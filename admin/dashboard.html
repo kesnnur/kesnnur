@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KESNNUR Admin Dashboard</title>
-    <!-- Remove CDN version and use local Tailwind or keep as is -->
+    <title>KESNNUR - Complete Management System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -65,25 +64,10 @@
         .modal-content {
             background: white;
             border-radius: 12px;
-            max-width: 600px;
+            max-width: 800px;
             margin: 50px auto;
-            max-height: 80vh;
+            max-height: 90vh;
             overflow-y: auto;
-        }
-        .code-editor {
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        .tab-button {
-            padding: 8px 16px;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s;
-        }
-        .tab-button.active {
-            border-bottom-color: #3b82f6;
-            color: #3b82f6;
-            font-weight: 600;
         }
         .loading {
             display: inline-block;
@@ -97,6 +81,42 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge.active {
+            background: #10b98120;
+            color: #10b981;
+        }
+        .badge.pending {
+            background: #f59e0b20;
+            color: #f59e0b;
+        }
+        .badge.inactive {
+            background: #ef444420;
+            color: #ef4444;
+        }
+        .calendar-day {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .calendar-day.event {
+            background: #3b82f620;
+            color: #1e40af;
+        }
+        .calendar-day.today {
+            background: #10b98120;
+            color: #065f46;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -105,56 +125,98 @@
         <div class="p-6 border-b border-white/20">
             <div class="flex items-center space-x-3">
                 <div class="bg-white/20 p-2 rounded-lg">
-                    <i class="fas fa-shield-alt text-white text-xl"></i>
+                    <i class="fas fa-users text-white text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg">KESNNUR Admin</h1>
-                    <p class="text-white/80 text-xs">Complete Management</p>
+                    <h1 class="font-bold text-lg">KESNNUR</h1>
+                    <p class="text-white/80 text-xs">Management System</p>
                 </div>
             </div>
         </div>
         
         <div class="p-4">
-            <!-- WEBSITE MANAGEMENT -->
+            <!-- DASHBOARD -->
             <div class="text-white/60 text-xs font-semibold uppercase tracking-wider mb-2 px-4">
-                Website Management
+                Dashboard
             </div>
             <div class="nav-item active" data-section="dashboard">
                 <i class="fas fa-tachometer-alt mr-3"></i>
-                Dashboard
-            </div>
-            <div class="nav-item" data-section="editor">
-                <i class="fas fa-code mr-3"></i>
-                Edit Website Files
-            </div>
-            <div class="nav-item" data-section="pages">
-                <i class="fas fa-file-alt mr-3"></i>
-                Manage Pages
-            </div>
-            <div class="nav-item" data-section="media">
-                <i class="fas fa-images mr-3"></i>
-                Media Library
+                Overview
             </div>
             
-            <!-- DATABASE MANAGEMENT -->
+            <!-- MEMBERSHIP MANAGEMENT -->
             <div class="text-white/60 text-xs font-semibold uppercase tracking-wider mb-2 px-4 mt-6">
-                Database Management
+                Membership
             </div>
             <div class="nav-item" data-section="members">
                 <i class="fas fa-users mr-3"></i>
-                Members
+                All Members
+            </div>
+            <div class="nav-item" data-section="add-member">
+                <i class="fas fa-user-plus mr-3"></i>
+                Add New Member
+            </div>
+            
+            <!-- CHAPTERS -->
+            <div class="text-white/60 text-xs font-semibold uppercase tracking-wider mb-2 px-4 mt-6">
+                Chapters
             </div>
             <div class="nav-item" data-section="chapters">
                 <i class="fas fa-map-marker-alt mr-3"></i>
-                Chapters
+                Manage Chapters
+            </div>
+            
+            <!-- EVENTS -->
+            <div class="text-white/60 text-xs font-semibold uppercase tracking-wider mb-2 px-4 mt-6">
+                Events
             </div>
             <div class="nav-item" data-section="events">
                 <i class="fas fa-calendar-alt mr-3"></i>
-                Events
+                Events Calendar
+            </div>
+            <div class="nav-item" data-section="add-event">
+                <i class="fas fa-calendar-plus mr-3"></i>
+                Add Event
+            </div>
+            
+            <!-- FINANCIAL -->
+            <div class="text-white/60 text-xs font-semibold uppercase tracking-wider mb-2 px-4 mt-6">
+                Financial
             </div>
             <div class="nav-item" data-section="payments">
                 <i class="fas fa-money-bill-wave mr-3"></i>
                 Payments
+            </div>
+            <div class="nav-item" data-section="add-payment">
+                <i class="fas fa-plus-circle mr-3"></i>
+                Record Payment
+            </div>
+            
+            <!-- COMMUNICATIONS -->
+            <div class="text-white/60 text-xs font-semibold uppercase tracking-wider mb-2 px-4 mt-6">
+                Communications
+            </div>
+            <div class="nav-item" data-section="announcements">
+                <i class="fas fa-bullhorn mr-3"></i>
+                Announcements
+            </div>
+            
+            <!-- REPORTS -->
+            <div class="text-white/60 text-xs font-semibold uppercase tracking-wider mb-2 px-4 mt-6">
+                Reports
+            </div>
+            <div class="nav-item" data-section="reports">
+                <i class="fas fa-chart-bar mr-3"></i>
+                Reports
+            </div>
+            
+            <!-- SYSTEM -->
+            <div class="text-white/60 text-xs font-semibold uppercase tracking-wider mb-2 px-4 mt-6">
+                System
+            </div>
+            <div class="nav-item" data-section="users">
+                <i class="fas fa-user-shield mr-3"></i>
+                Admin Users
             </div>
         </div>
         
@@ -181,7 +243,7 @@
         <div class="p-6 border-b bg-white">
             <div class="flex justify-between items-center">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800" id="pageTitle">Dashboard</h1>
+                    <h1 class="text-2xl font-bold text-gray-800" id="pageTitle">Dashboard Overview</h1>
                     <p class="text-gray-600" id="welcomeMessage">Welcome back</p>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -222,10 +284,71 @@
         
         const ADMIN_ROLES = ['admin', 'super_admin', 'editor'];
         
-        // Initialize Supabase client - SINGLE DECLARATION
+        // Initialize Supabase client
         let supabaseClient = null;
         let currentUser = null;
         let currentUserProfile = null;
+        
+        // Initialize all tables if they don't exist
+        const TABLE_SCHEMAS = {
+            members: {
+                id: 'uuid default gen_random_uuid() primary key',
+                first_name: 'text',
+                last_name: 'text',
+                email: 'text unique',
+                phone: 'text',
+                chapter: 'text',
+                status: 'text default \'pending\'',
+                member_id: 'text',
+                notes: 'text',
+                created_by: 'uuid references auth.users(id)',
+                created_at: 'timestamp default now()',
+                updated_at: 'timestamp default now()'
+            },
+            chapters: {
+                id: 'uuid default gen_random_uuid() primary key',
+                name: 'text unique',
+                location: 'text',
+                leader_id: 'uuid references members(id)',
+                contact_email: 'text',
+                contact_phone: 'text',
+                description: 'text',
+                created_at: 'timestamp default now()'
+            },
+            events: {
+                id: 'uuid default gen_random_uuid() primary key',
+                title: 'text',
+                description: 'text',
+                location: 'text',
+                start_date: 'timestamp',
+                end_date: 'timestamp',
+                chapter_id: 'uuid references chapters(id)',
+                organizer_id: 'uuid references members(id)',
+                status: 'text default \'upcoming\'',
+                max_attendees: 'integer',
+                created_at: 'timestamp default now()'
+            },
+            payments: {
+                id: 'uuid default gen_random_uuid() primary key',
+                member_id: 'uuid references members(id)',
+                amount: 'decimal',
+                payment_type: 'text',
+                description: 'text',
+                status: 'text default \'completed\'',
+                payment_date: 'timestamp default now()',
+                created_by: 'uuid references auth.users(id)',
+                created_at: 'timestamp default now()'
+            },
+            announcements: {
+                id: 'uuid default gen_random_uuid() primary key',
+                title: 'text',
+                content: 'text',
+                audience: 'text default \'all\'',
+                author_id: 'uuid references auth.users(id)',
+                published_at: 'timestamp default now()',
+                created_at: 'timestamp default now()'
+            }
+        };
         
         // Show toast notifications
         function showToast(message, type = 'success') {
@@ -252,8 +375,6 @@
         // Check authentication state
         async function checkAuth() {
             try {
-                console.log('Checking authentication...');
-                
                 // Initialize Supabase
                 const supabase = initSupabase();
                 
@@ -271,7 +392,6 @@
                     return false;
                 }
                 
-                console.log('Session found for user:', session.user.email);
                 currentUser = session.user;
                 
                 // Get user profile from profiles table
@@ -284,22 +404,36 @@
                 if (profileError) {
                     console.error('Profile error:', profileError);
                     
-                    // If profile doesn't exist, check if user is in auth.users table
-                    const { data: authUser } = await supabase.auth.getUser();
-                    if (authUser.user) {
-                        // Create a basic profile if none exists
-                        const basicProfile = {
-                            id: authUser.user.id,
-                            email: authUser.user.email,
+                    // If profile doesn't exist, create one
+                    const { data: newProfile, error: createError } = await supabase
+                        .from('profiles')
+                        .insert([{
+                            id: session.user.id,
+                            email: session.user.email,
                             role: 'admin',
-                            first_name: authUser.user.email.split('@')[0],
+                            first_name: session.user.email.split('@')[0],
+                            last_name: '',
+                            last_login: new Date().toISOString()
+                        }])
+                        .select()
+                        .single();
+                    
+                    if (createError) {
+                        console.error('Create profile error:', createError);
+                        const basicProfile = {
+                            id: session.user.id,
+                            email: session.user.email,
+                            role: 'admin',
+                            first_name: session.user.email.split('@')[0],
                             last_name: '',
                             last_login: new Date().toISOString()
                         };
                         currentUserProfile = basicProfile;
-                        return true;
+                    } else {
+                        currentUserProfile = newProfile;
                     }
-                    return false;
+                    
+                    return true;
                 }
                 
                 if (!profile) {
@@ -315,7 +449,6 @@
                 }
                 
                 currentUserProfile = profile;
-                console.log('User authenticated successfully:', profile.email);
                 
                 // Update last login
                 try {
@@ -342,14 +475,12 @@
         // Initialize dashboard
         async function initializeDashboard() {
             try {
-                console.log('Initializing dashboard...');
-                
                 // Show loading state
                 document.getElementById('contentArea').innerHTML = `
                     <div class="flex items-center justify-center h-64">
                         <div class="text-center">
                             <div class="loading mx-auto mb-4"></div>
-                            <p class="text-gray-600">Checking authentication...</p>
+                            <p class="text-gray-600">Initializing system...</p>
                         </div>
                     </div>
                 `;
@@ -366,8 +497,6 @@
                     return;
                 }
                 
-                console.log('User authenticated successfully');
-                
                 // Update user info
                 updateUserInfo();
                 
@@ -377,28 +506,24 @@
                 // Load dashboard
                 await loadDashboard();
                 
-                // Setup auth state listener - but only once
+                // Setup auth state listener
                 setupAuthListener();
                 
-                showToast('Dashboard loaded successfully!', 'success');
+                showToast('KESNNUR Management System loaded!', 'success');
                 
             } catch (error) {
                 console.error('Dashboard initialization error:', error);
                 showToast('Error loading dashboard: ' + error.message, 'error');
                 
-                // Don't redirect immediately on error, give user a chance to retry
                 document.getElementById('contentArea').innerHTML = `
                     <div class="text-center py-12">
                         <div class="text-red-600 text-4xl mb-4">
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Error Loading Dashboard</h3>
+                        <h3 class="text-xl font-bold mb-2">System Error</h3>
                         <p class="text-gray-600 mb-4">${error.message}</p>
                         <button onclick="initializeDashboard()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                             Retry
-                        </button>
-                        <button onclick="logout()" class="ml-4 px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
-                            Logout
                         </button>
                     </div>
                 `;
@@ -407,20 +532,14 @@
         
         // Setup auth state listener
         function setupAuthListener() {
-            console.log('Setting up auth listener...');
-            
-            // Only set up listener once
             if (window.authListenerSet) return;
             window.authListenerSet = true;
             
             const supabase = initSupabase();
             
             supabase.auth.onAuthStateChange(async (event, session) => {
-                console.log('Auth state changed:', event, session ? 'Session exists' : 'No session');
-                
                 switch(event) {
                     case 'SIGNED_OUT':
-                        console.log('User signed out, redirecting...');
                         showToast('You have been logged out', 'info');
                         setTimeout(() => {
                             window.location.href = 'login.html';
@@ -428,28 +547,12 @@
                         break;
                         
                     case 'SIGNED_IN':
-                        console.log('User signed in');
                         if (session) {
                             currentUser = session.user;
                             await checkAuth();
                             updateUserInfo();
                             showToast('Welcome back!', 'success');
                         }
-                        break;
-                        
-                    case 'TOKEN_REFRESHED':
-                        console.log('Token refreshed');
-                        await checkAuth();
-                        break;
-                        
-                    case 'USER_UPDATED':
-                        console.log('User updated');
-                        await checkAuth();
-                        updateUserInfo();
-                        break;
-                        
-                    case 'INITIAL_SESSION':
-                        console.log('Initial session loaded');
                         break;
                 }
             });
@@ -517,56 +620,93 @@
             }
             
             // Update page title
-            document.getElementById('pageTitle').textContent = 
-                section.charAt(0).toUpperCase() + section.slice(1);
+            const pageTitles = {
+                'dashboard': 'Dashboard Overview',
+                'members': 'All Members',
+                'add-member': 'Add New Member',
+                'chapters': 'Manage Chapters',
+                'events': 'Events Calendar',
+                'add-event': 'Add New Event',
+                'payments': 'Payments',
+                'add-payment': 'Record Payment',
+                'announcements': 'Announcements',
+                'reports': 'Reports',
+                'users': 'Admin Users'
+            };
+            
+            document.getElementById('pageTitle').textContent = pageTitles[section] || section;
             
             // Show loading
             contentArea.innerHTML = `
                 <div class="flex items-center justify-center h-64">
                     <div class="text-center">
                         <div class="loading mx-auto mb-4"></div>
-                        <p class="text-gray-600">Loading ${section}...</p>
+                        <p class="text-gray-600">Loading ${pageTitles[section] || section}...</p>
                     </div>
                 </div>
             `;
             
+            // Load the appropriate section
             switch(section) {
                 case 'dashboard':
                     await loadDashboard();
                     break;
-                case 'editor':
-                    await loadFileEditor();
-                    break;
                 case 'members':
                     await loadMembersManager();
                     break;
-                case 'events':
-                    await loadEventsManager();
+                case 'add-member':
+                    await loadAddMemberForm();
                     break;
                 case 'chapters':
                     await loadChaptersManager();
                     break;
+                case 'events':
+                    await loadEventsManager();
+                    break;
+                case 'add-event':
+                    await loadAddEventForm();
+                    break;
                 case 'payments':
                     await loadPaymentsManager();
                     break;
-                case 'pages':
-                    await loadPagesManager();
+                case 'add-payment':
+                    await loadAddPaymentForm();
                     break;
-                case 'media':
-                    await loadMediaManager();
+                case 'announcements':
+                    await loadAnnouncementsManager();
+                    break;
+                case 'reports':
+                    await loadReportsManager();
+                    break;
+                case 'users':
+                    await loadUsersManager();
                     break;
                 default:
                     contentArea.innerHTML = '<div class="text-center py-12">Section not found</div>';
             }
         }
         
-        // DASHBOARD
+        // DASHBOARD - OVERVIEW
         async function loadDashboard() {
             try {
                 const stats = await loadStats();
-                const recentActivity = await getRecentActivity();
+                const recentMembers = await getRecentMembers(5);
+                const upcomingEvents = await getUpcomingEvents(5);
                 
                 document.getElementById('contentArea').innerHTML = `
+                    <!-- Welcome Banner -->
+                    <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl p-6 text-white mb-8">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h2 class="text-2xl font-bold mb-2">KESNNUR Management System</h2>
+                                <p class="text-blue-100">Complete management solution for your organization</p>
+                            </div>
+                            <div class="text-4xl">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- Stats Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="stat-card">
@@ -574,12 +714,12 @@
                                 <div>
                                     <p class="text-gray-500 text-sm">Total Members</p>
                                     <h3 class="text-2xl font-bold text-gray-800">${stats.members}</h3>
-                                    <p class="text-green-600 text-sm mt-1">
+                                    <p class="text-blue-600 text-sm mt-1">
                                         <i class="fas fa-users mr-1"></i>Registered
                                     </p>
                                 </div>
-                                <div class="bg-green-100 p-3 rounded-lg">
-                                    <i class="fas fa-users text-green-900 text-xl"></i>
+                                <div class="bg-blue-100 p-3 rounded-lg">
+                                    <i class="fas fa-users text-blue-900 text-xl"></i>
                                 </div>
                             </div>
                         </div>
@@ -587,29 +727,14 @@
                         <div class="stat-card">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-gray-500 text-sm">Active Events</p>
-                                    <h3 class="text-2xl font-bold text-gray-800">${stats.events}</h3>
-                                    <p class="text-purple-600 text-sm mt-1">
-                                        <i class="fas fa-calendar mr-1"></i>Upcoming
-                                    </p>
-                                </div>
-                                <div class="bg-purple-100 p-3 rounded-lg">
-                                    <i class="fas fa-calendar-alt text-purple-900 text-xl"></i>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <p class="text-gray-500 text-sm">Chapters</p>
+                                    <p class="text-gray-500 text-sm">Active Chapters</p>
                                     <h3 class="text-2xl font-bold text-gray-800">${stats.chapters}</h3>
-                                    <p class="text-blue-600 text-sm mt-1">
+                                    <p class="text-purple-600 text-sm mt-1">
                                         <i class="fas fa-map-marker-alt mr-1"></i>Locations
                                     </p>
                                 </div>
-                                <div class="bg-blue-100 p-3 rounded-lg">
-                                    <i class="fas fa-map-marker-alt text-blue-900 text-xl"></i>
+                                <div class="bg-purple-100 p-3 rounded-lg">
+                                    <i class="fas fa-map-marker-alt text-purple-900 text-xl"></i>
                                 </div>
                             </div>
                         </div>
@@ -617,7 +742,22 @@
                         <div class="stat-card">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-gray-500 text-sm">Recent Payments</p>
+                                    <p class="text-gray-500 text-sm">Upcoming Events</p>
+                                    <h3 class="text-2xl font-bold text-gray-800">${stats.events}</h3>
+                                    <p class="text-green-600 text-sm mt-1">
+                                        <i class="fas fa-calendar mr-1"></i>Scheduled
+                                    </p>
+                                </div>
+                                <div class="bg-green-100 p-3 rounded-lg">
+                                    <i class="fas fa-calendar-alt text-green-900 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-gray-500 text-sm">Total Payments</p>
                                     <h3 class="text-2xl font-bold text-gray-800">${stats.payments}</h3>
                                     <p class="text-orange-600 text-sm mt-1">
                                         <i class="fas fa-money-bill-wave mr-1"></i>This Month
@@ -630,37 +770,98 @@
                         </div>
                     </div>
                     
-                    <!-- Quick Actions -->
-                    <div class="bg-white rounded-xl p-6 shadow mb-6">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <button onclick="loadSection('editor')" class="p-4 bg-blue-50 rounded-lg text-center hover:bg-blue-100 transition-colors cursor-pointer">
-                                <i class="fas fa-edit text-blue-900 text-2xl mb-2"></i>
-                                <p class="font-medium">Edit Website</p>
-                            </button>
-                            
-                            <button onclick="showAddMemberModal()" class="p-4 bg-green-50 rounded-lg text-center hover:bg-green-100 transition-colors cursor-pointer">
-                                <i class="fas fa-user-plus text-green-900 text-2xl mb-2"></i>
-                                <p class="font-medium">Add Member</p>
-                            </button>
-                            
-                            <button onclick="showAddEventModal()" class="p-4 bg-purple-50 rounded-lg text-center hover:bg-purple-100 transition-colors cursor-pointer">
-                                <i class="fas fa-calendar-plus text-purple-900 text-2xl mb-2"></i>
-                                <p class="font-medium">Create Event</p>
-                            </button>
-                            
-                            <button onclick="showUploadMediaModal()" class="p-4 bg-orange-50 rounded-lg text-center hover:bg-orange-100 transition-colors cursor-pointer">
-                                <i class="fas fa-upload text-orange-900 text-2xl mb-2"></i>
-                                <p class="font-medium">Upload Media</p>
-                            </button>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Recent Members -->
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-xl font-bold text-gray-800">Recent Members</h2>
+                                <button onclick="loadSection('members')" class="text-blue-600 hover:text-blue-800 text-sm">
+                                    View All
+                                </button>
+                            </div>
+                            <div class="space-y-4">
+                                ${recentMembers.length > 0 ? recentMembers.map(member => `
+                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-user text-blue-900"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="font-medium">${member.first_name} ${member.last_name}</p>
+                                            <p class="text-gray-600 text-sm">${member.email} • ${member.chapter || 'No Chapter'}</p>
+                                        </div>
+                                        <span class="badge ${member.status === 'active' ? 'active' : member.status === 'pending' ? 'pending' : 'inactive'}">
+                                            ${member.status}
+                                        </span>
+                                    </div>
+                                `).join('') : `
+                                    <div class="text-center py-8 text-gray-500">
+                                        <i class="fas fa-users text-3xl mb-3"></i>
+                                        <p>No members yet</p>
+                                        <button onclick="loadSection('add-member')" class="mt-3 text-blue-600 hover:text-blue-800">
+                                            Add your first member
+                                        </button>
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                        
+                        <!-- Upcoming Events -->
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-xl font-bold text-gray-800">Upcoming Events</h2>
+                                <button onclick="loadSection('events')" class="text-blue-600 hover:text-blue-800 text-sm">
+                                    View All
+                                </button>
+                            </div>
+                            <div class="space-y-4">
+                                ${upcomingEvents.length > 0 ? upcomingEvents.map(event => `
+                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-calendar text-green-900"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="font-medium">${event.title}</p>
+                                            <p class="text-gray-600 text-sm">
+                                                ${new Date(event.start_date).toLocaleDateString()} • ${event.location || 'TBA'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                `).join('') : `
+                                    <div class="text-center py-8 text-gray-500">
+                                        <i class="fas fa-calendar text-3xl mb-3"></i>
+                                        <p>No upcoming events</p>
+                                        <button onclick="loadSection('add-event')" class="mt-3 text-blue-600 hover:text-blue-800">
+                                            Schedule an event
+                                        </button>
+                                    </div>
+                                `}
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Recent Activity -->
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">Recent Activity</h2>
-                        <div id="recentActivity" class="space-y-4">
-                            ${recentActivity}
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-xl shadow p-6 mt-8">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <button onclick="loadSection('add-member')" class="p-4 bg-blue-50 rounded-lg text-center hover:bg-blue-100 transition-colors">
+                                <i class="fas fa-user-plus text-blue-900 text-2xl mb-2"></i>
+                                <p class="font-medium">Add Member</p>
+                            </button>
+                            
+                            <button onclick="loadSection('add-event')" class="p-4 bg-green-50 rounded-lg text-center hover:bg-green-100 transition-colors">
+                                <i class="fas fa-calendar-plus text-green-900 text-2xl mb-2"></i>
+                                <p class="font-medium">Add Event</p>
+                            </button>
+                            
+                            <button onclick="loadSection('add-payment')" class="p-4 bg-orange-50 rounded-lg text-center hover:bg-orange-100 transition-colors">
+                                <i class="fas fa-money-bill-wave text-orange-900 text-2xl mb-2"></i>
+                                <p class="font-medium">Record Payment</p>
+                            </button>
+                            
+                            <button onclick="loadSection('reports')" class="p-4 bg-purple-50 rounded-lg text-center hover:bg-purple-100 transition-colors">
+                                <i class="fas fa-chart-bar text-purple-900 text-2xl mb-2"></i>
+                                <p class="font-medium">View Reports</p>
+                            </button>
                         </div>
                     </div>
                 `;
@@ -681,10 +882,9 @@
         
         async function loadStats() {
             try {
-                // Initialize Supabase
                 const supabase = initSupabase();
                 
-                // Get member count - with error handling for missing tables
+                // Get member count
                 let memberCount = 0;
                 try {
                     const { count } = await supabase
@@ -692,20 +892,8 @@
                         .select('*', { count: 'exact', head: true });
                     memberCount = count || 0;
                 } catch (error) {
-                    console.warn('Error loading members count:', error.message);
-                }
-                
-                // Get active events count
-                let eventCount = 0;
-                try {
-                    const { count } = await supabase
-                        .from('events')
-                        .select('*', { count: 'exact', head: true })
-                        .eq('status', 'published')
-                        .gte('start_date', new Date().toISOString());
-                    eventCount = count || 0;
-                } catch (error) {
-                    console.warn('Error loading events count:', error.message);
+                    // Table might not exist, initialize it
+                    await initializeTable('members');
                 }
                 
                 // Get chapters count
@@ -716,288 +904,1311 @@
                         .select('*', { count: 'exact', head: true });
                     chapterCount = count || 0;
                 } catch (error) {
-                    console.warn('Error loading chapters count:', error.message);
+                    await initializeTable('chapters');
                 }
                 
-                // Get recent payments count (last 30 days)
+                // Get events count
+                let eventCount = 0;
+                try {
+                    const { count } = await supabase
+                        .from('events')
+                        .select('*', { count: 'exact', head: true })
+                        .gte('start_date', new Date().toISOString());
+                    eventCount = count || 0;
+                } catch (error) {
+                    await initializeTable('events');
+                }
+                
+                // Get payments count (this month)
                 let paymentCount = 0;
                 try {
-                    const thirtyDaysAgo = new Date();
-                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                    const firstDay = new Date();
+                    firstDay.setDate(1);
                     
                     const { count } = await supabase
                         .from('payments')
                         .select('*', { count: 'exact', head: true })
-                        .gte('created_at', thirtyDaysAgo.toISOString());
+                        .gte('payment_date', firstDay.toISOString());
                     paymentCount = count || 0;
                 } catch (error) {
-                    console.warn('Error loading payments count:', error.message);
+                    await initializeTable('payments');
                 }
                 
                 return {
                     members: memberCount,
-                    events: eventCount,
                     chapters: chapterCount,
+                    events: eventCount,
                     payments: paymentCount
                 };
                 
             } catch (error) {
                 console.error('Error loading stats:', error);
-                return { members: 0, events: 0, chapters: 0, payments: 0 };
+                return { members: 0, chapters: 0, events: 0, payments: 0 };
             }
         }
         
-        async function getRecentActivity() {
+        async function getRecentMembers(limit = 5) {
             try {
-                // Initialize Supabase
                 const supabase = initSupabase();
-                
-                let html = '';
-                
-                // Try to get recent members
-                try {
-                    const { data: recentMembers } = await supabase
-                        .from('members')
-                        .select('*')
-                        .order('created_at', { ascending: false })
-                        .limit(5);
-                    
-                    if (recentMembers && recentMembers.length > 0) {
-                        recentMembers.forEach(member => {
-                            html += `
-                                <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                        <i class="fas fa-user text-blue-900"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="font-medium">New member registered</p>
-                                        <p class="text-gray-600 text-sm">${member.first_name || ''} ${member.last_name || ''} • ${new Date(member.created_at).toLocaleDateString()}</p>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-                } catch (error) {
-                    console.warn('Error loading recent members:', error.message);
-                }
-                
-                // Try to get recent events
-                try {
-                    const { data: recentEvents } = await supabase
-                        .from('events')
-                        .select('*')
-                        .order('created_at', { ascending: false })
-                        .limit(5);
-                    
-                    if (recentEvents && recentEvents.length > 0) {
-                        recentEvents.forEach(event => {
-                            html += `
-                                <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                    <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
-                                        <i class="fas fa-calendar text-purple-900"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="font-medium">New event created</p>
-                                        <p class="text-gray-600 text-sm">${event.title || 'Untitled Event'} • ${new Date(event.created_at).toLocaleDateString()}</p>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-                } catch (error) {
-                    console.warn('Error loading recent events:', error.message);
-                }
-                
-                return html || '<p class="text-gray-600">No recent activity or database tables not set up yet</p>';
-                
+                const { data } = await supabase
+                    .from('members')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(limit);
+                return data || [];
             } catch (error) {
-                console.error('Error loading recent activity:', error);
-                return '<p class="text-gray-600">Error loading activity</p>';
+                return [];
             }
         }
         
-        // FILE EDITOR - Already defined in your code
-        
-        // MEMBERS MANAGER - Already defined in your code
-        
-        // EVENTS MANAGER
-        async function loadEventsManager() {
+        async function getUpcomingEvents(limit = 5) {
             try {
+                const supabase = initSupabase();
+                const { data } = await supabase
+                    .from('events')
+                    .select('*')
+                    .gte('start_date', new Date().toISOString())
+                    .order('start_date', { ascending: true })
+                    .limit(limit);
+                return data || [];
+            } catch (error) {
+                return [];
+            }
+        }
+        
+        // MEMBERS MANAGER
+        async function loadMembersManager() {
+            try {
+                const supabase = initSupabase();
+                const { data: members } = await supabase
+                    .from('members')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
                 document.getElementById('contentArea').innerHTML = `
                     <div class="bg-white rounded-xl shadow">
                         <div class="p-6 border-b">
                             <div class="flex justify-between items-center">
-                                <h2 class="text-xl font-bold text-gray-800">Events Management</h2>
-                                <button onclick="showAddEventModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                    <i class="fas fa-calendar-plus mr-2"></i>Add New Event
-                                </button>
+                                <h2 class="text-xl font-bold text-gray-800">Members Management</h2>
+                                <div class="flex space-x-3">
+                                    <button onclick="exportMembers()" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        <i class="fas fa-download mr-2"></i>Export
+                                    </button>
+                                    <button onclick="loadSection('add-member')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                        <i class="fas fa-user-plus mr-2"></i>Add Member
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         
                         <div class="p-6">
-                            <div class="text-center py-12">
-                                <i class="fas fa-calendar text-gray-400 text-4xl mb-4"></i>
-                                <h3 class="text-xl font-bold mb-2">Events Manager</h3>
-                                <p class="text-gray-600 mb-4">Events management section is under development</p>
-                                <p class="text-sm text-gray-500">Check back soon for full events management features</p>
+                            <!-- Search and Filters -->
+                            <div class="flex flex-wrap gap-4 mb-6">
+                                <input type="text" id="searchMembers" placeholder="Search members..." 
+                                       class="px-4 py-2 border border-gray-300 rounded-lg flex-1 min-w-[200px]"
+                                       onkeyup="filterTable('membersTable')">
+                                <select id="filterChapter" class="px-4 py-2 border border-gray-300 rounded-lg" onchange="filterTable('membersTable')">
+                                    <option value="">All Chapters</option>
+                                    <option value="Nairobi">Nairobi</option>
+                                    <option value="Mombasa">Mombasa</option>
+                                    <option value="Kisumu">Kisumu</option>
+                                    <option value="Eldoret">Eldoret</option>
+                                </select>
+                                <select id="filterStatus" class="px-4 py-2 border border-gray-300 rounded-lg" onchange="filterTable('membersTable')">
+                                    <option value="">All Status</option>
+                                    <option value="active">Active</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="alumni">Alumni</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Members Table -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Name</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Email</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Chapter</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Joined</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="membersTable">
+                                        ${members && members.length > 0 ? members.map(member => `
+                                            <tr class="border-b hover:bg-gray-50">
+                                                <td class="px-4 py-3">
+                                                    <div class="flex items-center">
+                                                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                                            <i class="fas fa-user text-blue-900 text-sm"></i>
+                                                        </div>
+                                                        <div>
+                                                            <p class="font-medium">${member.first_name || ''} ${member.last_name || ''}</p>
+                                                            <p class="text-sm text-gray-500">${member.member_id || 'No ID'}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3">${member.email || 'N/A'}</td>
+                                                <td class="px-4 py-3">${member.chapter || 'N/A'}</td>
+                                                <td class="px-4 py-3">
+                                                    <span class="badge ${member.status === 'active' ? 'active' : member.status === 'pending' ? 'pending' : 'inactive'}">
+                                                        ${member.status || 'pending'}
+                                                    </span>
+                                                </td>
+                                                <td class="px-4 py-3">${member.created_at ? new Date(member.created_at).toLocaleDateString() : 'N/A'}</td>
+                                                <td class="px-4 py-3">
+                                                    <div class="flex space-x-2">
+                                                        <button onclick="editMember('${member.id}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button onclick="deleteMember('${member.id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `).join('') : `
+                                            <tr>
+                                                <td colspan="6" class="px-4 py-12 text-center text-gray-500">
+                                                    <i class="fas fa-users text-3xl mb-3"></i>
+                                                    <p class="text-lg">No members found</p>
+                                                    <button onclick="loadSection('add-member')" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                                        Add Your First Member
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        `}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="flex justify-between items-center mt-6">
+                                <div class="text-sm text-gray-600">
+                                    Showing ${members ? members.length : 0} members
+                                </div>
+                                <div class="text-sm text-gray-600">
+                                    <i class="fas fa-database mr-2"></i>Live Database
+                                </div>
                             </div>
                         </div>
                     </div>
                 `;
                 
             } catch (error) {
-                console.error('Error loading events manager:', error);
-                showToast('Error loading events manager', 'error');
+                console.error('Error loading members manager:', error);
+                showToast('Error loading members: ' + error.message, 'error');
             }
+        }
+        
+        // ADD MEMBER FORM
+        async function loadAddMemberForm() {
+            const supabase = initSupabase();
+            const { data: chapters } = await supabase
+                .from('chapters')
+                .select('name')
+                .order('name');
+            
+            document.getElementById('contentArea').innerHTML = `
+                <div class="bg-white rounded-xl shadow">
+                    <div class="p-6 border-b">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold text-gray-800">Add New Member</h2>
+                            <button onclick="loadSection('members')" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                                <i class="fas fa-arrow-left mr-2"></i>Back to Members
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <form id="addMemberForm" class="space-y-6 max-w-2xl">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                                    <input type="text" name="first_name" required 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                                    <input type="text" name="last_name" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                                <input type="email" name="email" required
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                                    <input type="tel" name="phone"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Chapter</label>
+                                    <select name="chapter" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Select Chapter</option>
+                                        ${chapters ? chapters.map(chapter => `
+                                            <option value="${chapter.name}">${chapter.name}</option>
+                                        `).join('') : `
+                                            <option value="Nairobi">Nairobi</option>
+                                            <option value="Mombasa">Mombasa</option>
+                                            <option value="Kisumu">Kisumu</option>
+                                            <option value="Eldoret">Eldoret</option>
+                                        `}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Membership Status</label>
+                                    <select name="status" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="active">Active Member</option>
+                                        <option value="pending">Pending Approval</option>
+                                        <option value="inactive">Inactive</option>
+                                        <option value="alumni">Alumni</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Member ID</label>
+                                    <input type="text" name="member_id"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                           placeholder="KESNNUR-${new Date().getFullYear()}-001">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                                <textarea name="notes" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-4 pt-6 border-t">
+                                <button type="button" onclick="loadSection('members')" class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                    Cancel
+                                </button>
+                                <button type="button" onclick="addNewMember()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                    <i class="fas fa-save mr-2"></i>Save Member
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
         }
         
         // CHAPTERS MANAGER
         async function loadChaptersManager() {
             try {
+                const supabase = initSupabase();
+                const { data: chapters } = await supabase
+                    .from('chapters')
+                    .select('*')
+                    .order('name');
+                
                 document.getElementById('contentArea').innerHTML = `
                     <div class="bg-white rounded-xl shadow">
                         <div class="p-6 border-b">
                             <div class="flex justify-between items-center">
                                 <h2 class="text-xl font-bold text-gray-800">Chapters Management</h2>
                                 <button onclick="showAddChapterModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                    <i class="fas fa-map-marker-alt mr-2"></i>Add New Chapter
+                                    <i class="fas fa-plus mr-2"></i>Add Chapter
                                 </button>
                             </div>
                         </div>
                         
                         <div class="p-6">
-                            <div class="text-center py-12">
-                                <i class="fas fa-map-marker-alt text-gray-400 text-4xl mb-4"></i>
-                                <h3 class="text-xl font-bold mb-2">Chapters Manager</h3>
-                                <p class="text-gray-600 mb-4">Chapters management section is under development</p>
-                                <p class="text-sm text-gray-500">Check back soon for full chapters management features</p>
+                            ${chapters && chapters.length > 0 ? `
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    ${chapters.map(chapter => `
+                                        <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                                            <div class="flex justify-between items-start mb-4">
+                                                <div>
+                                                    <h3 class="text-lg font-bold text-gray-800">${chapter.name}</h3>
+                                                    <p class="text-gray-600 text-sm mt-1">${chapter.location || 'Location not specified'}</p>
+                                                </div>
+                                                <div class="text-blue-600">
+                                                    <i class="fas fa-map-marker-alt text-xl"></i>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="space-y-3">
+                                                ${chapter.contact_email ? `
+                                                    <div class="flex items-center text-gray-600">
+                                                        <i class="fas fa-envelope mr-3"></i>
+                                                        <span class="text-sm">${chapter.contact_email}</span>
+                                                    </div>
+                                                ` : ''}
+                                                
+                                                ${chapter.contact_phone ? `
+                                                    <div class="flex items-center text-gray-600">
+                                                        <i class="fas fa-phone mr-3"></i>
+                                                        <span class="text-sm">${chapter.contact_phone}</span>
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                            
+                                            ${chapter.description ? `
+                                                <div class="mt-4 pt-4 border-t border-gray-200">
+                                                    <p class="text-gray-700 text-sm">${chapter.description}</p>
+                                                </div>
+                                            ` : ''}
+                                            
+                                            <div class="flex justify-end space-x-2 mt-6 pt-4 border-t border-gray-200">
+                                                <button onclick="editChapter('${chapter.id}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200">
+                                                    <i class="fas fa-edit mr-1"></i>Edit
+                                                </button>
+                                                <button onclick="deleteChapter('${chapter.id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200">
+                                                    <i class="fas fa-trash mr-1"></i>Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : `
+                                <div class="text-center py-12">
+                                    <i class="fas fa-map-marker-alt text-gray-400 text-5xl mb-4"></i>
+                                    <h3 class="text-xl font-bold text-gray-800 mb-3">No Chapters Yet</h3>
+                                    <p class="text-gray-600 mb-6">Start by adding your first chapter</p>
+                                    <button onclick="showAddChapterModal()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                        <i class="fas fa-plus mr-2"></i>Add First Chapter
+                                    </button>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error loading chapters:', error);
+                showToast('Error loading chapters: ' + error.message, 'error');
+            }
+        }
+        
+        // EVENTS MANAGER
+        async function loadEventsManager() {
+            try {
+                const supabase = initSupabase();
+                const { data: events } = await supabase
+                    .from('events')
+                    .select('*')
+                    .order('start_date', { ascending: true });
+                
+                // Get current month for calendar
+                const now = new Date();
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
+                
+                // Generate calendar
+                const firstDay = new Date(currentYear, currentMonth, 1);
+                const lastDay = new Date(currentYear, currentMonth + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                const startingDay = firstDay.getDay();
+                
+                let calendarHTML = '';
+                let dayCounter = 0;
+                
+                // Calendar header
+                calendarHTML += '<div class="grid grid-cols-7 gap-2 mb-4">';
+                ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+                    calendarHTML += `<div class="text-center text-sm font-medium text-gray-500 py-2">${day}</div>`;
+                });
+                calendarHTML += '</div>';
+                
+                // Calendar days
+                calendarHTML += '<div class="grid grid-cols-7 gap-2">';
+                
+                // Empty cells for days before the first day of month
+                for (let i = 0; i < startingDay; i++) {
+                    calendarHTML += '<div class="calendar-day"></div>';
+                }
+                
+                // Days of the month
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayDate = new Date(currentYear, currentMonth, day);
+                    const isToday = day === now.getDate() && currentMonth === now.getMonth() && currentYear === now.getFullYear();
+                    const hasEvent = events ? events.some(event => 
+                        new Date(event.start_date).toDateString() === dayDate.toDateString()
+                    ) : false;
+                    
+                    let dayClass = 'calendar-day';
+                    if (isToday) dayClass += ' today';
+                    if (hasEvent) dayClass += ' event';
+                    
+                    calendarHTML += `
+                        <div class="${dayClass}" onclick="viewEventsForDate('${dayDate.toISOString()}')">
+                            ${day}
+                        </div>
+                    `;
+                }
+                calendarHTML += '</div>';
+                
+                document.getElementById('contentArea').innerHTML = `
+                    <div class="bg-white rounded-xl shadow">
+                        <div class="p-6 border-b">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-xl font-bold text-gray-800">Events Calendar</h2>
+                                <div class="flex space-x-3">
+                                    <button onclick="loadSection('add-event')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                        <i class="fas fa-calendar-plus mr-2"></i>Add Event
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                <!-- Calendar -->
+                                <div class="lg:col-span-2">
+                                    <div class="mb-6">
+                                        <h3 class="text-lg font-bold text-gray-800 mb-4">
+                                            ${now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                                        </h3>
+                                        ${calendarHTML}
+                                    </div>
+                                    
+                                    <!-- Upcoming Events -->
+                                    <div>
+                                        <h3 class="text-lg font-bold text-gray-800 mb-4">Upcoming Events</h3>
+                                        ${events && events.length > 0 ? events.filter(event => 
+                                            new Date(event.start_date) >= new Date()
+                                        ).slice(0, 5).map(event => `
+                                            <div class="border border-gray-200 rounded-lg p-4 mb-3 hover:bg-gray-50">
+                                                <div class="flex justify-between items-start">
+                                                    <div>
+                                                        <h4 class="font-medium text-gray-800">${event.title}</h4>
+                                                        <p class="text-sm text-gray-600 mt-1">
+                                                            <i class="fas fa-calendar-day mr-2"></i>
+                                                            ${new Date(event.start_date).toLocaleDateString()} 
+                                                            ${event.start_date.includes('T') ? ' at ' + new Date(event.start_date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}
+                                                        </p>
+                                                        ${event.location ? `
+                                                            <p class="text-sm text-gray-600 mt-1">
+                                                                <i class="fas fa-map-marker-alt mr-2"></i>${event.location}
+                                                            </p>
+                                                        ` : ''}
+                                                    </div>
+                                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                                        ${event.status || 'upcoming'}
+                                                    </span>
+                                                </div>
+                                                ${event.description ? `
+                                                    <p class="text-gray-700 mt-3 text-sm">${event.description.substring(0, 100)}${event.description.length > 100 ? '...' : ''}</p>
+                                                ` : ''}
+                                                <div class="flex justify-end space-x-2 mt-4">
+                                                    <button onclick="editEvent('${event.id}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200">
+                                                        <i class="fas fa-edit mr-1"></i>Edit
+                                                    </button>
+                                                    <button onclick="deleteEvent('${event.id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200">
+                                                        <i class="fas fa-trash mr-1"></i>Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        `).join('') : `
+                                            <div class="text-center py-8 text-gray-500">
+                                                <i class="fas fa-calendar text-3xl mb-3"></i>
+                                                <p>No upcoming events</p>
+                                            </div>
+                                        `}
+                                    </div>
+                                </div>
+                                
+                                <!-- Event Stats -->
+                                <div>
+                                    <div class="bg-gray-50 rounded-xl p-6">
+                                        <h3 class="text-lg font-bold text-gray-800 mb-4">Event Statistics</h3>
+                                        <div class="space-y-4">
+                                            <div class="flex justify-between items-center p-3 bg-white rounded-lg border border-gray-200">
+                                                <div>
+                                                    <p class="text-sm text-gray-600">Total Events</p>
+                                                    <p class="text-2xl font-bold">${events ? events.length : 0}</p>
+                                                </div>
+                                                <i class="fas fa-calendar text-blue-600 text-xl"></i>
+                                            </div>
+                                            
+                                            <div class="flex justify-between items-center p-3 bg-white rounded-lg border border-gray-200">
+                                                <div>
+                                                    <p class="text-sm text-gray-600">Upcoming</p>
+                                                    <p class="text-2xl font-bold">${events ? events.filter(e => new Date(e.start_date) >= new Date()).length : 0}</p>
+                                                </div>
+                                                <i class="fas fa-clock text-green-600 text-xl"></i>
+                                            </div>
+                                            
+                                            <div class="flex justify-between items-center p-3 bg-white rounded-lg border border-gray-200">
+                                                <div>
+                                                    <p class="text-sm text-gray-600">This Month</p>
+                                                    <p class="text-2xl font-bold">${events ? events.filter(e => {
+                                                        const eventDate = new Date(e.start_date);
+                                                        return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
+                                                    }).length : 0}</p>
+                                                </div>
+                                                <i class="fas fa-star text-purple-600 text-xl"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mt-6 pt-6 border-t border-gray-200">
+                                            <h4 class="font-medium text-gray-700 mb-3">Quick Links</h4>
+                                            <div class="space-y-2">
+                                                <button onclick="loadSection('add-event')" class="w-full text-left px-4 py-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100">
+                                                    <i class="fas fa-calendar-plus mr-3"></i>Schedule New Event
+                                                </button>
+                                                <button onclick="viewAllEvents()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100">
+                                                    <i class="fas fa-list mr-3"></i>View All Events
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 `;
                 
             } catch (error) {
-                console.error('Error loading chapters manager:', error);
-                showToast('Error loading chapters manager', 'error');
+                console.error('Error loading events:', error);
+                showToast('Error loading events: ' + error.message, 'error');
             }
         }
         
         // PAYMENTS MANAGER
         async function loadPaymentsManager() {
             try {
+                const supabase = initSupabase();
+                const { data: payments } = await supabase
+                    .from('payments')
+                    .select(`
+                        *,
+                        members (first_name, last_name, email)
+                    `)
+                    .order('payment_date', { ascending: false });
+                
+                // Calculate totals
+                let totalAmount = 0;
+                let monthlyAmount = 0;
+                const thisMonth = new Date().getMonth();
+                
+                if (payments) {
+                    payments.forEach(payment => {
+                        totalAmount += parseFloat(payment.amount || 0);
+                        const paymentDate = new Date(payment.payment_date);
+                        if (paymentDate.getMonth() === thisMonth) {
+                            monthlyAmount += parseFloat(payment.amount || 0);
+                        }
+                    });
+                }
+                
                 document.getElementById('contentArea').innerHTML = `
                     <div class="bg-white rounded-xl shadow">
                         <div class="p-6 border-b">
                             <div class="flex justify-between items-center">
                                 <h2 class="text-xl font-bold text-gray-800">Payments Management</h2>
-                                <button onclick="showAddPaymentModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                    <i class="fas fa-money-bill-wave mr-2"></i>Add New Payment
-                                </button>
+                                <div class="flex space-x-3">
+                                    <button onclick="exportPayments()" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        <i class="fas fa-download mr-2"></i>Export
+                                    </button>
+                                    <button onclick="loadSection('add-payment')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                        <i class="fas fa-plus-circle mr-2"></i>Record Payment
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         
                         <div class="p-6">
-                            <div class="text-center py-12">
-                                <i class="fas fa-money-bill-wave text-gray-400 text-4xl mb-4"></i>
-                                <h3 class="text-xl font-bold mb-2">Payments Manager</h3>
-                                <p class="text-gray-600 mb-4">Payments management section is under development</p>
-                                <p class="text-sm text-gray-500">Check back soon for full payments management features</p>
+                            <!-- Payment Stats -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-blue-100 text-sm">Total Payments</p>
+                                            <h3 class="text-2xl font-bold mt-1">KSh ${totalAmount.toLocaleString()}</h3>
+                                        </div>
+                                        <i class="fas fa-money-bill-wave text-2xl opacity-80"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-green-100 text-sm">This Month</p>
+                                            <h3 class="text-2xl font-bold mt-1">KSh ${monthlyAmount.toLocaleString()}</h3>
+                                        </div>
+                                        <i class="fas fa-calendar-alt text-2xl opacity-80"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-purple-100 text-sm">Total Transactions</p>
+                                            <h3 class="text-2xl font-bold mt-1">${payments ? payments.length : 0}</h3>
+                                        </div>
+                                        <i class="fas fa-receipt text-2xl opacity-80"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Payments Table -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Date</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Member</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Description</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Amount</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Type</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${payments && payments.length > 0 ? payments.map(payment => `
+                                            <tr class="border-b hover:bg-gray-50">
+                                                <td class="px-4 py-3">
+                                                    ${new Date(payment.payment_date).toLocaleDateString()}
+                                                </td>
+                                                <td class="px-4 py-3">
+                                                    ${payment.members ? `${payment.members.first_name} ${payment.members.last_name}` : 'Unknown Member'}
+                                                    ${payment.members ? `<p class="text-sm text-gray-500">${payment.members.email}</p>` : ''}
+                                                </td>
+                                                <td class="px-4 py-3">${payment.description || 'Membership Payment'}</td>
+                                                <td class="px-4 py-3 font-medium">KSh ${parseFloat(payment.amount || 0).toLocaleString()}</td>
+                                                <td class="px-4 py-3">
+                                                    <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                        ${payment.payment_type || 'membership'}
+                                                    </span>
+                                                </td>
+                                                <td class="px-4 py-3">
+                                                    <span class="px-2 py-1 rounded-full text-xs font-medium ${payment.status === 'completed' ? 'bg-green-100 text-green-800' : payment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}">
+                                                        ${payment.status || 'pending'}
+                                                    </span>
+                                                </td>
+                                                <td class="px-4 py-3">
+                                                    <div class="flex space-x-2">
+                                                        <button onclick="editPayment('${payment.id}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button onclick="deletePayment('${payment.id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `).join('') : `
+                                            <tr>
+                                                <td colspan="7" class="px-4 py-12 text-center text-gray-500">
+                                                    <i class="fas fa-money-bill-wave text-3xl mb-3"></i>
+                                                    <p class="text-lg">No payments recorded</p>
+                                                    <button onclick="loadSection('add-payment')" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                                        Record First Payment
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        `}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 `;
                 
             } catch (error) {
-                console.error('Error loading payments manager:', error);
-                showToast('Error loading payments manager', 'error');
+                console.error('Error loading payments:', error);
+                showToast('Error loading payments: ' + error.message, 'error');
             }
         }
         
-        // PAGES MANAGER
-        async function loadPagesManager() {
+        // ADD PAYMENT FORM
+        async function loadAddPaymentForm() {
+            const supabase = initSupabase();
+            const { data: members } = await supabase
+                .from('members')
+                .select('id, first_name, last_name, email')
+                .order('first_name');
+            
+            document.getElementById('contentArea').innerHTML = `
+                <div class="bg-white rounded-xl shadow">
+                    <div class="p-6 border-b">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold text-gray-800">Record Payment</h2>
+                            <button onclick="loadSection('payments')" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                                <i class="fas fa-arrow-left mr-2"></i>Back to Payments
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <form id="addPaymentForm" class="space-y-6 max-w-2xl">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Member *</label>
+                                <select name="member_id" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">Select Member</option>
+                                    ${members ? members.map(member => `
+                                        <option value="${member.id}">${member.first_name} ${member.last_name} (${member.email})</option>
+                                    `).join('') : ''}
+                                </select>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Amount (KSh) *</label>
+                                    <input type="number" name="amount" step="0.01" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                           placeholder="0.00">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Payment Type *</label>
+                                    <select name="payment_type" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="membership">Membership Fee</option>
+                                        <option value="event">Event Registration</option>
+                                        <option value="donation">Donation</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                                <input type="text" name="description"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       placeholder="e.g., Annual Membership Fee 2024">
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Payment Date</label>
+                                    <input type="date" name="payment_date"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                           value="${new Date().toISOString().split('T')[0]}">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                                    <select name="status" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="completed">Completed</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="failed">Failed</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-4 pt-6 border-t">
+                                <button type="button" onclick="loadSection('payments')" class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                    Cancel
+                                </button>
+                                <button type="button" onclick="addNewPayment()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                    <i class="fas fa-save mr-2"></i>Record Payment
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // ANNOUNCEMENTS MANAGER
+        async function loadAnnouncementsManager() {
             try {
+                const supabase = initSupabase();
+                const { data: announcements } = await supabase
+                    .from('announcements')
+                    .select('*')
+                    .order('published_at', { ascending: false });
+                
                 document.getElementById('contentArea').innerHTML = `
                     <div class="bg-white rounded-xl shadow">
                         <div class="p-6 border-b">
                             <div class="flex justify-between items-center">
-                                <h2 class="text-xl font-bold text-gray-800">Pages Management</h2>
-                                <button onclick="showAddPageModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                    <i class="fas fa-file-alt mr-2"></i>Add New Page
+                                <h2 class="text-xl font-bold text-gray-800">Announcements</h2>
+                                <button onclick="showAddAnnouncementModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                    <i class="fas fa-plus mr-2"></i>New Announcement
                                 </button>
                             </div>
                         </div>
                         
                         <div class="p-6">
-                            <div class="text-center py-12">
-                                <i class="fas fa-file-alt text-gray-400 text-4xl mb-4"></i>
-                                <h3 class="text-xl font-bold mb-2">Pages Manager</h3>
-                                <p class="text-gray-600 mb-4">Pages management section is under development</p>
-                                <p class="text-sm text-gray-500">Check back soon for full pages management features</p>
-                            </div>
+                            ${announcements && announcements.length > 0 ? announcements.map(announcement => `
+                                <div class="border border-gray-200 rounded-xl p-6 mb-6 hover:bg-gray-50">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div>
+                                            <h3 class="text-lg font-bold text-gray-800">${announcement.title}</h3>
+                                            <p class="text-gray-600 text-sm mt-1">
+                                                <i class="fas fa-calendar mr-2"></i>
+                                                ${new Date(announcement.published_at).toLocaleDateString()}
+                                                <span class="mx-2">•</span>
+                                                <i class="fas fa-users mr-2"></i>
+                                                ${announcement.audience === 'all' ? 'All Members' : announcement.audience}
+                                            </p>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button onclick="editAnnouncement('${announcement.id}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button onclick="deleteAnnouncement('${announcement.id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="prose max-w-none">
+                                        <p class="text-gray-700 whitespace-pre-line">${announcement.content}</p>
+                                    </div>
+                                </div>
+                            `).join('') : `
+                                <div class="text-center py-12">
+                                    <i class="fas fa-bullhorn text-gray-400 text-5xl mb-4"></i>
+                                    <h3 class="text-xl font-bold text-gray-800 mb-3">No Announcements</h3>
+                                    <p class="text-gray-600 mb-6">Create your first announcement to share with members</p>
+                                    <button onclick="showAddAnnouncementModal()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                        <i class="fas fa-plus mr-2"></i>Create Announcement
+                                    </button>
+                                </div>
+                            `}
                         </div>
                     </div>
                 `;
                 
             } catch (error) {
-                console.error('Error loading pages manager:', error);
-                showToast('Error loading pages manager', 'error');
+                console.error('Error loading announcements:', error);
+                showToast('Error loading announcements: ' + error.message, 'error');
             }
         }
         
-        // MEDIA MANAGER
-        async function loadMediaManager() {
+        // REPORTS MANAGER
+        async function loadReportsManager() {
             try {
+                const supabase = initSupabase();
+                
+                // Get data for reports
+                const { data: members } = await supabase
+                    .from('members')
+                    .select('status, chapter, created_at');
+                
+                const { data: payments } = await supabase
+                    .from('payments')
+                    .select('amount, payment_date, status');
+                
+                const { data: events } = await supabase
+                    .from('events')
+                    .select('start_date, status');
+                
+                // Calculate statistics
+                const memberStats = calculateMemberStats(members);
+                const paymentStats = calculatePaymentStats(payments);
+                const eventStats = calculateEventStats(events);
+                
                 document.getElementById('contentArea').innerHTML = `
                     <div class="bg-white rounded-xl shadow">
                         <div class="p-6 border-b">
                             <div class="flex justify-between items-center">
-                                <h2 class="text-xl font-bold text-gray-800">Media Library</h2>
-                                <button onclick="showUploadMediaModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                    <i class="fas fa-upload mr-2"></i>Upload Media
-                                </button>
+                                <h2 class="text-xl font-bold text-gray-800">Reports & Analytics</h2>
+                                <div class="flex space-x-3">
+                                    <button onclick="exportReport()" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        <i class="fas fa-download mr-2"></i>Export Report
+                                    </button>
+                                    <button onclick="printReport()" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        <i class="fas fa-print mr-2"></i>Print
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         
                         <div class="p-6">
-                            <div class="text-center py-12">
-                                <i class="fas fa-images text-gray-400 text-4xl mb-4"></i>
-                                <h3 class="text-xl font-bold mb-2">Media Library</h3>
-                                <p class="text-gray-600 mb-4">Media library section is under development</p>
-                                <p class="text-sm text-gray-500">Check back soon for full media management features</p>
+                            <!-- Summary Cards -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-blue-100 text-sm">Total Members</p>
+                                            <h3 class="text-2xl font-bold mt-1">${memberStats.total}</h3>
+                                            <p class="text-blue-200 text-xs mt-2">
+                                                ${memberStats.active} active • ${memberStats.pending} pending
+                                            </p>
+                                        </div>
+                                        <i class="fas fa-users text-2xl opacity-80"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-green-100 text-sm">Total Revenue</p>
+                                            <h3 class="text-2xl font-bold mt-1">KSh ${paymentStats.totalAmount.toLocaleString()}</h3>
+                                            <p class="text-green-200 text-xs mt-2">
+                                                ${paymentStats.totalCount} transactions
+                                            </p>
+                                        </div>
+                                        <i class="fas fa-money-bill-wave text-2xl opacity-80"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-purple-100 text-sm">Total Events</p>
+                                            <h3 class="text-2xl font-bold mt-1">${eventStats.total}</h3>
+                                            <p class="text-purple-200 text-xs mt-2">
+                                                ${eventStats.upcoming} upcoming • ${eventStats.past} past
+                                            </p>
+                                        </div>
+                                        <i class="fas fa-calendar-alt text-2xl opacity-80"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <!-- Member Distribution -->
+                                <div class="bg-gray-50 rounded-xl p-6">
+                                    <h3 class="text-lg font-bold text-gray-800 mb-4">Member Distribution</h3>
+                                    <div class="space-y-4">
+                                        ${Object.entries(memberStats.byChapter).map(([chapter, count]) => `
+                                            <div>
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span class="font-medium">${chapter || 'No Chapter'}</span>
+                                                    <span>${count} members</span>
+                                                </div>
+                                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                                    <div class="bg-blue-600 h-2 rounded-full" 
+                                                         style="width: ${(count / memberStats.total * 100) || 0}%"></div>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                                
+                                <!-- Revenue Breakdown -->
+                                <div class="bg-gray-50 rounded-xl p-6">
+                                    <h3 class="text-lg font-bold text-gray-800 mb-4">Revenue Breakdown</h3>
+                                    <div class="space-y-4">
+                                        ${paymentStats.monthlyRevenue.length > 0 ? paymentStats.monthlyRevenue.map((month, index) => `
+                                            <div>
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span class="font-medium">${month.month}</span>
+                                                    <span>KSh ${month.amount.toLocaleString()}</span>
+                                                </div>
+                                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                                    <div class="bg-green-600 h-2 rounded-full" 
+                                                         style="width: ${(month.amount / paymentStats.maxMonthly * 100) || 0}%"></div>
+                                                </div>
+                                            </div>
+                                        `).join('') : `
+                                            <div class="text-center py-4 text-gray-500">
+                                                No payment data available
+                                            </div>
+                                        `}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Quick Stats -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+                                <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                    <div class="text-center">
+                                        <div class="text-blue-600 text-2xl mb-2">
+                                            <i class="fas fa-user-plus"></i>
+                                        </div>
+                                        <p class="text-sm text-gray-600">New Members (30 days)</p>
+                                        <p class="text-2xl font-bold mt-1">${memberStats.newLast30Days}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                    <div class="text-center">
+                                        <div class="text-green-600 text-2xl mb-2">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                        <p class="text-sm text-gray-600">Avg. Revenue/Member</p>
+                                        <p class="text-2xl font-bold mt-1">KSh ${(paymentStats.totalAmount / memberStats.total || 0).toFixed(0)}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                    <div class="text-center">
+                                        <div class="text-purple-600 text-2xl mb-2">
+                                            <i class="fas fa-calendar-check"></i>
+                                        </div>
+                                        <p class="text-sm text-gray-600">Events This Month</p>
+                                        <p class="text-2xl font-bold mt-1">${eventStats.thisMonth}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                    <div class="text-center">
+                                        <div class="text-orange-600 text-2xl mb-2">
+                                            <i class="fas fa-percentage"></i>
+                                        </div>
+                                        <p class="text-sm text-gray-600">Active Member Rate</p>
+                                        <p class="text-2xl font-bold mt-1">${((memberStats.active / memberStats.total) * 100 || 0).toFixed(1)}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Report Actions -->
+                            <div class="mt-8 pt-8 border-t border-gray-200">
+                                <h3 class="text-lg font-bold text-gray-800 mb-4">Generate Reports</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <button onclick="generateMemberReport()" class="p-4 bg-blue-50 rounded-lg text-left hover:bg-blue-100">
+                                        <i class="fas fa-users text-blue-600 text-xl mb-2"></i>
+                                        <p class="font-medium">Member Directory</p>
+                                        <p class="text-sm text-gray-600 mt-1">Export complete member list with details</p>
+                                    </button>
+                                    
+                                    <button onclick="generateFinancialReport()" class="p-4 bg-green-50 rounded-lg text-left hover:bg-green-100">
+                                        <i class="fas fa-money-bill-wave text-green-600 text-xl mb-2"></i>
+                                        <p class="font-medium">Financial Report</p>
+                                        <p class="text-sm text-gray-600 mt-1">Revenue, expenses, and financial overview</p>
+                                    </button>
+                                    
+                                    <button onclick="generateEventReport()" class="p-4 bg-purple-50 rounded-lg text-left hover:bg-purple-100">
+                                        <i class="fas fa-calendar-alt text-purple-600 text-xl mb-2"></i>
+                                        <p class="font-medium">Events Report</p>
+                                        <p class="text-sm text-gray-600 mt-1">Event attendance and participation data</p>
+                                    </button>
+                                    
+                                    <button onclick="generateAnalyticsReport()" class="p-4 bg-orange-50 rounded-lg text-left hover:bg-orange-100">
+                                        <i class="fas fa-chart-bar text-orange-600 text-xl mb-2"></i>
+                                        <p class="font-medium">Analytics Dashboard</p>
+                                        <p class="text-sm text-gray-600 mt-1">Trends, growth metrics, and insights</p>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 `;
                 
             } catch (error) {
-                console.error('Error loading media manager:', error);
-                showToast('Error loading media manager', 'error');
+                console.error('Error loading reports:', error);
+                showToast('Error loading reports: ' + error.message, 'error');
             }
         }
         
-        // MODAL FUNCTIONS
-        function showAddEventModal() {
-            showToast('Events feature coming soon!', 'info');
+        // ADMIN USERS MANAGER
+        async function loadUsersManager() {
+            try {
+                const supabase = initSupabase();
+                const { data: profiles } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                document.getElementById('contentArea').innerHTML = `
+                    <div class="bg-white rounded-xl shadow">
+                        <div class="p-6 border-b">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-xl font-bold text-gray-800">Admin Users</h2>
+                                <button onclick="showAddUserModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                    <i class="fas fa-user-plus mr-2"></i>Add Admin
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6">
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">User</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Role</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Last Login</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${profiles && profiles.length > 0 ? profiles.map(profile => `
+                                            <tr class="border-b hover:bg-gray-50">
+                                                <td class="px-4 py-3">
+                                                    <div class="flex items-center">
+                                                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                                            <i class="fas fa-user text-blue-900 text-sm"></i>
+                                                        </div>
+                                                        <div>
+                                                            <p class="font-medium">${profile.first_name || ''} ${profile.last_name || ''}</p>
+                                                            <p class="text-sm text-gray-500">${profile.email}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3">
+                                                    <span class="px-3 py-1 rounded-full text-xs font-medium ${profile.role === 'admin' ? 'bg-purple-100 text-purple-800' : profile.role === 'super_admin' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}">
+                                                        ${profile.role ? profile.role.replace('_', ' ').toUpperCase() : 'USER'}
+                                                    </span>
+                                                </td>
+                                                <td class="px-4 py-3">
+                                                    ${profile.last_login ? new Date(profile.last_login).toLocaleDateString() : 'Never'}
+                                                </td>
+                                                <td class="px-4 py-3">
+                                                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                        Active
+                                                    </span>
+                                                </td>
+                                                <td class="px-4 py-3">
+                                                    <div class="flex space-x-2">
+                                                        ${profile.id !== currentUser.id ? `
+                                                            <button onclick="editUserRole('${profile.id}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            <button onclick="deleteUser('${profile.id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        ` : `
+                                                            <span class="px-3 py-1 text-sm text-gray-500">Current User</span>
+                                                        `}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `).join('') : `
+                                            <tr>
+                                                <td colspan="5" class="px-4 py-12 text-center text-gray-500">
+                                                    <i class="fas fa-users text-3xl mb-3"></i>
+                                                    <p class="text-lg">No admin users found</p>
+                                                </td>
+                                            </tr>
+                                        `}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                                <div class="flex items-start">
+                                    <i class="fas fa-info-circle text-blue-600 mt-1 mr-3"></i>
+                                    <div class="text-sm text-blue-800">
+                                        <p class="font-medium">Admin Roles:</p>
+                                        <ul class="mt-1 space-y-1">
+                                            <li><span class="font-medium">Super Admin:</span> Full system access</li>
+                                            <li><span class="font-medium">Admin:</span> Full management access</li>
+                                            <li><span class="font-medium">Editor:</span> Limited editing access</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showToast('Error loading users: ' + error.message, 'error');
+            }
         }
         
-        function showAddChapterModal() {
-            showToast('Chapters feature coming soon!', 'info');
+        // ADD EVENT FORM
+        async function loadAddEventForm() {
+            const supabase = initSupabase();
+            const { data: chapters } = await supabase
+                .from('chapters')
+                .select('id, name')
+                .order('name');
+            
+            const { data: members } = await supabase
+                .from('members')
+                .select('id, first_name, last_name')
+                .order('first_name');
+            
+            document.getElementById('contentArea').innerHTML = `
+                <div class="bg-white rounded-xl shadow">
+                    <div class="p-6 border-b">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold text-gray-800">Add New Event</h2>
+                            <button onclick="loadSection('events')" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                                <i class="fas fa-arrow-left mr-2"></i>Back to Events
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <form id="addEventForm" class="space-y-6 max-w-2xl">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Event Title *</label>
+                                <input type="text" name="title" required 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                                <textarea name="description" rows="4" 
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Start Date & Time *</label>
+                                    <input type="datetime-local" name="start_date" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">End Date & Time *</label>
+                                    <input type="datetime-local" name="end_date" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                                    <input type="text" name="location"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Attendees</label>
+                                    <input type="number" name="max_attendees"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Chapter</label>
+                                    <select name="chapter_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Select Chapter (Optional)</option>
+                                        ${chapters ? chapters.map(chapter => `
+                                            <option value="${chapter.id}">${chapter.name}</option>
+                                        `).join('') : ''}
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Organizer</label>
+                                    <select name="organizer_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Select Organizer (Optional)</option>
+                                        ${members ? members.map(member => `
+                                            <option value="${member.id}">${member.first_name} ${member.last_name}</option>
+                                        `).join('') : ''}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Event Status</label>
+                                <select name="status" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="upcoming">Upcoming</option>
+                                    <option value="ongoing">Ongoing</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-4 pt-6 border-t">
+                                <button type="button" onclick="loadSection('events')" class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                    Cancel
+                                </button>
+                                <button type="button" onclick="addNewEvent()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                    <i class="fas fa-save mr-2"></i>Save Event
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
         }
-        
-        function showAddPaymentModal() {
-            showToast('Payments feature coming soon!', 'info');
-        }
-        
-        function showAddPageModal() {
-            showToast('Pages feature coming soon!', 'info');
-        }
-        
-        function showUploadMediaModal() {
-            showToast('Media upload feature coming soon!', 'info');
-        }
-        
-        // Note: showAddMemberModal, editMember, updateMember, deleteMember functions
-        // are already defined in your existing code for members management
         
         // UTILITY FUNCTIONS
         function showModal(content) {
@@ -1019,9 +2230,7 @@
         async function logout() {
             if (confirm('Are you sure you want to logout?')) {
                 try {
-                    // Initialize Supabase
                     const supabase = initSupabase();
-                    
                     await supabase.auth.signOut();
                     showToast('Logged out successfully', 'success');
                     setTimeout(() => {
@@ -1034,6 +2243,247 @@
             }
         }
         
+        // DATA FUNCTIONS
+        async function addNewMember() {
+            try {
+                const form = document.getElementById('addMemberForm');
+                const formData = new FormData(form);
+                const memberData = Object.fromEntries(formData.entries());
+                
+                const supabase = initSupabase();
+                
+                const { data, error } = await supabase
+                    .from('members')
+                    .insert([{
+                        ...memberData,
+                        created_by: currentUser.id,
+                        created_at: new Date().toISOString()
+                    }])
+                    .select();
+                
+                if (error) throw error;
+                
+                showToast('Member added successfully', 'success');
+                setTimeout(() => {
+                    loadSection('members');
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error adding member:', error);
+                showToast('Error adding member: ' + error.message, 'error');
+            }
+        }
+        
+        async function addNewEvent() {
+            try {
+                const form = document.getElementById('addEventForm');
+                const formData = new FormData(form);
+                const eventData = Object.fromEntries(formData.entries());
+                
+                // Convert datetime strings to ISO format
+                if (eventData.start_date) {
+                    eventData.start_date = new Date(eventData.start_date).toISOString();
+                }
+                if (eventData.end_date) {
+                    eventData.end_date = new Date(eventData.end_date).toISOString();
+                }
+                
+                const supabase = initSupabase();
+                
+                const { data, error } = await supabase
+                    .from('events')
+                    .insert([{
+                        ...eventData,
+                        created_at: new Date().toISOString()
+                    }])
+                    .select();
+                
+                if (error) throw error;
+                
+                showToast('Event added successfully', 'success');
+                setTimeout(() => {
+                    loadSection('events');
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error adding event:', error);
+                showToast('Error adding event: ' + error.message, 'error');
+            }
+        }
+        
+        async function addNewPayment() {
+            try {
+                const form = document.getElementById('addPaymentForm');
+                const formData = new FormData(form);
+                const paymentData = Object.fromEntries(formData.entries());
+                
+                // Convert date string to ISO format
+                if (paymentData.payment_date) {
+                    paymentData.payment_date = new Date(paymentData.payment_date).toISOString();
+                }
+                
+                const supabase = initSupabase();
+                
+                const { data, error } = await supabase
+                    .from('payments')
+                    .insert([{
+                        ...paymentData,
+                        created_by: currentUser.id,
+                        created_at: new Date().toISOString()
+                    }])
+                    .select();
+                
+                if (error) throw error;
+                
+                showToast('Payment recorded successfully', 'success');
+                setTimeout(() => {
+                    loadSection('payments');
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error adding payment:', error);
+                showToast('Error recording payment: ' + error.message, 'error');
+            }
+        }
+        
+        // TABLE INITIALIZATION
+        async function initializeTable(tableName) {
+            try {
+                const supabase = initSupabase();
+                // Just try to select to see if table exists
+                await supabase
+                    .from(tableName)
+                    .select('*')
+                    .limit(1);
+                return true;
+            } catch (error) {
+                console.log(`Table ${tableName} doesn't exist or can't be accessed`);
+                return false;
+            }
+        }
+        
+        // HELPER FUNCTIONS FOR REPORTS
+        function calculateMemberStats(members) {
+            if (!members) return {
+                total: 0,
+                active: 0,
+                pending: 0,
+                inactive: 0,
+                byChapter: {},
+                newLast30Days: 0
+            };
+            
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
+            const stats = {
+                total: members.length,
+                active: 0,
+                pending: 0,
+                inactive: 0,
+                byChapter: {},
+                newLast30Days: 0
+            };
+            
+            members.forEach(member => {
+                // Count by status
+                if (member.status === 'active') stats.active++;
+                else if (member.status === 'pending') stats.pending++;
+                else stats.inactive++;
+                
+                // Count by chapter
+                const chapter = member.chapter || 'No Chapter';
+                stats.byChapter[chapter] = (stats.byChapter[chapter] || 0) + 1;
+                
+                // Count new in last 30 days
+                if (member.created_at && new Date(member.created_at) >= thirtyDaysAgo) {
+                    stats.newLast30Days++;
+                }
+            });
+            
+            return stats;
+        }
+        
+        function calculatePaymentStats(payments) {
+            if (!payments) return {
+                totalAmount: 0,
+                totalCount: 0,
+                monthlyRevenue: [],
+                maxMonthly: 0
+            };
+            
+            const monthly = {};
+            let totalAmount = 0;
+            
+            payments.forEach(payment => {
+                const amount = parseFloat(payment.amount || 0);
+                totalAmount += amount;
+                
+                if (payment.payment_date) {
+                    const date = new Date(payment.payment_date);
+                    const monthKey = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+                    const monthName = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                    
+                    if (!monthly[monthKey]) {
+                        monthly[monthKey] = {
+                            month: monthName,
+                            amount: 0
+                        };
+                    }
+                    monthly[monthKey].amount += amount;
+                }
+            });
+            
+            const monthlyRevenue = Object.values(monthly)
+                .sort((a, b) => new Date(a.month) - new Date(b.month))
+                .slice(-6); // Last 6 months
+            
+            const maxMonthly = Math.max(...monthlyRevenue.map(m => m.amount), 0);
+            
+            return {
+                totalAmount,
+                totalCount: payments.length,
+                monthlyRevenue,
+                maxMonthly
+            };
+        }
+        
+        function calculateEventStats(events) {
+            if (!events) return {
+                total: 0,
+                upcoming: 0,
+                past: 0,
+                thisMonth: 0
+            };
+            
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            const stats = {
+                total: events.length,
+                upcoming: 0,
+                past: 0,
+                thisMonth: 0
+            };
+            
+            events.forEach(event => {
+                const eventDate = new Date(event.start_date);
+                
+                if (eventDate >= now) {
+                    stats.upcoming++;
+                } else {
+                    stats.past++;
+                }
+                
+                if (eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear) {
+                    stats.thisMonth++;
+                }
+            });
+            
+            return stats;
+        }
+        
         // Close modal when clicking outside
         document.addEventListener('click', function(event) {
             const modal = document.getElementById('modal');
@@ -1044,7 +2494,6 @@
         
         // Initialize on load
         document.addEventListener('DOMContentLoaded', function() {
-            // Add a small delay to ensure all scripts are loaded
             setTimeout(initializeDashboard, 100);
         });
     </script>
