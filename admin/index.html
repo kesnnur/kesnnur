@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KESNNUR Admin Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -28,6 +29,10 @@
         .input-admin::placeholder {
             color: rgba(255, 255, 255, 0.6);
         }
+        
+        .loading-spinner {
+            display: none;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center p-4">
@@ -47,11 +52,13 @@
             
             <form id="adminLoginForm">
                 <div class="mb-6">
-                    <label class="block text-white/80 mb-2">Admin Username</label>
-                    <input type="text" 
+                    <label class="block text-white/80 mb-2">Admin Email</label>
+                    <input type="email" 
+                           id="email"
                            class="w-full px-4 py-3 input-admin rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50"
-                           placeholder="Enter admin username"
-                           required>
+                           placeholder="admin@kesnnur.org"
+                           required
+                           autocomplete="email">
                 </div>
                 
                 <div class="mb-6">
@@ -61,7 +68,8 @@
                                id="password"
                                class="w-full px-4 py-3 input-admin rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50 pr-10"
                                placeholder="Enter password"
-                               required>
+                               required
+                               autocomplete="current-password">
                         <button type="button" 
                                 onclick="togglePassword()"
                                 class="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white">
@@ -70,16 +78,25 @@
                     </div>
                 </div>
                 
-                <div class="mb-6">
+                <div id="errorMessage" class="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-white hidden">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    <span id="errorText"></span>
+                </div>
+                
+                <div class="mb-6 flex items-center justify-between">
                     <label class="flex items-center">
-                        <input type="checkbox" class="mr-2">
+                        <input type="checkbox" id="rememberMe" class="mr-2">
                         <span class="text-white/80">Remember me</span>
                     </label>
+                    <a href="#" class="text-white/70 hover:text-white text-sm">Forgot password?</a>
                 </div>
                 
                 <button type="submit" 
-                        class="w-full bg-white text-blue-900 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors">
-                    <i class="fas fa-lock mr-2"></i>Login to Dashboard
+                        id="loginButton"
+                        class="w-full bg-white text-blue-900 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors flex items-center justify-center">
+                    <i class="fas fa-lock mr-2"></i>
+                    <span id="buttonText">Login to Dashboard</span>
+                    <i class="fas fa-spinner fa-spin ml-2 loading-spinner" id="loadingSpinner"></i>
                 </button>
             </form>
             
@@ -100,24 +117,128 @@
     </div>
 
     <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const type = passwordInput.type === 'password' ? 'text' : 'password';
-            passwordInput.type = type;
+        // Initialize Supabase
+        const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with your Supabase URL
+        const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase anon key
+        
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+        
+        // Check if user is already logged in
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session) {
+                // Check if user is admin
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('id', session.user.id)
+                    .single();
+                
+                if (profile && ['chapter_admin', 'national_admin', 'super_admin'].includes(profile.role)) {
+                    window.location.href = 'dashboard.html';
+                }
+            }
         }
         
-        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+        checkAuth();
+        
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = passwordInput.parentElement.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+        
+        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // For demo purposes - In production, this would connect to backend
-            const username = this.querySelector('input[type="text"]').value;
-            const password = this.querySelector('input[type="password"]').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const buttonText = document.getElementById('buttonText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
             
-            if (username === 'admin' && password === 'kesnnur2024') {
-                alert('Login successful! Redirecting to dashboard...');
+            // Show loading state
+            buttonText.textContent = 'Authenticating...';
+            loadingSpinner.style.display = 'inline-block';
+            errorMessage.classList.add('hidden');
+            
+            try {
+                // Sign in with Supabase
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) throw error;
+                
+                // Check if user has admin role
+                const { data: profile, error: profileError } = await supabase
+                    .from('profiles')
+                    .select('role, status')
+                    .eq('id', data.user.id)
+                    .single();
+                
+                if (profileError) throw profileError;
+                
+                // Verify admin role
+                const adminRoles = ['chapter_admin', 'national_admin', 'super_admin'];
+                if (!adminRoles.includes(profile.role)) {
+                    throw new Error('You do not have administrator privileges.');
+                }
+                
+                // Verify account is active
+                if (profile.status !== 'active') {
+                    throw new Error('Your account is not active. Please contact support.');
+                }
+                
+                // Update last login
+                await supabase
+                    .from('profiles')
+                    .update({ last_login: new Date() })
+                    .eq('id', data.user.id);
+                
+                // Redirect to dashboard
                 window.location.href = 'dashboard.html';
-            } else {
-                alert('Invalid credentials. Please try again.');
+                
+            } catch (error) {
+                // Show error
+                errorText.textContent = error.message;
+                errorMessage.classList.remove('hidden');
+                
+                // Reset button
+                buttonText.textContent = 'Login to Dashboard';
+                loadingSpinner.style.display = 'none';
+                
+                console.error('Login error:', error);
+            }
+        });
+        
+        // Forgot password functionality
+        document.querySelector('a[href="#"]').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const email = prompt('Please enter your email address to reset password:');
+            
+            if (email) {
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: `${window.location.origin}/reset-password.html`,
+                });
+                
+                if (error) {
+                    alert('Error sending reset email: ' + error.message);
+                } else {
+                    alert('Password reset email sent. Please check your inbox.');
+                }
             }
         });
     </script>
