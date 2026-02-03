@@ -6,8 +6,6 @@
     <title>Member Portal - KESNNUR</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
-    <script src="utils.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -98,8 +96,8 @@
                 <div class="bg-white rounded-2xl shadow-xl mb-12">
                     <!-- Tabs Header -->
                     <div class="flex border-b">
-                        <button class="tab-button flex-1 active" data-tab="login">Member Login</button>
-                        <button class="tab-button flex-1" data-tab="register">Register</button>
+                        <button class="tab-button flex-1 active" onclick="switchTab('login')">Member Login</button>
+                        <button class="tab-button flex-1" onclick="switchTab('register')">Register</button>
                     </div>
                     
                     <!-- Login Tab -->
@@ -389,13 +387,13 @@
                 <div class="bg-white rounded-xl shadow mb-8">
                     <div class="flex border-b">
                         <button class="dashboard-tab py-4 px-6 font-medium border-b-2 border-transparent hover:text-blue-900" 
-                                data-tab="profile">Profile</button>
+                                onclick="loadTabContent('profile')">Profile</button>
                         <button class="dashboard-tab py-4 px-6 font-medium border-b-2 border-transparent hover:text-blue-900" 
-                                data-tab="events">My Events</button>
+                                onclick="loadTabContent('events')">My Events</button>
                         <button class="dashboard-tab py-4 px-6 font-medium border-b-2 border-transparent hover:text-blue-900" 
-                                data-tab="payments">Payments</button>
+                                onclick="loadTabContent('payments')">Payments</button>
                         <button class="dashboard-tab py-4 px-6 font-medium border-b-2 border-transparent hover:text-blue-900" 
-                                data-tab="resources">Resources</button>
+                                onclick="loadTabContent('resources')">Resources</button>
                     </div>
                     
                     <div id="dashboardContent" class="p-6">
@@ -459,7 +457,7 @@
     <footer class="bg-gray-900 text-white py-8">
         <div class="container mx-auto px-4">
             <div class="text-center">
-                <p>© 2024 KESNNUR - Kenya Students & Novice Nurses</p>
+                <p>© <span id="currentYear"></span> KESNNUR - Kenya Students & Novice Nurses</p>
                 <p class="text-gray-400 mt-2">Nurses Complex KNH, Nairobi | +254 791 296 924 | kesnnur@gmail.com</p>
             </div>
         </div>
@@ -496,19 +494,39 @@
     </div>
 
     <script>
-        // Initialize Supabase
-        const supabase = window.supabase.createClient(
-            SUPABASE_CONFIG.url,
-            SUPABASE_CONFIG.publishableKey
-        );
-        
+        // Global variables
+        let supabaseClient = null;
         let currentUser = null;
         let currentMember = null;
+        const ADMIN_ROLES = ['chapter_admin', 'national_admin', 'super_admin'];
+        
+        // Initialize application
+        async function initializeApp() {
+            try {
+                // Initialize Supabase
+                supabaseClient = window.supabase.createClient(
+                    'https://noadhwqvaxajuckpibbo.supabase.co',
+                    'sb_publishable_P02egT5dJQkzvkxz5wETyQ_vZkdcxxz'
+                );
+                
+                // Set current year in footer
+                document.getElementById('currentYear').textContent = new Date().getFullYear();
+                
+                // Check authentication
+                await checkAuth();
+                
+                // Setup event listeners
+                setupEventListeners();
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+            }
+        }
         
         // Check authentication on load
         async function checkAuth() {
             try {
-                const { data: { session } } = await supabase.auth.getSession();
+                const { data: { session } } = await supabaseClient.auth.getSession();
                 
                 if (session) {
                     currentUser = session.user;
@@ -528,6 +546,25 @@
             document.getElementById('memberDashboard').classList.add('hidden');
         }
         
+        // Tab switching function
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.textContent.toLowerCase().includes(tabName)) {
+                    button.classList.add('active');
+                }
+            });
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+                if (content.id === tabName + 'Tab') {
+                    content.classList.add('active');
+                }
+            });
+        }
+        
         // Load member dashboard
         async function loadMemberDashboard() {
             try {
@@ -536,7 +573,7 @@
                 document.getElementById('memberDashboard').classList.remove('hidden');
                 
                 // Load user profile
-                const { data: profile } = await supabase
+                const { data: profile } = await supabaseClient
                     .from('profiles')
                     .select('*')
                     .eq('id', currentUser.id)
@@ -554,7 +591,7 @@
                 }
                 
                 // Load member data
-                const { data: member } = await supabase
+                const { data: member } = await supabaseClient
                     .from('members')
                     .select('*')
                     .eq('profile_id', currentUser.id)
@@ -570,9 +607,6 @@
                     await loadMemberStats();
                 }
                 
-                // Setup dashboard tabs
-                setupDashboardTabs();
-                
             } catch (error) {
                 console.error('Error loading dashboard:', error);
                 showAuthContainer();
@@ -582,19 +616,21 @@
         // Load member statistics
         async function loadMemberStats() {
             try {
+                if (!currentMember) return;
+                
                 // Count registered events
-                const { count: eventCount } = await supabase
+                const { count: eventCount } = await supabaseClient
                     .from('event_registrations')
                     .select('*', { count: 'exact', head: true })
-                    .eq('member_id', currentMember?.id);
+                    .eq('member_id', currentMember.id);
                 
                 document.getElementById('eventCount').textContent = eventCount || 0;
                 
                 // Count certificates
-                const { count: certificateCount } = await supabase
+                const { count: certificateCount } = await supabaseClient
                     .from('certificates')
                     .select('*', { count: 'exact', head: true })
-                    .eq('member_id', currentMember?.id);
+                    .eq('member_id', currentMember.id);
                 
                 document.getElementById('certificateCount').textContent = certificateCount || 0;
                 
@@ -603,55 +639,51 @@
             }
         }
         
-        // Setup dashboard tabs
-        function setupDashboardTabs() {
-            const tabs = document.querySelectorAll('.dashboard-tab');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabName = this.getAttribute('data-tab');
-                    
-                    // Update active tab
-                    tabs.forEach(t => t.classList.remove('border-blue-900', 'text-blue-900'));
-                    this.classList.add('border-blue-900', 'text-blue-900');
-                    
-                    // Load tab content
-                    loadTabContent(tabName);
-                });
-            });
-        }
-        
-        // Load tab content
+        // Load tab content for dashboard
         async function loadTabContent(tabName) {
             const contentDiv = document.getElementById('dashboardContent');
+            
+            // Update active tab
+            document.querySelectorAll('.dashboard-tab').forEach(tab => {
+                tab.classList.remove('border-blue-900', 'text-blue-900');
+            });
             
             switch(tabName) {
                 case 'profile':
                     await loadProfileContent(contentDiv);
+                    // Add active class to profile tab
+                    document.querySelector('.dashboard-tab:nth-child(1)').classList.add('border-blue-900', 'text-blue-900');
                     break;
                 case 'events':
-                    await loadEventsContent(contentDiv);
+                    contentDiv.innerHTML = `<div class="text-center py-12">Events content coming soon</div>`;
+                    // Add active class to events tab
+                    document.querySelector('.dashboard-tab:nth-child(2)').classList.add('border-blue-900', 'text-blue-900');
                     break;
                 case 'payments':
-                    await loadPaymentsContent(contentDiv);
+                    contentDiv.innerHTML = `<div class="text-center py-12">Payments content coming soon</div>`;
+                    // Add active class to payments tab
+                    document.querySelector('.dashboard-tab:nth-child(3)').classList.add('border-blue-900', 'text-blue-900');
                     break;
                 case 'resources':
-                    await loadResourcesContent(contentDiv);
+                    contentDiv.innerHTML = `<div class="text-center py-12">Resources content coming soon</div>`;
+                    // Add active class to resources tab
+                    document.querySelector('.dashboard-tab:nth-child(4)').classList.add('border-blue-900', 'text-blue-900');
                     break;
                 default:
-                    contentDiv.innerHTML = `<div class="text-center py-12">Tab content coming soon</div>`;
+                    contentDiv.innerHTML = `<div class="text-center py-12">Select a tab to manage your account</div>`;
             }
         }
         
         // Load profile content
         async function loadProfileContent(container) {
             try {
-                const { data: profile } = await supabase
+                const { data: profile } = await supabaseClient
                     .from('profiles')
                     .select('*')
                     .eq('id', currentUser.id)
                     .single();
                 
-                const { data: member } = await supabase
+                const { data: member } = await supabaseClient
                     .from('members')
                     .select('*, chapter:chapters(name)')
                     .eq('profile_id', currentUser.id)
@@ -718,12 +750,32 @@
                 
             } catch (error) {
                 console.error('Error loading profile:', error);
-                container.innerHTML = `<div class="text-red-600">Error loading profile: ${error.message}</div>`;
+                container.innerHTML = `<div class="text-red-600">Error loading profile</div>`;
             }
         }
         
+        // Setup event listeners
+        function setupEventListeners() {
+            // Handle login form
+            document.getElementById('loginForm')?.addEventListener('submit', handleLogin);
+            
+            // Handle registration form
+            document.getElementById('registerForm')?.addEventListener('submit', handleRegistration);
+            
+            // Handle forgot password form
+            document.getElementById('forgotPasswordForm')?.addEventListener('submit', handleForgotPassword);
+            
+            // Tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabName = this.textContent.toLowerCase().includes('login') ? 'login' : 'register';
+                    switchTab(tabName);
+                });
+            });
+        }
+        
         // Handle login
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        async function handleLogin(e) {
             e.preventDefault();
             
             const email = document.getElementById('loginEmail').value;
@@ -739,7 +791,7 @@
             errorDiv.classList.add('hidden');
             
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
                     email: email,
                     password: password
                 });
@@ -757,13 +809,13 @@
                 buttonText.textContent = 'Sign In';
                 spinner.style.display = 'none';
             }
-        });
+        }
         
         // Handle registration
-        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        async function handleRegistration(e) {
             e.preventDefault();
             
-            const formData = new FormData(this);
+            const formData = new FormData(e.target);
             const data = Object.fromEntries(formData);
             const errorDiv = document.getElementById('registerError');
             const button = document.getElementById('registerButton');
@@ -777,7 +829,7 @@
             
             try {
                 // 1. Create auth user
-                const { data: authData, error: authError } = await supabase.auth.signUp({
+                const { data: authData, error: authError } = await supabaseClient.auth.signUp({
                     email: data.email,
                     password: data.password,
                     options: {
@@ -792,7 +844,7 @@
                 if (authError) throw authError;
                 
                 // 2. Create profile
-                const { error: profileError } = await supabase
+                const { error: profileError } = await supabaseClient
                     .from('profiles')
                     .insert({
                         id: authData.user.id,
@@ -807,7 +859,7 @@
                 if (profileError) throw profileError;
                 
                 // 3. Create member record
-                const { error: memberError } = await supabase
+                const { error: memberError } = await supabaseClient
                     .from('members')
                     .insert({
                         profile_id: authData.user.id,
@@ -823,13 +875,13 @@
                 showNotification('Account created successfully! Please check your email to verify your account.', 'success');
                 
                 // Clear form
-                this.reset();
+                e.target.reset();
                 
                 // Switch to login tab
                 switchTab('login');
                 
                 // Send verification email
-                await supabase.auth.resend({
+                await supabaseClient.auth.resend({
                     type: 'signup',
                     email: data.email
                 });
@@ -842,39 +894,20 @@
                 buttonText.textContent = 'Create Account';
                 spinner.style.display = 'none';
             }
-        });
-        
-        // Tab switching
-        function switchTab(tabName) {
-            // Update tab buttons
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-                if (button.getAttribute('data-tab') === tabName) {
-                    button.classList.add('active');
-                }
-            });
-            
-            // Update tab content
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-                if (content.id === tabName + 'Tab') {
-                    content.classList.add('active');
-                }
-            });
         }
         
-        // Forgot password
+        // Forgot password functions
         function showForgotPassword() {
             document.getElementById('forgotPasswordModal').style.display = 'block';
-            document.getElementById('forgotPasswordModal').querySelector('.modal-container').style.display = 'block';
+            document.querySelector('#forgotPasswordModal .modal-container').style.display = 'block';
         }
         
         function closeForgotPassword() {
             document.getElementById('forgotPasswordModal').style.display = 'none';
         }
         
-        // Handle forgot password form
-        document.getElementById('forgotPasswordForm').addEventListener('submit', async function(e) {
+        // Handle forgot password
+        async function handleForgotPassword(e) {
             e.preventDefault();
             
             const email = document.getElementById('resetEmail').value;
@@ -885,7 +918,7 @@
             successDiv.classList.add('hidden');
             
             try {
-                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
                     redirectTo: `${window.location.origin}/members.html#reset-password`,
                 });
                 
@@ -902,12 +935,12 @@
                 errorDiv.textContent = error.message;
                 errorDiv.classList.remove('hidden');
             }
-        });
+        }
         
         // Logout
         async function logout() {
             try {
-                await supabase.auth.signOut();
+                await supabaseClient.auth.signOut();
                 showNotification('Logged out successfully', 'success');
                 setTimeout(() => {
                     window.location.reload();
@@ -946,16 +979,17 @@
             }, 5000);
         }
         
-        // Initialize
-        document.addEventListener('DOMContentLoaded', checkAuth);
+        // Placeholder functions for future implementation
+        function editProfile() {
+            alert('Profile editing coming soon!');
+        }
         
-        // Tab button event listeners
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const tabName = this.getAttribute('data-tab');
-                switchTab(tabName);
-            });
-        });
+        function changePassword() {
+            alert('Password change coming soon!');
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeApp);
         
         // Close modal when clicking outside
         window.onclick = function(event) {
