@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Portal - KESNNUR</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="utils.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -13,9 +16,53 @@
         .bg-kesnnur-blue { background-color: #1e3a8a; }
         .membership-card { transition: all 0.3s; }
         .membership-card:hover { transform: scale(1.02); }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1000;
+        }
+        .modal-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: none;
+            z-index: 1001;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .tab-button {
+            padding: 12px 24px;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+        }
+        .tab-button.active {
+            border-bottom-color: #1e3a8a;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+        .loading-spinner {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
+    <!-- Navigation -->
     <nav class="bg-white shadow">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
@@ -35,130 +82,888 @@
                     <a href="resources.html" class="text-gray-700 hover:kesnnur-blue">Resources</a>
                     <a href="contact.html" class="text-gray-700 hover:kesnnur-blue">Contact</a>
                 </div>
-                <a href="members.html" class="bg-kesnnur-blue text-white px-4 py-2 rounded-lg">Member Portal</a>
+                <div id="authButtons">
+                    <a href="members.html" class="bg-kesnnur-blue text-white px-4 py-2 rounded-lg">Member Portal</a>
+                </div>
             </div>
         </div>
     </nav>
 
+    <!-- Main Content -->
     <div class="container mx-auto px-4 py-12">
-        <div class="max-w-4xl mx-auto">
-            <!-- Login/Register Section -->
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-12">
-                <div class="md:flex">
-                    <!-- Login Side -->
-                    <div class="md:w-1/2 p-8">
-                        <h2 class="text-2xl font-bold mb-6 kesnnur-blue">Member Login</h2>
+        <div class="max-w-6xl mx-auto">
+            <!-- Auth Container -->
+            <div id="authContainer">
+                <!-- Login/Register Tabs -->
+                <div class="bg-white rounded-2xl shadow-xl mb-12">
+                    <!-- Tabs Header -->
+                    <div class="flex border-b">
+                        <button class="tab-button flex-1 active" data-tab="login">Member Login</button>
+                        <button class="tab-button flex-1" data-tab="register">Register</button>
+                    </div>
+                    
+                    <!-- Login Tab -->
+                    <div id="loginTab" class="tab-content active p-8">
+                        <h2 class="text-2xl font-bold mb-6 kesnnur-blue">Welcome Back</h2>
                         <form id="loginForm">
                             <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">Email</label>
-                                <input type="email" class="w-full px-4 py-3 border rounded-lg" placeholder="member@example.com" required>
+                                <label class="block text-gray-700 mb-2">Email Address</label>
+                                <input type="email" id="loginEmail" 
+                                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       placeholder="member@example.com" required>
                             </div>
                             <div class="mb-6">
                                 <label class="block text-gray-700 mb-2">Password</label>
-                                <input type="password" class="w-full px-4 py-3 border rounded-lg" placeholder="••••••••" required>
+                                <input type="password" id="loginPassword" 
+                                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       placeholder="••••••••" required>
+                                <div class="flex justify-end mt-2">
+                                    <button type="button" onclick="showForgotPassword()" class="text-sm text-blue-900 hover:underline">
+                                        Forgot password?
+                                    </button>
+                                </div>
                             </div>
-                            <button type="submit" class="w-full bg-kesnnur-blue text-white py-3 rounded-lg font-bold hover:bg-blue-800">
-                                Sign In
+                            
+                            <div id="loginError" class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg hidden">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                <span id="loginErrorText"></span>
+                            </div>
+                            
+                            <button type="submit" id="loginButton" 
+                                    class="w-full bg-kesnnur-blue text-white py-3 rounded-lg font-bold hover:bg-blue-800 transition-colors">
+                                <span id="loginButtonText">Sign In</span>
+                                <i class="fas fa-spinner fa-spin ml-2 loading-spinner" id="loginSpinner"></i>
                             </button>
-                            <p class="text-center mt-4">
-                                <a href="#" class="text-blue-900 hover:underline">Forgot password?</a>
-                            </p>
                         </form>
+                        
+                        <div class="mt-6 pt-6 border-t border-gray-100">
+                            <p class="text-gray-600 text-center">
+                                Don't have an account? 
+                                <button onclick="switchTab('register')" class="text-blue-900 font-medium hover:underline">
+                                    Register here
+                                </button>
+                            </p>
+                        </div>
                     </div>
                     
-                    <!-- Register Side -->
-                    <div class="md:w-1/2 bg-gradient-to-br from-blue-900 to-blue-700 text-white p-8">
-                        <h2 class="text-2xl font-bold mb-6">Join KESNNUR</h2>
-                        <p class="mb-6">Become a member to access exclusive benefits, events, and resources.</p>
-                        <ul class="space-y-3 mb-8">
-                            <li><i class="fas fa-check-circle mr-2"></i> Access to all events</li>
-                            <li><i class="fas fa-check-circle mr-2"></i> Download resources</li>
-                            <li><i class="fas fa-check-circle mr-2"></i> Networking opportunities</li>
-                            <li><i class="fas fa-check-circle mr-2"></i> Professional mentorship</li>
-                            <li><i class="fas fa-check-circle mr-2"></i> Certificate of membership</li>
-                        </ul>
-                        <a href="#membership" class="block w-full bg-white text-blue-900 py-3 rounded-lg font-bold text-center hover:bg-gray-100">
-                            View Membership Options
-                        </a>
+                    <!-- Register Tab -->
+                    <div id="registerTab" class="tab-content p-8">
+                        <h2 class="text-2xl font-bold mb-6 kesnnur-blue">Join KESNNUR</h2>
+                        <form id="registerForm">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-2">First Name *</label>
+                                    <input type="text" name="first_name" 
+                                           class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                           required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-2">Last Name *</label>
+                                    <input type="text" name="last_name" 
+                                           class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                           required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Email Address *</label>
+                                <input type="email" name="email" 
+                                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       required>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Phone Number *</label>
+                                <input type="tel" name="phone" 
+                                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       placeholder="+254 XXX XXX XXX" required>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Membership Type *</label>
+                                <select name="membership_type" 
+                                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        required>
+                                    <option value="">Select membership type</option>
+                                    <option value="student">Student Member (Ksh 500/year)</option>
+                                    <option value="novice">Novice Nurse (Ksh 1,000/year)</option>
+                                    <option value="professional">Professional Nurse (Ksh 2,000/year)</option>
+                                    <option value="alumni">Alumni Member (Ksh 1,500/year)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Institution/Organization</label>
+                                <input type="text" name="institution" 
+                                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Student ID (if student)</label>
+                                <input type="text" name="student_id" 
+                                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label class="block text-gray-700 mb-2">Password *</label>
+                                <input type="password" name="password" 
+                                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       placeholder="Minimum 8 characters" required minlength="8">
+                                <p class="text-sm text-gray-500 mt-1">Password must be at least 8 characters long</p>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label class="flex items-center">
+                                    <input type="checkbox" name="terms" class="mr-2" required>
+                                    <span class="text-gray-700">
+                                        I agree to the 
+                                        <a href="#" class="text-blue-900 hover:underline">Terms of Service</a> 
+                                        and 
+                                        <a href="#" class="text-blue-900 hover:underline">Privacy Policy</a>
+                                    </span>
+                                </label>
+                            </div>
+                            
+                            <div id="registerError" class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg hidden">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                <span id="registerErrorText"></span>
+                            </div>
+                            
+                            <button type="submit" id="registerButton" 
+                                    class="w-full bg-gradient-to-r from-blue-900 to-blue-700 text-white py-3 rounded-lg font-bold hover:opacity-90 transition-opacity">
+                                <span id="registerButtonText">Create Account</span>
+                                <i class="fas fa-spinner fa-spin ml-2 loading-spinner" id="registerSpinner"></i>
+                            </button>
+                        </form>
+                        
+                        <div class="mt-6 pt-6 border-t border-gray-100">
+                            <p class="text-gray-600 text-center">
+                                Already have an account? 
+                                <button onclick="switchTab('login')" class="text-blue-900 font-medium hover:underline">
+                                    Sign in here
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Membership Plans -->
+                <div id="membership" class="mb-16">
+                    <h2 class="text-3xl font-bold mb-8 kesnnur-blue text-center">Membership Benefits</h2>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Student Membership -->
+                        <div class="membership-card bg-white rounded-xl shadow-lg p-8">
+                            <div class="text-center mb-6">
+                                <div class="inline-block bg-blue-100 text-blue-900 px-3 py-1 rounded-full text-sm font-bold mb-2">
+                                    For Students
+                                </div>
+                                <h3 class="text-xl font-bold mb-2">Student Member</h3>
+                                <div class="text-3xl font-bold kesnnur-blue">Ksh 500<span class="text-sm text-gray-600">/year</span></div>
+                            </div>
+                            <ul class="space-y-3 mb-8">
+                                <li><i class="fas fa-check text-green-500 mr-2"></i> Access to all workshops</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i> 50% event discounts</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i> Resource library access</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i> Student networking</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i> Certificate of membership</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i> Monthly newsletter</li>
+                            </ul>
+                            <button onclick="switchTab('register')" class="w-full border-2 border-kesnnur-blue text-kesnnur-blue py-3 rounded-lg font-bold hover:bg-blue-50">
+                                Register Now
+                            </button>
+                        </div>
+
+                        <!-- Novice Nurse -->
+                        <div class="membership-card bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-xl shadow-xl p-8 transform scale-105 relative">
+                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                                <div class="bg-yellow-500 text-white px-4 py-1 rounded-full text-sm font-bold">
+                                    MOST POPULAR
+                                </div>
+                            </div>
+                            <div class="text-center mb-6 pt-4">
+                                <h3 class="text-xl font-bold mb-2">Novice Nurse</h3>
+                                <div class="text-3xl font-bold">Ksh 1,000<span class="text-sm opacity-80">/year</span></div>
+                            </div>
+                            <ul class="space-y-3 mb-8">
+                                <li><i class="fas fa-check mr-2"></i> All student benefits</li>
+                                <li><i class="fas fa-check mr-2"></i> Free conference registration</li>
+                                <li><i class="fas fa-check mr-2"></i> Mentorship program access</li>
+                                <li><i class="fas fa-check mr-2"></i> Leadership training</li>
+                                <li><i class="fas fa-check mr-2"></i> Research opportunities</li>
+                                <li><i class="fas fa-check mr-2"></i> Professional development</li>
+                            </ul>
+                            <button onclick="switchTab('register')" class="w-full bg-white text-blue-900 py-3 rounded-lg font-bold hover:bg-gray-100">
+                                Get Started
+                            </button>
+                        </div>
+
+                        <!-- Professional -->
+                        <div class="membership-card bg-white rounded-xl shadow-lg p-8">
+                            <div class="text-center mb-6">
+                                <div class="inline-block bg-purple-100 text-purple-900 px-3 py-1 rounded-full text-sm font-bold mb-2">
+                                    For Professionals
+                                </div>
+                                <h3 class="text-xl font-bold mb-2">Professional Nurse</h3>
+                                <div class="text-3xl font-bold kesnnur-blue">Ksh 2,000<span class="text-sm text-gray-600">/year</span></div>
+                            </div>
+                            <ul class="space-y-3 mb-8">
+                                <li><i class="fas fa-check text-green-500 mr-2"></i> All novice benefits</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i> Become a mentor</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i> Council positions</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i> Speaker opportunities</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i> Advanced workshops</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i> Research grants access</li>
+                            </ul>
+                            <button onclick="switchTab('register')" class="w-full border-2 border-kesnnur-blue text-kesnnur-blue py-3 rounded-lg font-bold hover:bg-blue-50">
+                                Register Now
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Membership Plans -->
-            <div id="membership" class="mb-16">
-                <h2 class="text-3xl font-bold mb-8 kesnnur-blue text-center">Membership Plans</h2>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Student Membership -->
-                    <div class="membership-card bg-white rounded-xl shadow-lg p-8">
-                        <div class="text-center mb-6">
-                            <h3 class="text-xl font-bold mb-2">Student Member</h3>
-                            <div class="text-3xl font-bold kesnnur-blue">Ksh 500<span class="text-sm text-gray-600">/year</span></div>
-                        </div>
-                        <ul class="space-y-3 mb-8">
-                            <li><i class="fas fa-check text-green-500 mr-2"></i> Access to workshops</li>
-                            <li><i class="fas fa-check text-green-500 mr-2"></i> Event discounts</li>
-                            <li><i class="fas fa-check text-green-500 mr-2"></i> Resource library</li>
-                            <li><i class="fas fa-times text-gray-400 mr-2"></i> Conference registration</li>
-                            <li><i class="fas fa-times text-gray-400 mr-2"></i> Mentorship program</li>
-                        </ul>
-                        <button class="w-full border-2 border-kesnnur-blue text-kesnnur-blue py-3 rounded-lg font-bold hover:bg-blue-50">
-                            Register Now
-                        </button>
+            
+            <!-- Member Dashboard (Hidden by default) -->
+            <div id="memberDashboard" class="hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800">Member Dashboard</h1>
+                        <p class="text-gray-600" id="welcomeMessage">Welcome back!</p>
                     </div>
-
-                    <!-- Novice Nurse -->
-                    <div class="membership-card bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-xl shadow-xl p-8 transform scale-105">
-                        <div class="text-center mb-6">
-                            <div class="inline-block bg-white text-blue-900 px-3 py-1 rounded-full text-sm font-bold mb-2">POPULAR</div>
-                            <h3 class="text-xl font-bold mb-2">Novice Nurse</h3>
-                            <div class="text-3xl font-bold">Ksh 1,000<span class="text-sm opacity-80">/year</span></div>
+                    <button onclick="logout()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
+                </div>
+                
+                <!-- Dashboard Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <div class="flex items-center">
+                            <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                                <i class="fas fa-id-card text-blue-900 text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-sm">Membership No.</p>
+                                <p class="text-xl font-bold" id="membershipNumber">KES2024-00001</p>
+                            </div>
                         </div>
-                        <ul class="space-y-3 mb-8">
-                            <li><i class="fas fa-check mr-2"></i> All student benefits</li>
-                            <li><i class="fas fa-check mr-2"></i> Conference registration</li>
-                            <li><i class="fas fa-check mr-2"></i> Mentorship program</li>
-                            <li><i class="fas fa-check mr-2"></i> Leadership training</li>
-                            <li><i class="fas fa-check mr-2"></i> Research opportunities</li>
-                        </ul>
-                        <button class="w-full bg-white text-blue-900 py-3 rounded-lg font-bold hover:bg-gray-100">
-                            Get Started
-                        </button>
                     </div>
-
-                    <!-- Professional -->
-                    <div class="membership-card bg-white rounded-xl shadow-lg p-8">
-                        <div class="text-center mb-6">
-                            <h3 class="text-xl font-bold mb-2">Professional Nurse</h3>
-                            <div class="text-3xl font-bold kesnnur-blue">Ksh 2,000<span class="text-sm text-gray-600">/year</span></div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 p-3 rounded-lg mr-4">
+                                <i class="fas fa-calendar-check text-green-900 text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-sm">Registered Events</p>
+                                <p class="text-xl font-bold" id="eventCount">0</p>
+                            </div>
                         </div>
-                        <ul class="space-y-3 mb-8">
-                            <li><i class="fas fa-check text-green-500 mr-2"></i> All novice benefits</li>
-                            <li><i class="fas fa-check text-green-500 mr-2"></i> Become a mentor</li>
-                            <li><i class="fas fa-check text-green-500 mr-2"></i> Council positions</li>
-                            <li><i class="fas fa-check text-green-500 mr-2"></i> Speaker opportunities</li>
-                            <li><i class="fas fa-check text-green-500 mr-2"></i> Advanced workshops</li>
-                        </ul>
-                        <button class="w-full border-2 border-kesnnur-blue text-kesnnur-blue py-3 rounded-lg font-bold hover:bg-blue-50">
-                            Register Now
-                        </button>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <div class="flex items-center">
+                            <div class="bg-yellow-100 p-3 rounded-lg mr-4">
+                                <i class="fas fa-certificate text-yellow-900 text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-sm">Certificates</p>
+                                <p class="text-xl font-bold" id="certificateCount">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <div class="flex items-center">
+                            <div class="bg-purple-100 p-3 rounded-lg mr-4">
+                                <i class="fas fa-credit-card text-purple-900 text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-sm">Membership Status</p>
+                                <p class="text-xl font-bold" id="membershipStatus">Active</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dashboard Tabs -->
+                <div class="bg-white rounded-xl shadow mb-8">
+                    <div class="flex border-b">
+                        <button class="dashboard-tab py-4 px-6 font-medium border-b-2 border-transparent hover:text-blue-900" 
+                                data-tab="profile">Profile</button>
+                        <button class="dashboard-tab py-4 px-6 font-medium border-b-2 border-transparent hover:text-blue-900" 
+                                data-tab="events">My Events</button>
+                        <button class="dashboard-tab py-4 px-6 font-medium border-b-2 border-transparent hover:text-blue-900" 
+                                data-tab="payments">Payments</button>
+                        <button class="dashboard-tab py-4 px-6 font-medium border-b-2 border-transparent hover:text-blue-900" 
+                                data-tab="resources">Resources</button>
+                    </div>
+                    
+                    <div id="dashboardContent" class="p-6">
+                        <!-- Content will be loaded dynamically -->
+                        <div class="text-center py-12">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                                <i class="fas fa-user text-blue-900 text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Welcome to your dashboard</h3>
+                            <p class="text-gray-600">Select a tab to manage your account</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <a href="events.html" class="bg-white p-6 rounded-xl shadow hover:shadow-md transition-shadow">
+                        <div class="flex items-center">
+                            <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                                <i class="fas fa-calendar-plus text-blue-900"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">Browse Events</h3>
+                                <p class="text-gray-600 text-sm">Find upcoming workshops and conferences</p>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="resources.html" class="bg-white p-6 rounded-xl shadow hover:shadow-md transition-shadow">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 p-3 rounded-lg mr-4">
+                                <i class="fas fa-book-medical text-green-900"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">Access Resources</h3>
+                                <p class="text-gray-600 text-sm">Download guides, templates, and research</p>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-6 rounded-xl shadow">
+                        <div class="flex items-center">
+                            <div class="bg-white/20 p-3 rounded-lg mr-4">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">Need Help?</h3>
+                                <p class="text-white/80 text-sm">Contact our support team</p>
+                                <button onclick="window.location.href='contact.html'" class="mt-3 px-4 py-2 bg-white text-blue-900 rounded-lg font-medium hover:bg-gray-100">
+                                    Contact Support
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
     <footer class="bg-gray-900 text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p>© 2024 KESNNUR - Kenya Students & Novice Nurses</p>
-            <p class="text-gray-400 mt-2">Nurses Complex KNH, Nairobi | +254 791 296 924 | kesnnur@gmail.com</p>
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <p>© 2024 KESNNUR - Kenya Students & Novice Nurses</p>
+                <p class="text-gray-400 mt-2">Nurses Complex KNH, Nairobi | +254 791 296 924 | kesnnur@gmail.com</p>
+            </div>
         </div>
     </footer>
 
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal-overlay">
+        <div class="modal-container p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold kesnnur-blue">Reset Password</h3>
+                <button onclick="closeForgotPassword()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="forgotPasswordForm">
+                <div class="mb-6">
+                    <p class="text-gray-600 mb-4">Enter your email address and we'll send you a link to reset your password.</p>
+                    <input type="email" id="resetEmail" 
+                           class="w-full px-4 py-3 border rounded-lg"
+                           placeholder="your@email.com" required>
+                </div>
+                <div id="resetError" class="mb-4 text-red-600 text-sm hidden"></div>
+                <div id="resetSuccess" class="mb-4 text-green-600 text-sm hidden"></div>
+                <div class="flex space-x-3">
+                    <button type="button" onclick="closeForgotPassword()" class="flex-1 px-4 py-3 border rounded-lg text-gray-700 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 bg-kesnnur-blue text-white py-3 rounded-lg font-bold hover:bg-blue-800">
+                        Send Reset Link
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        // Initialize Supabase
+        const supabase = window.supabase.createClient(
+            SUPABASE_CONFIG.url,
+            SUPABASE_CONFIG.publishableKey
+        );
+        
+        let currentUser = null;
+        let currentMember = null;
+        
+        // Check authentication on load
+        async function checkAuth() {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                
+                if (session) {
+                    currentUser = session.user;
+                    await loadMemberDashboard();
+                } else {
+                    showAuthContainer();
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+                showAuthContainer();
+            }
+        }
+        
+        // Show authentication container (login/register)
+        function showAuthContainer() {
+            document.getElementById('authContainer').classList.remove('hidden');
+            document.getElementById('memberDashboard').classList.add('hidden');
+        }
+        
+        // Load member dashboard
+        async function loadMemberDashboard() {
+            try {
+                // Show dashboard, hide auth
+                document.getElementById('authContainer').classList.add('hidden');
+                document.getElementById('memberDashboard').classList.remove('hidden');
+                
+                // Load user profile
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                if (profile) {
+                    document.getElementById('welcomeMessage').textContent = 
+                        `Welcome back, ${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Welcome back!';
+                    
+                    // Check if user is admin (redirect to admin panel)
+                    if (ADMIN_ROLES.includes(profile.role)) {
+                        window.location.href = 'admin/dashboard.html';
+                        return;
+                    }
+                }
+                
+                // Load member data
+                const { data: member } = await supabase
+                    .from('members')
+                    .select('*')
+                    .eq('profile_id', currentUser.id)
+                    .single();
+                
+                if (member) {
+                    currentMember = member;
+                    document.getElementById('membershipNumber').textContent = member.membership_number || 'Not assigned';
+                    document.getElementById('membershipStatus').textContent = 
+                        member.membership_status ? member.membership_status.charAt(0).toUpperCase() + member.membership_status.slice(1) : 'Pending';
+                    
+                    // Load member stats
+                    await loadMemberStats();
+                }
+                
+                // Setup dashboard tabs
+                setupDashboardTabs();
+                
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showAuthContainer();
+            }
+        }
+        
+        // Load member statistics
+        async function loadMemberStats() {
+            try {
+                // Count registered events
+                const { count: eventCount } = await supabase
+                    .from('event_registrations')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('member_id', currentMember?.id);
+                
+                document.getElementById('eventCount').textContent = eventCount || 0;
+                
+                // Count certificates
+                const { count: certificateCount } = await supabase
+                    .from('certificates')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('member_id', currentMember?.id);
+                
+                document.getElementById('certificateCount').textContent = certificateCount || 0;
+                
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        // Setup dashboard tabs
+        function setupDashboardTabs() {
+            const tabs = document.querySelectorAll('.dashboard-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('border-blue-900', 'text-blue-900'));
+                    this.classList.add('border-blue-900', 'text-blue-900');
+                    
+                    // Load tab content
+                    loadTabContent(tabName);
+                });
+            });
+        }
+        
+        // Load tab content
+        async function loadTabContent(tabName) {
+            const contentDiv = document.getElementById('dashboardContent');
+            
+            switch(tabName) {
+                case 'profile':
+                    await loadProfileContent(contentDiv);
+                    break;
+                case 'events':
+                    await loadEventsContent(contentDiv);
+                    break;
+                case 'payments':
+                    await loadPaymentsContent(contentDiv);
+                    break;
+                case 'resources':
+                    await loadResourcesContent(contentDiv);
+                    break;
+                default:
+                    contentDiv.innerHTML = `<div class="text-center py-12">Tab content coming soon</div>`;
+            }
+        }
+        
+        // Load profile content
+        async function loadProfileContent(container) {
+            try {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                const { data: member } = await supabase
+                    .from('members')
+                    .select('*, chapter:chapters(name)')
+                    .eq('profile_id', currentUser.id)
+                    .single();
+                
+                container.innerHTML = `
+                    <div class="max-w-2xl">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6">Profile Information</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div>
+                                <label class="block text-gray-600 text-sm mb-2">Full Name</label>
+                                <div class="p-3 bg-gray-50 rounded-lg">
+                                    ${profile?.first_name || ''} ${profile?.last_name || ''}
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-600 text-sm mb-2">Email</label>
+                                <div class="p-3 bg-gray-50 rounded-lg">
+                                    ${profile?.email || ''}
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-600 text-sm mb-2">Phone</label>
+                                <div class="p-3 bg-gray-50 rounded-lg">
+                                    ${profile?.phone || 'Not provided'}
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-600 text-sm mb-2">Membership Type</label>
+                                <div class="p-3 bg-gray-50 rounded-lg capitalize">
+                                    ${member?.membership_type || 'Not assigned'}
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-600 text-sm mb-2">Membership Number</label>
+                                <div class="p-3 bg-gray-50 rounded-lg font-mono">
+                                    ${member?.membership_number || 'Pending'}
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-600 text-sm mb-2">Chapter</label>
+                                <div class="p-3 bg-gray-50 rounded-lg">
+                                    ${member?.chapter?.name || 'Not assigned'}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button onclick="editProfile()" class="px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800">
+                                Edit Profile
+                            </button>
+                            <button onclick="changePassword()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                                Change Password
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                container.innerHTML = `<div class="text-red-600">Error loading profile: ${error.message}</div>`;
+            }
+        }
+        
+        // Handle login
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            alert('Login feature coming soon! The member portal is under development.');
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            const button = document.getElementById('loginButton');
+            const buttonText = document.getElementById('loginButtonText');
+            const spinner = document.getElementById('loginSpinner');
+            
+            // Show loading
+            buttonText.textContent = 'Signing in...';
+            spinner.style.display = 'inline-block';
+            errorDiv.classList.add('hidden');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) throw error;
+                
+                // Success - page will reload from checkAuth()
+                showNotification('Login successful!', 'success');
+                
+            } catch (error) {
+                errorDiv.classList.remove('hidden');
+                document.getElementById('loginErrorText').textContent = error.message;
+                
+                // Reset button
+                buttonText.textContent = 'Sign In';
+                spinner.style.display = 'none';
+            }
         });
+        
+        // Handle registration
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            const errorDiv = document.getElementById('registerError');
+            const button = document.getElementById('registerButton');
+            const buttonText = document.getElementById('registerButtonText');
+            const spinner = document.getElementById('registerSpinner');
+            
+            // Show loading
+            buttonText.textContent = 'Creating account...';
+            spinner.style.display = 'inline-block';
+            errorDiv.classList.add('hidden');
+            
+            try {
+                // 1. Create auth user
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: data.email,
+                    password: data.password,
+                    options: {
+                        data: {
+                            first_name: data.first_name,
+                            last_name: data.last_name,
+                            phone: data.phone
+                        }
+                    }
+                });
+                
+                if (authError) throw authError;
+                
+                // 2. Create profile
+                const { error: profileError } = await supabase
+                    .from('profiles')
+                    .insert({
+                        id: authData.user.id,
+                        email: data.email,
+                        first_name: data.first_name,
+                        last_name: data.last_name,
+                        phone: data.phone,
+                        role: 'member',
+                        status: 'pending'
+                    });
+                
+                if (profileError) throw profileError;
+                
+                // 3. Create member record
+                const { error: memberError } = await supabase
+                    .from('members')
+                    .insert({
+                        profile_id: authData.user.id,
+                        membership_type: data.membership_type,
+                        institution: data.institution,
+                        student_id: data.student_id,
+                        membership_status: 'pending'
+                    });
+                
+                if (memberError) throw memberError;
+                
+                // Success
+                showNotification('Account created successfully! Please check your email to verify your account.', 'success');
+                
+                // Clear form
+                this.reset();
+                
+                // Switch to login tab
+                switchTab('login');
+                
+                // Send verification email
+                await supabase.auth.resend({
+                    type: 'signup',
+                    email: data.email
+                });
+                
+            } catch (error) {
+                errorDiv.classList.remove('hidden');
+                document.getElementById('registerErrorText').textContent = error.message;
+            } finally {
+                // Reset button
+                buttonText.textContent = 'Create Account';
+                spinner.style.display = 'none';
+            }
+        });
+        
+        // Tab switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.getAttribute('data-tab') === tabName) {
+                    button.classList.add('active');
+                }
+            });
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+                if (content.id === tabName + 'Tab') {
+                    content.classList.add('active');
+                }
+            });
+        }
+        
+        // Forgot password
+        function showForgotPassword() {
+            document.getElementById('forgotPasswordModal').style.display = 'block';
+            document.getElementById('forgotPasswordModal').querySelector('.modal-container').style.display = 'block';
+        }
+        
+        function closeForgotPassword() {
+            document.getElementById('forgotPasswordModal').style.display = 'none';
+        }
+        
+        // Handle forgot password form
+        document.getElementById('forgotPasswordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('resetEmail').value;
+            const errorDiv = document.getElementById('resetError');
+            const successDiv = document.getElementById('resetSuccess');
+            
+            errorDiv.classList.add('hidden');
+            successDiv.classList.add('hidden');
+            
+            try {
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: `${window.location.origin}/members.html#reset-password`,
+                });
+                
+                if (error) throw error;
+                
+                successDiv.textContent = 'Password reset link sent! Check your email.';
+                successDiv.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    closeForgotPassword();
+                }, 3000);
+                
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        });
+        
+        // Logout
+        async function logout() {
+            try {
+                await supabase.auth.signOut();
+                showNotification('Logged out successfully', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transform transition-transform duration-300 translate-x-full`;
+            
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+            notification.className += ` ${bgColor} text-white`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-3"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 10);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', checkAuth);
+        
+        // Tab button event listeners
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                switchTab(tabName);
+            });
+        });
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('forgotPasswordModal');
+            if (event.target === modal) {
+                closeForgotPassword();
+            }
+        };
     </script>
 </body>
 </html>
