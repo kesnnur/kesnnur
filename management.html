@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management & Leadership - KESNNUR</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --kesnnur-blue: #1e3a8a;
+            --kesnnur-light: #3b82f6;
+            --kesnnur-teal: #0d9488;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .font-display {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        .team-card {
+            transition: all 0.3s ease;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(30, 58, 138, 0.15);
+        }
+        
+        .nav-pill {
+            @apply px-4 py-2 rounded-full transition-all duration-300;
+        }
+        
+        .nav-pill.active {
+            @apply bg-blue-900 text-white;
+        }
+        
+        .nav-pill:not(.active) {
+            @apply bg-blue-100 text-blue-900 hover:bg-blue-200;
+        }
+        
+        .committee-tag {
+            @apply inline-block px-3 py-1 text-xs font-semibold rounded-full mr-2 mb-2;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-blue-50">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 glass shadow-sm">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="bg-gradient-to-br from-blue-900 to-blue-700 p-3 rounded-xl group-hover:scale-105 transition-transform">
+                        <i class="fas fa-graduation-cap text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-blue-900 font-display">KESNNUR</h1>
+                        <p class="text-sm text-gray-600">Kenya Students & Novice Nurses</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors">Home</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors">About</a>
+                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors border-b-2 border-blue-900">Management</a>
+                    <a href="events.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors">Events</a>
+                    <a href="resources.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors">Resources</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors">Contact</a>
+                    
+                    <a href="members.html" class="bg-gradient-to-r from-blue-900 to-blue-700 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition-all hover:scale-105">
+                        Member Portal
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="menuBtn" class="md:hidden text-blue-900">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden mt-4 space-y-4 bg-white rounded-lg shadow-lg p-6">
+                <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors">
+                    <i class="fas fa-home mr-3"></i>Home
+                </a>
+                <a href="about.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors">
+                    <i class="fas fa-info-circle mr-3"></i>About
+                </a>
+                <a href="management.html" class="block py-3 px-4 bg-blue-50 text-blue-900 rounded-lg transition-colors">
+                    <i class="fas fa-users mr-3"></i>Management
+                </a>
+                <a href="events.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors">
+                    <i class="fas fa-calendar-alt mr-3"></i>Events
+                </a>
+                <a href="resources.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors">
+                    <i class="fas fa-book-medical mr-3"></i>Resources
+                </a>
+                <a href="contact.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors">
+                    <i class="fas fa-envelope mr-3"></i>Contact
+                </a>
+                <a href="members.html" class="block py-3 px-4 bg-gradient-to-r from-blue-900 to-blue-700 text-white rounded-lg text-center font-medium mt-4">
+                    <i class="fas fa-user mr-3"></i>Member Portal
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="py-12 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 font-display">Leadership & Governance</h1>
+                <p class="text-xl text-blue-100 mb-6">
+                    Meet the dedicated leaders steering KESNNUR towards excellence in nursing education and practice
+                </p>
+                <div class="flex flex-wrap justify-center gap-2 mt-8">
+                    <a href="#national-council" class="nav-pill active">National Council</a>
+                    <a href="#regional-committees" class="nav-pill">Regional Committees</a>
+                    <a href="#ad-hoc-committees" class="nav-pill">Ad Hoc Committees</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- National Governing Council -->
+    <section id="national-council" class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4 gradient-text font-display">National Governing Council</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">
+                    The supreme decision-making body of KESNNUR, responsible for strategic direction, policy formulation, and overall governance
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- National Chairperson -->
+                <div class="team-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 animate-fade-in">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center mb-4">
+                            <i class="fas fa-user-tie text-white text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1">Chrisphine JUMA</h3>
+                        <p class="text-blue-900 font-semibold mb-3">National Chairperson</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            My fervent dedication to idealistic leadership, advocacy, and mentorship drives my commitment to this esteemed position.
+                        </p>
+                        <div class="flex space-x-2">
+                            <span class="committee-tag bg-blue-100 text-blue-800">Leadership</span>
+                            <span class="committee-tag bg-blue-100 text-blue-800">Strategy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1st Vice Chairperson -->
+                <div class="team-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 animate-fade-in" style="animation-delay: 0.1s">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center mb-4">
+                            <i class="fas fa-graduation-cap text-white text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1">PHOEBE CAROL</h3>
+                        <p class="text-blue-900 font-semibold mb-3">1st Vice Chairperson</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Chairperson Education and Research committee. Passionate about nursing research and empowering student nurses.
+                        </p>
+                        <div class="flex space-x-2">
+                            <span class="committee-tag bg-green-100 text-green-800">Education</span>
+                            <span class="committee-tag bg-green-100 text-green-800">Research</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2nd Vice Chairperson -->
+                <div class="team-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 animate-fade-in" style="animation-delay: 0.2s">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center mb-4">
+                            <i class="fas fa-map-marker-alt text-white text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1">John Waema</h3>
+                        <p class="text-blue-900 font-semibold mb-3">2nd Vice Chairperson</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Chairperson of the Regional committee. Committed to visionary servant leadership and Universal Health Coverage.
+                        </p>
+                        <div class="flex space-x-2">
+                            <span class="committee-tag bg-purple-100 text-purple-800">Regional</span>
+                            <span class="committee-tag bg-purple-100 text-purple-800">Advocacy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secretary General -->
+                <div class="team-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 animate-fade-in" style="animation-delay: 0.3s">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center mb-4">
+                            <i class="fas fa-file-alt text-white text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1">GAUDENCIA GESARE</h3>
+                        <p class="text-blue-900 font-semibold mb-3">Secretary General</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Mission to amplify KESNNUR's visibility through advocacy, professional growth, and dynamic engagement.
+                        </p>
+                        <div class="flex space-x-2">
+                            <span class="committee-tag bg-yellow-100 text-yellow-800">Secretariat</span>
+                            <span class="committee-tag bg-yellow-100 text-yellow-800">Communication</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assistant Secretary General -->
+                <div class="team-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 animate-fade-in" style="animation-delay: 0.4s">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center mb-4">
+                            <i class="fas fa-hands-helping text-white text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1">Calvin Brian</h3>
+                        <p class="text-blue-900 font-semibold mb-3">Assistant Secretary General</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Dedicated to supporting the Secretariat in maintaining efficient communication and promoting student involvement.
+                        </p>
+                        <div class="flex space-x-2">
+                            <span class="committee-tag bg-yellow-100 text-yellow-800">Support</span>
+                            <span class="committee-tag bg-yellow-100 text-yellow-800">Coordination</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Organizing Secretary -->
+                <div class="team-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 animate-fade-in" style="animation-delay: 0.5s">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center mb-4">
+                            <i class="fas fa-tasks text-white text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1">EMMANUEL ADEMBA</h3>
+                        <p class="text-blue-900 font-semibold mb-3">Organizing Secretary</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Committed to revitalizing our common endeavor and renewing faith in KESNNUR programs and purposes.
+                        </p>
+                        <div class="flex space-x-2">
+                            <span class="committee-tag bg-red-100 text-red-800">Organization</span>
+                            <span class="committee-tag bg-red-100 text-red-800">Events</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More National Council Members -->
+                <div class="team-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 animate-fade-in" style="animation-delay: 0.6s">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center mb-4">
+                            <i class="fas fa-user-md text-white text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1">JAVAN OCHIENG</h3>
+                        <p class="text-blue-900 font-semibold mb-3">Novice Representative</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Committed to fostering an inclusive environment and implementing innovative programs for KESNNUR members.
+                        </p>
+                        <div class="flex space-x-2">
+                            <span class="committee-tag bg-pink-100 text-pink-800">Novice Rep</span>
+                            <span class="committee-tag bg-pink-100 text-pink-800">Welfare</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 animate-fade-in" style="animation-delay: 0.7s">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center mb-4">
+                            <i class="fas fa-cogs text-white text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1">MITCHEL AKINYI</h3>
+                        <p class="text-blue-900 font-semibold mb-3">Assistant Organizing Secretary</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Passionate about bridging medicine with leadership to inspire meaningful change in nursing.
+                        </p>
+                        <div class="flex space-x-2">
+                            <span class="committee-tag bg-red-100 text-red-800">Operations</span>
+                            <span class="committee-tag bg-red-100 text-red-800">Support</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 animate-fade-in" style="animation-delay: 0.8s">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center mb-4">
+                            <i class="fas fa-coins text-white text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1">Ondu Brian</h3>
+                        <p class="text-blue-900 font-semibold mb-3">Finance Secretary</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Ensuring proper funding through improved resource mobilization and transparent financial reporting.
+                        </p>
+                        <div class="flex space-x-2">
+                            <span class="committee-tag bg-indigo-100 text-indigo-800">Finance</span>
+                            <span class="committee-tag bg-indigo-100 text-indigo-800">Resources</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Regional Committees -->
+    <section id="regional-committees" class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4 gradient-text font-display">Regional Committees</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">
+                    Coordinating KESNNUR activities across Kenya's regions, ensuring representation and implementation of national policies at grassroots level
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Nairobi Region -->
+                <div class="team-card bg-white rounded-xl p-6 shadow-md border border-gray-100">
+                    <div class="text-center">
+                        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-city text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-1">Nairobi Region</h3>
+                        <p class="text-blue-900 text-sm font-semibold mb-3">Central Coordination</p>
+                        <p class="text-gray-600 text-xs mb-3">
+                            Headquarters coordination, major hospital partnerships, and national event organization.
+                        </p>
+                        <div class="text-sm text-gray-500">
+                            <i class="fas fa-user mr-2"></i>Regional Chair: To be elected
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rift Valley Region -->
+                <div class="team-card bg-white rounded-xl p-6 shadow-md border border-gray-100">
+                    <div class="text-center">
+                        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-green-700 to-green-500 flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-mountain text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-1">Rift Valley</h3>
+                        <p class="text-green-800 text-sm font-semibold mb-3">Largest Region</p>
+                        <p class="text-gray-600 text-xs mb-3">
+                            Covering Nakuru, Eldoret, Narok, and surrounding counties with multiple nursing colleges.
+                        </p>
+                        <div class="text-sm text-gray-500">
+                            <i class="fas fa-user mr-2"></i>Regional Chair: To be elected
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Western Region -->
+                <div class="team-card bg-white rounded-xl p-6 shadow-md border border-gray-100">
+                    <div class="text-center">
+                        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-yellow-600 to-yellow-400 flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-lake text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-1">Western Region</h3>
+                        <p class="text-yellow-800 text-sm font-semibold mb-3">Lake Basin</p>
+                        <p class="text-gray-600 text-xs mb-3">
+                            Kisumu, Kakamega, Bungoma, and Busia counties with strong community health focus.
+                        </p>
+                        <div class="text-sm text-gray-500">
+                            <i class="fas fa-user mr-2"></i>Regional Chair: To be elected
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coastal Region -->
+                <div class="team-card bg-white rounded-xl p-6 shadow-md border border-gray-100">
+                    <div class="text-center">
+                        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-teal-600 to-teal-400 flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-umbrella-beach text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-1">Coastal Region</h3>
+                        <p class="text-teal-800 text-sm font-semibold mb-3">Maritime Focus</p>
+                        <p class="text-gray-600 text-xs mb-3">
+                            Mombasa, Kilifi, Kwale, and Lamu counties with unique healthcare challenges and opportunities.
+                        </p>
+                        <div class="text-sm text-gray-500">
+                            <i class="fas fa-user mr-2"></i>Regional Chair: To be elected
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <a href="contact.html" class="inline-flex items-center text-blue-900 font-semibold hover:underline">
+                    <i class="fas fa-plus-circle mr-2"></i> View All Regional Committees
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ad Hoc Committees -->
+    <section id="ad-hoc-committees" class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4 gradient-text font-display">Ad Hoc Committees</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">
+                    Temporary committees established for specific projects, events, or initiatives requiring specialized focus
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Conference Committee -->
+                <div class="team-card bg-white rounded-xl p-6 shadow-md border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-4">
+                            <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-600 to-purple-400 flex items-center justify-center">
+                                <i class="fas fa-calendar-star text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold mb-2">Annual Conference Committee</h3>
+                            <p class="text-gray-600 text-sm mb-3">
+                                Planning and execution of KESNNUR's flagship annual conference, including speakers, logistics, and programming.
+                            </p>
+                            <span class="committee-tag bg-purple-100 text-purple-800">Temporary</span>
+                            <span class="committee-tag bg-purple-100 text-purple-800">Event Planning</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fundraising Committee -->
+                <div class="team-card bg-white rounded-xl p-6 shadow-md border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-4">
+                            <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-green-600 to-green-400 flex items-center justify-center">
+                                <i class="fas fa-hand-holding-usd text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold mb-2">Fundraising Committee</h3>
+                            <p class="text-gray-600 text-sm mb-3">
+                                Developing and implementing strategies to secure funding for special projects and initiatives.
+                            </p>
+                            <span class="committee-tag bg-green-100 text-green-800">Temporary</span>
+                            <span class="committee-tag bg-green-100 text-green-800">Resource Mobilization</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Constitution Review -->
+                <div class="team-card bg-white rounded-xl p-6 shadow-md border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-4">
+                            <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-red-600 to-red-400 flex items-center justify-center">
+                                <i class="fas fa-gavel text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold mb-2">Constitution Review Committee</h3>
+                            <p class="text-gray-600 text-sm mb-3">
+                                Periodically reviewing and updating KESNNUR constitution and bylaws to ensure relevance.
+                            </p>
+                            <span class="committee-tag bg-red-100 text-red-800">Periodic</span>
+                            <span class="committee-tag bg-red-100 text-red-800">Governance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Membership Drive -->
+                <div class="team-card bg-white rounded-xl p-6 shadow-md border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-4">
+                            <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center">
+                                <i class="fas fa-users text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold mb-2">Membership Drive Committee</h3>
+                            <p class="text-gray-600 text-sm mb-3">
+                                Special initiatives to increase membership across all nursing institutions in Kenya.
+                            </p>
+                            <span class="committee-tag bg-blue-100 text-blue-800">Campaign</span>
+                            <span class="committee-tag bg-blue-100 text-blue-800">Recruitment</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Research Ethics -->
+                <div class="team-card bg-white rounded-xl p-6 shadow-md border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-4">
+                            <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-teal-600 to-teal-400 flex items-center justify-center">
+                                <i class="fas fa-clipboard-check text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold mb-2">Research Ethics Committee</h3>
+                            <p class="text-gray-600 text-sm mb-3">
+                                Overseeing ethical considerations for research projects involving KESNNUR members.
+                            </p>
+                            <span class="committee-tag bg-teal-100 text-teal-800">Ongoing</span>
+                            <span class="committee-tag bg-teal-100 text-teal-800">Ethics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Response -->
+                <div class="team-card bg-white rounded-xl p-6 shadow-md border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-4">
+                            <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-600 to-orange-400 flex items-center justify-center">
+                                <i class="fas fa-first-aid text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold mb-2">Emergency Response Committee</h3>
+                            <p class="text-gray-600 text-sm mb-3">
+                                Mobilizing nursing students during public health emergencies and disasters.
+                            </p>
+                            <span class="committee-tag bg-orange-100 text-orange-800">Standby</span>
+                            <span class="committee-tag bg-orange-100 text-orange-800">Crisis</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="bg-blue-600 p-2 rounded-lg">
+                            <i class="fas fa-graduation-cap text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">KESNNUR</h3>
+                    </div>
+                    <p class="text-gray-400">
+                        Kenya Students & Novice Nurses Chapter - Empowering Kenya's future nursing leaders.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Contact</h4>
+                    <div class="space-y-3 text-gray-400">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
+                            <span>Nurses Complex KNH, Nairobi, Kenya</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone mr-3"></i>
+                            <span>+254 791 296 924</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i>
+                            <span>kesnnur@gmail.com</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <div class="space-y-3">
+                        <a href="index.html" class="text-gray-400 hover:text-white block transition-colors">Home</a>
+                        <a href="about.html" class="text-gray-400 hover:text-white block transition-colors">About Us</a>
+                        <a href="management.html" class="text-gray-400 hover:text-white block transition-colors">Management</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white block transition-colors">Events</a>
+                        <a href="members.html" class="text-gray-400 hover:text-white block transition-colors">Member Portal</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Partners</h4>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="bg-gray-800 px-3 py-1 rounded text-sm">Nursing Council of Kenya</span>
+                        <span class="bg-gray-800 px-3 py-1 rounded text-sm">Equity Bank</span>
+                        <span class="bg-gray-800 px-3 py-1 rounded text-sm">NNAK</span>
+                        <span class="bg-gray-800 px-3 py-1 rounded text-sm">Ministry of Health</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>Copyright © 2024 KESNNUR. All rights reserved.</p>
+                <p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menuBtn').addEventListener('click', function() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Smooth scrolling for navigation pills
+        document.querySelectorAll('.nav-pill').forEach(pill => {
+            pill.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+                
+                if (target) {
+                    // Remove active class from all pills
+                    document.querySelectorAll('.nav-pill').forEach(p => {
+                        p.classList.remove('active', 'bg-blue-900', 'text-white');
+                        p.classList.add('bg-blue-100', 'text-blue-900');
+                    });
+                    
+                    // Add active class to clicked pill
+                    this.classList.remove('bg-blue-100', 'text-blue-900');
+                    this.classList.add('active', 'bg-blue-900', 'text-white');
+                    
+                    // Scroll to section
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all team cards
+        document.querySelectorAll('.team-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Add current year to footer
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearSpan = document.querySelector('footer p:first-of-type');
+            if (yearSpan) {
+                const currentYear = new Date().getFullYear();
+                yearSpan.innerHTML = yearSpan.innerHTML.replace('2024', currentYear);
+            }
+        });
+
+        // Highlight active section based on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navPills = document.querySelectorAll('.nav-pill');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const scrollPosition = window.scrollY + 100;
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navPills.forEach(pill => {
+                pill.classList.remove('active', 'bg-blue-900', 'text-white');
+                pill.classList.add('bg-blue-100', 'text-blue-900');
+                if (pill.getAttribute('href') === `#${current}`) {
+                    pill.classList.remove('bg-blue-100', 'text-blue-900');
+                    pill.classList.add('active', 'bg-blue-900', 'text-white');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
