@@ -14,6 +14,11 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Load Configuration and Utilities -->
+    <script src="config.js"></script>
+    <script src="utils.js"></script>
+    <script src="api-client.js"></script>
+    
     <!-- Custom Styles -->
     <style>
         :root {
@@ -205,6 +210,18 @@
             text-align: center;
             z-index: 2;
         }
+        
+        /* Loading state */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-blue-50">
@@ -388,19 +405,19 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div class="transform hover:scale-110 transition-transform">
-                    <div class="text-4xl md:text-5xl font-bold mb-2">1,500+</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" data-stat="members">1,500+</div>
                     <div class="text-blue-200">Active Members</div>
                 </div>
                 <div class="transform hover:scale-110 transition-transform">
-                    <div class="text-4xl md:text-5xl font-bold mb-2">50+</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" data-stat="events">50+</div>
                     <div class="text-blue-200">Events Yearly</div>
                 </div>
                 <div class="transform hover:scale-110 transition-transform">
-                    <div class="text-4xl md:text-5xl font-bold mb-2">24</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" data-stat="chapters">24</div>
                     <div class="text-blue-200">Chapters</div>
                 </div>
                 <div class="transform hover:scale-110 transition-transform">
-                    <div class="text-4xl md:text-5xl font-bold mb-2">100%</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" data-stat="growth">100%</div>
                     <div class="text-blue-200">Growth Focused</div>
                 </div>
             </div>
@@ -474,73 +491,30 @@
                 </a>
             </div>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Event 1 -->
-                <div class="event-card bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div class="relative h-48">
-                        <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400"></div>
-                        <div class="date-badge">
-                            <div class="font-bold text-blue-900">15</div>
-                            <div class="text-xs text-gray-600">MAR</div>
-                        </div>
-                        <div class="category-badge bg-white text-blue-900">Workshop</div>
-                    </div>
+            <div id="eventsContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Events will be loaded dynamically -->
+                <div class="event-card loading-skeleton">
+                    <div class="h-48"></div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Clinical Skills Workshop</h3>
-                        <p class="text-gray-600 mb-4">Hands-on training on advanced clinical procedures and patient care techniques.</p>
-                        <div class="flex items-center text-sm text-gray-500 mb-4">
-                            <i class="fas fa-map-marker-alt mr-2"></i>
-                            <span>KNH Training Center, Nairobi</span>
-                        </div>
-                        <a href="events.html#clinical-workshop" class="text-blue-900 font-medium hover:underline inline-flex items-center">
-                            Register Now <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
+                        <div class="h-6 w-3/4 mb-4 loading-skeleton"></div>
+                        <div class="h-4 w-full mb-2 loading-skeleton"></div>
+                        <div class="h-4 w-5/6 mb-4 loading-skeleton"></div>
                     </div>
                 </div>
-                
-                <!-- Event 2 -->
-                <div class="event-card bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div class="relative h-48">
-                        <div class="absolute inset-0 bg-gradient-to-r from-teal-600 to-teal-400"></div>
-                        <div class="date-badge">
-                            <div class="font-bold text-teal-900">22</div>
-                            <div class="text-xs text-gray-600">MAR</div>
-                        </div>
-                        <div class="category-badge bg-white text-teal-900">Conference</div>
-                    </div>
+                <div class="event-card loading-skeleton">
+                    <div class="h-48"></div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Annual Nursing Conference</h3>
-                        <p class="text-gray-600 mb-4">Networking with industry leaders and presentations on latest nursing research.</p>
-                        <div class="flex items-center text-sm text-gray-500 mb-4">
-                            <i class="fas fa-map-marker-alt mr-2"></i>
-                            <span>Virtual & On-site</span>
-                        </div>
-                        <a href="events.html#annual-conference" class="text-teal-900 font-medium hover:underline inline-flex items-center">
-                            Learn More <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
+                        <div class="h-6 w-3/4 mb-4 loading-skeleton"></div>
+                        <div class="h-4 w-full mb-2 loading-skeleton"></div>
+                        <div class="h-4 w-5/6 mb-4 loading-skeleton"></div>
                     </div>
                 </div>
-                
-                <!-- Event 3 -->
-                <div class="event-card bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div class="relative h-48">
-                        <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-400"></div>
-                        <div class="date-badge">
-                            <div class="font-bold text-purple-900">05</div>
-                            <div class="text-xs text-gray-600">APR</div>
-                        </div>
-                        <div class="category-badge bg-white text-purple-900">Mentorship</div>
-                    </div>
+                <div class="event-card loading-skeleton">
+                    <div class="h-48"></div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Mentor-Mentee Mixer</h3>
-                        <p class="text-gray-600 mb-4">Connect with experienced nurses for career guidance and professional development.</p>
-                        <div class="flex items-center text-sm text-gray-500 mb-4">
-                            <i class="fas fa-map-marker-alt mr-2"></i>
-                            <span>KMA Centre, Nairobi</span>
-                        </div>
-                        <a href="events.html#mentorship-mixer" class="text-purple-900 font-medium hover:underline inline-flex items-center">
-                            Join Session <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
+                        <div class="h-6 w-3/4 mb-4 loading-skeleton"></div>
+                        <div class="h-4 w-full mb-2 loading-skeleton"></div>
+                        <div class="h-4 w-5/6 mb-4 loading-skeleton"></div>
                     </div>
                 </div>
             </div>
@@ -560,76 +534,33 @@
                 </a>
             </div>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Blog Post 1 -->
-                <div class="blog-card bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div class="relative h-48">
-                        <img src="https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070" 
-                             alt="Nursing Student" 
-                             class="w-full h-full object-cover">
-                        <div class="category-badge bg-blue-600 text-white">Student Life</div>
-                    </div>
+            <div id="blogContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Blog posts will be loaded dynamically -->
+                <div class="blog-card loading-skeleton">
+                    <div class="h-48"></div>
                     <div class="p-6">
-                        <div class="flex items-center text-sm text-gray-500 mb-3">
-                            <i class="fas fa-calendar-alt mr-2"></i>
-                            <span>March 10, 2024</span>
-                            <span class="mx-2">•</span>
-                            <i class="fas fa-user mr-2"></i>
-                            <span>Jane Mwangi</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3">Balancing Studies and Clinical Rotations</h3>
-                        <p class="text-gray-600 mb-4">Practical tips for nursing students to manage academic workload while excelling in clinical rotations.</p>
-                        <a href="blog.html#balancing-studies" class="text-blue-900 font-medium hover:underline inline-flex items-center">
-                            Read Article <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
+                        <div class="h-4 w-1/2 mb-3 loading-skeleton"></div>
+                        <div class="h-6 w-3/4 mb-3 loading-skeleton"></div>
+                        <div class="h-4 w-full mb-2 loading-skeleton"></div>
+                        <div class="h-4 w-5/6 mb-4 loading-skeleton"></div>
                     </div>
                 </div>
-                
-                <!-- Blog Post 2 -->
-                <div class="blog-card bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div class="relative h-48">
-                        <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070" 
-                             alt="Mental Health" 
-                             class="w-full h-full object-cover">
-                        <div class="category-badge bg-teal-600 text-white">Mental Health</div>
-                    </div>
+                <div class="blog-card loading-skeleton">
+                    <div class="h-48"></div>
                     <div class="p-6">
-                        <div class="flex items-center text-sm text-gray-500 mb-3">
-                            <i class="fas fa-calendar-alt mr-2"></i>
-                            <span>March 5, 2024</span>
-                            <span class="mx-2">•</span>
-                            <i class="fas fa-user mr-2"></i>
-                            <span>Dr. Susan Kimani</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3">Self-Care Strategies for Nurses</h3>
-                        <p class="text-gray-600 mb-4">Essential self-care practices to prevent burnout and maintain mental wellness in nursing.</p>
-                        <a href="blog.html#self-care" class="text-teal-900 font-medium hover:underline inline-flex items-center">
-                            Read Article <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
+                        <div class="h-4 w-1/2 mb-3 loading-skeleton"></div>
+                        <div class="h-6 w-3/4 mb-3 loading-skeleton"></div>
+                        <div class="h-4 w-full mb-2 loading-skeleton"></div>
+                        <div class="h-4 w-5/6 mb-4 loading-skeleton"></div>
                     </div>
                 </div>
-                
-                <!-- Blog Post 3 -->
-                <div class="blog-card bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div class="relative h-48">
-                        <img src="https://images.unsplash.com/photo-1584467735871-8db9ac8d0916?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070" 
-                             alt="Career Development" 
-                             class="w-full h-full object-cover">
-                        <div class="category-badge bg-purple-600 text-white">Career Tips</div>
-                    </div>
+                <div class="blog-card loading-skeleton">
+                    <div class="h-48"></div>
                     <div class="p-6">
-                        <div class="flex items-center text-sm text-gray-500 mb-3">
-                            <i class="fas fa-calendar-alt mr-2"></i>
-                            <span>Feb 28, 2024</span>
-                            <span class="mx-2">•</span>
-                            <i class="fas fa-user mr-2"></i>
-                            <span>John Omondi</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3">Navigating Your First Year as a Nurse</h3>
-                        <p class="text-gray-600 mb-4">A guide for novice nurses on transitioning from student to professional practice.</p>
-                        <a href="blog.html#first-year-nurse" class="text-purple-900 font-medium hover:underline inline-flex items-center">
-                            Read Article <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
+                        <div class="h-4 w-1/2 mb-3 loading-skeleton"></div>
+                        <div class="h-6 w-3/4 mb-3 loading-skeleton"></div>
+                        <div class="h-4 w-full mb-2 loading-skeleton"></div>
+                        <div class="h-4 w-5/6 mb-4 loading-skeleton"></div>
                     </div>
                 </div>
             </div>
@@ -664,70 +595,9 @@
             
             <div class="relative overflow-hidden py-6">
                 <div class="partner-slider-track">
-                    <!-- Partner logos - duplicated for seamless loop -->
-                    <div class="flex items-center space-x-12 px-4">
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-stethoscope text-blue-900 text-4xl mb-2"></i>
-                                <span class="font-bold text-blue-900">Nursing Council of Kenya</span>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-university text-green-600 text-4xl mb-2"></i>
-                                <span class="font-bold text-green-800">Equity Bank</span>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-heartbeat text-red-600 text-4xl mb-2"></i>
-                                <span class="font-bold text-red-800">NNAK</span>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-shield-alt text-purple-600 text-4xl mb-2"></i>
-                                <span class="font-bold text-purple-800">Ministry of Health</span>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-hospital text-teal-600 text-4xl mb-2"></i>
-                                <span class="font-bold text-teal-800">Kenyatta Hospital</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Duplicated for seamless loop -->
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-stethoscope text-blue-900 text-4xl mb-2"></i>
-                                <span class="font-bold text-blue-900">Nursing Council of Kenya</span>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-university text-green-600 text-4xl mb-2"></i>
-                                <span class="font-bold text-green-800">Equity Bank</span>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-heartbeat text-red-600 text-4xl mb-2"></i>
-                                <span class="font-bold text-red-800">NNAK</span>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-shield-alt text-purple-600 text-4xl mb-2"></i>
-                                <span class="font-bold text-purple-800">Ministry of Health</span>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-hospital text-teal-600 text-4xl mb-2"></i>
-                                <span class="font-bold text-teal-800">Kenyatta Hospital</span>
-                            </div>
-                        </div>
+                    <!-- Partner logos will be loaded dynamically -->
+                    <div id="partnersContainer" class="flex items-center space-x-12 px-4">
+                        <!-- Partners will be loaded here -->
                     </div>
                 </div>
             </div>
@@ -797,8 +667,8 @@
                 <div>
                     <h4 class="font-bold mb-4">Newsletter</h4>
                     <p class="text-gray-400 mb-4">Subscribe to our newsletter for updates</p>
-                    <form class="space-y-3">
-                        <input type="email" placeholder="Your email" 
+                    <form id="newsletterForm" class="space-y-3">
+                        <input type="email" name="email" placeholder="Your email" required
                                class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-blue-500">
                         <button type="submit" 
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition-colors">
@@ -809,7 +679,7 @@
             </div>
             
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>Copyright © 2024 KESNNUR. All rights reserved.</p>
+                <p>Copyright © <span id="currentYear">2024</span> KESNNUR. All rights reserved.</p>
                 <p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p>
             </div>
         </div>
@@ -817,126 +687,509 @@
 
     <!-- JavaScript -->
     <script>
-        // Mobile menu toggle
-        document.getElementById('menuBtn').addEventListener('click', function() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-            const icon = this.querySelector('i');
-            if (icon.classList.contains('fa-bars')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        });
-
-        // Hero Slider Logic
-        let currentHeroSlide = 0;
-        const heroSlides = document.querySelectorAll('#heroSlider .slider-slide');
-        const heroDots = document.querySelectorAll('#heroDots .slider-dot');
-        const heroTrack = document.querySelector('#heroSlider .slider-track');
-        const totalHeroSlides = heroSlides.length;
-
-        function updateHeroSlider() {
-            heroTrack.style.transform = `translateX(-${currentHeroSlide * 100}%)`;
+        // ============================================
+        // INITIALIZE BACKEND CONNECTION
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize backend services
+            initializeBackend();
             
-            // Update dots
-            heroDots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentHeroSlide);
-            });
-        }
-
-        function nextHeroSlide() {
-            currentHeroSlide = (currentHeroSlide + 1) % totalHeroSlides;
-            updateHeroSlider();
-        }
-
-        function prevHeroSlide() {
-            currentHeroSlide = (currentHeroSlide - 1 + totalHeroSlides) % totalHeroSlides;
-            updateHeroSlider();
-        }
-
-        function goToHeroSlide(index) {
-            currentHeroSlide = index;
-            updateHeroSlider();
-        }
-
-        // Auto slide hero
-        let heroSlideInterval = setInterval(nextHeroSlide, 5000);
-
-        // Pause auto slide on hover
-        const heroSlider = document.getElementById('heroSlider');
-        heroSlider.addEventListener('mouseenter', () => {
-            clearInterval(heroSlideInterval);
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Setup navigation
+            setupNavigation();
+            
+            // Update current year
+            updateCurrentYear();
         });
 
-        heroSlider.addEventListener('mouseleave', () => {
-            heroSlideInterval = setInterval(nextHeroSlide, 5000);
-        });
+        // ============================================
+        // BACKEND INTEGRATION
+        // ============================================
 
-        // Animate elements on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
+        async function initializeBackend() {
+            try {
+                console.log('Initializing KESNNUR backend connection...');
+                
+                // Check if API is available
+                if (!window.API) {
+                    console.warn('API client not available, using static data');
+                    return;
+                }
+                
+                // Load homepage data
+                await Promise.all([
+                    loadStats(),
+                    loadEvents(),
+                    loadBlogPosts(),
+                    loadPartners()
+                ]);
+                
+                console.log('Backend initialization complete');
+                
+            } catch (error) {
+                console.error('Backend initialization failed:', error);
+                Utils.showNotification('Connected to offline mode. Some features may be limited.', 'warning');
+            }
+        }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in');
+        async function loadStats() {
+            try {
+                const stats = await window.API.getStats();
+                updateStatsUI(stats);
+            } catch (error) {
+                console.warn('Failed to load stats, using fallback:', error);
+                // Use fallback from config
+                const fallbackStats = window.CONFIG?.CONTENT?.FALLBACK?.STATS || {
+                    members: 1500,
+                    events: 50,
+                    chapters: 24,
+                    growth: '100%'
+                };
+                updateStatsUI(fallbackStats);
+            }
+        }
+
+        async function loadEvents() {
+            try {
+                const eventsContainer = document.getElementById('eventsContainer');
+                if (!eventsContainer) return;
+                
+                // Remove loading skeletons
+                eventsContainer.innerHTML = '';
+                
+                const events = await window.API.getEvents(3);
+                
+                if (events && events.length > 0) {
+                    events.forEach(event => {
+                        eventsContainer.appendChild(createEventCard(event));
+                    });
+                } else {
+                    // Show fallback events
+                    eventsContainer.innerHTML = `
+                        <div class="col-span-3 text-center py-12">
+                            <i class="fas fa-calendar-alt text-4xl text-gray-400 mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-700 mb-2">No Upcoming Events</h3>
+                            <p class="text-gray-600">Check back soon for upcoming events!</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.warn('Failed to load events:', error);
+                // Keep loading skeletons as fallback
+            }
+        }
+
+        async function loadBlogPosts() {
+            try {
+                const blogContainer = document.getElementById('blogContainer');
+                if (!blogContainer) return;
+                
+                // Remove loading skeletons
+                blogContainer.innerHTML = '';
+                
+                const posts = await window.API.getBlogPosts(3);
+                
+                if (posts && posts.length > 0) {
+                    posts.forEach(post => {
+                        blogContainer.appendChild(createBlogCard(post));
+                    });
+                } else {
+                    // Show fallback posts
+                    blogContainer.innerHTML = `
+                        <div class="col-span-3 text-center py-12">
+                            <i class="fas fa-newspaper text-4xl text-gray-400 mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-700 mb-2">No Blog Posts Yet</h3>
+                            <p class="text-gray-600">Check back soon for new articles!</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.warn('Failed to load blog posts:', error);
+                // Keep loading skeletons as fallback
+            }
+        }
+
+        async function loadPartners() {
+            try {
+                const partnersContainer = document.getElementById('partnersContainer');
+                if (!partnersContainer) return;
+                
+                const partners = await window.API.getPartners();
+                
+                if (partners && partners.length > 0) {
+                    // Clear existing
+                    partnersContainer.innerHTML = '';
+                    
+                    // Add partners (duplicated for seamless loop)
+                    partners.forEach(partner => {
+                        const partnerElement = createPartnerLogo(partner);
+                        partnersContainer.appendChild(partnerElement.cloneNode(true));
+                        partnersContainer.appendChild(partnerElement.cloneNode(true));
+                    });
+                }
+                
+            } catch (error) {
+                console.warn('Failed to load partners:', error);
+                // Partners slider will use static data
+            }
+        }
+
+        // ============================================
+        // UI COMPONENT CREATORS
+        // ============================================
+
+        function createEventCard(event) {
+            const colors = {
+                workshop: 'from-blue-600 to-blue-400',
+                conference: 'from-teal-600 to-teal-400',
+                seminar: 'from-green-600 to-green-400',
+                webinar: 'from-purple-600 to-purple-400',
+                default: 'from-blue-600 to-blue-400'
+            };
+            
+            const colorClass = colors[event.category] || colors.default;
+            const date = new Date(event.date);
+            
+            const card = document.createElement('div');
+            card.className = 'event-card bg-white rounded-xl shadow-lg overflow-hidden';
+            card.innerHTML = `
+                <div class="relative h-48 ${colorClass}">
+                    ${event.image ? `<img src="${event.image}" alt="${event.title}" class="w-full h-full object-cover">` : ''}
+                    <div class="date-badge">
+                        <div class="font-bold">${date.getDate()}</div>
+                        <div class="text-xs text-gray-600">${date.toLocaleString('default', { month: 'short' }).toUpperCase()}</div>
+                    </div>
+                    <div class="category-badge bg-white text-gray-800">
+                        ${event.category || 'Event'}
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">${event.title}</h3>
+                    <p class="text-gray-600 mb-4">${event.description || 'Join us for this exciting event!'}</p>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        <span>${event.location || 'To be announced'}</span>
+                    </div>
+                    <a href="events.html?id=${event.id}" class="text-blue-900 font-medium hover:underline inline-flex items-center">
+                        ${event.status === 'upcoming' ? 'Register Now' : 'Learn More'} 
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function createBlogCard(post) {
+            const categories = {
+                'student-life': { color: 'bg-blue-600', label: 'Student Life' },
+                'career-tips': { color: 'bg-teal-600', label: 'Career Tips' },
+                'clinical-skills': { color: 'bg-green-600', label: 'Clinical Skills' },
+                'mental-health': { color: 'bg-purple-600', label: 'Mental Health' },
+                'research': { color: 'bg-orange-600', label: 'Research' },
+                'news': { color: 'bg-red-600', label: 'News' }
+            };
+            
+            const category = categories[post.category] || { color: 'bg-gray-600', label: post.category || 'Blog' };
+            const date = Utils.formatDate(post.created_at);
+            
+            const card = document.createElement('div');
+            card.className = 'blog-card bg-white rounded-xl shadow-lg overflow-hidden';
+            card.innerHTML = `
+                <div class="relative h-48">
+                    <img src="${post.image || 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070'}" 
+                         alt="${post.title}" 
+                         class="w-full h-full object-cover">
+                    <div class="category-badge ${category.color} text-white">${category.label}</div>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        <span>${date}</span>
+                        ${post.author ? `<span class="mx-2">•</span><i class="fas fa-user mr-2"></i><span>${post.author}</span>` : ''}
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">${post.title}</h3>
+                    <p class="text-gray-600 mb-4">${post.excerpt || 'Read this interesting article...'}</p>
+                    <a href="blog.html?id=${post.id}" class="text-blue-900 font-medium hover:underline inline-flex items-center">
+                        Read Article <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function createPartnerLogo(partner) {
+            const iconColors = {
+                'Nursing Council of Kenya': 'text-blue-900',
+                'Equity Bank': 'text-green-600',
+                'NNAK': 'text-red-600',
+                'Ministry of Health': 'text-purple-600',
+                'Kenyatta Hospital': 'text-teal-600',
+                'default': 'text-gray-600'
+            };
+            
+            const colorClass = iconColors[partner.name] || iconColors.default;
+            
+            const logo = document.createElement('div');
+            logo.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center';
+            logo.innerHTML = `
+                <div class="text-center">
+                    <i class="fas fa-handshake ${colorClass} text-4xl mb-2"></i>
+                    <span class="font-bold ${colorClass.replace('text-', 'text-')}">${partner.name}</span>
+                </div>
+            `;
+            
+            return logo;
+        }
+
+        // ============================================
+        // UI UPDATES
+        // ============================================
+
+        function updateStatsUI(stats) {
+            // Animate stats counters
+            Object.keys(stats).forEach(key => {
+                const element = document.querySelector(`[data-stat="${key}"]`);
+                if (element) {
+                    animateCounter(element, stats[key]);
                 }
             });
-        }, observerOptions);
+        }
 
-        // Observe all feature cards and event cards
-        document.querySelectorAll('.feature-card, .event-card, .blog-card').forEach(card => {
-            observer.observe(card);
-        });
-
-        // Add current year to footer
-        document.addEventListener('DOMContentLoaded', function() {
-            const yearSpan = document.querySelector('footer p:first-of-type');
-            if (yearSpan) {
-                const currentYear = new Date().getFullYear();
-                yearSpan.innerHTML = yearSpan.innerHTML.replace('2024', currentYear);
+        function animateCounter(element, target) {
+            const current = parseInt(element.textContent.replace(/[^0-9]/g, '')) || 0;
+            const targetNum = typeof target === 'string' ? parseInt(target.replace(/[^0-9]/g, '')) : target;
+            
+            if (isNaN(targetNum)) {
+                element.textContent = target;
+                return;
             }
             
-            // Initialize animations
-            document.querySelectorAll('.animate-fade-in').forEach((el, index) => {
-                el.style.animationDelay = `${index * 0.1}s`;
-            });
-        });
+            const increment = targetNum / 50; // 50 steps
+            let currentValue = current;
+            
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetNum) {
+                    currentValue = targetNum;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(currentValue).toLocaleString() + (typeof target === 'string' && target.includes('+') ? '+' : '');
+            }, 30);
+        }
 
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                if (href.startsWith('#')) {
-                    e.preventDefault();
-                    const target = document.querySelector(href);
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
+        function updateCurrentYear() {
+            const yearElement = document.getElementById('currentYear');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+
+        function setupEventListeners() {
+            // Newsletter form
+            const newsletterForm = document.getElementById('newsletterForm');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', handleNewsletterSubmit);
+            }
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href.startsWith('#')) {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // Intersection Observer for animations
+            setupAnimations();
+        }
+
+        async function handleNewsletterSubmit(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const emailInput = form.querySelector('input[name="email"]');
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            
+            const email = emailInput.value.trim();
+            
+            if (!Utils.isValidEmail(email)) {
+                Utils.showNotification('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            // Show loading
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Subscribing...';
+            
+            try {
+                // Try backend first
+                if (window.API) {
+                    await window.API.subscribeNewsletter(email);
+                    Utils.showNotification('Successfully subscribed to newsletter!', 'success');
+                } else {
+                    // Fallback to localStorage
+                    const subscriptions = JSON.parse(localStorage.getItem('kesnnur_newsletter') || '[]');
+                    subscriptions.push({
+                        email,
+                        subscribedAt: new Date().toISOString()
+                    });
+                    localStorage.setItem('kesnnur_newsletter', JSON.stringify(subscriptions));
+                    Utils.showNotification('Successfully subscribed to newsletter!', 'success');
+                }
+                
+                // Reset form
+                form.reset();
+                
+            } catch (error) {
+                console.error('Newsletter subscription failed:', error);
+                Utils.showNotification('Failed to subscribe. Please try again.', 'error');
+            } finally {
+                // Reset button
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+            }
+        }
+
+        function setupAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all cards
+            document.querySelectorAll('.feature-card, .event-card, .blog-card').forEach(card => {
+                observer.observe(card);
+            });
+        }
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+
+        function setupNavigation() {
+            // Mobile menu toggle
+            const menuBtn = document.getElementById('menuBtn');
+            if (menuBtn) {
+                menuBtn.addEventListener('click', function() {
+                    const menu = document.getElementById('mobileMenu');
+                    if (menu) {
+                        menu.classList.toggle('hidden');
+                        const icon = this.querySelector('i');
+                        if (icon.classList.contains('fa-bars')) {
+                            icon.classList.remove('fa-bars');
+                            icon.classList.add('fa-times');
+                        } else {
+                            icon.classList.remove('fa-times');
+                            icon.classList.add('fa-bars');
+                        }
+                    }
+                });
+            }
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const menu = document.getElementById('mobileMenu');
+                const menuBtn = document.getElementById('menuBtn');
+                
+                if (menu && !menu.contains(event.target) && menuBtn && !menuBtn.contains(event.target) && !menu.classList.contains('hidden')) {
+                    menu.classList.add('hidden');
+                    const icon = menuBtn.querySelector('i');
+                    if (icon.classList.contains('fa-times')) {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
                     }
                 }
             });
-        });
-
-        // Newsletter form submission
-        const newsletterForm = document.querySelector('footer form');
-        if (newsletterForm) {
-            newsletterForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = this.querySelector('input[type="email"]').value;
-                if (email) {
-                    alert(`Thank you for subscribing with: ${email}`);
-                    this.reset();
-                }
-            });
         }
+
+        // ============================================
+        // HERO SLIDER
+        // ============================================
+
+        let currentHeroSlide = 0;
+        let heroSlideInterval;
+
+        function initHeroSlider() {
+            const heroSlides = document.querySelectorAll('#heroSlider .slider-slide');
+            const heroDots = document.querySelectorAll('#heroDots .slider-dot');
+            const heroTrack = document.querySelector('#heroSlider .slider-track');
+            const totalHeroSlides = heroSlides.length;
+
+            function updateHeroSlider() {
+                if (heroTrack) {
+                    heroTrack.style.transform = `translateX(-${currentHeroSlide * 100}%)`;
+                }
+                
+                // Update dots
+                heroDots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentHeroSlide);
+                });
+            }
+
+            window.nextHeroSlide = function() {
+                currentHeroSlide = (currentHeroSlide + 1) % totalHeroSlides;
+                updateHeroSlider();
+            };
+
+            window.prevHeroSlide = function() {
+                currentHeroSlide = (currentHeroSlide - 1 + totalHeroSlides) % totalHeroSlides;
+                updateHeroSlider();
+            };
+
+            window.goToHeroSlide = function(index) {
+                currentHeroSlide = index;
+                updateHeroSlider();
+            };
+
+            // Auto slide hero
+            if (totalHeroSlides > 1) {
+                heroSlideInterval = setInterval(window.nextHeroSlide, 5000);
+
+                // Pause auto slide on hover
+                const heroSlider = document.getElementById('heroSlider');
+                if (heroSlider) {
+                    heroSlider.addEventListener('mouseenter', () => {
+                        clearInterval(heroSlideInterval);
+                    });
+
+                    heroSlider.addEventListener('mouseleave', () => {
+                        heroSlideInterval = setInterval(window.nextHeroSlide, 5000);
+                    });
+                }
+            }
+        }
+
+        // Initialize hero slider
+        initHeroSlider();
     </script>
 </body>
 </html>
