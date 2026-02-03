@@ -74,6 +74,137 @@
         .animate-fade-in {
             animation: fadeIn 0.8s ease-out forwards;
         }
+        
+        /* Slider styles */
+        .slider-container {
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .slider-slide {
+            flex: 0 0 100%;
+            position: relative;
+        }
+        
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        
+        .slider-nav:hover {
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+        
+        .slider-nav.prev {
+            left: 20px;
+        }
+        
+        .slider-nav.next {
+            right: 20px;
+        }
+        
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .slider-dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+        
+        /* Partner slider */
+        .partner-slider-track {
+            display: flex;
+            animation: slidePartners 30s linear infinite;
+        }
+        
+        .partner-slider-track:hover {
+            animation-play-state: paused;
+        }
+        
+        @keyframes slidePartners {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        /* Card styles */
+        .event-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(30, 58, 138, 0.15);
+        }
+        
+        .blog-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+        
+        .date-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 2;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-blue-50">
@@ -96,7 +227,9 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors border-b-2 border-blue-900">Home</a>
                     <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors">About</a>
+                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors">Management</a>
                     <a href="events.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors">Events</a>
+                    <a href="blog.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors">Blog</a>
                     <a href="resources.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors">Resources</a>
                     <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors">Contact</a>
                     
@@ -119,8 +252,14 @@
                 <a href="about.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors">
                     <i class="fas fa-info-circle mr-3"></i>About
                 </a>
+                <a href="management.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors">
+                    <i class="fas fa-users mr-3"></i>Management
+                </a>
                 <a href="events.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors">
                     <i class="fas fa-calendar-alt mr-3"></i>Events
+                </a>
+                <a href="blog.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors">
+                    <i class="fas fa-blog mr-3"></i>Blog
                 </a>
                 <a href="resources.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors">
                     <i class="fas fa-book-medical mr-3"></i>Resources
@@ -135,39 +274,111 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="py-16 md:py-24">
-        <div class="container mx-auto px-4 text-center">
-            <div class="max-w-4xl mx-auto">
-                <!-- Animated badge -->
-                <div class="inline-flex items-center bg-gradient-to-r from-blue-100 to-blue-50 px-6 py-3 rounded-full mb-8 animate-float">
-                    <span class="text-blue-900 font-medium">
-                        <i class="fas fa-star mr-2"></i>Welcome to KESNNUR
-                    </span>
+    <!-- Hero Slider -->
+    <section class="relative h-[600px] overflow-hidden">
+        <div id="heroSlider" class="slider-container h-full">
+            <div class="slider-track h-full">
+                <!-- Slide 1 -->
+                <div class="slider-slide h-full relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-blue-700/60 z-10"></div>
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center"></div>
+                    <div class="relative z-20 h-full flex items-center">
+                        <div class="container mx-auto px-4">
+                            <div class="max-w-3xl">
+                                <div class="inline-flex items-center bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full mb-6">
+                                    <span class="text-white font-medium">
+                                        <i class="fas fa-star mr-2"></i>Welcome Future Nurses
+                                    </span>
+                                </div>
+                                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 font-display">
+                                    Your Nursing Career 
+                                    <span class="text-blue-200">Journey Starts Here</span>
+                                </h1>
+                                <p class="text-xl text-blue-100 mb-8 leading-relaxed">
+                                    Join Kenya's largest community of nursing students and novice nurses. 
+                                    Access mentorship, resources, and career opportunities.
+                                </p>
+                                <a href="members.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl transition-all hover:scale-105 inline-flex items-center">
+                                    <i class="fas fa-user-plus mr-3"></i>
+                                    Join KESNNUR Today
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
-                <h1 class="text-4xl md:text-6xl font-bold mb-6 font-display">
-                    Your Nursing Career 
-                    <span class="gradient-text">Starts Here</span>
-                </h1>
-                
-                <p class="text-xl text-gray-600 mb-10 leading-relaxed">
-                    Welcome to Kenya Students & Novice Nurses Chapter (KESNNUR). 
-                    Build skills, connections, and confidence with Kenya's future nursing leaders 
-                    across all specialties.
-                </p>
-                
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="members.html" class="bg-gradient-to-r from-blue-900 to-blue-700 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl transition-all hover:scale-105 inline-flex items-center justify-center">
-                        <i class="fas fa-user-plus mr-3"></i>
-                        Become a Member
-                    </a>
-                    
-                    <a href="events.html" class="border-2 border-blue-900 text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-blue-50 transition-all inline-flex items-center justify-center">
-                        <i class="fas fa-calendar-alt mr-3"></i>
-                        View Events
-                    </a>
+                <!-- Slide 2 -->
+                <div class="slider-slide h-full relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-teal-900/80 to-teal-600/60 z-10"></div>
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=2067')] bg-cover bg-center"></div>
+                    <div class="relative z-20 h-full flex items-center">
+                        <div class="container mx-auto px-4">
+                            <div class="max-w-3xl">
+                                <div class="inline-flex items-center bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full mb-6">
+                                    <span class="text-white font-medium">
+                                        <i class="fas fa-graduation-cap mr-2"></i>Professional Development
+                                    </span>
+                                </div>
+                                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 font-display">
+                                    Continuous Learning 
+                                    <span class="text-teal-200">& Growth</span>
+                                </h1>
+                                <p class="text-xl text-teal-100 mb-8 leading-relaxed">
+                                    Access workshops, seminars, and latest research to excel in your nursing practice.
+                                    Stay current with evidence-based practices.
+                                </p>
+                                <a href="events.html" class="bg-white text-teal-900 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl transition-all hover:scale-105 inline-flex items-center">
+                                    <i class="fas fa-calendar-alt mr-3"></i>
+                                    View Upcoming Events
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
+                <!-- Slide 3 -->
+                <div class="slider-slide h-full relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-900/80 to-purple-600/60 z-10"></div>
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516549655669-df565bcfbc19?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center"></div>
+                    <div class="relative z-20 h-full flex items-center">
+                        <div class="container mx-auto px-4">
+                            <div class="max-w-3xl">
+                                <div class="inline-flex items-center bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full mb-6">
+                                    <span class="text-white font-medium">
+                                        <i class="fas fa-users mr-2"></i>Community Support
+                                    </span>
+                                </div>
+                                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 font-display">
+                                    Connect With 
+                                    <span class="text-purple-200">Peers & Mentors</span>
+                                </h1>
+                                <p class="text-xl text-purple-100 mb-8 leading-relaxed">
+                                    Build meaningful connections with fellow nursing students and experienced nurse mentors
+                                    across Kenya's 24 chapters.
+                                </p>
+                                <a href="resources.html" class="bg-white text-purple-900 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl transition-all hover:scale-105 inline-flex items-center">
+                                    <i class="fas fa-hands-helping mr-3"></i>
+                                    Explore Resources
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation Arrows -->
+            <button class="slider-nav prev" onclick="prevHeroSlide()">
+                <i class="fas fa-chevron-left text-blue-900"></i>
+            </button>
+            <button class="slider-nav next" onclick="nextHeroSlide()">
+                <i class="fas fa-chevron-right text-blue-900"></i>
+            </button>
+            
+            <!-- Dots -->
+            <div class="slider-dots" id="heroDots">
+                <span class="slider-dot active" onclick="goToHeroSlide(0)"></span>
+                <span class="slider-dot" onclick="goToHeroSlide(1)"></span>
+                <span class="slider-dot" onclick="goToHeroSlide(2)"></span>
             </div>
         </div>
     </section>
@@ -247,32 +458,277 @@
                     </a>
                 </div>
             </div>
-            
-            <div class="text-center mt-12">
-                <a href="about.html" class="inline-flex items-center text-blue-900 font-bold text-lg">
-                    <span>Learn More About Our Programs</span>
-                    <i class="fas fa-arrow-right ml-2"></i>
+        </div>
+    </section>
+
+    <!-- Upcoming Events Section -->
+    <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Upcoming Events</h2>
+                    <p class="text-gray-600">Join our upcoming workshops, conferences, and networking events</p>
+                </div>
+                <a href="events.html" class="text-blue-900 font-semibold hover:underline inline-flex items-center">
+                    View All Events <i class="fas fa-arrow-right ml-2"></i>
                 </a>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Event 1 -->
+                <div class="event-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-48">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400"></div>
+                        <div class="date-badge">
+                            <div class="font-bold text-blue-900">15</div>
+                            <div class="text-xs text-gray-600">MAR</div>
+                        </div>
+                        <div class="category-badge bg-white text-blue-900">Workshop</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Clinical Skills Workshop</h3>
+                        <p class="text-gray-600 mb-4">Hands-on training on advanced clinical procedures and patient care techniques.</p>
+                        <div class="flex items-center text-sm text-gray-500 mb-4">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span>KNH Training Center, Nairobi</span>
+                        </div>
+                        <a href="events.html#clinical-workshop" class="text-blue-900 font-medium hover:underline inline-flex items-center">
+                            Register Now <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Event 2 -->
+                <div class="event-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-48">
+                        <div class="absolute inset-0 bg-gradient-to-r from-teal-600 to-teal-400"></div>
+                        <div class="date-badge">
+                            <div class="font-bold text-teal-900">22</div>
+                            <div class="text-xs text-gray-600">MAR</div>
+                        </div>
+                        <div class="category-badge bg-white text-teal-900">Conference</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Annual Nursing Conference</h3>
+                        <p class="text-gray-600 mb-4">Networking with industry leaders and presentations on latest nursing research.</p>
+                        <div class="flex items-center text-sm text-gray-500 mb-4">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span>Virtual & On-site</span>
+                        </div>
+                        <a href="events.html#annual-conference" class="text-teal-900 font-medium hover:underline inline-flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Event 3 -->
+                <div class="event-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-48">
+                        <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-400"></div>
+                        <div class="date-badge">
+                            <div class="font-bold text-purple-900">05</div>
+                            <div class="text-xs text-gray-600">APR</div>
+                        </div>
+                        <div class="category-badge bg-white text-purple-900">Mentorship</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Mentor-Mentee Mixer</h3>
+                        <p class="text-gray-600 mb-4">Connect with experienced nurses for career guidance and professional development.</p>
+                        <div class="flex items-center text-sm text-gray-500 mb-4">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span>KMA Centre, Nairobi</span>
+                        </div>
+                        <a href="events.html#mentorship-mixer" class="text-purple-900 font-medium hover:underline inline-flex items-center">
+                            Join Session <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Blog Posts -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Latest from Our Blog</h2>
+                    <p class="text-gray-600">Insights, tips, and stories from the nursing community</p>
+                </div>
+                <a href="blog.html" class="text-blue-900 font-semibold hover:underline inline-flex items-center">
+                    View All Posts <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Blog Post 1 -->
+                <div class="blog-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070" 
+                             alt="Nursing Student" 
+                             class="w-full h-full object-cover">
+                        <div class="category-badge bg-blue-600 text-white">Student Life</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <i class="fas fa-calendar-alt mr-2"></i>
+                            <span>March 10, 2024</span>
+                            <span class="mx-2">•</span>
+                            <i class="fas fa-user mr-2"></i>
+                            <span>Jane Mwangi</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Balancing Studies and Clinical Rotations</h3>
+                        <p class="text-gray-600 mb-4">Practical tips for nursing students to manage academic workload while excelling in clinical rotations.</p>
+                        <a href="blog.html#balancing-studies" class="text-blue-900 font-medium hover:underline inline-flex items-center">
+                            Read Article <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 2 -->
+                <div class="blog-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070" 
+                             alt="Mental Health" 
+                             class="w-full h-full object-cover">
+                        <div class="category-badge bg-teal-600 text-white">Mental Health</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <i class="fas fa-calendar-alt mr-2"></i>
+                            <span>March 5, 2024</span>
+                            <span class="mx-2">•</span>
+                            <i class="fas fa-user mr-2"></i>
+                            <span>Dr. Susan Kimani</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Self-Care Strategies for Nurses</h3>
+                        <p class="text-gray-600 mb-4">Essential self-care practices to prevent burnout and maintain mental wellness in nursing.</p>
+                        <a href="blog.html#self-care" class="text-teal-900 font-medium hover:underline inline-flex items-center">
+                            Read Article <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 3 -->
+                <div class="blog-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1584467735871-8db9ac8d0916?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070" 
+                             alt="Career Development" 
+                             class="w-full h-full object-cover">
+                        <div class="category-badge bg-purple-600 text-white">Career Tips</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <i class="fas fa-calendar-alt mr-2"></i>
+                            <span>Feb 28, 2024</span>
+                            <span class="mx-2">•</span>
+                            <i class="fas fa-user mr-2"></i>
+                            <span>John Omondi</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Navigating Your First Year as a Nurse</h3>
+                        <p class="text-gray-600 mb-4">A guide for novice nurses on transitioning from student to professional practice.</p>
+                        <a href="blog.html#first-year-nurse" class="text-purple-900 font-medium hover:underline inline-flex items-center">
+                            Read Article <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+    <section class="py-16 bg-gradient-to-br from-blue-900 to-blue-700 text-white">
         <div class="container mx-auto px-4">
             <div class="max-w-3xl mx-auto text-center">
-                <h2 class="text-3xl font-bold mb-6">Ready to Join KESNNUR?</h2>
-                <p class="text-gray-600 mb-8">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Join KESNNUR?</h2>
+                <p class="text-xl text-blue-100 mb-8 leading-relaxed">
                     Become part of Kenya's largest community of nursing students and novice nurses. 
                     Access exclusive benefits, events, and career opportunities.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="members.html" class="bg-gradient-to-r from-blue-900 to-blue-700 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl transition-all">
-                        Join Now
+                    <a href="members.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl transition-all hover:scale-105">
+                        <i class="fas fa-user-plus mr-2"></i> Join Now
                     </a>
-                    <a href="contact.html" class="bg-white border-2 border-blue-900 text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-blue-50 transition-all">
-                        Contact Us
+                    <a href="contact.html" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-white/10 transition-all">
+                        <i class="fas fa-envelope mr-2"></i> Contact Us
                     </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Slider -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h3 class="text-2xl font-bold text-center mb-8">Our Trusted Partners</h3>
+            
+            <div class="relative overflow-hidden py-6">
+                <div class="partner-slider-track">
+                    <!-- Partner logos - duplicated for seamless loop -->
+                    <div class="flex items-center space-x-12 px-4">
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-stethoscope text-blue-900 text-4xl mb-2"></i>
+                                <span class="font-bold text-blue-900">Nursing Council of Kenya</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-university text-green-600 text-4xl mb-2"></i>
+                                <span class="font-bold text-green-800">Equity Bank</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-heartbeat text-red-600 text-4xl mb-2"></i>
+                                <span class="font-bold text-red-800">NNAK</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-shield-alt text-purple-600 text-4xl mb-2"></i>
+                                <span class="font-bold text-purple-800">Ministry of Health</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-hospital text-teal-600 text-4xl mb-2"></i>
+                                <span class="font-bold text-teal-800">Kenyatta Hospital</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Duplicated for seamless loop -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-stethoscope text-blue-900 text-4xl mb-2"></i>
+                                <span class="font-bold text-blue-900">Nursing Council of Kenya</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-university text-green-600 text-4xl mb-2"></i>
+                                <span class="font-bold text-green-800">Equity Bank</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-heartbeat text-red-600 text-4xl mb-2"></i>
+                                <span class="font-bold text-red-800">NNAK</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-shield-alt text-purple-600 text-4xl mb-2"></i>
+                                <span class="font-bold text-purple-800">Ministry of Health</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-hospital text-teal-600 text-4xl mb-2"></i>
+                                <span class="font-bold text-teal-800">Kenyatta Hospital</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -292,6 +748,32 @@
                     <p class="text-gray-400">
                         Kenya Students & Novice Nurses Chapter - Empowering Kenya's future nursing leaders.
                     </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <div class="space-y-3">
+                        <a href="index.html" class="text-gray-400 hover:text-white block transition-colors">Home</a>
+                        <a href="about.html" class="text-gray-400 hover:text-white block transition-colors">About Us</a>
+                        <a href="management.html" class="text-gray-400 hover:text-white block transition-colors">Management</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white block transition-colors">Events</a>
+                        <a href="blog.html" class="text-gray-400 hover:text-white block transition-colors">Blog</a>
+                        <a href="members.html" class="text-gray-400 hover:text-white block transition-colors">Member Portal</a>
+                    </div>
                 </div>
                 
                 <div>
@@ -313,24 +795,16 @@
                 </div>
                 
                 <div>
-                    <h4 class="font-bold mb-4">Quick Links</h4>
-                    <div class="space-y-3">
-                        <a href="index.html" class="text-gray-400 hover:text-white block transition-colors">Home</a>
-                        <a href="about.html" class="text-gray-400 hover:text-white block transition-colors">About Us</a>
-                        <a href="events.html" class="text-gray-400 hover:text-white block transition-colors">Events</a>
-                        <a href="resources.html" class="text-gray-400 hover:text-white block transition-colors">Resources</a>
-                        <a href="members.html" class="text-gray-400 hover:text-white block transition-colors">Member Portal</a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold mb-4">Partners</h4>
-                    <div class="flex flex-wrap gap-3">
-                        <span class="bg-gray-800 px-3 py-1 rounded text-sm">Nursing Council of Kenya</span>
-                        <span class="bg-gray-800 px-3 py-1 rounded text-sm">Equity Bank</span>
-                        <span class="bg-gray-800 px-3 py-1 rounded text-sm">NNAK</span>
-                        <span class="bg-gray-800 px-3 py-1 rounded text-sm">Ministry of Health</span>
-                    </div>
+                    <h4 class="font-bold mb-4">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for updates</p>
+                    <form class="space-y-3">
+                        <input type="email" placeholder="Your email" 
+                               class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-blue-500">
+                        <button type="submit" 
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition-colors">
+                            Subscribe
+                        </button>
+                    </form>
                 </div>
             </div>
             
@@ -347,7 +821,6 @@
         document.getElementById('menuBtn').addEventListener('click', function() {
             const menu = document.getElementById('mobileMenu');
             menu.classList.toggle('hidden');
-            // Change icon
             const icon = this.querySelector('i');
             if (icon.classList.contains('fa-bars')) {
                 icon.classList.remove('fa-bars');
@@ -356,6 +829,83 @@
                 icon.classList.remove('fa-times');
                 icon.classList.add('fa-bars');
             }
+        });
+
+        // Hero Slider Logic
+        let currentHeroSlide = 0;
+        const heroSlides = document.querySelectorAll('#heroSlider .slider-slide');
+        const heroDots = document.querySelectorAll('#heroDots .slider-dot');
+        const heroTrack = document.querySelector('#heroSlider .slider-track');
+        const totalHeroSlides = heroSlides.length;
+
+        function updateHeroSlider() {
+            heroTrack.style.transform = `translateX(-${currentHeroSlide * 100}%)`;
+            
+            // Update dots
+            heroDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentHeroSlide);
+            });
+        }
+
+        function nextHeroSlide() {
+            currentHeroSlide = (currentHeroSlide + 1) % totalHeroSlides;
+            updateHeroSlider();
+        }
+
+        function prevHeroSlide() {
+            currentHeroSlide = (currentHeroSlide - 1 + totalHeroSlides) % totalHeroSlides;
+            updateHeroSlider();
+        }
+
+        function goToHeroSlide(index) {
+            currentHeroSlide = index;
+            updateHeroSlider();
+        }
+
+        // Auto slide hero
+        let heroSlideInterval = setInterval(nextHeroSlide, 5000);
+
+        // Pause auto slide on hover
+        const heroSlider = document.getElementById('heroSlider');
+        heroSlider.addEventListener('mouseenter', () => {
+            clearInterval(heroSlideInterval);
+        });
+
+        heroSlider.addEventListener('mouseleave', () => {
+            heroSlideInterval = setInterval(nextHeroSlide, 5000);
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all feature cards and event cards
+        document.querySelectorAll('.feature-card, .event-card, .blog-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Add current year to footer
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearSpan = document.querySelector('footer p:first-of-type');
+            if (yearSpan) {
+                const currentYear = new Date().getFullYear();
+                yearSpan.innerHTML = yearSpan.innerHTML.replace('2024', currentYear);
+            }
+            
+            // Initialize animations
+            document.querySelectorAll('.animate-fade-in').forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
         });
 
         // Smooth scrolling for anchor links
@@ -375,33 +925,18 @@
             });
         });
 
-        // Animate elements on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in');
+        // Newsletter form submission
+        const newsletterForm = document.querySelector('footer form');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type="email"]').value;
+                if (email) {
+                    alert(`Thank you for subscribing with: ${email}`);
+                    this.reset();
                 }
             });
-        }, observerOptions);
-
-        // Observe all feature cards
-        document.querySelectorAll('.feature-card').forEach(card => {
-            observer.observe(card);
-        });
-
-        // Add current year to footer
-        document.addEventListener('DOMContentLoaded', function() {
-            const yearSpan = document.querySelector('footer p:first-of-type');
-            if (yearSpan) {
-                const currentYear = new Date().getFullYear();
-                yearSpan.innerHTML = yearSpan.innerHTML.replace('2024', currentYear);
-            }
-        });
+        }
     </script>
 </body>
 </html>
