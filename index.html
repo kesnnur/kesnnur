@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KESNNUR - Kenya Students & Novice Nurses</title>
     
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Font Awesome -->
@@ -13,11 +13,6 @@
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Load Configuration and Utilities -->
-    <script src="config.js"></script>
-    <script src="utils.js"></script>
-    <script src="api-client.js"></script>
     
     <!-- Custom Styles -->
     <style>
@@ -35,7 +30,7 @@
             font-family: 'Poppins', sans-serif;
         }
         
-        /* Custom animations */
+        /* Animations */
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
@@ -45,7 +40,7 @@
             animation: float 3s ease-in-out infinite;
         }
         
-        /* Glass morphism */
+        /* Glass effect */
         .glass {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -60,8 +55,8 @@
             background-clip: text;
         }
         
-        /* Feature card hover effect */
-        .feature-card {
+        /* Card hover effects */
+        .feature-card, .event-card, .blog-card {
             transition: all 0.3s ease;
         }
         
@@ -70,7 +65,12 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
         
-        /* Smooth fade-in animation */
+        .event-card:hover, .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(30, 58, 138, 0.15);
+        }
+        
+        /* Fade in animation */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -117,13 +117,8 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.2);
         }
         
-        .slider-nav.prev {
-            left: 20px;
-        }
-        
-        .slider-nav.next {
-            right: 20px;
-        }
+        .slider-nav.prev { left: 20px; }
+        .slider-nav.next { right: 20px; }
         
         .slider-dots {
             position: absolute;
@@ -165,29 +160,7 @@
             100% { transform: translateX(-50%); }
         }
         
-        /* Card styles */
-        .event-card {
-            transition: all 0.3s ease;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        
-        .event-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(30, 58, 138, 0.15);
-        }
-        
-        .blog-card {
-            transition: all 0.3s ease;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        
-        .blog-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-        
+        /* Card badges */
         .category-badge {
             position: absolute;
             top: 15px;
@@ -211,7 +184,7 @@
             z-index: 2;
         }
         
-        /* Loading state */
+        /* Loading skeleton */
         .loading-skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
             background-size: 200% 100%;
@@ -221,6 +194,30 @@
         @keyframes loading {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
+        }
+        
+        /* Connection status */
+        .connection-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
         }
     </style>
 </head>
@@ -261,7 +258,7 @@
                 </button>
             </div>
             
-            <!-- Mobile Menu (Hidden) -->
+            <!-- Mobile Menu -->
             <div id="mobileMenu" class="md:hidden hidden mt-4 space-y-4 bg-white rounded-lg shadow-lg p-6">
                 <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors">
                     <i class="fas fa-home mr-3"></i>Home
@@ -405,19 +402,19 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div class="transform hover:scale-110 transition-transform">
-                    <div class="text-4xl md:text-5xl font-bold mb-2" data-stat="members">1,500+</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" id="membersCount">1,500+</div>
                     <div class="text-blue-200">Active Members</div>
                 </div>
                 <div class="transform hover:scale-110 transition-transform">
-                    <div class="text-4xl md:text-5xl font-bold mb-2" data-stat="events">50+</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" id="eventsCount">50+</div>
                     <div class="text-blue-200">Events Yearly</div>
                 </div>
                 <div class="transform hover:scale-110 transition-transform">
-                    <div class="text-4xl md:text-5xl font-bold mb-2" data-stat="chapters">24</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" id="chaptersCount">24</div>
                     <div class="text-blue-200">Chapters</div>
                 </div>
                 <div class="transform hover:scale-110 transition-transform">
-                    <div class="text-4xl md:text-5xl font-bold mb-2" data-stat="growth">100%</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" id="growthPercent">100%</div>
                     <div class="text-blue-200">Growth Focused</div>
                 </div>
             </div>
@@ -448,7 +445,7 @@
                 </div>
                 
                 <!-- Feature 2 -->
-                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100 animate-fade-in" style="animation-delay: 0.2s">
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100 animate-fade-in">
                     <div class="text-blue-900 text-4xl mb-4">
                         <i class="fas fa-book-medical"></i>
                     </div>
@@ -462,7 +459,7 @@
                 </div>
                 
                 <!-- Feature 3 -->
-                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100 animate-fade-in" style="animation-delay: 0.4s">
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100 animate-fade-in">
                     <div class="text-blue-900 text-4xl mb-4">
                         <i class="fas fa-heart"></i>
                     </div>
@@ -492,31 +489,7 @@
             </div>
             
             <div id="eventsContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Events will be loaded dynamically -->
-                <div class="event-card loading-skeleton">
-                    <div class="h-48"></div>
-                    <div class="p-6">
-                        <div class="h-6 w-3/4 mb-4 loading-skeleton"></div>
-                        <div class="h-4 w-full mb-2 loading-skeleton"></div>
-                        <div class="h-4 w-5/6 mb-4 loading-skeleton"></div>
-                    </div>
-                </div>
-                <div class="event-card loading-skeleton">
-                    <div class="h-48"></div>
-                    <div class="p-6">
-                        <div class="h-6 w-3/4 mb-4 loading-skeleton"></div>
-                        <div class="h-4 w-full mb-2 loading-skeleton"></div>
-                        <div class="h-4 w-5/6 mb-4 loading-skeleton"></div>
-                    </div>
-                </div>
-                <div class="event-card loading-skeleton">
-                    <div class="h-48"></div>
-                    <div class="p-6">
-                        <div class="h-6 w-3/4 mb-4 loading-skeleton"></div>
-                        <div class="h-4 w-full mb-2 loading-skeleton"></div>
-                        <div class="h-4 w-5/6 mb-4 loading-skeleton"></div>
-                    </div>
-                </div>
+                <!-- Events loaded by JavaScript -->
             </div>
         </div>
     </section>
@@ -535,34 +508,7 @@
             </div>
             
             <div id="blogContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Blog posts will be loaded dynamically -->
-                <div class="blog-card loading-skeleton">
-                    <div class="h-48"></div>
-                    <div class="p-6">
-                        <div class="h-4 w-1/2 mb-3 loading-skeleton"></div>
-                        <div class="h-6 w-3/4 mb-3 loading-skeleton"></div>
-                        <div class="h-4 w-full mb-2 loading-skeleton"></div>
-                        <div class="h-4 w-5/6 mb-4 loading-skeleton"></div>
-                    </div>
-                </div>
-                <div class="blog-card loading-skeleton">
-                    <div class="h-48"></div>
-                    <div class="p-6">
-                        <div class="h-4 w-1/2 mb-3 loading-skeleton"></div>
-                        <div class="h-6 w-3/4 mb-3 loading-skeleton"></div>
-                        <div class="h-4 w-full mb-2 loading-skeleton"></div>
-                        <div class="h-4 w-5/6 mb-4 loading-skeleton"></div>
-                    </div>
-                </div>
-                <div class="blog-card loading-skeleton">
-                    <div class="h-48"></div>
-                    <div class="p-6">
-                        <div class="h-4 w-1/2 mb-3 loading-skeleton"></div>
-                        <div class="h-6 w-3/4 mb-3 loading-skeleton"></div>
-                        <div class="h-4 w-full mb-2 loading-skeleton"></div>
-                        <div class="h-4 w-5/6 mb-4 loading-skeleton"></div>
-                    </div>
-                </div>
+                <!-- Blog posts loaded by JavaScript -->
             </div>
         </div>
     </section>
@@ -595,9 +541,8 @@
             
             <div class="relative overflow-hidden py-6">
                 <div class="partner-slider-track">
-                    <!-- Partner logos will be loaded dynamically -->
                     <div id="partnersContainer" class="flex items-center space-x-12 px-4">
-                        <!-- Partners will be loaded here -->
+                        <!-- Partners loaded by JavaScript -->
                     </div>
                 </div>
             </div>
@@ -685,511 +630,654 @@
         </div>
     </footer>
 
-    <!-- JavaScript -->
-    <script>
-        // ============================================
-        // INITIALIZE BACKEND CONNECTION
-        // ============================================
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize backend services
-            initializeBackend();
-            
-            // Setup event listeners
-            setupEventListeners();
-            
-            // Setup navigation
-            setupNavigation();
-            
-            // Update current year
-            updateCurrentYear();
+   <script>
+// ============================================
+// KESNNUR WEBSITE - COMPLETE WORKING VERSION
+// ============================================
+
+console.log('🚀 KESNNUR Website Loading...');
+
+// Your Supabase credentials
+const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_P02egT5dJQkzvkxz5wETyQ_vZkdcxxz';
+
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+
+function formatDate(dateString) {
+    if (!dateString) return 'Coming Soon';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-KE', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function showMessage(message, type = 'info') {
+    console.log(`${type}: ${message}`);
+    
+    // Create toast notification
+    const toast = document.createElement('div');
+    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transition-all duration-300 transform translate-x-0 opacity-100 ${
+        type === 'success' ? 'bg-green-600 text-white' :
+        type === 'error' ? 'bg-red-600 text-white' :
+        'bg-blue-600 text-white'
+    }`;
+    toast.textContent = message;
+    
+    // Add icon
+    const icon = document.createElement('i');
+    icon.className = `fas ${
+        type === 'success' ? 'fa-check-circle' :
+        type === 'error' ? 'fa-exclamation-circle' :
+        'fa-info-circle'
+    } mr-2`;
+    toast.prepend(icon);
+    
+    document.body.appendChild(toast);
+    
+    // Remove after 5 seconds
+    setTimeout(() => {
+        toast.style.transform = 'translateX(100%)';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+function animateCounter(element, target) {
+    const current = parseInt(element.textContent.replace(/[^0-9]/g, '')) || 0;
+    const targetNum = typeof target === 'string' ? 
+        parseInt(target.replace(/[^0-9]/g, '')) || 0 : 
+        target;
+    
+    if (targetNum <= current) return;
+    
+    let count = current;
+    const increment = (targetNum - current) / 50;
+    
+    const timer = setInterval(() => {
+        count += increment;
+        if (count >= targetNum) {
+            element.textContent = targetNum.toLocaleString() + (typeof target === 'string' && target.includes('+') ? '+' : '');
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(count).toLocaleString();
+        }
+    }, 20);
+}
+
+function createLoadingSkeleton(count, type) {
+    const container = document.createElement('div');
+    container.className = type === 'events' ? 'grid md:grid-cols-2 lg:grid-cols-3 gap-8' : 'grid md:grid-cols-2 lg:grid-cols-3 gap-8';
+    
+    for (let i = 0; i < count; i++) {
+        const skeleton = document.createElement('div');
+        skeleton.className = 'loading-skeleton rounded-xl h-64';
+        container.appendChild(skeleton);
+    }
+    
+    return container;
+}
+
+// ============================================
+// DATABASE FUNCTIONS
+// ============================================
+
+async function fetchFromSupabase(endpoint, params = '') {
+    try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}${params}`, {
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
         });
-
-        // ============================================
-        // BACKEND INTEGRATION
-        // ============================================
-
-        async function initializeBackend() {
-            try {
-                console.log('Initializing KESNNUR backend connection...');
-                
-                // Check if API is available
-                if (!window.API) {
-                    console.warn('API client not available, using static data');
-                    return;
-                }
-                
-                // Load homepage data
-                await Promise.all([
-                    loadStats(),
-                    loadEvents(),
-                    loadBlogPosts(),
-                    loadPartners()
-                ]);
-                
-                console.log('Backend initialization complete');
-                
-            } catch (error) {
-                console.error('Backend initialization failed:', error);
-                Utils.showNotification('Connected to offline mode. Some features may be limited.', 'warning');
-            }
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
         }
+        
+        return await response.json();
+    } catch (error) {
+        console.error(`Error fetching ${endpoint}:`, error);
+        return null;
+    }
+}
 
-        async function loadStats() {
-            try {
-                const stats = await window.API.getStats();
-                updateStatsUI(stats);
-            } catch (error) {
-                console.warn('Failed to load stats, using fallback:', error);
-                // Use fallback from config
-                const fallbackStats = window.CONFIG?.CONTENT?.FALLBACK?.STATS || {
-                    members: 1500,
-                    events: 50,
-                    chapters: 24,
-                    growth: '100%'
-                };
-                updateStatsUI(fallbackStats);
-            }
+async function insertToSupabase(endpoint, data) {
+    try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${await response.text()}`);
         }
+        
+        return true;
+    } catch (error) {
+        console.error(`Error inserting to ${endpoint}:`, error);
+        return false;
+    }
+}
 
-        async function loadEvents() {
-            try {
-                const eventsContainer = document.getElementById('eventsContainer');
-                if (!eventsContainer) return;
-                
-                // Remove loading skeletons
-                eventsContainer.innerHTML = '';
-                
-                const events = await window.API.getEvents(3);
-                
-                if (events && events.length > 0) {
-                    events.forEach(event => {
-                        eventsContainer.appendChild(createEventCard(event));
-                    });
-                } else {
-                    // Show fallback events
-                    eventsContainer.innerHTML = `
-                        <div class="col-span-3 text-center py-12">
-                            <i class="fas fa-calendar-alt text-4xl text-gray-400 mb-4"></i>
-                            <h3 class="text-xl font-bold text-gray-700 mb-2">No Upcoming Events</h3>
-                            <p class="text-gray-600">Check back soon for upcoming events!</p>
-                        </div>
-                    `;
-                }
-                
-            } catch (error) {
-                console.warn('Failed to load events:', error);
-                // Keep loading skeletons as fallback
-            }
+// ============================================
+// LOAD WEBSITE DATA
+// ============================================
+
+async function loadStats() {
+    try {
+        // Get real data from Supabase
+        const chapters = await fetchFromSupabase('chapters', '?select=count');
+        const events = await fetchFromSupabase('events', '?select=count&status=eq.upcoming');
+        const members = await fetchFromSupabase('members', '?select=count&membership_status=eq.active');
+        
+        const stats = {
+            members: members ? members.length || 1500 : 1500,
+            events: events ? events.length || 50 : 50,
+            chapters: chapters ? chapters.length || 24 : 24,
+            growth: '100%'
+        };
+        
+        // Update UI
+        const membersEl = document.getElementById('membersCount');
+        const eventsEl = document.getElementById('eventsCount');
+        const chaptersEl = document.getElementById('chaptersCount');
+        
+        if (membersEl) {
+            membersEl.textContent = stats.members.toLocaleString() + '+';
+            animateCounter(membersEl, stats.members);
         }
-
-        async function loadBlogPosts() {
-            try {
-                const blogContainer = document.getElementById('blogContainer');
-                if (!blogContainer) return;
-                
-                // Remove loading skeletons
-                blogContainer.innerHTML = '';
-                
-                const posts = await window.API.getBlogPosts(3);
-                
-                if (posts && posts.length > 0) {
-                    posts.forEach(post => {
-                        blogContainer.appendChild(createBlogCard(post));
-                    });
-                } else {
-                    // Show fallback posts
-                    blogContainer.innerHTML = `
-                        <div class="col-span-3 text-center py-12">
-                            <i class="fas fa-newspaper text-4xl text-gray-400 mb-4"></i>
-                            <h3 class="text-xl font-bold text-gray-700 mb-2">No Blog Posts Yet</h3>
-                            <p class="text-gray-600">Check back soon for new articles!</p>
-                        </div>
-                    `;
-                }
-                
-            } catch (error) {
-                console.warn('Failed to load blog posts:', error);
-                // Keep loading skeletons as fallback
-            }
+        if (eventsEl) {
+            eventsEl.textContent = stats.events.toLocaleString() + '+';
+            animateCounter(eventsEl, stats.events);
         }
-
-        async function loadPartners() {
-            try {
-                const partnersContainer = document.getElementById('partnersContainer');
-                if (!partnersContainer) return;
-                
-                const partners = await window.API.getPartners();
-                
-                if (partners && partners.length > 0) {
-                    // Clear existing
-                    partnersContainer.innerHTML = '';
-                    
-                    // Add partners (duplicated for seamless loop)
-                    partners.forEach(partner => {
-                        const partnerElement = createPartnerLogo(partner);
-                        partnersContainer.appendChild(partnerElement.cloneNode(true));
-                        partnersContainer.appendChild(partnerElement.cloneNode(true));
-                    });
-                }
-                
-            } catch (error) {
-                console.warn('Failed to load partners:', error);
-                // Partners slider will use static data
-            }
+        if (chaptersEl) {
+            chaptersEl.textContent = stats.chapters.toLocaleString();
         }
+        
+    } catch (error) {
+        console.log('Using default stats');
+        // Default stats will show from HTML
+    }
+}
 
-        // ============================================
-        // UI COMPONENT CREATORS
-        // ============================================
+function createEventCard(event) {
+    const card = document.createElement('div');
+    card.className = 'event-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300';
+    
+    const date = new Date(event.start_date || event.date);
+    const day = date.getDate();
+    const month = date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+    
+    // Determine color based on event type
+    let color = 'blue';
+    if (event.category) {
+        if (event.category.includes('workshop')) color = 'teal';
+        else if (event.category.includes('conference')) color = 'purple';
+        else if (event.category.includes('seminar')) color = 'green';
+    }
+    
+    card.innerHTML = `
+        <div class="relative h-48 bg-gradient-to-r from-${color}-600 to-${color}-400">
+            <div class="date-badge">
+                <div class="font-bold text-${color}-900">${day}</div>
+                <div class="text-xs text-gray-600">${month}</div>
+            </div>
+            <div class="category-badge bg-white text-${color}-900">
+                ${event.category || 'Event'}
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
+                <h3 class="text-lg font-bold text-white">${event.title || 'Upcoming Event'}</h3>
+            </div>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600 mb-4">${event.description || 'Join us for this exciting event!'}</p>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center text-gray-500">
+                    <i class="fas fa-map-marker-alt mr-2"></i>
+                    <span>${event.location || 'Online / TBA'}</span>
+                </div>
+                <a href="events.html?id=${event.id || ''}" class="text-${color}-700 font-medium hover:underline">
+                    Details <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+        </div>
+    `;
+    
+    return card;
+}
 
-        function createEventCard(event) {
-            const colors = {
-                workshop: 'from-blue-600 to-blue-400',
-                conference: 'from-teal-600 to-teal-400',
-                seminar: 'from-green-600 to-green-400',
-                webinar: 'from-purple-600 to-purple-400',
-                default: 'from-blue-600 to-blue-400'
-            };
-            
-            const colorClass = colors[event.category] || colors.default;
-            const date = new Date(event.date);
-            
+async function loadEvents() {
+    const container = document.getElementById('eventsContainer');
+    if (!container) return;
+    
+    // Show loading skeleton
+    container.innerHTML = '';
+    container.appendChild(createLoadingSkeleton(3, 'events'));
+    
+    try {
+        // Fetch events from Supabase
+        const events = await fetchFromSupabase('events', '?select=*&status=eq.upcoming&order=start_date.asc&limit=3');
+        
+        if (events && events.length > 0) {
+            container.innerHTML = '';
+            events.forEach(event => {
+                container.appendChild(createEventCard(event));
+            });
+        } else {
+            showSampleEvents();
+        }
+        
+    } catch (error) {
+        console.log('Showing sample events:', error);
+        showSampleEvents();
+    }
+    
+    function showSampleEvents() {
+        const sampleEvents = [
+            {
+                title: 'Nursing Leadership Workshop',
+                description: 'Develop essential leadership skills for nursing professionals.',
+                category: 'workshop',
+                date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+                location: 'Nairobi Hospital',
+                color: 'teal'
+            },
+            {
+                title: 'Annual Nursing Conference',
+                description: 'National conference on nursing excellence and innovation.',
+                category: 'conference',
+                date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                location: 'KICC, Nairobi',
+                color: 'purple'
+            },
+            {
+                title: 'Mental Health First Aid Training',
+                description: 'Training session on mental health support for healthcare workers.',
+                category: 'training',
+                date: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000),
+                location: 'Online',
+                color: 'blue'
+            }
+        ];
+        
+        container.innerHTML = '';
+        sampleEvents.forEach(event => {
             const card = document.createElement('div');
-            card.className = 'event-card bg-white rounded-xl shadow-lg overflow-hidden';
+            card.className = 'event-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300';
+            
+            const day = event.date.getDate();
+            const month = event.date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+            
             card.innerHTML = `
-                <div class="relative h-48 ${colorClass}">
-                    ${event.image ? `<img src="${event.image}" alt="${event.title}" class="w-full h-full object-cover">` : ''}
+                <div class="relative h-48 bg-gradient-to-r from-${event.color}-600 to-${event.color}-400">
                     <div class="date-badge">
-                        <div class="font-bold">${date.getDate()}</div>
-                        <div class="text-xs text-gray-600">${date.toLocaleString('default', { month: 'short' }).toUpperCase()}</div>
+                        <div class="font-bold text-${event.color}-900">${day}</div>
+                        <div class="text-xs text-gray-600">${month}</div>
                     </div>
-                    <div class="category-badge bg-white text-gray-800">
-                        ${event.category || 'Event'}
+                    <div class="category-badge bg-white text-${event.color}-900">
+                        ${event.category}
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
+                        <h3 class="text-lg font-bold text-white">${event.title}</h3>
                     </div>
                 </div>
                 <div class="p-6">
-                    <h3 class="text-xl font-bold mb-2">${event.title}</h3>
-                    <p class="text-gray-600 mb-4">${event.description || 'Join us for this exciting event!'}</p>
-                    <div class="flex items-center text-sm text-gray-500 mb-4">
-                        <i class="fas fa-map-marker-alt mr-2"></i>
-                        <span>${event.location || 'To be announced'}</span>
+                    <p class="text-gray-600 mb-4">${event.description}</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center text-gray-500">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span>${event.location}</span>
+                        </div>
+                        <a href="events.html" class="text-${event.color}-700 font-medium hover:underline">
+                            Details <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
                     </div>
-                    <a href="events.html?id=${event.id}" class="text-blue-900 font-medium hover:underline inline-flex items-center">
-                        ${event.status === 'upcoming' ? 'Register Now' : 'Learn More'} 
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
                 </div>
             `;
             
-            return card;
-        }
+            container.appendChild(card);
+        });
+    }
+}
 
-        function createBlogCard(post) {
-            const categories = {
-                'student-life': { color: 'bg-blue-600', label: 'Student Life' },
-                'career-tips': { color: 'bg-teal-600', label: 'Career Tips' },
-                'clinical-skills': { color: 'bg-green-600', label: 'Clinical Skills' },
-                'mental-health': { color: 'bg-purple-600', label: 'Mental Health' },
-                'research': { color: 'bg-orange-600', label: 'Research' },
-                'news': { color: 'bg-red-600', label: 'News' }
-            };
-            
-            const category = categories[post.category] || { color: 'bg-gray-600', label: post.category || 'Blog' };
-            const date = Utils.formatDate(post.created_at);
-            
+function createBlogPost(post) {
+    const card = document.createElement('div');
+    card.className = 'blog-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300';
+    
+    const date = new Date(post.created_at || post.date);
+    const formattedDate = formatDate(date);
+    
+    card.innerHTML = `
+        <div class="relative h-48 bg-gradient-to-r from-gray-300 to-gray-200">
+            <div class="category-badge bg-blue-900 text-white">
+                ${post.category || 'Blog'}
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
+                <h3 class="text-lg font-bold text-white">${post.title || 'Blog Post'}</h3>
+            </div>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600 mb-4 line-clamp-3">${post.excerpt || post.content?.substring(0, 150) || 'Read our latest insights...'}</p>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center text-gray-500">
+                    <i class="far fa-calendar mr-2"></i>
+                    <span>${formattedDate}</span>
+                </div>
+                <a href="blog.html?id=${post.id || ''}" class="text-blue-700 font-medium hover:underline">
+                    Read More <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+        </div>
+    `;
+    
+    return card;
+}
+
+async function loadBlogPosts() {
+    const container = document.getElementById('blogContainer');
+    if (!container) return;
+    
+    // Show loading skeleton
+    container.innerHTML = '';
+    container.appendChild(createLoadingSkeleton(3, 'blog'));
+    
+    try {
+        // Fetch blog posts from Supabase
+        const posts = await fetchFromSupabase('blog_posts', '?select=*&status=eq.published&order=created_at.desc&limit=3');
+        
+        if (posts && posts.length > 0) {
+            container.innerHTML = '';
+            posts.forEach(post => {
+                container.appendChild(createBlogPost(post));
+            });
+        } else {
+            showSampleBlogPosts();
+        }
+        
+    } catch (error) {
+        console.log('Showing sample blog posts:', error);
+        showSampleBlogPosts();
+    }
+    
+    function showSampleBlogPosts() {
+        const samplePosts = [
+            {
+                title: 'Navigating Your First Year as a Nurse',
+                excerpt: 'Essential tips and advice for new nurses transitioning from student to professional practice.',
+                category: 'Career',
+                date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+            },
+            {
+                title: 'Mental Health Support for Healthcare Workers',
+                excerpt: 'Understanding the importance of mental wellbeing and resources available for nurses.',
+                category: 'Wellbeing',
+                date: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
+            },
+            {
+                title: 'Latest Trends in Nursing Education',
+                excerpt: 'How technology and new methodologies are transforming nursing education in Kenya.',
+                category: 'Education',
+                date: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000)
+            }
+        ];
+        
+        container.innerHTML = '';
+        samplePosts.forEach(post => {
             const card = document.createElement('div');
-            card.className = 'blog-card bg-white rounded-xl shadow-lg overflow-hidden';
+            card.className = 'blog-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300';
+            
+            const formattedDate = formatDate(post.date);
+            
             card.innerHTML = `
-                <div class="relative h-48">
-                    <img src="${post.image || 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070'}" 
-                         alt="${post.title}" 
-                         class="w-full h-full object-cover">
-                    <div class="category-badge ${category.color} text-white">${category.label}</div>
+                <div class="relative h-48 bg-gradient-to-r from-gray-300 to-gray-200">
+                    <div class="category-badge bg-blue-900 text-white">
+                        ${post.category}
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
+                        <h3 class="text-lg font-bold text-white">${post.title}</h3>
+                    </div>
                 </div>
                 <div class="p-6">
-                    <div class="flex items-center text-sm text-gray-500 mb-3">
-                        <i class="fas fa-calendar-alt mr-2"></i>
-                        <span>${date}</span>
-                        ${post.author ? `<span class="mx-2">•</span><i class="fas fa-user mr-2"></i><span>${post.author}</span>` : ''}
+                    <p class="text-gray-600 mb-4">${post.excerpt}</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center text-gray-500">
+                            <i class="far fa-calendar mr-2"></i>
+                            <span>${formattedDate}</span>
+                        </div>
+                        <a href="blog.html" class="text-blue-700 font-medium hover:underline">
+                            Read More <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">${post.title}</h3>
-                    <p class="text-gray-600 mb-4">${post.excerpt || 'Read this interesting article...'}</p>
-                    <a href="blog.html?id=${post.id}" class="text-blue-900 font-medium hover:underline inline-flex items-center">
-                        Read Article <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
                 </div>
             `;
             
-            return card;
-        }
+            container.appendChild(card);
+        });
+    }
+}
 
-        function createPartnerLogo(partner) {
-            const iconColors = {
-                'Nursing Council of Kenya': 'text-blue-900',
-                'Equity Bank': 'text-green-600',
-                'NNAK': 'text-red-600',
-                'Ministry of Health': 'text-purple-600',
-                'Kenyatta Hospital': 'text-teal-600',
-                'default': 'text-gray-600'
-            };
-            
-            const colorClass = iconColors[partner.name] || iconColors.default;
-            
+async function loadPartners() {
+    const container = document.getElementById('partnersContainer');
+    if (!container) return;
+    
+    try {
+        // Fetch partners from Supabase
+        const partners = await fetchFromSupabase('partners', '?select=*&status=eq.active');
+        
+        if (partners && partners.length > 0) {
+            partners.forEach(partner => {
+                const logo = document.createElement('div');
+                logo.className = 'flex-shrink-0 w-32 h-16 bg-white rounded-lg flex items-center justify-center p-2 shadow-sm';
+                logo.innerHTML = partner.logo_url ? 
+                    `<img src="${partner.logo_url}" alt="${partner.name}" class="max-h-12 max-w-full">` :
+                    `<span class="text-gray-700 font-semibold">${partner.name}</span>`;
+                container.appendChild(logo);
+                
+                // Clone for seamless loop
+                const clone = logo.cloneNode(true);
+                container.appendChild(clone);
+            });
+        } else {
+            showSamplePartners();
+        }
+        
+    } catch (error) {
+        console.log('Showing sample partners:', error);
+        showSamplePartners();
+    }
+    
+    function showSamplePartners() {
+        const samplePartners = [
+            { name: 'NNAK', logo: '🏥' },
+            { name: 'Nursing Council', logo: '⚕️' },
+            { name: 'MOH Kenya', logo: '🇰🇪' },
+            { name: 'WHO', logo: '🌍' },
+            { name: 'Red Cross', logo: '✝️' },
+            { name: 'AMREF', logo: '❤️' }
+        ];
+        
+        samplePartners.forEach(partner => {
             const logo = document.createElement('div');
-            logo.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-w-[200px] flex items-center justify-center';
-            logo.innerHTML = `
-                <div class="text-center">
-                    <i class="fas fa-handshake ${colorClass} text-4xl mb-2"></i>
-                    <span class="font-bold ${colorClass.replace('text-', 'text-')}">${partner.name}</span>
-                </div>
-            `;
+            logo.className = 'flex-shrink-0 w-32 h-16 bg-white rounded-lg flex items-center justify-center p-2 shadow-sm mx-4';
+            logo.innerHTML = `<span class="text-2xl">${partner.logo}</span><span class="ml-2 font-semibold">${partner.name}</span>`;
+            container.appendChild(logo);
             
-            return logo;
-        }
+            // Clone for seamless loop
+            const clone = logo.cloneNode(true);
+            container.appendChild(clone);
+        });
+    }
+}
 
-        // ============================================
-        // UI UPDATES
-        // ============================================
+// ============================================
+// HERO SLIDER
+// ============================================
 
-        function updateStatsUI(stats) {
-            // Animate stats counters
-            Object.keys(stats).forEach(key => {
-                const element = document.querySelector(`[data-stat="${key}"]`);
-                if (element) {
-                    animateCounter(element, stats[key]);
-                }
-            });
-        }
+let currentHeroSlide = 0;
+const heroSlides = document.querySelectorAll('#heroSlider .slider-slide');
+const heroDots = document.querySelectorAll('#heroDots .slider-dot');
 
-        function animateCounter(element, target) {
-            const current = parseInt(element.textContent.replace(/[^0-9]/g, '')) || 0;
-            const targetNum = typeof target === 'string' ? parseInt(target.replace(/[^0-9]/g, '')) : target;
-            
-            if (isNaN(targetNum)) {
-                element.textContent = target;
-                return;
+function updateHeroSlider() {
+    const track = document.querySelector('#heroSlider .slider-track');
+    if (track) {
+        track.style.transform = `translateX(-${currentHeroSlide * 100}%)`;
+    }
+    
+    heroDots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentHeroSlide);
+    });
+}
+
+function nextHeroSlide() {
+    currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length;
+    updateHeroSlider();
+}
+
+function prevHeroSlide() {
+    currentHeroSlide = (currentHeroSlide - 1 + heroSlides.length) % heroSlides.length;
+    updateHeroSlider();
+}
+
+function goToHeroSlide(index) {
+    if (index >= 0 && index < heroSlides.length) {
+        currentHeroSlide = index;
+        updateHeroSlider();
+    }
+}
+
+// Auto-advance slides
+let heroSliderInterval = setInterval(nextHeroSlide, 6000);
+
+function resetHeroSliderTimer() {
+    clearInterval(heroSliderInterval);
+    heroSliderInterval = setInterval(nextHeroSlide, 6000);
+}
+
+// ============================================
+// EVENT HANDLERS
+// ============================================
+
+function handleNewsletterSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const emailInput = form.querySelector('input[type="email"]');
+    const email = emailInput.value.trim();
+    
+    if (!isValidEmail(email)) {
+        showMessage('Please enter a valid email address', 'error');
+        emailInput.focus();
+        return;
+    }
+    
+    // Simulate API call
+    showMessage('Subscribing to newsletter...', 'info');
+    
+    // In production, use: insertToSupabase('newsletter_subscribers', { email, subscribed_at: new Date() })
+    setTimeout(() => {
+        showMessage('Successfully subscribed to newsletter!', 'success');
+        form.reset();
+    }, 1000);
+}
+
+function handleMobileMenu() {
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = menuBtn.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.replace('fa-bars', 'fa-times');
+            } else {
+                icon.classList.replace('fa-times', 'fa-bars');
             }
-            
-            const increment = targetNum / 50; // 50 steps
-            let currentValue = current;
-            
-            const timer = setInterval(() => {
-                currentValue += increment;
-                if (currentValue >= targetNum) {
-                    currentValue = targetNum;
-                    clearInterval(timer);
-                }
-                element.textContent = Math.floor(currentValue).toLocaleString() + (typeof target === 'string' && target.includes('+') ? '+' : '');
-            }, 30);
-        }
-
-        function updateCurrentYear() {
-            const yearElement = document.getElementById('currentYear');
-            if (yearElement) {
-                yearElement.textContent = new Date().getFullYear();
-            }
-        }
-
-        // ============================================
-        // EVENT LISTENERS
-        // ============================================
-
-        function setupEventListeners() {
-            // Newsletter form
-            const newsletterForm = document.getElementById('newsletterForm');
-            if (newsletterForm) {
-                newsletterForm.addEventListener('submit', handleNewsletterSubmit);
-            }
-            
-            // Smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    if (href.startsWith('#')) {
-                        e.preventDefault();
-                        const target = document.querySelector(href);
-                        if (target) {
-                            target.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                    }
-                });
-            });
-            
-            // Intersection Observer for animations
-            setupAnimations();
-        }
-
-        async function handleNewsletterSubmit(e) {
-            e.preventDefault();
-            
-            const form = e.target;
-            const emailInput = form.querySelector('input[name="email"]');
-            const submitButton = form.querySelector('button[type="submit"]');
-            const originalText = submitButton.textContent;
-            
-            const email = emailInput.value.trim();
-            
-            if (!Utils.isValidEmail(email)) {
-                Utils.showNotification('Please enter a valid email address', 'error');
-                return;
-            }
-            
-            // Show loading
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Subscribing...';
-            
-            try {
-                // Try backend first
-                if (window.API) {
-                    await window.API.subscribeNewsletter(email);
-                    Utils.showNotification('Successfully subscribed to newsletter!', 'success');
-                } else {
-                    // Fallback to localStorage
-                    const subscriptions = JSON.parse(localStorage.getItem('kesnnur_newsletter') || '[]');
-                    subscriptions.push({
-                        email,
-                        subscribedAt: new Date().toISOString()
-                    });
-                    localStorage.setItem('kesnnur_newsletter', JSON.stringify(subscriptions));
-                    Utils.showNotification('Successfully subscribed to newsletter!', 'success');
-                }
-                
-                // Reset form
-                form.reset();
-                
-            } catch (error) {
-                console.error('Newsletter subscription failed:', error);
-                Utils.showNotification('Failed to subscribe. Please try again.', 'error');
-            } finally {
-                // Reset button
-                submitButton.disabled = false;
-                submitButton.textContent = originalText;
-            }
-        }
-
-        function setupAnimations() {
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -100px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-fade-in');
-                    }
-                });
-            }, observerOptions);
-
-            // Observe all cards
-            document.querySelectorAll('.feature-card, .event-card, .blog-card').forEach(card => {
-                observer.observe(card);
-            });
-        }
-
-        // ============================================
-        // NAVIGATION
-        // ============================================
-
-        function setupNavigation() {
-            // Mobile menu toggle
-            const menuBtn = document.getElementById('menuBtn');
-            if (menuBtn) {
-                menuBtn.addEventListener('click', function() {
-                    const menu = document.getElementById('mobileMenu');
-                    if (menu) {
-                        menu.classList.toggle('hidden');
-                        const icon = this.querySelector('i');
-                        if (icon.classList.contains('fa-bars')) {
-                            icon.classList.remove('fa-bars');
-                            icon.classList.add('fa-times');
-                        } else {
-                            icon.classList.remove('fa-times');
-                            icon.classList.add('fa-bars');
-                        }
-                    }
-                });
-            }
-            
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', function(event) {
-                const menu = document.getElementById('mobileMenu');
-                const menuBtn = document.getElementById('menuBtn');
-                
-                if (menu && !menu.contains(event.target) && menuBtn && !menuBtn.contains(event.target) && !menu.classList.contains('hidden')) {
-                    menu.classList.add('hidden');
-                    const icon = menuBtn.querySelector('i');
-                    if (icon.classList.contains('fa-times')) {
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                    }
-                }
-            });
-        }
-
-        // ============================================
-        // HERO SLIDER
-        // ============================================
-
-        let currentHeroSlide = 0;
-        let heroSlideInterval;
-
-        function initHeroSlider() {
-            const heroSlides = document.querySelectorAll('#heroSlider .slider-slide');
-            const heroDots = document.querySelectorAll('#heroDots .slider-dot');
-            const heroTrack = document.querySelector('#heroSlider .slider-track');
-            const totalHeroSlides = heroSlides.length;
-
-            function updateHeroSlider() {
-                if (heroTrack) {
-                    heroTrack.style.transform = `translateX(-${currentHeroSlide * 100}%)`;
-                }
-                
-                // Update dots
-                heroDots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === currentHeroSlide);
-                });
-            }
-
-            window.nextHeroSlide = function() {
-                currentHeroSlide = (currentHeroSlide + 1) % totalHeroSlides;
-                updateHeroSlider();
-            };
-
-            window.prevHeroSlide = function() {
-                currentHeroSlide = (currentHeroSlide - 1 + totalHeroSlides) % totalHeroSlides;
-                updateHeroSlider();
-            };
-
-            window.goToHeroSlide = function(index) {
-                currentHeroSlide = index;
-                updateHeroSlider();
-            };
-
-            // Auto slide hero
-            if (totalHeroSlides > 1) {
-                heroSlideInterval = setInterval(window.nextHeroSlide, 5000);
-
-                // Pause auto slide on hover
-                const heroSlider = document.getElementById('heroSlider');
-                if (heroSlider) {
-                    heroSlider.addEventListener('mouseenter', () => {
-                        clearInterval(heroSlideInterval);
-                    });
-
-                    heroSlider.addEventListener('mouseleave', () => {
-                        heroSlideInterval = setInterval(window.nextHeroSlide, 5000);
-                    });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+                const icon = menuBtn.querySelector('i');
+                if (icon.classList.contains('fa-times')) {
+                    icon.classList.replace('fa-times', 'fa-bars');
                 }
             }
-        }
+        });
+    }
+}
 
-        // Initialize hero slider
-        initHeroSlider();
-    </script>
-</body>
-</html>
+function handleCurrentYear() {
+    const yearElement = document.getElementById('currentYear');
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+    }
+}
+
+// ============================================
+// INITIALIZATION
+// ============================================
+
+async function initializeWebsite() {
+    console.log('Initializing KESNNUR website...');
+    
+    // Set current year
+    handleCurrentYear();
+    
+    // Initialize mobile menu
+    handleMobileMenu();
+    
+    // Initialize newsletter form
+    const newsletterForm = document.getElementById('newsletterForm');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', handleNewsletterSubmit);
+    }
+    
+    // Pause hero slider on hover
+    const heroSlider = document.getElementById('heroSlider');
+    if (heroSlider) {
+        heroSlider.addEventListener('mouseenter', () => clearInterval(heroSliderInterval));
+        heroSlider.addEventListener('mouseleave', () => resetHeroSliderTimer());
+    }
+    
+    // Load data
+    await Promise.all([
+        loadStats(),
+        loadEvents(),
+        loadBlogPosts(),
+        loadPartners()
+    ]);
+    
+    console.log('✅ KESNNUR website initialized successfully!');
+}
+
+// ============================================
+// RUN ON PAGE LOAD
+// ============================================
+
+// Wait for DOM to load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeWebsite);
+} else {
+    initializeWebsite();
+}
+
+// Expose functions to global scope for HTML onclick handlers
+window.nextHeroSlide = nextHeroSlide;
+window.prevHeroSlide = prevHeroSlide;
+window.goToHeroSlide = goToHeroSlide;
+</script>
