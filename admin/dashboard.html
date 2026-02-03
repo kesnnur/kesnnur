@@ -5,350 +5,1031 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KESNNUR Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include utility files -->
+    <script src="config.js"></script>
+    <script src="utils.js"></script>
     <style>
+        :root {
+            --sidebar-width: 260px;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
-            background: #f8fafc;
+            background-color: #f8fafc;
         }
         
         .sidebar {
+            width: var(--sidebar-width);
             background: linear-gradient(180deg, #1e3a8a 0%, #3b82f6 100%);
-            color: white;
-            min-height: 100vh;
-        }
-        
-        .sidebar-item {
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin: 4px 0;
             transition: all 0.3s;
         }
         
-        .sidebar-item:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .main-content {
+            margin-left: var(--sidebar-width);
+            transition: all 0.3s;
         }
         
-        .sidebar-item.active {
-            background: rgba(255, 255, 255, 0.2);
-            font-weight: 600;
+        .card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
         }
         
         .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
         }
         
-        .stat-card:hover {
-            transform: translateY(-5px);
+        .menu-item {
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.2s;
+            border-radius: 0.5rem;
         }
         
-        .admin-table {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
         }
         
-        .admin-table th {
-            background: #f8fafc;
-            padding: 16px;
-            font-weight: 600;
-            color: #475569;
-            border-bottom: 2px solid #e2e8f0;
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
         }
         
-        .admin-table td {
-            padding: 16px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .admin-table tr:hover {
-            background: #f8fafc;
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: calc(-1 * var(--sidebar-width));
+            }
+            
+            .sidebar.active {
+                margin-left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .main-content.sidebar-active {
+                margin-left: var(--sidebar-width);
+            }
         }
     </style>
 </head>
-<body class="flex">
+<body>
     <!-- Sidebar -->
-    <div class="sidebar w-64 flex-shrink-0">
+    <div class="sidebar fixed h-screen top-0 left-0 z-50" id="sidebar">
         <!-- Logo -->
-        <div class="p-6 border-b border-white/20">
-            <div class="flex items-center space-x-3">
-                <div class="bg-white/20 p-2 rounded-lg">
-                    <i class="fas fa-shield-alt text-white text-xl"></i>
+        <div class="p-6 border-b border-white/10">
+            <div class="flex items-center">
+                <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-shield-alt text-white"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg">KESNNUR Admin</h1>
-                    <p class="text-white/80 text-xs">Management System</p>
+                    <h2 class="text-white font-bold text-lg">KESNNUR Admin</h2>
+                    <p class="text-white/60 text-xs">Management Portal</p>
                 </div>
             </div>
         </div>
         
-        <!-- Navigation -->
-        <div class="p-4">
-            <div class="sidebar-item active">
-                <i class="fas fa-tachometer-alt mr-3"></i>
-                Dashboard
-            </div>
-            
-            <div class="sidebar-item">
-                <i class="fas fa-users mr-3"></i>
-                Members
-            </div>
-            
-            <div class="sidebar-item">
-                <i class="fas fa-calendar-alt mr-3"></i>
-                Events
-            </div>
-            
-            <div class="sidebar-item">
-                <i class="fas fa-money-bill-wave mr-3"></i>
-                Finance
-            </div>
-            
-            <div class="sidebar-item">
-                <i class="fas fa-bullhorn mr-3"></i>
-                Announcements
-            </div>
-            
-            <div class="sidebar-item">
-                <i class="fas fa-chart-bar mr-3"></i>
-                Reports
-            </div>
-            
-            <div class="sidebar-item">
-                <i class="fas fa-cog mr-3"></i>
-                Settings
-            </div>
-        </div>
-        
-        <!-- User Info -->
-        <div class="p-4 border-t border-white/20 mt-auto">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+        <!-- User Profile -->
+        <div class="p-4 border-b border-white/10">
+            <div class="flex items-center">
+                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mr-3">
                     <i class="fas fa-user text-white"></i>
                 </div>
-                <div>
-                    <p class="font-medium">Admin User</p>
-                    <p class="text-white/60 text-sm">Super Admin</p>
+                <div class="flex-1 min-w-0">
+                    <p class="text-white font-medium truncate" id="userName">Loading...</p>
+                    <p class="text-white/60 text-xs truncate" id="userRole">Loading...</p>
                 </div>
             </div>
-            <button onclick="logout()" class="w-full mt-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm transition-colors">
-                <i class="fas fa-sign-out-alt mr-2"></i>Logout
-            </button>
+        </div>
+        
+        <!-- Navigation Menu -->
+        <div class="p-4">
+            <nav class="space-y-1">
+                <a href="#" class="menu-item flex items-center p-3 active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    Dashboard
+                </a>
+                
+                <a href="#" class="menu-item flex items-center p-3" data-section="members">
+                    <i class="fas fa-users mr-3"></i>
+                    Members
+                    <span class="ml-auto bg-white/20 text-xs px-2 py-1 rounded-full" id="membersCount">0</span>
+                </a>
+                
+                <a href="#" class="menu-item flex items-center p-3" data-section="chapters">
+                    <i class="fas fa-map-marker-alt mr-3"></i>
+                    Chapters
+                </a>
+                
+                <a href="#" class="menu-item flex items-center p-3" data-section="events">
+                    <i class="fas fa-calendar-alt mr-3"></i>
+                    Events
+                    <span class="ml-auto bg-white/20 text-xs px-2 py-1 rounded-full" id="eventsCount">0</span>
+                </a>
+                
+                <a href="#" class="menu-item flex items-center p-3" data-section="payments">
+                    <i class="fas fa-credit-card mr-3"></i>
+                    Payments
+                </a>
+                
+                <a href="#" class="menu-item flex items-center p-3" data-section="reports">
+                    <i class="fas fa-chart-bar mr-3"></i>
+                    Reports
+                </a>
+                
+                <a href="#" class="menu-item flex items-center p-3" data-section="announcements">
+                    <i class="fas fa-bullhorn mr-3"></i>
+                    Announcements
+                </a>
+                
+                <div class="pt-4 mt-4 border-t border-white/10">
+                    <a href="#" class="menu-item flex items-center p-3" data-section="settings">
+                        <i class="fas fa-cog mr-3"></i>
+                        Settings
+                    </a>
+                    
+                    <a href="#" id="logoutBtn" class="menu-item flex items-center p-3 text-red-200 hover:text-red-100 hover:bg-red-500/20">
+                        <i class="fas fa-sign-out-alt mr-3"></i>
+                        Logout
+                    </a>
+                </div>
+            </nav>
+        </div>
+        
+        <!-- System Status -->
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                    <span class="text-white/60 text-sm">System Online</span>
+                </div>
+                <span class="text-white/40 text-xs" id="currentTime"></span>
+            </div>
         </div>
     </div>
     
     <!-- Main Content -->
-    <div class="flex-1 p-6">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
-                <p class="text-gray-600">Welcome back, Administrator</p>
+    <div class="main-content min-h-screen" id="mainContent">
+        <!-- Top Header -->
+        <header class="bg-white border-b px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+            <div class="flex items-center">
+                <button id="menuToggle" class="mr-4 text-gray-600 hover:text-blue-600 lg:hidden">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-2xl font-bold text-gray-800" id="pageTitle">Dashboard</h1>
             </div>
+            
             <div class="flex items-center space-x-4">
+                <!-- Notifications -->
                 <div class="relative">
-                    <i class="fas fa-bell text-gray-500 text-xl cursor-pointer"></i>
-                    <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                    <button id="notificationsBtn" class="text-gray-600 hover:text-blue-600 relative">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center" id="notificationCount">0</span>
+                    </button>
+                    <div id="notificationsDropdown" class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border hidden z-50">
+                        <div class="p-4 border-b">
+                            <h3 class="font-bold text-gray-800">Notifications</h3>
+                        </div>
+                        <div class="max-h-96 overflow-y-auto" id="notificationsList">
+                            <!-- Notifications will be loaded here -->
+                        </div>
+                    </div>
                 </div>
-                <div class="text-sm text-gray-600">
-                    Last login: Today, 09:45 AM
+                
+                <!-- Quick Actions -->
+                <div class="relative">
+                    <button id="quickActionsBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center">
+                        <i class="fas fa-plus mr-2"></i>
+                        Quick Actions
+                    </button>
+                    <div id="quickActionsDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border hidden z-50">
+                        <div class="p-2">
+                            <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded" data-action="add-member">
+                                <i class="fas fa-user-plus mr-3"></i>
+                                Add New Member
+                            </a>
+                            <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded" data-action="create-event">
+                                <i class="fas fa-calendar-plus mr-3"></i>
+                                Create Event
+                            </a>
+                            <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded" data-action="send-announcement">
+                                <i class="fas fa-bullhorn mr-3"></i>
+                                Send Announcement
+                            </a>
+                            <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded" data-action="generate-report">
+                                <i class="fas fa-file-invoice-dollar mr-3"></i>
+                                Generate Report
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </header>
         
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="stat-card">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-500 text-sm">Total Members</p>
-                        <h3 class="text-2xl font-bold text-gray-800">1,542</h3>
-                        <p class="text-green-600 text-sm mt-1">
-                            <i class="fas fa-arrow-up mr-1"></i>12% this month
-                        </p>
+        <!-- Main Content Area -->
+        <main class="p-6">
+            <!-- Dashboard Content -->
+            <div id="dashboardContent" class="section-content">
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card rounded-xl p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white/80 text-sm">Total Members</p>
+                                <h3 class="text-3xl font-bold mt-2" id="totalMembers">0</h3>
+                            </div>
+                            <i class="fas fa-users text-3xl opacity-50"></i>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-white/80 text-sm">This Month: <span id="newMembers">0</span></span>
+                        </div>
                     </div>
-                    <div class="bg-blue-100 p-3 rounded-lg">
-                        <i class="fas fa-users text-blue-900 text-xl"></i>
+                    
+                    <div class="stat-card rounded-xl p-6" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white/80 text-sm">Active Events</p>
+                                <h3 class="text-3xl font-bold mt-2" id="activeEvents">0</h3>
+                            </div>
+                            <i class="fas fa-calendar-check text-3xl opacity-50"></i>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-white/80 text-sm">Upcoming: <span id="upcomingEvents">0</span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card rounded-xl p-6" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white/80 text-sm">Revenue (KES)</p>
+                                <h3 class="text-3xl font-bold mt-2" id="totalRevenue">0</h3>
+                            </div>
+                            <i class="fas fa-money-bill-wave text-3xl opacity-50"></i>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-white/80 text-sm">This Month: <span id="monthlyRevenue">0</span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card rounded-xl p-6" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white/80 text-sm">Pending Actions</p>
+                                <h3 class="text-3xl font-bold mt-2" id="pendingActions">0</h3>
+                            </div>
+                            <i class="fas fa-tasks text-3xl opacity-50"></i>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-white/80 text-sm">Approvals needed</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="card p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Membership Growth</h3>
+                        <div class="h-64">
+                            <canvas id="membershipChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Revenue by Type</h3>
+                        <div class="h-64">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="card p-6 lg:col-span-2">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Recent Activity</h3>
+                        <div class="space-y-4" id="recentActivity">
+                            <!-- Activity items will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Quick Stats</h3>
+                        <div class="space-y-4" id="quickStats">
+                            <!-- Quick stats will be loaded here -->
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <div class="stat-card">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-500 text-sm">Pending Approvals</p>
-                        <h3 class="text-2xl font-bold text-gray-800">47</h3>
-                        <p class="text-red-600 text-sm mt-1">
-                            <i class="fas fa-clock mr-1"></i>Needs attention
-                        </p>
-                    </div>
-                    <div class="bg-yellow-100 p-3 rounded-lg">
-                        <i class="fas fa-clock text-yellow-900 text-xl"></i>
-                    </div>
-                </div>
+            <!-- Other sections will be loaded here -->
+            <div id="otherSections" class="section-content hidden">
+                <!-- Content for members, events, etc. will be loaded dynamically -->
             </div>
-            
-            <div class="stat-card">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-500 text-sm">Revenue (Monthly)</p>
-                        <h3 class="text-2xl font-bold text-gray-800">Ksh 248,500</h3>
-                        <p class="text-green-600 text-sm mt-1">
-                            <i class="fas fa-arrow-up mr-1"></i>8% increase
-                        </p>
-                    </div>
-                    <div class="bg-green-100 p-3 rounded-lg">
-                        <i class="fas fa-money-bill-wave text-green-900 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-500 text-sm">Upcoming Events</p>
-                        <h3 class="text-2xl font-bold text-gray-800">14</h3>
-                        <p class="text-blue-600 text-sm mt-1">
-                            <i class="fas fa-calendar mr-1"></i>Next: Mar 15
-                        </p>
-                    </div>
-                    <div class="bg-purple-100 p-3 rounded-lg">
-                        <i class="fas fa-calendar-alt text-purple-900 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Recent Activity -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Recent Members -->
-            <div class="admin-table">
-                <div class="p-6 border-b">
-                    <h2 class="text-lg font-bold text-gray-800">Recent Members</h2>
-                </div>
-                <table class="w-full">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                        <i class="fas fa-user text-blue-900 text-sm"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium">John Kamau</p>
-                                        <p class="text-gray-500 text-sm">UoN Nursing</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>Student</td>
-                            <td>
-                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                                    Active
-                                </span>
-                            </td>
-                            <td>
-                                <button class="text-blue-900 hover:text-blue-700">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                        <i class="fas fa-user text-blue-900 text-sm"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium">Sarah Wanjiku</p>
-                                        <p class="text-gray-500 text-sm">KNH School</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>Novice</td>
-                            <td>
-                                <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
-                                    Pending
-                                </span>
-                            </td>
-                            <td>
-                                <button class="text-blue-900 hover:text-blue-700">
-                                    <i class="fas fa-check"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="p-4 border-t text-center">
-                    <a href="members.html" class="text-blue-900 hover:text-blue-700 font-medium">
-                        View All Members →
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Quick Actions -->
-            <div class="admin-table">
-                <div class="p-6 border-b">
-                    <h2 class="text-lg font-bold text-gray-800">Quick Actions</h2>
-                </div>
-                <div class="p-6">
-                    <div class="grid grid-cols-2 gap-4">
-                        <a href="members.html?action=add" 
-                           class="p-4 bg-blue-50 rounded-lg text-center hover:bg-blue-100 transition-colors">
-                            <i class="fas fa-user-plus text-blue-900 text-2xl mb-2"></i>
-                            <p class="font-medium">Add Member</p>
-                        </a>
-                        
-                        <a href="events.html?action=create" 
-                           class="p-4 bg-green-50 rounded-lg text-center hover:bg-green-100 transition-colors">
-                            <i class="fas fa-calendar-plus text-green-900 text-2xl mb-2"></i>
-                            <p class="font-medium">Create Event</p>
-                        </a>
-                        
-                        <a href="announcements.html" 
-                           class="p-4 bg-purple-50 rounded-lg text-center hover:bg-purple-100 transition-colors">
-                            <i class="fas fa-bullhorn text-purple-900 text-2xl mb-2"></i>
-                            <p class="font-medium">Send Announcement</p>
-                        </a>
-                        
-                        <a href="reports.html" 
-                           class="p-4 bg-orange-50 rounded-lg text-center hover:bg-orange-100 transition-colors">
-                            <i class="fas fa-chart-bar text-orange-900 text-2xl mb-2"></i>
-                            <p class="font-medium">Generate Report</p>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
     <script>
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                window.location.href = 'index.html';
+        // Initialize Supabase with your credentials
+        const supabaseUrl = 'https://noadhwqvaxajuckpibbo.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+        
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+        
+        // Global variables
+        let currentUser = null;
+        let currentUserRole = null;
+        let currentUserProfile = null;
+        
+        // Check authentication and load dashboard
+        async function initializeDashboard() {
+            try {
+                // Check if user is authenticated
+                const { data: { session }, error: authError } = await supabase.auth.getSession();
+                
+                if (authError || !session) {
+                    window.location.href = 'admin-login.html';
+                    return;
+                }
+                
+                // Get user profile
+                const { data: profile, error: profileError } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', session.user.id)
+                    .single();
+                
+                if (profileError || !profile) {
+                    throw new Error('User profile not found');
+                }
+                
+                // Check if user is admin
+                const adminRoles = ['chapter_admin', 'national_admin', 'super_admin'];
+                if (!adminRoles.includes(profile.role)) {
+                    await supabase.auth.signOut();
+                    window.location.href = 'admin-login.html?error=no_admin';
+                    return;
+                }
+                
+                // Set global variables
+                currentUser = session.user;
+                currentUserRole = profile.role;
+                currentUserProfile = profile;
+                
+                // Update UI with user info
+                document.getElementById('userName').textContent = 
+                    `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || profile.email;
+                document.getElementById('userRole').textContent = 
+                    profile.role.replace('_', ' ').toUpperCase();
+                
+                // Load dashboard data
+                await loadDashboardData();
+                await loadNotifications();
+                startClock();
+                setupEventListeners();
+                
+            } catch (error) {
+                console.error('Dashboard initialization error:', error);
+                alert('Error loading dashboard. Please try again.');
+                window.location.href = 'admin-login.html';
             }
         }
         
-        // Sidebar navigation
-        document.querySelectorAll('.sidebar-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
+        // Setup event listeners
+        function setupEventListeners() {
+            // Menu toggle for mobile
+            document.getElementById('menuToggle').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('active');
+                document.getElementById('mainContent').classList.toggle('sidebar-active');
             });
-        });
+            
+            // Navigation menu
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update active menu item
+                    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Load section content
+                    const section = this.getAttribute('data-section');
+                    loadSection(section);
+                });
+            });
+            
+            // Notifications dropdown
+            document.getElementById('notificationsBtn').addEventListener('click', () => {
+                document.getElementById('notificationsDropdown').classList.toggle('hidden');
+            });
+            
+            // Quick actions dropdown
+            document.getElementById('quickActionsBtn').addEventListener('click', () => {
+                document.getElementById('quickActionsDropdown').classList.toggle('hidden');
+            });
+            
+            // Quick action handlers
+            document.querySelectorAll('[data-action]').forEach(action => {
+                action.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('quickActionsDropdown').classList.add('hidden');
+                    
+                    const actionType = this.getAttribute('data-action');
+                    handleQuickAction(actionType);
+                });
+            });
+            
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+                e.preventDefault();
+                
+                const confirmed = await showConfirm('Are you sure you want to logout?');
+                if (confirmed) {
+                    await supabase.auth.signOut();
+                    window.location.href = 'admin-login.html';
+                }
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#notificationsBtn') && !e.target.closest('#notificationsDropdown')) {
+                    document.getElementById('notificationsDropdown').classList.add('hidden');
+                }
+                
+                if (!e.target.closest('#quickActionsBtn') && !e.target.closest('#quickActionsDropdown')) {
+                    document.getElementById('quickActionsDropdown').classList.add('hidden');
+                }
+            });
+        }
+        
+        // Load dashboard statistics
+        async function loadDashboardData() {
+            try {
+                // Get total members count
+                const { count: totalMembers } = await supabase
+                    .from('members')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('membership_status', 'active');
+                
+                document.getElementById('totalMembers').textContent = totalMembers || 0;
+                document.getElementById('membersCount').textContent = totalMembers || 0;
+                
+                // Get new members this month
+                const startOfMonth = new Date();
+                startOfMonth.setDate(1);
+                startOfMonth.setHours(0, 0, 0, 0);
+                
+                const { count: newMembers } = await supabase
+                    .from('members')
+                    .select('*', { count: 'exact', head: true })
+                    .gte('created_at', startOfMonth.toISOString());
+                
+                document.getElementById('newMembers').textContent = newMembers || 0;
+                
+                // Get events data
+                const { count: activeEvents } = await supabase
+                    .from('events')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('status', 'published')
+                    .gte('end_date', new Date().toISOString());
+                
+                document.getElementById('activeEvents').textContent = activeEvents || 0;
+                document.getElementById('eventsCount').textContent = activeEvents || 0;
+                
+                // Get upcoming events
+                const { count: upcomingEvents } = await supabase
+                    .from('events')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('status', 'published')
+                    .gte('start_date', new Date().toISOString());
+                
+                document.getElementById('upcomingEvents').textContent = upcomingEvents || 0;
+                
+                // Get revenue data
+                const { data: revenueData } = await supabase
+                    .from('payments')
+                    .select('amount')
+                    .eq('payment_status', 'completed');
+                
+                const totalRevenue = revenueData?.reduce((sum, payment) => sum + parseFloat(payment.amount || 0), 0) || 0;
+                document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+                
+                // Get monthly revenue
+                const { data: monthlyRevenueData } = await supabase
+                    .from('payments')
+                    .select('amount')
+                    .eq('payment_status', 'completed')
+                    .gte('created_at', startOfMonth.toISOString());
+                
+                const monthlyRevenue = monthlyRevenueData?.reduce((sum, payment) => sum + parseFloat(payment.amount || 0), 0) || 0;
+                document.getElementById('monthlyRevenue').textContent = formatCurrency(monthlyRevenue);
+                
+                // Get pending actions
+                const { count: pendingMembers } = await supabase
+                    .from('members')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('membership_status', 'pending');
+                
+                document.getElementById('pendingActions').textContent = pendingMembers || 0;
+                
+                // Load charts
+                await loadCharts();
+                await loadRecentActivity();
+                await loadQuickStats();
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showNotification('Error loading dashboard data', 'error');
+            }
+        }
+        
+        // Load charts
+        async function loadCharts() {
+            try {
+                // Membership growth chart - get real data
+                const membershipCtx = document.getElementById('membershipChart').getContext('2d');
+                
+                // Get membership data for last 6 months
+                const months = [];
+                const memberCounts = [];
+                
+                for (let i = 5; i >= 0; i--) {
+                    const date = new Date();
+                    date.setMonth(date.getMonth() - i);
+                    const monthName = date.toLocaleString('default', { month: 'short' });
+                    months.push(monthName);
+                    
+                    // Calculate start and end of month
+                    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+                    const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                    
+                    // Query for members created in this month
+                    const { count } = await supabase
+                        .from('members')
+                        .select('*', { count: 'exact', head: true })
+                        .gte('created_at', startOfMonth.toISOString())
+                        .lte('created_at', endOfMonth.toISOString());
+                    
+                    memberCounts.push(count || 0);
+                }
+                
+                new Chart(membershipCtx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'New Members',
+                            data: memberCounts,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Revenue chart - get real data
+                const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+                
+                // Get revenue by type
+                const { data: revenueByType } = await supabase
+                    .from('payments')
+                    .select('payment_for, amount')
+                    .eq('payment_status', 'completed')
+                    .gte('created_at', new Date(new Date().getFullYear(), 0, 1).toISOString());
+                
+                const revenueData = {
+                    membership: 0,
+                    event: 0,
+                    donation: 0,
+                    other: 0
+                };
+                
+                revenueByType?.forEach(payment => {
+                    const type = payment.payment_for || 'other';
+                    revenueData[type] = (revenueData[type] || 0) + parseFloat(payment.amount || 0);
+                });
+                
+                new Chart(revenueCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Membership', 'Events', 'Donations', 'Other'],
+                        datasets: [{
+                            data: [
+                                revenueData.membership,
+                                revenueData.event,
+                                revenueData.donation,
+                                revenueData.other
+                            ],
+                            backgroundColor: [
+                                '#3b82f6',
+                                '#10b981',
+                                '#f59e0b',
+                                '#8b5cf6'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = Math.round((value / total) * 100);
+                                        return `${label}: ${formatCurrency(value)} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error loading charts:', error);
+            }
+        }
+        
+        // Load recent activity
+        async function loadRecentActivity() {
+            const activityList = document.getElementById('recentActivity');
+            showLoader(activityList);
+            
+            try {
+                // Get recent payments
+                const { data: recentPayments } = await supabase
+                    .from('payments')
+                    .select(`
+                        amount,
+                        payment_for,
+                        created_at,
+                        member:members(
+                            membership_number,
+                            profile:profiles(first_name, last_name)
+                        )
+                    `)
+                    .eq('payment_status', 'completed')
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                
+                // Get recent members
+                const { data: recentMembers } = await supabase
+                    .from('members')
+                    .select(`
+                        membership_number,
+                        membership_type,
+                        created_at,
+                        profile:profiles(first_name, last_name)
+                    `)
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                
+                activityList.innerHTML = '';
+                
+                // Combine and sort activities
+                const activities = [];
+                
+                recentPayments?.forEach(payment => {
+                    const memberName = payment.member?.profile ? 
+                        `${payment.member.profile.first_name} ${payment.member.profile.last_name}` : 
+                        'Unknown Member';
+                    
+                    activities.push({
+                        type: 'payment',
+                        title: `Payment received from ${memberName}`,
+                        description: `${payment.payment_for} - ${formatCurrency(payment.amount)}`,
+                        time: timeAgo(payment.created_at),
+                        icon: 'fa-credit-card',
+                        color: 'text-green-500'
+                    });
+                });
+                
+                recentMembers?.forEach(member => {
+                    const memberName = member.profile ? 
+                        `${member.profile.first_name} ${member.profile.last_name}` : 
+                        'New Member';
+                    
+                    activities.push({
+                        type: 'member',
+                        title: `New ${member.membership_type} member registered`,
+                        description: `${memberName} - ${member.membership_number}`,
+                        time: timeAgo(member.created_at),
+                        icon: 'fa-user-plus',
+                        color: 'text-blue-500'
+                    });
+                });
+                
+                // Sort by time
+                activities.sort((a, b) => new Date(b.time) - new Date(a.time));
+                
+                // Display activities
+                activities.slice(0, 5).forEach(activity => {
+                    const activityItem = document.createElement('div');
+                    activityItem.className = 'flex items-center p-3 bg-gray-50 rounded-lg';
+                    activityItem.innerHTML = `
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 rounded-full ${activity.color.replace('text-', 'bg-')}/10 flex items-center justify-center">
+                                <i class="fas ${activity.icon} ${activity.color}"></i>
+                            </div>
+                        </div>
+                        <div class="ml-3 flex-1">
+                            <h4 class="font-medium text-gray-800">${activity.title}</h4>
+                            <p class="text-sm text-gray-600">${activity.description}</p>
+                            <p class="text-xs text-gray-500 mt-1">${activity.time}</p>
+                        </div>
+                    `;
+                    activityList.appendChild(activityItem);
+                });
+                
+                if (activities.length === 0) {
+                    activityList.innerHTML = `
+                        <div class="text-center p-8 text-gray-500">
+                            <i class="fas fa-inbox text-3xl mb-3"></i>
+                            <p>No recent activity</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Error loading recent activity:', error);
+                activityList.innerHTML = `
+                    <div class="text-center p-8 text-red-500">
+                        <i class="fas fa-exclamation-triangle text-3xl mb-3"></i>
+                        <p>Error loading activity</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Load quick stats
+        async function loadQuickStats() {
+            const quickStatsList = document.getElementById('quickStats');
+            
+            try {
+                // Get various stats
+                const [
+                    { count: pendingVerifications },
+                    { count: upcomingEventsCount },
+                    { count: expiringMemberships },
+                    { data: latestAnnouncements }
+                ] = await Promise.all([
+                    supabase
+                        .from('members')
+                        .select('*', { count: 'exact', head: true })
+                        .eq('is_verified', false),
+                    
+                    supabase
+                        .from('events')
+                        .select('*', { count: 'exact', head: true })
+                        .eq('status', 'published')
+                        .gte('start_date', new Date().toISOString())
+                        .lte('start_date', new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()),
+                    
+                    supabase
+                        .from('members')
+                        .select('*', { count: 'exact', head: true })
+                        .eq('membership_status', 'active')
+                        .lte('expiry_date', new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString())
+                        .gte('expiry_date', new Date().toISOString()),
+                    
+                    supabase
+                        .from('announcements')
+                        .select('title, created_at')
+                        .eq('status', 'published')
+                        .order('created_at', { ascending: false })
+                        .limit(3)
+                ]);
+                
+                quickStatsList.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <div>
+                                <p class="text-sm font-medium text-blue-800">Pending Verifications</p>
+                                <p class="text-2xl font-bold text-blue-600">${pendingVerifications || 0}</p>
+                            </div>
+                            <i class="fas fa-user-check text-blue-500 text-xl"></i>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <div>
+                                <p class="text-sm font-medium text-green-800">Events This Week</p>
+                                <p class="text-2xl font-bold text-green-600">${upcomingEventsCount || 0}</p>
+                            </div>
+                            <i class="fas fa-calendar text-green-500 text-xl"></i>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                            <div>
+                                <p class="text-sm font-medium text-yellow-800">Memberships Expiring Soon</p>
+                                <p class="text-2xl font-bold text-yellow-600">${expiringMemberships || 0}</p>
+                            </div>
+                            <i class="fas fa-clock text-yellow-500 text-xl"></i>
+                        </div>
+                        
+                        <div class="p-3 bg-purple-50 rounded-lg">
+                            <p class="text-sm font-medium text-purple-800 mb-2">Latest Announcements</p>
+                            <div class="space-y-2">
+                                ${latestAnnouncements && latestAnnouncements.length > 0 ? 
+                                    latestAnnouncements.map(announcement => `
+                                        <div class="text-sm text-purple-700 truncate" title="${announcement.title}">
+                                            <i class="fas fa-bullhorn mr-1 text-xs"></i>
+                                            ${announcement.title}
+                                        </div>
+                                    `).join('') :
+                                    '<p class="text-sm text-purple-600">No recent announcements</p>'
+                                }
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error loading quick stats:', error);
+                quickStatsList.innerHTML = `
+                    <div class="text-center p-8 text-gray-500">
+                        <i class="fas fa-exclamation-triangle text-xl mb-3"></i>
+                        <p>Error loading stats</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Load notifications
+        async function loadNotifications() {
+            try {
+                // Get unread notifications
+                const { data: notifications, count: unreadCount } = await supabase
+                    .from('notifications')
+                    .select('*', { count: 'exact' })
+                    .eq('user_id', currentUserProfile?.id)
+                    .eq('is_read', false)
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+                
+                document.getElementById('notificationCount').textContent = unreadCount || 0;
+                
+                const notificationsList = document.getElementById('notificationsList');
+                
+                if (notifications && notifications.length > 0) {
+                    notificationsList.innerHTML = notifications.map(notification => `
+                        <div class="p-3 border-b hover:bg-gray-50 cursor-pointer" data-id="${notification.id}">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1">
+                                    <i class="fas fa-${notification.notification_type === 'payment' ? 'credit-card' : 
+                                        notification.notification_type === 'event' ? 'calendar' : 
+                                        notification.notification_type === 'membership' ? 'users' : 'bell'} 
+                                        text-blue-500"></i>
+                                </div>
+                                <div class="ml-3 flex-1">
+                                    <p class="text-sm font-medium text-gray-800">${notification.title}</p>
+                                    <p class="text-xs text-gray-600 mt-1">${notification.message}</p>
+                                    <p class="text-xs text-gray-500 mt-1">${timeAgo(notification.created_at)}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    // Add click handler to mark as read
+                    notificationsList.querySelectorAll('[data-id]').forEach(item => {
+                        item.addEventListener('click', async () => {
+                            const notificationId = item.getAttribute('data-id');
+                            await supabase
+                                .from('notifications')
+                                .update({ is_read: true, read_at: new Date() })
+                                .eq('id', notificationId);
+                            
+                            loadNotifications();
+                        });
+                    });
+                } else {
+                    notificationsList.innerHTML = `
+                        <div class="p-8 text-center text-gray-500">
+                            <i class="fas fa-bell-slash text-2xl mb-3"></i>
+                            <p>No new notifications</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+            }
+        }
+        
+        // Handle quick actions
+        function handleQuickAction(actionType) {
+            switch(actionType) {
+                case 'add-member':
+                    showAddMemberModal();
+                    break;
+                case 'create-event':
+                    showCreateEventModal();
+                    break;
+                case 'send-announcement':
+                    showSendAnnouncementModal();
+                    break;
+                case 'generate-report':
+                    showGenerateReportModal();
+                    break;
+            }
+        }
+        
+        // Show add member modal
+        function showAddMemberModal() {
+            // Implementation for add member modal
+            alert('Add member functionality coming soon!');
+        }
+        
+        // Load different sections
+        async function loadSection(section) {
+            document.getElementById('pageTitle').textContent = 
+                section.charAt(0).toUpperCase() + section.slice(1);
+            
+            // Show/hide appropriate content
+            if (section === 'dashboard') {
+                document.getElementById('dashboardContent').classList.remove('hidden');
+                document.getElementById('otherSections').classList.add('hidden');
+            } else {
+                document.getElementById('dashboardContent').classList.add('hidden');
+                document.getElementById('otherSections').classList.remove('hidden');
+                
+                // Load section content
+                const contentDiv = document.getElementById('otherSections');
+                showLoader(contentDiv);
+                
+                // Load section-specific content
+                switch(section) {
+                    case 'members':
+                        await loadMembersSection(contentDiv);
+                        break;
+                    case 'chapters':
+                        await loadChaptersSection(contentDiv);
+                        break;
+                    case 'events':
+                        await loadEventsSection(contentDiv);
+                        break;
+                    case 'payments':
+                        await loadPaymentsSection(contentDiv);
+                        break;
+                    case 'reports':
+                        await loadReportsSection(contentDiv);
+                        break;
+                    case 'announcements':
+                        await loadAnnouncementsSection(contentDiv);
+                        break;
+                    case 'settings':
+                        await loadSettingsSection(contentDiv);
+                        break;
+                }
+            }
+        }
+        
+        // Start clock
+        function startClock() {
+            function updateClock() {
+                const now = new Date();
+                const options = { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    hour12: true 
+                };
+                document.getElementById('currentTime').textContent = 
+                    now.toLocaleTimeString('en-KE', options);
+            }
+            
+            updateClock();
+            setInterval(updateClock, 60000); // Update every minute
+        }
+        
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
     </script>
 </body>
 </html>
