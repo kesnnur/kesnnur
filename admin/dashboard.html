@@ -6,9 +6,8 @@
     <title>KESNNUR Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../config.js"></script>
-    <script src="../utils.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/toastify-js@1.11.2/src/toastify.min.css" rel="stylesheet">
     <style>
         :root {
             --sidebar-width: 280px;
@@ -51,6 +50,39 @@
         }
         .stat-card:hover {
             transform: translateY(-5px);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 50px auto;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .code-editor {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .tab-button {
+            padding: 8px 16px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .tab-button.active {
+            border-bottom-color: #3b82f6;
+            color: #3b82f6;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -143,115 +175,36 @@
                     <div class="text-sm text-gray-600" id="lastLogin">
                         Last login: Loading...
                     </div>
+                    <button onclick="refreshData()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-sync-alt mr-2"></i>Refresh
+                    </button>
                 </div>
             </div>
         </div>
         
-        <!-- Dashboard Content -->
+        <!-- Content Area -->
         <div class="p-6" id="contentArea">
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="stat-card">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-gray-500 text-sm">Website Files</p>
-                            <h3 class="text-2xl font-bold text-gray-800" id="fileCount">Loading...</h3>
-                            <p class="text-blue-600 text-sm mt-1">
-                                <i class="fas fa-code mr-1"></i>HTML, CSS, JS
-                            </p>
-                        </div>
-                        <div class="bg-blue-100 p-3 rounded-lg">
-                            <i class="fas fa-file-code text-blue-900 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-gray-500 text-sm">Total Members</p>
-                            <h3 class="text-2xl font-bold text-gray-800" id="memberCount">0</h3>
-                            <p class="text-green-600 text-sm mt-1">
-                                <i class="fas fa-users mr-1"></i>Database
-                            </p>
-                        </div>
-                        <div class="bg-green-100 p-3 rounded-lg">
-                            <i class="fas fa-users text-green-900 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-gray-500 text-sm">Active Events</p>
-                            <h3 class="text-2xl font-bold text-gray-800" id="eventCount">0</h3>
-                            <p class="text-purple-600 text-sm mt-1">
-                                <i class="fas fa-calendar mr-1"></i>Upcoming
-                            </p>
-                        </div>
-                        <div class="bg-purple-100 p-3 rounded-lg">
-                            <i class="fas fa-calendar-alt text-purple-900 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-gray-500 text-sm">Quick Actions</p>
-                            <h3 class="text-2xl font-bold text-gray-800">4+</h3>
-                            <p class="text-orange-600 text-sm mt-1">
-                                <i class="fas fa-bolt mr-1"></i>Available
-                            </p>
-                        </div>
-                        <div class="bg-orange-100 p-3 rounded-lg">
-                            <i class="fas fa-bolt text-orange-900 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Quick Actions -->
-            <div class="bg-white rounded-xl p-6 shadow mb-6">
-                <h2 class="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <button onclick="loadSection('editor')" class="p-4 bg-blue-50 rounded-lg text-center hover:bg-blue-100 transition-colors cursor-pointer">
-                        <i class="fas fa-edit text-blue-900 text-2xl mb-2"></i>
-                        <p class="font-medium">Edit Website</p>
-                    </button>
-                    
-                    <button onclick="loadSection('members')" class="p-4 bg-green-50 rounded-lg text-center hover:bg-green-100 transition-colors cursor-pointer">
-                        <i class="fas fa-user-plus text-green-900 text-2xl mb-2"></i>
-                        <p class="font-medium">Add Member</p>
-                    </button>
-                    
-                    <button onclick="loadSection('events')" class="p-4 bg-purple-50 rounded-lg text-center hover:bg-purple-100 transition-colors cursor-pointer">
-                        <i class="fas fa-calendar-plus text-purple-900 text-2xl mb-2"></i>
-                        <p class="font-medium">Create Event</p>
-                    </button>
-                    
-                    <button onclick="loadSection('media')" class="p-4 bg-orange-50 rounded-lg text-center hover:bg-orange-100 transition-colors cursor-pointer">
-                        <i class="fas fa-upload text-orange-900 text-2xl mb-2"></i>
-                        <p class="font-medium">Upload Media</p>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Recent Activity -->
-            <div class="bg-white rounded-xl p-6 shadow">
-                <h2 class="text-xl font-bold text-gray-800 mb-4">Recent Activity</h2>
-                <div id="recentActivity" class="space-y-4">
-                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mr-3"></div>
-                        <p class="text-gray-600">Loading activity...</p>
-                    </div>
-                </div>
-            </div>
+            <!-- Dashboard will be loaded here -->
         </div>
     </div>
 
+    <!-- Modal for forms -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <!-- Modal content will be loaded here -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.11.2/src/toastify.min.js"></script>
     <script>
+        // Configuration - Replace with your actual Supabase credentials
+        const SUPABASE_CONFIG = {
+            url: 'https://your-project.supabase.co',
+            publishableKey: 'your-anon-key'
+        };
+        
+        const ADMIN_ROLES = ['admin', 'super_admin', 'editor'];
+        
         // Initialize Supabase
         const supabase = window.supabase.createClient(
             SUPABASE_CONFIG.url,
@@ -260,6 +213,18 @@
         
         let currentUser = null;
         let currentUserProfile = null;
+        
+        // Show toast notifications
+        function showToast(message, type = 'success') {
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: type === 'success' ? "#10b981" : type === 'error' ? "#ef4444" : "#3b82f6",
+                stopOnFocus: true,
+            }).showToast();
+        }
         
         // Initialize dashboard
         async function initializeDashboard() {
@@ -289,11 +254,12 @@
                 
                 updateUserInfo();
                 setupEventListeners();
-                loadStats();
+                loadDashboard();
                 
             } catch (error) {
                 console.error('Dashboard error:', error);
-                window.location.href = 'login.html';
+                showToast('Authentication error: ' + error.message, 'error');
+                setTimeout(() => window.location.href = 'login.html', 2000);
             }
         }
         
@@ -316,32 +282,6 @@
             document.getElementById('lastLogin').textContent = `Last login: ${lastLogin}`;
         }
         
-        async function loadStats() {
-            try {
-                // Count website files (we'll implement this later with GitHub API)
-                document.getElementById('fileCount').textContent = '7+';
-                
-                // Count members from Supabase
-                const { count: memberCount } = await supabase
-                    .from('members')
-                    .select('*', { count: 'exact', head: true });
-                
-                document.getElementById('memberCount').textContent = memberCount || 0;
-                
-                // Count events
-                const { count: eventCount } = await supabase
-                    .from('events')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('status', 'published')
-                    .gte('start_date', new Date().toISOString());
-                
-                document.getElementById('eventCount').textContent = eventCount || 0;
-                
-            } catch (error) {
-                console.error('Error loading stats:', error);
-            }
-        }
-        
         function setupEventListeners() {
             // Navigation
             document.querySelectorAll('.nav-item').forEach(item => {
@@ -352,10 +292,6 @@
                     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
                     this.classList.add('active');
                     
-                    // Update page title
-                    const title = section.charAt(0).toUpperCase() + section.slice(1);
-                    document.getElementById('pageTitle').textContent = title;
-                    
                     // Load section
                     loadSection(section);
                 });
@@ -365,26 +301,1859 @@
         async function loadSection(section) {
             const contentArea = document.getElementById('contentArea');
             
-            // For now, show a message. We'll implement each section later.
+            switch(section) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'editor':
+                    await loadFileEditor();
+                    break;
+                case 'members':
+                    await loadMembersManager();
+                    break;
+                case 'events':
+                    await loadEventsManager();
+                    break;
+                case 'chapters':
+                    await loadChaptersManager();
+                    break;
+                case 'payments':
+                    await loadPaymentsManager();
+                    break;
+                case 'pages':
+                    await loadPagesManager();
+                    break;
+                case 'media':
+                    await loadMediaManager();
+                    break;
+                default:
+                    contentArea.innerHTML = '<div class="text-center py-12">Section not found</div>';
+            }
+        }
+        
+        // DASHBOARD
+        async function loadDashboard() {
+            document.getElementById('pageTitle').textContent = 'Dashboard';
+            
+            const stats = await loadStats();
+            const recentActivity = await getRecentActivity();
+            
             contentArea.innerHTML = `
-                <div class="text-center py-12">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-                        <i class="fas fa-tools text-blue-900 text-2xl"></i>
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Members</p>
+                                <h3 class="text-2xl font-bold text-gray-800">${stats.members}</h3>
+                                <p class="text-green-600 text-sm mt-1">
+                                    <i class="fas fa-users mr-1"></i>Registered
+                                </p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-lg">
+                                <i class="fas fa-users text-green-900 text-xl"></i>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">${section.charAt(0).toUpperCase() + section.slice(1)} Section</h3>
-                    <p class="text-gray-600 mb-6">This section is under development.</p>
-                    <button onclick="loadSection('dashboard')" class="px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800">
-                        Back to Dashboard
-                    </button>
+                    
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm">Active Events</p>
+                                <h3 class="text-2xl font-bold text-gray-800">${stats.events}</h3>
+                                <p class="text-purple-600 text-sm mt-1">
+                                    <i class="fas fa-calendar mr-1"></i>Upcoming
+                                </p>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-lg">
+                                <i class="fas fa-calendar-alt text-purple-900 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm">Chapters</p>
+                                <h3 class="text-2xl font-bold text-gray-800">${stats.chapters}</h3>
+                                <p class="text-blue-600 text-sm mt-1">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>Locations
+                                </p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <i class="fas fa-map-marker-alt text-blue-900 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm">Recent Payments</p>
+                                <h3 class="text-2xl font-bold text-gray-800">${stats.payments}</h3>
+                                <p class="text-orange-600 text-sm mt-1">
+                                    <i class="fas fa-money-bill-wave mr-1"></i>This Month
+                                </p>
+                            </div>
+                            <div class="bg-orange-100 p-3 rounded-lg">
+                                <i class="fas fa-money-bill-wave text-orange-900 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-xl p-6 shadow mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <button onclick="loadSection('editor')" class="p-4 bg-blue-50 rounded-lg text-center hover:bg-blue-100 transition-colors cursor-pointer">
+                            <i class="fas fa-edit text-blue-900 text-2xl mb-2"></i>
+                            <p class="font-medium">Edit Website</p>
+                        </button>
+                        
+                        <button onclick="showAddMemberModal()" class="p-4 bg-green-50 rounded-lg text-center hover:bg-green-100 transition-colors cursor-pointer">
+                            <i class="fas fa-user-plus text-green-900 text-2xl mb-2"></i>
+                            <p class="font-medium">Add Member</p>
+                        </button>
+                        
+                        <button onclick="showAddEventModal()" class="p-4 bg-purple-50 rounded-lg text-center hover:bg-purple-100 transition-colors cursor-pointer">
+                            <i class="fas fa-calendar-plus text-purple-900 text-2xl mb-2"></i>
+                            <p class="font-medium">Create Event</p>
+                        </button>
+                        
+                        <button onclick="showUploadMediaModal()" class="p-4 bg-orange-50 rounded-lg text-center hover:bg-orange-100 transition-colors cursor-pointer">
+                            <i class="fas fa-upload text-orange-900 text-2xl mb-2"></i>
+                            <p class="font-medium">Upload Media</p>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-xl p-6 shadow">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Recent Activity</h2>
+                    <div id="recentActivity" class="space-y-4">
+                        ${recentActivity}
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function loadStats() {
+            try {
+                // Get member count
+                const { count: memberCount } = await supabase
+                    .from('members')
+                    .select('*', { count: 'exact', head: true });
+                
+                // Get active events count
+                const { count: eventCount } = await supabase
+                    .from('events')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('status', 'published')
+                    .gte('start_date', new Date().toISOString());
+                
+                // Get chapters count
+                const { count: chapterCount } = await supabase
+                    .from('chapters')
+                    .select('*', { count: 'exact', head: true });
+                
+                // Get recent payments count (last 30 days)
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                
+                const { count: paymentCount } = await supabase
+                    .from('payments')
+                    .select('*', { count: 'exact', head: true })
+                    .gte('created_at', thirtyDaysAgo.toISOString());
+                
+                return {
+                    members: memberCount || 0,
+                    events: eventCount || 0,
+                    chapters: chapterCount || 0,
+                    payments: paymentCount || 0
+                };
+                
+            } catch (error) {
+                console.error('Error loading stats:', error);
+                return { members: 0, events: 0, chapters: 0, payments: 0 };
+            }
+        }
+        
+        async function getRecentActivity() {
+            try {
+                // Get recent members (last 5)
+                const { data: recentMembers } = await supabase
+                    .from('members')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                
+                // Get recent events (last 5)
+                const { data: recentEvents } = await supabase
+                    .from('events')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                
+                let html = '';
+                
+                if (recentMembers) {
+                    recentMembers.forEach(member => {
+                        html += `
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-user text-blue-900"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">New member registered</p>
+                                    <p class="text-gray-600 text-sm">${member.first_name} ${member.last_name} • ${new Date(member.created_at).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                if (recentEvents) {
+                    recentEvents.forEach(event => {
+                        html += `
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-calendar text-purple-900"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">New event created</p>
+                                    <p class="text-gray-600 text-sm">${event.title} • ${new Date(event.created_at).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                return html || '<p class="text-gray-600">No recent activity</p>';
+                
+            } catch (error) {
+                console.error('Error loading recent activity:', error);
+                return '<p class="text-gray-600">Error loading activity</p>';
+            }
+        }
+        
+        // FILE EDITOR
+        async function loadFileEditor() {
+            document.getElementById('pageTitle').textContent = 'Edit Website Files';
+            
+            contentArea.innerHTML = `
+                <div class="bg-white rounded-xl shadow p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">Website File Editor</h2>
+                        <button onclick="createNewFile()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                            <i class="fas fa-plus mr-2"></i>New File
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                        <!-- File Tree -->
+                        <div class="lg:col-span-1 bg-gray-50 rounded-lg p-4">
+                            <h3 class="font-medium text-gray-700 mb-4">Website Files</h3>
+                            <div id="fileTree" class="space-y-2">
+                                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Editor -->
+                        <div class="lg:col-span-3">
+                            <div class="bg-gray-900 rounded-lg overflow-hidden">
+                                <div class="bg-gray-800 px-4 py-3 flex justify-between items-center">
+                                    <div class="flex space-x-2">
+                                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    </div>
+                                    <div id="fileName" class="text-gray-300 font-mono">Select a file to edit</div>
+                                </div>
+                                <div class="p-4">
+                                    <textarea id="fileContent" class="w-full h-96 bg-gray-900 text-gray-100 font-mono p-4 rounded code-editor" 
+                                              placeholder="Select a file from the left panel..." 
+                                              spellcheck="false"></textarea>
+                                    
+                                    <div class="flex justify-end space-x-3 mt-4">
+                                        <button onclick="saveFile()" id="saveButton" 
+                                                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                disabled>
+                                            Save Changes
+                                        </button>
+                                        <button onclick="previewFile()" id="previewButton"
+                                                class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                disabled>
+                                            Preview
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 text-sm text-gray-600">
+                                <p><i class="fas fa-info-circle mr-2"></i>Supported files: .html, .css, .js, .json, .txt</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `;
             
-            // We'll implement specific section loading in next steps
-            if (section === 'editor') {
-                // Will load file editor
-            } else if (section === 'members') {
-                // Will load members manager
+            await loadFileTree();
+        }
+        
+        async function loadFileTree() {
+            const fileTree = document.getElementById('fileTree');
+            fileTree.innerHTML = '<div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>';
+            
+            try {
+                // In a real implementation, you would fetch files from your server or GitHub API
+                // For demo purposes, we'll use mock files
+                const mockFiles = [
+                    { name: 'index.html', type: 'file', path: '/index.html' },
+                    { name: 'styles.css', type: 'file', path: '/styles.css' },
+                    { name: 'script.js', type: 'file', path: '/script.js' },
+                    { name: 'dashboard.html', type: 'file', path: '/dashboard.html' },
+                    { name: 'login.html', type: 'file', path: '/login.html' },
+                    { name: 'images', type: 'folder', path: '/images' },
+                    { name: 'pages', type: 'folder', path: '/pages' },
+                ];
+                
+                let html = '';
+                mockFiles.forEach(file => {
+                    if (file.type === 'folder') {
+                        html += `
+                            <div class="flex items-center p-2 hover:bg-gray-200 rounded cursor-pointer">
+                                <i class="fas fa-folder text-yellow-500 mr-2"></i>
+                                <span>${file.name}</span>
+                            </div>
+                        `;
+                    } else {
+                        html += `
+                            <div class="flex items-center p-2 hover:bg-gray-200 rounded cursor-pointer" 
+                                 onclick="loadFile('${file.path}', '${file.name}')">
+                                <i class="fas fa-file-code text-blue-500 mr-2"></i>
+                                <span>${file.name}</span>
+                            </div>
+                        `;
+                    }
+                });
+                
+                fileTree.innerHTML = html;
+                
+            } catch (error) {
+                fileTree.innerHTML = '<p class="text-red-600">Error loading files</p>';
             }
+        }
+        
+        async function loadFile(path, name) {
+            document.getElementById('fileName').textContent = name;
+            document.getElementById('saveButton').disabled = false;
+            document.getElementById('previewButton').disabled = false;
+            
+            // In a real implementation, you would fetch the file content from your server
+            // For demo, we'll show placeholder content
+            const mockContent = `<!-- ${name} -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KESNNUR - ${name}</title>
+    <!-- Add your content here -->
+</head>
+<body>
+    <h1>Welcome to KESNNUR</h1>
+    <p>Edit this file as needed.</p>
+</body>
+</html>`;
+            
+            document.getElementById('fileContent').value = mockContent;
+        }
+        
+        function saveFile() {
+            const content = document.getElementById('fileContent').value;
+            const fileName = document.getElementById('fileName').textContent;
+            
+            // In a real implementation, you would save to server
+            showToast(`Saved changes to ${fileName}`, 'success');
+        }
+        
+        function previewFile() {
+            const content = document.getElementById('fileContent').value;
+            const fileName = document.getElementById('fileName').textContent;
+            
+            // Open in new window for preview
+            const previewWindow = window.open();
+            previewWindow.document.write(content);
+            previewWindow.document.close();
+        }
+        
+        function createNewFile() {
+            showModal(`
+                <div class="p-6">
+                    <h3 class="text-lg font-bold mb-4">Create New File</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">File Name</label>
+                            <input type="text" id="newFileName" class="w-full px-3 py-2 border border-gray-300 rounded-lg" 
+                                   placeholder="example.html">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">File Type</label>
+                            <select id="newFileType" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                <option value="html">HTML</option>
+                                <option value="css">CSS</option>
+                                <option value="js">JavaScript</option>
+                                <option value="json">JSON</option>
+                                <option value="txt">Text</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-3 mt-6">
+                        <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                        <button onclick="createFile()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Create</button>
+                    </div>
+                </div>
+            `);
+        }
+        
+        function createFile() {
+            const fileName = document.getElementById('newFileName').value;
+            const fileType = document.getElementById('newFileType').value;
+            
+            if (!fileName) {
+                showToast('Please enter a file name', 'error');
+                return;
+            }
+            
+            showToast(`Created ${fileName}.${fileType}`, 'success');
+            closeModal();
+            loadFileTree();
+        }
+        
+        // MEMBERS MANAGER
+        async function loadMembersManager() {
+            document.getElementById('pageTitle').textContent = 'Members Management';
+            
+            contentArea.innerHTML = `
+                <div class="bg-white rounded-xl shadow">
+                    <div class="p-6 border-b">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold text-gray-800">Members Management</h2>
+                            <button onclick="showAddMemberModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                <i class="fas fa-user-plus mr-2"></i>Add New Member
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <!-- Filters -->
+                        <div class="flex flex-wrap gap-4 mb-6">
+                            <input type="text" id="searchMembers" placeholder="Search members..." 
+                                   class="px-4 py-2 border border-gray-300 rounded-lg flex-1 min-w-[200px]"
+                                   onkeyup="filterMembers()">
+                            <select id="filterChapter" class="px-4 py-2 border border-gray-300 rounded-lg" onchange="filterMembers()">
+                                <option value="">All Chapters</option>
+                                <!-- Chapters will be loaded here -->
+                            </select>
+                            <select id="filterStatus" class="px-4 py-2 border border-gray-300 rounded-lg" onchange="filterMembers()">
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Members Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Name</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Email</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Chapter</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Joined</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="membersTable">
+                                    <tr>
+                                        <td colspan="6" class="px-4 py-8 text-center">
+                                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        <div class="flex justify-between items-center mt-6">
+                            <div class="text-sm text-gray-600" id="membersCount">Loading...</div>
+                            <div class="flex space-x-2" id="pagination">
+                                <!-- Pagination will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            await loadMembers();
+            await loadChapterOptions();
+        }
+        
+        async function loadMembers(page = 1, limit = 10) {
+            try {
+                const { data: members, count } = await supabase
+                    .from('members')
+                    .select('*', { count: 'exact' })
+                    .order('created_at', { ascending: false })
+                    .range((page - 1) * limit, page * limit - 1);
+                
+                if (!members || members.length === 0) {
+                    document.getElementById('membersTable').innerHTML = `
+                        <tr>
+                            <td colspan="6" class="px-4 py-8 text-center text-gray-500">
+                                No members found
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                members.forEach(member => {
+                    const statusColors = {
+                        active: 'bg-green-100 text-green-800',
+                        inactive: 'bg-red-100 text-red-800',
+                        pending: 'bg-yellow-100 text-yellow-800'
+                    };
+                    
+                    html += `
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="px-4 py-3">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-user text-blue-900 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">${member.first_name} ${member.last_name}</p>
+                                        <p class="text-sm text-gray-500">ID: ${member.member_id || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3">${member.email}</td>
+                            <td class="px-4 py-3">${member.chapter || 'N/A'}</td>
+                            <td class="px-4 py-3">
+                                <span class="px-2 py-1 rounded-full text-xs font-medium ${statusColors[member.status || 'pending']}">
+                                    ${member.status || 'pending'}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3">${new Date(member.created_at).toLocaleDateString()}</td>
+                            <td class="px-4 py-3">
+                                <div class="flex space-x-2">
+                                    <button onclick="editMember('${member.id}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button onclick="deleteMember('${member.id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                document.getElementById('membersTable').innerHTML = html;
+                document.getElementById('membersCount').textContent = `Showing ${members.length} of ${count || 0} members`;
+                
+                // Load pagination
+                loadPagination(page, Math.ceil((count || 0) / limit));
+                
+            } catch (error) {
+                console.error('Error loading members:', error);
+                document.getElementById('membersTable').innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-4 py-8 text-center text-red-600">
+                            Error loading members: ${error.message}
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+        
+        async function loadChapterOptions() {
+            try {
+                const { data: chapters } = await supabase
+                    .from('chapters')
+                    .select('name')
+                    .order('name');
+                
+                const select = document.getElementById('filterChapter');
+                if (chapters) {
+                    chapters.forEach(chapter => {
+                        const option = document.createElement('option');
+                        option.value = chapter.name;
+                        option.textContent = chapter.name;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading chapters:', error);
+            }
+        }
+        
+        function loadPagination(currentPage, totalPages) {
+            if (totalPages <= 1) {
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            
+            // Previous button
+            html += `
+                <button onclick="loadMembers(${currentPage - 1})" 
+                        ${currentPage === 1 ? 'disabled' : ''}
+                        class="px-3 py-1 border rounded-lg ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-gray-100'}">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    html += `<button class="px-3 py-1 bg-blue-600 text-white rounded-lg">${i}</button>`;
+                } else if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    html += `<button onclick="loadMembers(${i})" class="px-3 py-1 border rounded-lg hover:bg-gray-100">${i}</button>`;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    html += `<span class="px-3 py-1">...</span>`;
+                }
+            }
+            
+            // Next button
+            html += `
+                <button onclick="loadMembers(${currentPage + 1})" 
+                        ${currentPage === totalPages ? 'disabled' : ''}
+                        class="px-3 py-1 border rounded-lg ${currentPage === totalPages ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-gray-100'}">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+            
+            document.getElementById('pagination').innerHTML = html;
+        }
+        
+        function filterMembers() {
+            // Implement search/filter functionality
+            const searchTerm = document.getElementById('searchMembers').value.toLowerCase();
+            const chapterFilter = document.getElementById('filterChapter').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+            
+            // In a real implementation, you would query Supabase with filters
+            console.log('Filtering with:', { searchTerm, chapterFilter, statusFilter });
+        }
+        
+        function showAddMemberModal() {
+            showModal(`
+                <div class="p-6">
+                    <h3 class="text-lg font-bold mb-4">Add New Member</h3>
+                    <form id="addMemberForm" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                                <input type="text" name="first_name" required 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                                <input type="text" name="last_name" required
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                            <input type="email" name="email" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                            <input type="tel" name="phone"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Chapter</label>
+                            <select name="chapter" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                <option value="">Select Chapter</option>
+                                <option value="Nairobi">Nairobi</option>
+                                <option value="Mombasa">Mombasa</option>
+                                <option value="Kisumu">Kisumu</option>
+                                <option value="Eldoret">Eldoret</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                            <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                <option value="active">Active</option>
+                                <option value="pending">Pending</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                            <textarea name="notes" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg"></textarea>
+                        </div>
+                    </form>
+                    
+                    <div class="flex justify-end space-x-3 mt-6">
+                        <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                        <button onclick="addNewMember()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Add Member</button>
+                    </div>
+                </div>
+            `);
+        }
+        
+        async function addNewMember() {
+            const form = document.getElementById('addMemberForm');
+            const formData = new FormData(form);
+            const memberData = Object.fromEntries(formData.entries());
+            
+            try {
+                const { data, error } = await supabase
+                    .from('members')
+                    .insert([{
+                        ...memberData,
+                        created_by: currentUser.id,
+                        created_at: new Date().toISOString()
+                    }])
+                    .select();
+                
+                if (error) throw error;
+                
+                showToast('Member added successfully', 'success');
+                closeModal();
+                loadMembers();
+                
+            } catch (error) {
+                console.error('Error adding member:', error);
+                showToast('Error adding member: ' + error.message, 'error');
+            }
+        }
+        
+        async function editMember(id) {
+            try {
+                const { data: member } = await supabase
+                    .from('members')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
+                
+                if (!member) throw new Error('Member not found');
+                
+                showModal(`
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold mb-4">Edit Member</h3>
+                        <form id="editMemberForm" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                                    <input type="text" name="first_name" value="${member.first_name || ''}" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                                    <input type="text" name="last_name" value="${member.last_name || ''}"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" name="email" value="${member.email || ''}"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                                <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                    <option value="active" ${member.status === 'active' ? 'selected' : ''}>Active</option>
+                                    <option value="pending" ${member.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="inactive" ${member.status === 'inactive' ? 'selected' : ''}>Inactive</option>
+                                </select>
+                            </div>
+                        </form>
+                        
+                        <div class="flex justify-end space-x-3 mt-6">
+                            <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                            <button onclick="updateMember('${id}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Update</button>
+                        </div>
+                    </div>
+                `);
+                
+            } catch (error) {
+                console.error('Error loading member:', error);
+                showToast('Error loading member: ' + error.message, 'error');
+            }
+        }
+        
+        async function updateMember(id) {
+            const form = document.getElementById('editMemberForm');
+            const formData = new FormData(form);
+            const memberData = Object.fromEntries(formData.entries());
+            
+            try {
+                const { error } = await supabase
+                    .from('members')
+                    .update(memberData)
+                    .eq('id', id);
+                
+                if (error) throw error;
+                
+                showToast('Member updated successfully', 'success');
+                closeModal();
+                loadMembers();
+                
+            } catch (error) {
+                console.error('Error updating member:', error);
+                showToast('Error updating member: ' + error.message, 'error');
+            }
+        }
+        
+        async function deleteMember(id) {
+            if (!confirm('Are you sure you want to delete this member?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('members')
+                    .delete()
+                    .eq('id', id);
+                
+                if (error) throw error;
+                
+                showToast('Member deleted successfully', 'success');
+                loadMembers();
+                
+            } catch (error) {
+                console.error('Error deleting member:', error);
+                showToast('Error deleting member: ' + error.message, 'error');
+            }
+        }
+        
+        // EVENTS MANAGER
+        async function loadEventsManager() {
+            document.getElementById('pageTitle').textContent = 'Events Management';
+            
+            contentArea.innerHTML = `
+                <div class="bg-white rounded-xl shadow">
+                    <div class="p-6 border-b">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold text-gray-800">Events Management</h2>
+                            <button onclick="showAddEventModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                <i class="fas fa-calendar-plus mr-2"></i>Create New Event
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <!-- Tabs -->
+                        <div class="flex border-b mb-6">
+                            <button onclick="loadEventTab('upcoming')" class="tab-button active" data-tab="upcoming">
+                                Upcoming Events
+                            </button>
+                            <button onclick="loadEventTab('past')" class="tab-button" data-tab="past">
+                                Past Events
+                            </button>
+                            <button onclick="loadEventTab('all')" class="tab-button" data-tab="all">
+                                All Events
+                            </button>
+                        </div>
+                        
+                        <!-- Events Grid -->
+                        <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-8">
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            await loadEvents('upcoming');
+        }
+        
+        async function loadEvents(filter = 'upcoming') {
+            try {
+                let query = supabase
+                    .from('events')
+                    .select('*')
+                    .order('start_date', { ascending: filter === 'upcoming' });
+                
+                const now = new Date().toISOString();
+                if (filter === 'upcoming') {
+                    query = query.gte('start_date', now);
+                } else if (filter === 'past') {
+                    query = query.lt('start_date', now);
+                }
+                
+                const { data: events } = await query;
+                
+                const eventsGrid = document.getElementById('eventsGrid');
+                if (!events || events.length === 0) {
+                    eventsGrid.innerHTML = `
+                        <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-8">
+                            <div class="text-gray-500">
+                                <i class="fas fa-calendar-times text-4xl mb-4"></i>
+                                <p>No ${filter} events found</p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                events.forEach(event => {
+                    const startDate = new Date(event.start_date);
+                    const endDate = event.end_date ? new Date(event.end_date) : null;
+                    const isPast = new Date(event.start_date) < new Date();
+                    
+                    html += `
+                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="font-bold text-lg text-gray-800 mb-1">${event.title}</h3>
+                                        <div class="flex items-center text-sm text-gray-600 mb-2">
+                                            <i class="fas fa-map-marker-alt mr-2"></i>
+                                            <span>${event.location || 'Online'}</span>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full 
+                                                 ${isPast ? 'bg-gray-100 text-gray-800' : 'bg-blue-100 text-blue-800'}">
+                                        ${isPast ? 'Past' : 'Upcoming'}
+                                    </span>
+                                </div>
+                                
+                                <div class="space-y-3 mb-4">
+                                    <div class="flex items-center text-sm">
+                                        <i class="fas fa-calendar-day text-gray-400 mr-2 w-4"></i>
+                                        <span>${startDate.toLocaleDateString()} ${startDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                    </div>
+                                    ${endDate ? `
+                                        <div class="flex items-center text-sm">
+                                            <i class="fas fa-clock text-gray-400 mr-2 w-4"></i>
+                                            <span>Ends: ${endDate.toLocaleDateString()} ${endDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                        </div>
+                                    ` : ''}
+                                    
+                                    ${event.description ? `
+                                        <p class="text-gray-600 text-sm line-clamp-2">${event.description}</p>
+                                    ` : ''}
+                                </div>
+                                
+                                <div class="flex justify-between items-center pt-4 border-t">
+                                    <div class="text-sm text-gray-500">
+                                        ${event.attendees_count || 0} attending
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button onclick="editEvent('${event.id}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-sm">
+                                            <i class="fas fa-edit mr-1"></i>Edit
+                                        </button>
+                                        <button onclick="deleteEvent('${event.id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 text-sm">
+                                            <i class="fas fa-trash mr-1"></i>Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                eventsGrid.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading events:', error);
+                document.getElementById('eventsGrid').innerHTML = `
+                    <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-8 text-red-600">
+                        Error loading events: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function loadEventTab(tab) {
+            // Update active tab
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.getAttribute('data-tab') === tab) {
+                    button.classList.add('active');
+                }
+            });
+            
+            // Load events for this tab
+            loadEvents(tab);
+        }
+        
+        function showAddEventModal() {
+            showModal(`
+                <div class="p-6">
+                    <h3 class="text-lg font-bold mb-4">Create New Event</h3>
+                    <form id="addEventForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Title *</label>
+                            <input type="text" name="title" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Start Date & Time *</label>
+                                <input type="datetime-local" name="start_date" required
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">End Date & Time</label>
+                                <input type="datetime-local" name="end_date"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                            <input type="text" name="location" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                                   placeholder="Venue or Online">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <textarea name="description" rows="4" 
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                            <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                <option value="published">Published</option>
+                                <option value="draft">Draft</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </form>
+                    
+                    <div class="flex justify-end space-x-3 mt-6">
+                        <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                        <button onclick="addNewEvent()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Create Event</button>
+                    </div>
+                </div>
+            `);
+        }
+        
+        async function addNewEvent() {
+            const form = document.getElementById('addEventForm');
+            const formData = new FormData(form);
+            const eventData = Object.fromEntries(formData.entries());
+            
+            try {
+                const { data, error } = await supabase
+                    .from('events')
+                    .insert([{
+                        ...eventData,
+                        created_by: currentUser.id,
+                        created_at: new Date().toISOString()
+                    }])
+                    .select();
+                
+                if (error) throw error;
+                
+                showToast('Event created successfully', 'success');
+                closeModal();
+                loadEvents('upcoming');
+                
+            } catch (error) {
+                console.error('Error creating event:', error);
+                showToast('Error creating event: ' + error.message, 'error');
+            }
+        }
+        
+        async function editEvent(id) {
+            try {
+                const { data: event } = await supabase
+                    .from('events')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
+                
+                if (!event) throw new Error('Event not found');
+                
+                // Format datetime for input fields
+                const startDate = new Date(event.start_date);
+                const endDate = event.end_date ? new Date(event.end_date) : null;
+                
+                const formatForInput = (date) => {
+                    return date.toISOString().slice(0, 16);
+                };
+                
+                showModal(`
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold mb-4">Edit Event</h3>
+                        <form id="editEventForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Event Title</label>
+                                <input type="text" name="title" value="${event.title || ''}" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Start Date & Time</label>
+                                    <input type="datetime-local" name="start_date" value="${formatForInput(startDate)}"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">End Date & Time</label>
+                                    <input type="datetime-local" name="end_date" value="${endDate ? formatForInput(endDate) : ''}"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                                <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                    <option value="published" ${event.status === 'published' ? 'selected' : ''}>Published</option>
+                                    <option value="draft" ${event.status === 'draft' ? 'selected' : ''}>Draft</option>
+                                    <option value="cancelled" ${event.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                                </select>
+                            </div>
+                        </form>
+                        
+                        <div class="flex justify-end space-x-3 mt-6">
+                            <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                            <button onclick="updateEvent('${id}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Update</button>
+                        </div>
+                    </div>
+                `);
+                
+            } catch (error) {
+                console.error('Error loading event:', error);
+                showToast('Error loading event: ' + error.message, 'error');
+            }
+        }
+        
+        async function updateEvent(id) {
+            const form = document.getElementById('editEventForm');
+            const formData = new FormData(form);
+            const eventData = Object.fromEntries(formData.entries());
+            
+            try {
+                const { error } = await supabase
+                    .from('events')
+                    .update(eventData)
+                    .eq('id', id);
+                
+                if (error) throw error;
+                
+                showToast('Event updated successfully', 'success');
+                closeModal();
+                loadEvents('upcoming');
+                
+            } catch (error) {
+                console.error('Error updating event:', error);
+                showToast('Error updating event: ' + error.message, 'error');
+            }
+        }
+        
+        async function deleteEvent(id) {
+            if (!confirm('Are you sure you want to delete this event?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('events')
+                    .delete()
+                    .eq('id', id);
+                
+                if (error) throw error;
+                
+                showToast('Event deleted successfully', 'success');
+                loadEvents('upcoming');
+                
+            } catch (error) {
+                console.error('Error deleting event:', error);
+                showToast('Error deleting event: ' + error.message, 'error');
+            }
+        }
+        
+        // CHAPTERS MANAGER
+        async function loadChaptersManager() {
+            document.getElementById('pageTitle').textContent = 'Chapters Management';
+            
+            contentArea.innerHTML = `
+                <div class="bg-white rounded-xl shadow">
+                    <div class="p-6 border-b">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold text-gray-800">Chapters Management</h2>
+                            <button onclick="showAddChapterModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                <i class="fas fa-plus mr-2"></i>Add New Chapter
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="chaptersGrid">
+                            <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-8">
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            await loadChapters();
+        }
+        
+        async function loadChapters() {
+            try {
+                const { data: chapters } = await supabase
+                    .from('chapters')
+                    .select('*')
+                    .order('name');
+                
+                const chaptersGrid = document.getElementById('chaptersGrid');
+                if (!chapters || chapters.length === 0) {
+                    chaptersGrid.innerHTML = `
+                        <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-8">
+                            <div class="text-gray-500">
+                                <i class="fas fa-map-marker-alt text-4xl mb-4"></i>
+                                <p>No chapters found</p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                chapters.forEach(chapter => {
+                    html += `
+                        <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800 mb-1">${chapter.name}</h3>
+                                    <p class="text-gray-600 text-sm">${chapter.city}, ${chapter.country}</p>
+                                </div>
+                                <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                                    ${chapter.member_count || 0} members
+                                </span>
+                            </div>
+                            
+                            <div class="space-y-2 mb-4">
+                                ${chapter.contact_person ? `
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-user mr-2 w-4"></i>
+                                        <span>${chapter.contact_person}</span>
+                                    </div>
+                                ` : ''}
+                                
+                                ${chapter.email ? `
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-envelope mr-2 w-4"></i>
+                                        <span>${chapter.email}</span>
+                                    </div>
+                                ` : ''}
+                                
+                                ${chapter.phone ? `
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-phone mr-2 w-4"></i>
+                                        <span>${chapter.phone}</span>
+                                    </div>
+                                ` : ''}
+                                
+                                ${chapter.description ? `
+                                    <p class="text-gray-600 text-sm mt-2">${chapter.description}</p>
+                                ` : ''}
+                            </div>
+                            
+                            <div class="flex justify-end space-x-2 pt-4 border-t">
+                                <button onclick="editChapter('${chapter.id}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-sm">
+                                    <i class="fas fa-edit mr-1"></i>Edit
+                                </button>
+                                <button onclick="deleteChapter('${chapter.id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 text-sm">
+                                    <i class="fas fa-trash mr-1"></i>Delete
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                chaptersGrid.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading chapters:', error);
+                document.getElementById('chaptersGrid').innerHTML = `
+                    <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-8 text-red-600">
+                        Error loading chapters: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function showAddChapterModal() {
+            showModal(`
+                <div class="p-6">
+                    <h3 class="text-lg font-bold mb-4">Add New Chapter</h3>
+                    <form id="addChapterForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Chapter Name *</label>
+                            <input type="text" name="name" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
+                                <input type="text" name="city" required
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Country *</label>
+                                <input type="text" name="country" required value="Kenya"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Contact Person</label>
+                            <input type="text" name="contact_person"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" name="email"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                                <input type="tel" name="phone"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <textarea name="description" rows="3" 
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg"></textarea>
+                        </div>
+                    </form>
+                    
+                    <div class="flex justify-end space-x-3 mt-6">
+                        <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                        <button onclick="addNewChapter()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Add Chapter</button>
+                    </div>
+                </div>
+            `);
+        }
+        
+        async function addNewChapter() {
+            const form = document.getElementById('addChapterForm');
+            const formData = new FormData(form);
+            const chapterData = Object.fromEntries(formData.entries());
+            
+            try {
+                const { data, error } = await supabase
+                    .from('chapters')
+                    .insert([{
+                        ...chapterData,
+                        created_by: currentUser.id,
+                        created_at: new Date().toISOString()
+                    }])
+                    .select();
+                
+                if (error) throw error;
+                
+                showToast('Chapter added successfully', 'success');
+                closeModal();
+                loadChapters();
+                
+            } catch (error) {
+                console.error('Error adding chapter:', error);
+                showToast('Error adding chapter: ' + error.message, 'error');
+            }
+        }
+        
+        // PAYMENTS MANAGER
+        async function loadPaymentsManager() {
+            document.getElementById('pageTitle').textContent = 'Payments Management';
+            
+            contentArea.innerHTML = `
+                <div class="bg-white rounded-xl shadow">
+                    <div class="p-6 border-b">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold text-gray-800">Payments Management</h2>
+                            <button onclick="showAddPaymentModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                <i class="fas fa-money-bill-wave mr-2"></i>Record Payment
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <!-- Filters -->
+                        <div class="flex flex-wrap gap-4 mb-6">
+                            <input type="text" id="searchPayments" placeholder="Search payments..." 
+                                   class="px-4 py-2 border border-gray-300 rounded-lg flex-1 min-w-[200px]">
+                            <select id="filterPaymentStatus" class="px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="">All Status</option>
+                                <option value="completed">Completed</option>
+                                <option value="pending">Pending</option>
+                                <option value="failed">Failed</option>
+                            </select>
+                            <input type="month" id="filterPaymentMonth" class="px-4 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        
+                        <!-- Payments Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Member</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Amount</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Type</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Date</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Reference</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="paymentsTable">
+                                    <tr>
+                                        <td colspan="7" class="px-4 py-8 text-center">
+                                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Summary -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <p class="text-sm text-green-700 mb-1">Total Received</p>
+                                <p class="text-2xl font-bold text-green-900" id="totalReceived">KSh 0</p>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p class="text-sm text-blue-700 mb-1">Pending Payments</p>
+                                <p class="text-2xl font-bold text-blue-900" id="pendingPayments">0</p>
+                            </div>
+                            <div class="bg-purple-50 p-4 rounded-lg">
+                                <p class="text-sm text-purple-700 mb-1">This Month</p>
+                                <p class="text-2xl font-bold text-purple-900" id="thisMonth">KSh 0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            await loadPayments();
+        }
+        
+        async function loadPayments() {
+            try {
+                const { data: payments } = await supabase
+                    .from('payments')
+                    .select(`
+                        *,
+                        members (first_name, last_name, email)
+                    `)
+                    .order('created_at', { ascending: false })
+                    .limit(20);
+                
+                if (!payments || payments.length === 0) {
+                    document.getElementById('paymentsTable').innerHTML = `
+                        <tr>
+                            <td colspan="7" class="px-4 py-8 text-center text-gray-500">
+                                No payments found
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                let totalReceived = 0;
+                let pendingCount = 0;
+                let thisMonthTotal = 0;
+                
+                const thisMonth = new Date().getMonth();
+                const thisYear = new Date().getFullYear();
+                
+                payments.forEach(payment => {
+                    const member = payment.members;
+                    const paymentDate = new Date(payment.created_at);
+                    const isThisMonth = paymentDate.getMonth() === thisMonth && paymentDate.getFullYear() === thisYear;
+                    
+                    if (payment.status === 'completed') {
+                        totalReceived += payment.amount || 0;
+                        if (isThisMonth) {
+                            thisMonthTotal += payment.amount || 0;
+                        }
+                    }
+                    if (payment.status === 'pending') {
+                        pendingCount++;
+                    }
+                    
+                    const statusColors = {
+                        completed: 'bg-green-100 text-green-800',
+                        pending: 'bg-yellow-100 text-yellow-800',
+                        failed: 'bg-red-100 text-red-800'
+                    };
+                    
+                    html += `
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="px-4 py-3">
+                                ${member ? `${member.first_name} ${member.last_name}` : 'Unknown'}
+                                <p class="text-sm text-gray-500">${member?.email || ''}</p>
+                            </td>
+                            <td class="px-4 py-3 font-medium">KSh ${payment.amount?.toLocaleString() || '0'}</td>
+                            <td class="px-4 py-3">
+                                <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded">
+                                    ${payment.payment_type || 'Membership'}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="px-2 py-1 text-xs font-medium rounded ${statusColors[payment.status || 'pending']}">
+                                    ${payment.status || 'pending'}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3">${paymentDate.toLocaleDateString()}</td>
+                            <td class="px-4 py-3 font-mono text-sm">${payment.reference || 'N/A'}</td>
+                            <td class="px-4 py-3">
+                                <div class="flex space-x-2">
+                                    ${payment.status === 'pending' ? `
+                                        <button onclick="markPaymentComplete('${payment.id}')" class="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 text-sm">
+                                            Approve
+                                        </button>
+                                    ` : ''}
+                                    <button onclick="deletePayment('${payment.id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 text-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                document.getElementById('paymentsTable').innerHTML = html;
+                document.getElementById('totalReceived').textContent = `KSh ${totalReceived.toLocaleString()}`;
+                document.getElementById('pendingPayments').textContent = pendingCount;
+                document.getElementById('thisMonth').textContent = `KSh ${thisMonthTotal.toLocaleString()}`;
+                
+            } catch (error) {
+                console.error('Error loading payments:', error);
+                document.getElementById('paymentsTable').innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-4 py-8 text-center text-red-600">
+                            Error loading payments: ${error.message}
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+        
+        async function markPaymentComplete(id) {
+            try {
+                const { error } = await supabase
+                    .from('payments')
+                    .update({ status: 'completed', updated_at: new Date().toISOString() })
+                    .eq('id', id);
+                
+                if (error) throw error;
+                
+                showToast('Payment marked as completed', 'success');
+                loadPayments();
+                
+            } catch (error) {
+                console.error('Error updating payment:', error);
+                showToast('Error updating payment: ' + error.message, 'error');
+            }
+        }
+        
+        // PAGES MANAGER
+        async function loadPagesManager() {
+            document.getElementById('pageTitle').textContent = 'Pages Management';
+            
+            contentArea.innerHTML = `
+                <div class="bg-white rounded-xl shadow">
+                    <div class="p-6 border-b">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold text-gray-800">Website Pages</h2>
+                            <button onclick="showAddPageModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                <i class="fas fa-plus mr-2"></i>Add New Page
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="pagesGrid">
+                            <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-8">
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            await loadPages();
+        }
+        
+        async function loadPages() {
+            // Mock pages for demo
+            const mockPages = [
+                { id: 1, title: 'Home', slug: '/', status: 'published', updated_at: '2024-01-15' },
+                { id: 2, title: 'About Us', slug: '/about', status: 'published', updated_at: '2024-01-10' },
+                { id: 3, title: 'Membership', slug: '/membership', status: 'published', updated_at: '2024-01-12' },
+                { id: 4, title: 'Events', slug: '/events', status: 'published', updated_at: '2024-01-08' },
+                { id: 5, title: 'Contact', slug: '/contact', status: 'draft', updated_at: '2024-01-05' },
+                { id: 6, title: 'Gallery', slug: '/gallery', status: 'published', updated_at: '2024-01-03' }
+            ];
+            
+            let html = '';
+            mockPages.forEach(page => {
+                const statusColors = {
+                    published: 'bg-green-100 text-green-800',
+                    draft: 'bg-yellow-100 text-yellow-800',
+                    archived: 'bg-gray-100 text-gray-800'
+                };
+                
+                html += `
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-800 mb-1">${page.title}</h3>
+                                <p class="text-gray-600 text-sm">${page.slug}</p>
+                            </div>
+                            <span class="px-2 py-1 text-xs font-medium rounded ${statusColors[page.status]}">
+                                ${page.status}
+                            </span>
+                        </div>
+                        
+                        <p class="text-gray-500 text-sm mb-4">
+                            Last updated: ${new Date(page.updated_at).toLocaleDateString()}
+                        </p>
+                        
+                        <div class="flex justify-end space-x-2 pt-4 border-t">
+                            <button onclick="editPage('${page.id}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-sm">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </button>
+                            <button onclick="previewPage('${page.slug}')" class="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 text-sm">
+                                <i class="fas fa-eye mr-1"></i>Preview
+                            </button>
+                            ${page.status !== 'published' ? `
+                                <button onclick="publishPage('${page.id}')" class="px-3 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 text-sm">
+                                    <i class="fas fa-upload mr-1"></i>Publish
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('pagesGrid').innerHTML = html;
+        }
+        
+        // MEDIA MANAGER
+        async function loadMediaManager() {
+            document.getElementById('pageTitle').textContent = 'Media Library';
+            
+            contentArea.innerHTML = `
+                <div class="bg-white rounded-xl shadow">
+                    <div class="p-6 border-b">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold text-gray-800">Media Library</h2>
+                            <button onclick="showUploadMediaModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                <i class="fas fa-upload mr-2"></i>Upload Media
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <!-- Filters -->
+                        <div class="flex flex-wrap gap-4 mb-6">
+                            <input type="text" id="searchMedia" placeholder="Search media..." 
+                                   class="px-4 py-2 border border-gray-300 rounded-lg flex-1 min-w-[200px]">
+                            <select id="filterMediaType" class="px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="">All Types</option>
+                                <option value="image">Images</option>
+                                <option value="document">Documents</option>
+                                <option value="video">Videos</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Media Grid -->
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" id="mediaGrid">
+                            <div class="col-span-2 md:col-span-3 lg:col-span-5 text-center py-8">
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            await loadMedia();
+        }
+        
+        async function loadMedia() {
+            // Mock media for demo
+            const mockMedia = [
+                { id: 1, name: 'logo.png', type: 'image', size: '45 KB', uploaded: '2024-01-15' },
+                { id: 2, name: 'banner.jpg', type: 'image', size: '1.2 MB', uploaded: '2024-01-14' },
+                { id: 3, name: 'event-flyer.pdf', type: 'document', size: '850 KB', uploaded: '2024-01-12' },
+                { id: 4, name: 'team-photo.jpg', type: 'image', size: '2.3 MB', uploaded: '2024-01-10' },
+                { id: 5, name: 'conference-video.mp4', type: 'video', size: '45 MB', uploaded: '2024-01-08' },
+                { id: 6, name: 'brochure.pdf', type: 'document', size: '1.5 MB', uploaded: '2024-01-05' },
+                { id: 7, name: 'gallery-1.jpg', type: 'image', size: '890 KB', uploaded: '2024-01-03' },
+                { id: 8, name: 'gallery-2.jpg', type: 'image', size: '920 KB', uploaded: '2024-01-02' }
+            ];
+            
+            let html = '';
+            mockMedia.forEach(media => {
+                const typeIcons = {
+                    image: 'fas fa-image text-blue-500',
+                    document: 'fas fa-file-pdf text-red-500',
+                    video: 'fas fa-video text-purple-500'
+                };
+                
+                html += `
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 hover:shadow transition-shadow">
+                        <div class="flex items-center justify-center h-32 bg-white rounded mb-3">
+                            <i class="${typeIcons[media.type]} text-3xl"></i>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <p class="font-medium text-sm truncate" title="${media.name}">${media.name}</p>
+                            <p class="text-xs text-gray-500">${media.size} • ${new Date(media.uploaded).toLocaleDateString()}</p>
+                        </div>
+                        
+                        <div class="flex justify-between">
+                            <button onclick="copyMediaLink('${media.id}')" class="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                                <i class="fas fa-link"></i>
+                            </button>
+                            <button onclick="deleteMedia('${media.id}')" class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('mediaGrid').innerHTML = html;
+        }
+        
+        function showUploadMediaModal() {
+            showModal(`
+                <div class="p-6">
+                    <h3 class="text-lg font-bold mb-4">Upload Media</h3>
+                    <form id="uploadMediaForm" class="space-y-4">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                            <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
+                            <p class="text-gray-600 mb-2">Drop files here or click to upload</p>
+                            <p class="text-sm text-gray-500 mb-4">Max file size: 10MB. Supported: JPG, PNG, PDF, MP4</p>
+                            <input type="file" id="fileInput" multiple class="hidden">
+                            <button type="button" onclick="document.getElementById('fileInput').click()" 
+                                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                Select Files
+                            </button>
+                        </div>
+                        
+                        <div id="selectedFiles" class="hidden">
+                            <h4 class="font-medium text-gray-700 mb-2">Selected Files:</h4>
+                            <div id="fileList"></div>
+                        </div>
+                    </form>
+                    
+                    <div class="flex justify-end space-x-3 mt-6">
+                        <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                        <button onclick="uploadMedia()" id="uploadButton" 
+                                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled>
+                            Upload
+                        </button>
+                    </div>
+                </div>
+            `);
+            
+            // Setup file input listener
+            document.getElementById('fileInput').addEventListener('change', function(e) {
+                const files = e.target.files;
+                const fileList = document.getElementById('fileList');
+                const selectedFiles = document.getElementById('selectedFiles');
+                const uploadButton = document.getElementById('uploadButton');
+                
+                if (files.length > 0) {
+                    selectedFiles.classList.remove('hidden');
+                    fileList.innerHTML = '';
+                    
+                    let totalSize = 0;
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        totalSize += file.size;
+                        
+                        const fileElement = document.createElement('div');
+                        fileElement.className = 'flex justify-between items-center p-2 bg-gray-50 rounded mb-2';
+                        fileElement.innerHTML = `
+                            <div>
+                                <p class="text-sm font-medium">${file.name}</p>
+                                <p class="text-xs text-gray-500">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                            </div>
+                            <button onclick="removeFile(${i})" class="text-red-500 hover:text-red-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `;
+                        fileList.appendChild(fileElement);
+                    }
+                    
+                    if (totalSize > 10 * 1024 * 1024) { // 10MB limit
+                        uploadButton.disabled = true;
+                        fileList.innerHTML += '<p class="text-red-500 text-sm mt-2">Total size exceeds 10MB limit</p>';
+                    } else {
+                        uploadButton.disabled = false;
+                    }
+                } else {
+                    selectedFiles.classList.add('hidden');
+                    uploadButton.disabled = true;
+                }
+            });
+        }
+        
+        function removeFile(index) {
+            // This would remove the file from the selection
+            // Implementation depends on how you handle file storage
+            showToast('File removed from selection', 'info');
+        }
+        
+        function uploadMedia() {
+            showToast('Media upload feature would be implemented here', 'info');
+            closeModal();
+            loadMedia();
+        }
+        
+        // UTILITY FUNCTIONS
+        function showModal(content) {
+            const modal = document.getElementById('modal');
+            const modalContent = modal.querySelector('.modal-content');
+            modalContent.innerHTML = content;
+            modal.style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+        
+        function refreshData() {
+            showToast('Refreshing data...', 'info');
+            loadSection(document.querySelector('.nav-item.active').getAttribute('data-section'));
         }
         
         function logout() {
@@ -393,6 +2162,14 @@
                 window.location.href = 'login.html';
             }
         }
+        
+        // Close modal when clicking outside
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
         
         // Initialize on load
         document.addEventListener('DOMContentLoaded', initializeDashboard);
