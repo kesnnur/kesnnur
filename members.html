@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Portal - KESNNUR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .kesnnur-blue { color: #1e3a8a; }
+        .bg-kesnnur-blue { background-color: #1e3a8a; }
+        .membership-card { transition: all 0.3s; }
+        .membership-card:hover { transform: scale(1.02); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="bg-kesnnur-blue p-2 rounded-lg">
+                        <i class="fas fa-graduation-cap text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold kesnnur-blue">KESNNUR</h1>
+                        <p class="text-sm text-gray-600">Kenya Students & Novice Nurses</p>
+                    </div>
+                </a>
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:kesnnur-blue">Home</a>
+                    <a href="about.html" class="text-gray-700 hover:kesnnur-blue">About</a>
+                    <a href="events.html" class="text-gray-700 hover:kesnnur-blue">Events</a>
+                    <a href="resources.html" class="text-gray-700 hover:kesnnur-blue">Resources</a>
+                    <a href="contact.html" class="text-gray-700 hover:kesnnur-blue">Contact</a>
+                </div>
+                <a href="members.html" class="bg-kesnnur-blue text-white px-4 py-2 rounded-lg">Member Portal</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto">
+            <!-- Login/Register Section -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-12">
+                <div class="md:flex">
+                    <!-- Login Side -->
+                    <div class="md:w-1/2 p-8">
+                        <h2 class="text-2xl font-bold mb-6 kesnnur-blue">Member Login</h2>
+                        <form id="loginForm">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Email</label>
+                                <input type="email" class="w-full px-4 py-3 border rounded-lg" placeholder="member@example.com" required>
+                            </div>
+                            <div class="mb-6">
+                                <label class="block text-gray-700 mb-2">Password</label>
+                                <input type="password" class="w-full px-4 py-3 border rounded-lg" placeholder="••••••••" required>
+                            </div>
+                            <button type="submit" class="w-full bg-kesnnur-blue text-white py-3 rounded-lg font-bold hover:bg-blue-800">
+                                Sign In
+                            </button>
+                            <p class="text-center mt-4">
+                                <a href="#" class="text-blue-900 hover:underline">Forgot password?</a>
+                            </p>
+                        </form>
+                    </div>
+                    
+                    <!-- Register Side -->
+                    <div class="md:w-1/2 bg-gradient-to-br from-blue-900 to-blue-700 text-white p-8">
+                        <h2 class="text-2xl font-bold mb-6">Join KESNNUR</h2>
+                        <p class="mb-6">Become a member to access exclusive benefits, events, and resources.</p>
+                        <ul class="space-y-3 mb-8">
+                            <li><i class="fas fa-check-circle mr-2"></i> Access to all events</li>
+                            <li><i class="fas fa-check-circle mr-2"></i> Download resources</li>
+                            <li><i class="fas fa-check-circle mr-2"></i> Networking opportunities</li>
+                            <li><i class="fas fa-check-circle mr-2"></i> Professional mentorship</li>
+                            <li><i class="fas fa-check-circle mr-2"></i> Certificate of membership</li>
+                        </ul>
+                        <a href="#membership" class="block w-full bg-white text-blue-900 py-3 rounded-lg font-bold text-center hover:bg-gray-100">
+                            View Membership Options
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Membership Plans -->
+            <div id="membership" class="mb-16">
+                <h2 class="text-3xl font-bold mb-8 kesnnur-blue text-center">Membership Plans</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Student Membership -->
+                    <div class="membership-card bg-white rounded-xl shadow-lg p-8">
+                        <div class="text-center mb-6">
+                            <h3 class="text-xl font-bold mb-2">Student Member</h3>
+                            <div class="text-3xl font-bold kesnnur-blue">Ksh 500<span class="text-sm text-gray-600">/year</span></div>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Access to workshops</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Event discounts</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Resource library</li>
+                            <li><i class="fas fa-times text-gray-400 mr-2"></i> Conference registration</li>
+                            <li><i class="fas fa-times text-gray-400 mr-2"></i> Mentorship program</li>
+                        </ul>
+                        <button class="w-full border-2 border-kesnnur-blue text-kesnnur-blue py-3 rounded-lg font-bold hover:bg-blue-50">
+                            Register Now
+                        </button>
+                    </div>
+
+                    <!-- Novice Nurse -->
+                    <div class="membership-card bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-xl shadow-xl p-8 transform scale-105">
+                        <div class="text-center mb-6">
+                            <div class="inline-block bg-white text-blue-900 px-3 py-1 rounded-full text-sm font-bold mb-2">POPULAR</div>
+                            <h3 class="text-xl font-bold mb-2">Novice Nurse</h3>
+                            <div class="text-3xl font-bold">Ksh 1,000<span class="text-sm opacity-80">/year</span></div>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li><i class="fas fa-check mr-2"></i> All student benefits</li>
+                            <li><i class="fas fa-check mr-2"></i> Conference registration</li>
+                            <li><i class="fas fa-check mr-2"></i> Mentorship program</li>
+                            <li><i class="fas fa-check mr-2"></i> Leadership training</li>
+                            <li><i class="fas fa-check mr-2"></i> Research opportunities</li>
+                        </ul>
+                        <button class="w-full bg-white text-blue-900 py-3 rounded-lg font-bold hover:bg-gray-100">
+                            Get Started
+                        </button>
+                    </div>
+
+                    <!-- Professional -->
+                    <div class="membership-card bg-white rounded-xl shadow-lg p-8">
+                        <div class="text-center mb-6">
+                            <h3 class="text-xl font-bold mb-2">Professional Nurse</h3>
+                            <div class="text-3xl font-bold kesnnur-blue">Ksh 2,000<span class="text-sm text-gray-600">/year</span></div>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> All novice benefits</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Become a mentor</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Council positions</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Speaker opportunities</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Advanced workshops</li>
+                        </ul>
+                        <button class="w-full border-2 border-kesnnur-blue text-kesnnur-blue py-3 rounded-lg font-bold hover:bg-blue-50">
+                            Register Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2024 KESNNUR - Kenya Students & Novice Nurses</p>
+            <p class="text-gray-400 mt-2">Nurses Complex KNH, Nairobi | +254 791 296 924 | kesnnur@gmail.com</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Login feature coming soon! The member portal is under development.');
+        });
+    </script>
+</body>
+</html>
