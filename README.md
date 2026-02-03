@@ -1,16 +1,15 @@
-## Hi there 👋
+# KESNNUR - Kenya Students & Novice Nurses
 
-<!--
-**kesnnur/kesnnur** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Official website for KESNNUR (Kenya Students & Novice Nurses Chapter).
 
-Here are some ideas to get you started:
+## 🚀 Features
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+- **Modern Design**: Responsive, mobile-first design with Tailwind CSS
+- **Dynamic Content**: Backend integration with Supabase
+- **Member Portal**: Secure member registration and management
+- **Event Management**: Event creation, registration, and payment
+- **Blog System**: Content management for articles and news
+- **Resource Library**: File uploads and downloads for members
+- **Admin Dashboard**: Comprehensive admin interface
+
+## 🏗️ Project Structure
