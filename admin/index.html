@@ -33,6 +33,11 @@
         .loading-spinner {
             display: none;
         }
+        
+        .success-message {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
     </style>
 </head>
 <body class="flex items-center justify-center p-4">
@@ -49,6 +54,12 @@
         <!-- Login Form -->
         <div class="admin-card rounded-2xl p-8 shadow-2xl">
             <h2 class="text-xl font-bold text-white mb-6">Administrator Login</h2>
+            
+            <!-- Status Messages -->
+            <div id="statusMessage" class="mb-4 p-3 rounded-lg hidden">
+                <i class="fas fa-info-circle mr-2"></i>
+                <span id="statusText"></span>
+            </div>
             
             <form id="adminLoginForm">
                 <div class="mb-6">
@@ -88,7 +99,9 @@
                         <input type="checkbox" id="rememberMe" class="mr-2">
                         <span class="text-white/80">Remember me</span>
                     </label>
-                    <a href="#" class="text-white/70 hover:text-white text-sm">Forgot password?</a>
+                    <button type="button" onclick="showForgotPassword()" class="text-white/70 hover:text-white text-sm">
+                        Forgot password?
+                    </button>
                 </div>
                 
                 <button type="submit" 
@@ -108,6 +121,17 @@
             </div>
         </div>
         
+        <!-- Admin Account Creation Instructions -->
+        <div class="admin-card rounded-2xl p-6 mt-6">
+            <h3 class="text-white font-bold mb-3">No Admin Account?</h3>
+            <p class="text-white/70 text-sm mb-3">Create admin account:</p>
+            <div class="text-sm text-white/80 space-y-2">
+                <p>1. Go to Supabase Dashboard → Authentication → Users</p>
+                <p>2. Click "Add User" with email: admin@kesnnur.org</p>
+                <p>3. Run SQL: <code class="bg-white/20 px-2 py-1 rounded">UPDATE profiles SET role = 'super_admin' WHERE email = 'admin@kesnnur.org';</code></p>
+            </div>
+        </div>
+        
         <!-- Back to main site -->
         <div class="text-center mt-8">
             <a href="../index.html" class="text-white/70 hover:text-white transition-colors">
@@ -116,33 +140,77 @@
         </div>
     </div>
 
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-xl w-full max-w-md">
+            <div class="p-6 border-b">
+                <h3 class="text-xl font-bold text-gray-800">Reset Password</h3>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-600 mb-4">Enter your email to receive a password reset link:</p>
+                <input type="email" id="resetEmail" 
+                       class="w-full px-4 py-3 border rounded-lg mb-4"
+                       placeholder="admin@kesnnur.org">
+                <div id="resetError" class="mb-4 text-red-600 text-sm hidden"></div>
+                <div id="resetSuccess" class="mb-4 text-green-600 text-sm hidden"></div>
+                <div class="flex space-x-3">
+                    <button type="button" onclick="closeForgotPassword()" 
+                            class="flex-1 px-4 py-3 border rounded-lg text-gray-700 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="button" onclick="sendResetLink()" 
+                            class="flex-1 bg-blue-900 text-white py-3 rounded-lg font-bold hover:bg-blue-800">
+                        Send Link
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Initialize Supabase with YOUR CREDENTIALS
-        const supabaseUrl = 'https://noadhwqvaxajuckpibbo.supabase.co';
-        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+        // ========== SUPABASE CONFIGURATION ==========
+        // Use unique variable name to avoid conflicts with index.html
+        const supabaseAdmin = (() => {
+            const supabaseUrl = 'https://noadhwqvaxajuckpibbo.supabase.co';
+            const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+            return window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+        })();
         
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+        // Admin roles configuration
+        const ADMIN_ROLES = ['chapter_admin', 'national_admin', 'super_admin'];
         
-        // Check if user is already logged in
-        async function checkAuth() {
-            const { data: { session } } = await supabase.auth.getSession();
-            
-            if (session) {
-                // Check if user is admin
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', session.user.id)
-                    .single();
-                
-                if (profile && ['chapter_admin', 'national_admin', 'super_admin'].includes(profile.role)) {
-                    window.location.href = 'dashboard.html';
-                }
+        // ========== INITIALIZATION ==========
+        async function initializePage() {
+            try {
+                await checkAuth();
+                showStatus('Ready to login', 'info');
+            } catch (error) {
+                console.log('Initialization complete');
             }
         }
         
-        checkAuth();
+        // ========== AUTH FUNCTIONS ==========
+        async function checkAuth() {
+            try {
+                const { data: { session } } = await supabaseAdmin.auth.getSession();
+                
+                if (session) {
+                    const { data: profile } = await supabaseAdmin
+                        .from('profiles')
+                        .select('role')
+                        .eq('id', session.user.id)
+                        .single();
+                    
+                    if (profile && ADMIN_ROLES.includes(profile.role)) {
+                        window.location.href = 'dashboard.html';
+                    }
+                }
+            } catch (error) {
+                // Silent error - user not logged in
+            }
+        }
         
+        // ========== PASSWORD FUNCTIONS ==========
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const eyeIcon = passwordInput.parentElement.querySelector('i');
@@ -158,6 +226,7 @@
             }
         }
         
+        // ========== LOGIN HANDLER ==========
         document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -172,10 +241,11 @@
             buttonText.textContent = 'Authenticating...';
             loadingSpinner.style.display = 'inline-block';
             errorMessage.classList.add('hidden');
+            showStatus('', 'info');
             
             try {
                 // Sign in with Supabase
-                const { data, error } = await supabase.auth.signInWithPassword({
+                const { data, error } = await supabaseAdmin.auth.signInWithPassword({
                     email: email,
                     password: password
                 });
@@ -183,17 +253,19 @@
                 if (error) throw error;
                 
                 // Check if user has admin role
-                const { data: profile, error: profileError } = await supabase
+                const { data: profile, error: profileError } = await supabaseAdmin
                     .from('profiles')
                     .select('role, status')
                     .eq('id', data.user.id)
                     .single();
                 
-                if (profileError) throw profileError;
+                if (profileError) {
+                    // Profile might not exist yet
+                    throw new Error('Admin profile not found. Please create admin account first.');
+                }
                 
                 // Verify admin role
-                const adminRoles = ['chapter_admin', 'national_admin', 'super_admin'];
-                if (!adminRoles.includes(profile.role)) {
+                if (!ADMIN_ROLES.includes(profile.role)) {
                     throw new Error('You do not have administrator privileges.');
                 }
                 
@@ -203,13 +275,16 @@
                 }
                 
                 // Update last login
-                await supabase
+                await supabaseAdmin
                     .from('profiles')
                     .update({ last_login: new Date() })
                     .eq('id', data.user.id);
                 
-                // Redirect to dashboard
-                window.location.href = 'dashboard.html';
+                // Show success and redirect
+                showStatus('Login successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
                 
             } catch (error) {
                 // Show error
@@ -224,21 +299,113 @@
             }
         });
         
-        // Forgot password functionality
-        document.querySelector('a[href="#"]').addEventListener('click', async function(e) {
-            e.preventDefault();
-            const email = prompt('Please enter your email address to reset password:');
+        // ========== FORGOT PASSWORD ==========
+        function showForgotPassword() {
+            document.getElementById('forgotPasswordModal').classList.remove('hidden');
+            document.getElementById('resetEmail').value = document.getElementById('email').value || '';
+        }
+        
+        function closeForgotPassword() {
+            document.getElementById('forgotPasswordModal').classList.add('hidden');
+            document.getElementById('resetError').classList.add('hidden');
+            document.getElementById('resetSuccess').classList.add('hidden');
+        }
+        
+        async function sendResetLink() {
+            const email = document.getElementById('resetEmail').value;
+            const errorDiv = document.getElementById('resetError');
+            const successDiv = document.getElementById('resetSuccess');
             
-            if (email) {
-                const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: `${window.location.origin}/reset-password.html`,
+            if (!email) {
+                errorDiv.textContent = 'Please enter your email address';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+            
+            errorDiv.classList.add('hidden');
+            successDiv.classList.add('hidden');
+            
+            try {
+                const { error } = await supabaseAdmin.auth.resetPasswordForEmail(email, {
+                    redirectTo: `${window.location.origin}/admin/reset-password.html`,
                 });
                 
-                if (error) {
-                    alert('Error sending reset email: ' + error.message);
-                } else {
-                    alert('Password reset email sent. Please check your inbox.');
-                }
+                if (error) throw error;
+                
+                successDiv.textContent = 'Password reset link sent! Check your email.';
+                successDiv.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    closeForgotPassword();
+                }, 3000);
+                
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+        
+        // ========== HELPER FUNCTIONS ==========
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('statusMessage');
+            const statusText = document.getElementById('statusText');
+            
+            if (!message) {
+                statusDiv.classList.add('hidden');
+                return;
+            }
+            
+            statusText.textContent = message;
+            
+            // Set color based on type
+            statusDiv.className = 'mb-4 p-3 rounded-lg';
+            if (type === 'success') {
+                statusDiv.classList.add('success-message', 'text-green-100');
+            } else if (type === 'error') {
+                statusDiv.classList.add('bg-red-500/20', 'border-red-500/30', 'text-red-100');
+            } else {
+                statusDiv.classList.add('bg-blue-500/20', 'border-blue-500/30', 'text-blue-100');
+            }
+            
+            statusDiv.classList.remove('hidden');
+        }
+        
+        // ========== CREATE ADMIN ACCOUNT HELP ==========
+        function showCreateAdminInstructions() {
+            const confirmed = confirm(
+                'No admin account? Here\'s how to create one:\n\n' +
+                '1. Go to Supabase Dashboard → Authentication → Users\n' +
+                '2. Click "Add User" with email: admin@kesnnur.org\n' +
+                '3. Run SQL: UPDATE profiles SET role = \'super_admin\' WHERE email = \'admin@kesnnur.org\';\n\n' +
+                'Click OK to see detailed instructions.'
+            );
+            
+            if (confirmed) {
+                // Scroll to instructions
+                document.querySelector('.admin-card:nth-child(3)').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // ========== KEYBOARD SHORTCUTS ==========
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+Enter to submit form
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                document.getElementById('adminLoginForm').dispatchEvent(new Event('submit'));
+            }
+            
+            // Escape to close modal
+            if (e.key === 'Escape' && !document.getElementById('forgotPasswordModal').classList.contains('hidden')) {
+                closeForgotPassword();
+            }
+        });
+        
+        // ========== INITIALIZE ON LOAD ==========
+        document.addEventListener('DOMContentLoaded', initializePage);
+        
+        // Close modal when clicking outside
+        document.getElementById('forgotPasswordModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeForgotPassword();
             }
         });
     </script>
