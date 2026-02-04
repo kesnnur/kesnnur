@@ -410,8 +410,8 @@
                     <div class="text-blue-200">Events Yearly</div>
                 </div>
                 <div class="transform hover:scale-110 transition-transform">
-                    <div class="text-4xl md:text-5xl font-bold mb-2" id="chaptersCount">24</div>
-                    <div class="text-blue-200">Chapters</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" id="regionsCount">24</div>
+                    <div class="text-blue-200">regions</div>
                 </div>
                 <div class="transform hover:scale-110 transition-transform">
                     <div class="text-4xl md:text-5xl font-bold mb-2" id="growthPercent">100%</div>
@@ -624,7 +624,7 @@
             </div>
             
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>Copyright © <span id="currentYear">2024</span> KESNNUR. All rights reserved.</p>
+                <p>Copyright © <span id="currentYear">2026</span> KESNNUR. All rights reserved.</p>
                 <p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p>
             </div>
         </div>
@@ -780,21 +780,21 @@ async function insertToSupabase(endpoint, data) {
 async function loadStats() {
     try {
         // Get real data from Supabase
-        const chapters = await fetchFromSupabase('chapters', '?select=count');
+        const regions = await fetchFromSupabase('regions', '?select=count');
         const events = await fetchFromSupabase('events', '?select=count&status=eq.upcoming');
         const members = await fetchFromSupabase('members', '?select=count&membership_status=eq.active');
         
         const stats = {
             members: members ? members.length || 1500 : 1500,
             events: events ? events.length || 50 : 50,
-            chapters: chapters ? chapters.length || 24 : 24,
+            regions: regions ? regions.length || 24 : 24,
             growth: '100%'
         };
         
         // Update UI
         const membersEl = document.getElementById('membersCount');
         const eventsEl = document.getElementById('eventsCount');
-        const chaptersEl = document.getElementById('chaptersCount');
+        const regionsEl = document.getElementById('regionsCount');
         
         if (membersEl) {
             membersEl.textContent = stats.members.toLocaleString() + '+';
@@ -804,8 +804,8 @@ async function loadStats() {
             eventsEl.textContent = stats.events.toLocaleString() + '+';
             animateCounter(eventsEl, stats.events);
         }
-        if (chaptersEl) {
-            chaptersEl.textContent = stats.chapters.toLocaleString();
+        if (regionsEl) {
+            regionsEl.textContent = stats.regions.toLocaleString();
         }
         
     } catch (error) {
