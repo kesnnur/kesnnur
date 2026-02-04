@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Login - KESNNUR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .kesnnur-blue { color: #1e3a8a; }
+        .bg-kesnnur-blue { background-color: #1e3a8a; }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1000;
+        }
+        .modal-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: none;
+            z-index: 1001;
+        }
+        .loading-spinner {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-white shadow">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="bg-kesnnur-blue p-2 rounded-lg">
+                        <i class="fas fa-graduation-cap text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold kesnnur-blue">KESNNUR</h1>
+                        <p class="text-sm text-gray-600">Kenya Students & Novice Nurses</p>
+                    </div>
+                </a>
+                <div>
+                    <a href="index.html" class="text-gray-700 hover:kesnnur-blue hover:underline">
+                        <i class="fas fa-home mr-1"></i> Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="flex-grow flex items-center justify-center py-12 px-4">
+        <div class="w-full max-w-md">
+            <!-- Login Card -->
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                        <i class="fas fa-user-lock text-blue-900 text-2xl"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold kesnnur-blue">Member Login</h1>
+                    <p class="text-gray-600 mt-2">Access your KESNNUR member dashboard</p>
+                </div>
+
+                <form id="loginForm">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2 font-medium">Email Address</label>
+                        <input type="email" id="loginEmail" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
+                               placeholder="member@example.com" required>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-2 font-medium">Password</label>
+                        <input type="password" id="loginPassword" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
+                               placeholder="••••••••" required>
+                        <div class="flex justify-end mt-2">
+                            <button type="button" onclick="showForgotPassword()" class="text-sm text-blue-900 hover:underline">
+                                Forgot password?
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="loginError" class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg hidden">
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-circle mr-2"></i>
+                            <span id="loginErrorText"></span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="loginButton" 
+                            class="w-full bg-gradient-to-r from-blue-900 to-blue-700 text-white py-3 rounded-lg font-bold hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        <span id="loginButtonText">Sign In</span>
+                        <i class="fas fa-spinner fa-spin ml-2 loading-spinner" id="loginSpinner"></i>
+                    </button>
+                </form>
+
+                <div class="mt-8 pt-6 border-t border-gray-100">
+                    <p class="text-gray-600 text-center">
+                        Not a member yet? 
+                        <a href="members.html" class="text-blue-900 font-medium hover:underline">
+                            Register here
+                        </a>
+                    </p>
+                    <p class="text-gray-600 text-center text-sm mt-2">
+                        Need help? 
+                        <a href="contact.html" class="text-blue-900 hover:underline">
+                            Contact support
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="mt-8 grid grid-cols-2 gap-4">
+                <a href="index.html" class="bg-white p-4 rounded-lg shadow text-center hover:shadow-md transition-shadow">
+                    <i class="fas fa-home text-blue-900 text-xl mb-2"></i>
+                    <p class="text-sm font-medium">Home</p>
+                </a>
+                <a href="members.html" class="bg-white p-4 rounded-lg shadow text-center hover:shadow-md transition-shadow">
+                    <i class="fas fa-user-plus text-blue-900 text-xl mb-2"></i>
+                    <p class="text-sm font-medium">Register</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-6 mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <p>© <span id="currentYear"></span> KESNNUR - Kenya Students & Novice Nurses</p>
+                <p class="text-gray-400 mt-2 text-sm">Nurses Complex KNH, Nairobi | +254 791 296 924 | kesnnur@gmail.com</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal-overlay">
+        <div class="modal-container p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold kesnnur-blue">Reset Password</h3>
+                <button onclick="closeForgotPassword()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="forgotPasswordForm">
+                <div class="mb-6">
+                    <p class="text-gray-600 mb-4">Enter your email address and we'll send you a link to reset your password.</p>
+                    <input type="email" id="resetEmail" 
+                           class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                           placeholder="your@email.com" required>
+                </div>
+                <div id="resetError" class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg hidden"></div>
+                <div id="resetSuccess" class="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg hidden"></div>
+                <div class="flex space-x-3">
+                    <button type="button" onclick="closeForgotPassword()" 
+                            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="flex-1 bg-kesnnur-blue text-white py-3 rounded-lg font-bold hover:bg-blue-800 transition-colors">
+                        Send Reset Link
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<script>
+    // Initialize Supabase
+    const supabaseClient = window.supabase.createClient(
+        'https://noadhwqvaxajuckpibbo.supabase.co',
+        'sb_publishable_P02egT5dJQkzvkxz5wETyQ_vZkdcxxz'
+    );
+
+    // Current user
+    let currentUser = null;
+
+    // Initialize app
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Check if user is already logged in
+        checkAuthStatus();
+        
+        // Setup event listeners
+        setupEventListeners();
+    });
+
+    // Check authentication status
+    async function checkAuthStatus() {
+        try {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            
+            if (session) {
+                currentUser = session.user;
+                
+                // Check if user is admin
+                const { data: profile } = await supabaseClient
+                    .from('profiles')
+                    .select('role')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                if (profile) {
+                    // Redirect based on role
+                    if (['chapter_admin', 'national_admin', 'super_admin'].includes(profile.role)) {
+                        window.location.href = 'admin/dashboard.html';
+                    } else {
+                        window.location.href = 'member-dashboard.html';
+                    }
+                } else {
+                    // No profile found, redirect to member dashboard anyway
+                    window.location.href = 'member-dashboard.html';
+                }
+            }
+        } catch (error) {
+            console.error('Auth check error:', error);
+            // Stay on login page if there's an error
+        }
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+        // Login form
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', handleLogin);
+        }
+        
+        // Forgot password form
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        if (forgotPasswordForm) {
+            forgotPasswordForm.addEventListener('submit', handleForgotPassword);
+        }
+    }
+
+    // Handle login
+    async function handleLogin(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const errorDiv = document.getElementById('loginError');
+        const button = document.getElementById('loginButton');
+        const buttonText = document.getElementById('loginButtonText');
+        const spinner = document.getElementById('loginSpinner');
+        
+        // Validation
+        if (!email || !password) {
+            showError(errorDiv, 'Please enter both email and password');
+            return;
+        }
+        
+        // Show loading
+        buttonText.textContent = 'Signing in...';
+        spinner.style.display = 'inline-block';
+        button.disabled = true;
+        errorDiv.classList.add('hidden');
+        
+        try {
+            console.log('Attempting login for:', email);
+            
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+            
+            if (error) {
+                console.error('Login error:', error);
+                
+                // Handle specific errors
+                if (error.message.includes('Invalid login credentials')) {
+                    throw new Error('Invalid email or password. Please try again.');
+                } else if (error.message.includes('Email not confirmed')) {
+                    throw new Error('Please verify your email address before logging in.');
+                } else {
+                    throw error;
+                }
+            }
+            
+            console.log('Login successful:', data.user.id);
+            
+            // Show success message
+            showNotification('Login successful! Redirecting...', 'success');
+            
+            // Check user role and redirect accordingly
+            const { data: profile } = await supabaseClient
+                .from('profiles')
+                .select('role')
+                .eq('id', data.user.id)
+                .single();
+            
+            // Redirect after short delay
+            setTimeout(() => {
+                if (profile && ['chapter_admin', 'national_admin', 'super_admin'].includes(profile.role)) {
+                    window.location.href = 'admin/dashboard.html';
+                } else {
+                    window.location.href = 'member-dashboard.html';
+                }
+            }, 1500);
+            
+        } catch (error) {
+            console.error('Login failed:', error);
+            showError(errorDiv, error.message);
+            
+            // Reset button
+            buttonText.textContent = 'Sign In';
+            spinner.style.display = 'none';
+            button.disabled = false;
+        }
+    }
+
+    // Forgot password functions
+    function showForgotPassword() {
+        document.getElementById('forgotPasswordModal').style.display = 'block';
+        document.querySelector('#forgotPasswordModal .modal-container').style.display = 'block';
+        
+        // Clear any previous messages
+        document.getElementById('resetError').classList.add('hidden');
+        document.getElementById('resetSuccess').classList.add('hidden');
+        document.getElementById('resetEmail').value = '';
+    }
+    
+    function closeForgotPassword() {
+        document.getElementById('forgotPasswordModal').style.display = 'none';
+    }
+    
+    // Handle forgot password
+    async function handleForgotPassword(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('resetEmail').value.trim();
+        const errorDiv = document.getElementById('resetError');
+        const successDiv = document.getElementById('resetSuccess');
+        
+        if (!email) {
+            errorDiv.textContent = 'Please enter your email address';
+            errorDiv.classList.remove('hidden');
+            return;
+        }
+        
+        errorDiv.classList.add('hidden');
+        successDiv.classList.add('hidden');
+        
+        try {
+            console.log('Sending password reset for:', email);
+            
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+                redirectTo: `${window.location.origin}/member-login.html#reset-password`,
+            });
+            
+            if (error) throw error;
+            
+            successDiv.textContent = 'Password reset link sent! Please check your email.';
+            successDiv.classList.remove('hidden');
+            
+            // Clear email field
+            document.getElementById('resetEmail').value = '';
+            
+            // Close modal after 5 seconds
+            setTimeout(() => {
+                closeForgotPassword();
+            }, 5000);
+            
+        } catch (error) {
+            console.error('Password reset error:', error);
+            errorDiv.textContent = error.message || 'Failed to send reset link. Please try again.';
+            errorDiv.classList.remove('hidden');
+        }
+    }
+
+    // Helper functions
+    function showError(container, message) {
+        container.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        container.classList.remove('hidden');
+    }
+    
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transform transition-transform duration-300 translate-x-full`;
+        
+        const bgColor = type === 'success' ? 'bg-green-500' : 'bg-blue-500';
+        notification.className += ` ${bgColor} text-white`;
+        
+        notification.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} mr-3"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 10);
+        
+        // Remove after 4 seconds
+        setTimeout(() => {
+            notification.classList.add('translate-x-full');
+            setTimeout(() => notification.remove(), 300);
+        }, 4000);
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('forgotPasswordModal');
+        if (event.target === modal) {
+            closeForgotPassword();
+        }
+    };
+</script>
+</body>
+</html>
