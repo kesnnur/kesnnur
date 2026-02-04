@@ -1126,47 +1126,56 @@
         }
         
         async function getRecentMembers(limit = 5) {
-    try {
-        // Check cache first
-        if (dataCache.members && dataCache.lastUpdated.members > Date.now() - 30000) {
-            return dataCache.members.slice(0, limit);
+            try {
+                // Check cache first
+                if (dataCache.members && dataCache.lastUpdated.members > Date.now() - 30000) {
+                    return dataCache.members.slice(0, limit);
+                }
+                
+                const supabase = initSupabase();
+                const { data } = await supabase
+                    .from('members')
+                    .select(`
+                        *,
+                        member_profile:profiles!members_profile_id_fkey (
+                            id, email, first_name, last_name, phone
+                        ),
+                        member_region:regions!members_region_id_fkey (
+                            name
+                        )
+                    `)
+                    .order('created_at', { ascending: false })
+                    .limit(limit);
+                
+                if (!data) return [];
+                
+                const formattedData = data.map(member => ({
+                    id: member.id,
+                    profile_id: member.profile_id,
+                    region_id: member.region_id,
+                    membership_number: member.membership_number,
+                    membership_type: member.membership_type,
+                    membership_status: member.membership_status,
+                    join_date: member.join_date,
+                    created_at: member.created_at,
+                    updated_at: member.updated_at,
+                    first_name: member.member_profile?.first_name || '',
+                    last_name: member.member_profile?.last_name || '',
+                    email: member.member_profile?.email || '',
+                    phone: member.member_profile?.phone || '',
+                    region: member.member_region?.name || 'No Region'
+                }));
+                
+                // Cache the results
+                dataCache.members = formattedData;
+                dataCache.lastUpdated.members = Date.now();
+                
+                return formattedData;
+            } catch (error) {
+                console.error('Error getting recent members:', error);
+                return [];
+            }
         }
-        
-        const supabase = initSupabase();
-        const { data } = await supabase
-            .from('members')
-            .select(`
-                *,
-                member_profile:profiles!members_profile_id_fkey (
-                    id, email, first_name, last_name, phone
-                ),
-                member_region:regions!members_region_id_fkey (
-                    name
-                )
-            `)
-            .order('created_at', { ascending: false })
-            .limit(limit);
-        
-        if (!data) return [];
-        
-        const formattedData = data.map(member => ({
-            ...member,
-            first_name: member.member_profile?.first_name || '',
-            last_name: member.member_profile?.last_name || '',
-            email: member.member_profile?.email || '',
-            region: member.member_region?.name || 'No Region'
-        }));
-        
-        // Cache the results
-        dataCache.members = formattedData;
-        dataCache.lastUpdated.members = Date.now();
-        
-        return formattedData;
-    } catch (error) {
-        console.error('Error getting recent members:', error);
-        return [];
-    }
-}
         
         async function getUpcomingEvents(limit = 5) {
             try {
@@ -1314,189 +1323,190 @@
             }
         }
         
-       async function loadAllMembers() {
-    try {
-        const supabase = initSupabase();
-        const { data: members, error } = await supabase
-            .from('members')
-            .select(`
-                *,
-                member_profile:profiles!members_profile_id_fkey (
-                    id, email, first_name, last_name, phone, id_number, 
-                    date_of_birth, address, status
-                ),
-                member_region:regions!members_region_id_fkey (
-                    name, code
-                )
-            `)
-            .order('created_at', { ascending: false });
-        
-        if (error) throw error;
-        
-        // Cache the data
-        dataCache.members = members || [];
-        dataCache.lastUpdated.members = Date.now();
-        
-        renderMembersTable('all-members-content', members || []);
-        
-    } catch (error) {
-        console.error('Error loading all members:', error);
-        document.getElementById('all-members-content').innerHTML = `
-            <div class="text-center py-12 text-red-600">
-                <i class="fas fa-exclamation-triangle text-2xl mb-4"></i>
-                <p>Error loading members: ${error.message}</p>
-                <button onclick="loadAllMembers()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg">
-                    Retry
-                </button>
-            </div>
-        `;
-    }
-}
+        async function loadAllMembers() {
+            try {
+                const supabase = initSupabase();
+                const { data: members, error } = await supabase
+                    .from('members')
+                    .select(`
+                        *,
+                        member_profile:profiles!members_profile_id_fkey (
+                            id, email, first_name, last_name, phone, id_number, 
+                            date_of_birth, address, status
+                        ),
+                        member_region:regions!members_region_id_fkey (
+                            name, code
+                        )
+                    `)
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                // Cache the data
+                dataCache.members = members || [];
+                dataCache.lastUpdated.members = Date.now();
+                
+                renderMembersTable('all-members-content', members || []);
+                
+            } catch (error) {
+                console.error('Error loading all members:', error);
+                document.getElementById('all-members-content').innerHTML = `
+                    <div class="text-center py-12 text-red-600">
+                        <i class="fas fa-exclamation-triangle text-2xl mb-4"></i>
+                        <p>Error loading members: ${error.message}</p>
+                        <button onclick="loadAllMembers()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg">
+                            Retry
+                        </button>
+                    </div>
+                `;
+            }
+        }
 
-async function loadMembersByStatus(status) {
-    try {
-        const supabase = initSupabase();
-        const { data: members, error } = await supabase
-            .from('members')
-            .select(`
-                *,
-                member_profile:profiles!members_profile_id_fkey (
-                    id, email, first_name, last_name, phone, id_number, 
-                    date_of_birth, address, status
-                ),
-                member_region:regions!members_region_id_fkey (
-                    name, code
-                )
-            `)
-            .eq('membership_status', status)
-            .order('created_at', { ascending: false });
-        
-        if (error) throw error;
-        
-        const contentId = `${status}-members-content`;
-        renderMembersTable(contentId, members || []);
-        
-    } catch (error) {
-        console.error(`Error loading ${status} members:`, error);
-        document.getElementById(`${status}-members-content`).innerHTML = `
-            <div class="text-center py-12 text-red-600">
-                <i class="fas fa-exclamation-triangle text-2xl mb-4"></i>
-                <p>Error loading ${status} members: ${error.message}</p>
-            </div>
-        `;
-    }
-}
+        async function loadMembersByStatus(status) {
+            try {
+                const supabase = initSupabase();
+                const { data: members, error } = await supabase
+                    .from('members')
+                    .select(`
+                        *,
+                        member_profile:profiles!members_profile_id_fkey (
+                            id, email, first_name, last_name, phone, id_number, 
+                            date_of_birth, address, status
+                        ),
+                        member_region:regions!members_region_id_fkey (
+                            name, code
+                        )
+                    `)
+                    .eq('membership_status', status)
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                const contentId = `${status}-members-content`;
+                renderMembersTable(contentId, members || []);
+                
+            } catch (error) {
+                console.error(`Error loading ${status} members:`, error);
+                document.getElementById(`${status}-members-content`).innerHTML = `
+                    <div class="text-center py-12 text-red-600">
+                        <i class="fas fa-exclamation-triangle text-2xl mb-4"></i>
+                        <p>Error loading ${status} members: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
         
         function renderMembersTable(containerId, members) {
-    const container = document.getElementById(containerId);
-    const status = containerId.split('-')[0];
-    
-    container.innerHTML = `
-        <!-- Quick Filters -->
-        <div class="mb-6">
-            <p class="text-sm text-gray-600 mb-2">Quick filter by region:</p>
-            <div>
-                ${KENYAN_REGIONS.map(region => `
-                    <span class="quick-filter" onclick="filterMembersByRegion('${status}', '${region}')">
-                        ${region}
-                    </span>
-                `).join('')}
-                <span class="quick-filter active" onclick="filterMembersByRegion('${status}', '')">
-                    All Regions
-                </span>
-            </div>
-        </div>
+            const container = document.getElementById(containerId);
+            const status = containerId.split('-')[0];
+            
+            container.innerHTML = `
+                <!-- Quick Filters -->
+                <div class="mb-6">
+                    <p class="text-sm text-gray-600 mb-2">Quick filter by region:</p>
+                    <div>
+                        ${KENYAN_REGIONS.map(region => `
+                            <span class="quick-filter" onclick="filterMembersByRegion('${status}', '${region}')">
+                                ${region}
+                            </span>
+                        `).join('')}
+                        <span class="quick-filter active" onclick="filterMembersByRegion('${status}', '')">
+                            All Regions
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Search -->
+                <div class="mb-6">
+                    <input type="text" id="search-${status}" 
+                           placeholder="Search by name, email, or member number..." 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                           onkeyup="filterMembersTable('${status}')">
+                </div>
+                
+                <!-- Members Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Name</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Member ID</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Region</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Type</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Joined</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="members-table-${status}">
+                            ${members.length > 0 ? members.map(member => `
+                                <tr class="border-b hover:bg-gray-50" data-region="${member.member_region?.name || ''}">
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                                <i class="fas fa-user text-blue-900 text-sm"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium">${member.member_profile?.first_name || ''} ${member.member_profile?.last_name || ''}</p>
+                                                <p class="text-sm text-gray-500">${member.member_profile?.email || 'N/A'}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <p class="font-medium">${member.membership_number || 'No ID'}</p>
+                                        <p class="text-sm text-gray-500">${member.membership_type || 'N/A'}</p>
+                                    </td>
+                                    <td class="px-4 py-3">${member.member_region?.name || 'N/A'}</td>
+                                    <td class="px-4 py-3">
+                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            ${member.membership_type || 'general'}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3">${member.join_date ? new Date(member.join_date).toLocaleDateString() : 'N/A'}</td>
+                                    <td class="px-4 py-3">
+                                        <div class="flex space-x-2">
+                                            <button onclick="editMember('${member.id}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button onclick="deleteMember('${member.id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                            <button onclick="viewMemberDetails('${member.id}')" class="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('') : `
+                                <tr>
+                                    <td colspan="6" class="px-4 py-12 text-center text-gray-500">
+                                        <i class="fas fa-users text-3xl mb-3"></i>
+                                        <p class="text-lg">No members found</p>
+                                        ${status === 'all' ? `
+                                            <button onclick="loadSection('add-member')" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                                Add Your First Member
+                                            </button>
+                                        ` : ''}
+                                    </td>
+                                </tr>
+                            `}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="flex justify-between items-center mt-6">
+                    <div class="text-sm text-gray-600">
+                        Showing ${members.length} members
+                    </div>
+                    <div class="text-sm text-gray-600">
+                        <i class="fas fa-database mr-2"></i>Live Database
+                    </div>
+                </div>
+            `;
+            
+            // Mark as loaded
+            container.setAttribute('data-loaded', 'true');
+        }
         
-        <!-- Search -->
-        <div class="mb-6">
-            <input type="text" id="search-${status}" 
-                   placeholder="Search by name, email, or member number..." 
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                   onkeyup="filterMembersTable('${status}')">
-        </div>
-        
-        <!-- Members Table -->
-        <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead>
-                    <tr class="bg-gray-50">
-                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Name</th>
-                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Member ID</th>
-                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Region</th>
-                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Type</th>
-                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Joined</th>
-                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="members-table-${status}">
-                    ${members.length > 0 ? members.map(member => `
-                        <tr class="border-b hover:bg-gray-50" data-region="${member.member_region?.name || ''}">
-                            <td class="px-4 py-3">
-                                <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                        <i class="fas fa-user text-blue-900 text-sm"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium">${member.member_profile?.first_name || ''} ${member.member_profile?.last_name || ''}</p>
-                                        <p class="text-sm text-gray-500">${member.member_profile?.email || 'N/A'}</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 py-3">
-                                <p class="font-medium">${member.membership_number || 'No ID'}</p>
-                                <p class="text-sm text-gray-500">${member.membership_type || 'N/A'}</p>
-                            </td>
-                            <td class="px-4 py-3">${member.member_region?.name || 'N/A'}</td>
-                            <td class="px-4 py-3">
-                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    ${member.membership_type || 'general'}
-                                </span>
-                            </td>
-                            <td class="px-4 py-3">${member.join_date ? new Date(member.join_date).toLocaleDateString() : 'N/A'}</td>
-                            <td class="px-4 py-3">
-                                <div class="flex space-x-2">
-                                    <button onclick="editMember('${member.id}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button onclick="deleteMember('${member.id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                    <button onclick="viewMemberDetails('${member.id}')" class="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    `).join('') : `
-                        <tr>
-                            <td colspan="6" class="px-4 py-12 text-center text-gray-500">
-                                <i class="fas fa-users text-3xl mb-3"></i>
-                                <p class="text-lg">No members found</p>
-                                ${status === 'all' ? `
-                                    <button onclick="loadSection('add-member')" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                        Add Your First Member
-                                    </button>
-                                ` : ''}
-                            </td>
-                        </tr>
-                    `}
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="flex justify-between items-center mt-6">
-            <div class="text-sm text-gray-600">
-                Showing ${members.length} members
-            </div>
-            <div class="text-sm text-gray-600">
-                <i class="fas fa-database mr-2"></i>Live Database
-            </div>
-        </div>
-    `;
-    
-    // Mark as loaded
-    container.setAttribute('data-loaded', 'true');
-}
         function filterMembersTable(status) {
             const searchTerm = document.getElementById(`search-${status}`).value.toLowerCase();
             const rows = document.querySelectorAll(`#members-table-${status} tr`);
@@ -1753,115 +1763,116 @@ async function loadMembersByStatus(status) {
         }
         
         // EDIT MEMBER
-       async function editMember(memberId) {
-    try {
-        const supabase = initSupabase();
-        
-        // Get member data with correct joins
-        const { data: member, error } = await supabase
-            .from('members')
-            .select(`
-                *,
-                member_profile:profiles!members_profile_id_fkey (*),
-                member_region:regions!members_region_id_fkey (*)
-            `)
-            .eq('id', memberId)
-            .single();
-        
-        if (error) throw error;
-        
-        // Get regions for dropdown
-        const { data: regions } = await supabase
-            .from('regions')
-            .select('id, name')
-            .eq('status', 'active')
-            .order('name');
-        
-        const modalContent = `
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-gray-800">Edit Member</h3>
-                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+        async function editMember(memberId) {
+            try {
+                const supabase = initSupabase();
                 
-                <form id="editMemberForm" class="space-y-4">
-                    <input type="hidden" name="member_id" value="${member.id}">
-                    <input type="hidden" name="profile_id" value="${member.profile_id}">
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-2">First Name *</label>
-                            <input type="text" name="first_name" value="${member.member_profile?.first_name || ''}" required class="w-full px-3 py-2 border rounded">
+                // Get member data with correct joins
+                const { data: member, error } = await supabase
+                    .from('members')
+                    .select(`
+                        *,
+                        member_profile:profiles!members_profile_id_fkey (*),
+                        member_region:regions!members_region_id_fkey (*)
+                    `)
+                    .eq('id', memberId)
+                    .single();
+                
+                if (error) throw error;
+                
+                // Get regions for dropdown
+                const { data: regions } = await supabase
+                    .from('regions')
+                    .select('id, name')
+                    .eq('status', 'active')
+                    .order('name');
+                
+                const modalContent = `
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-gray-800">Edit Member</h3>
+                            <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Last Name *</label>
-                            <input type="text" name="last_name" value="${member.member_profile?.last_name || ''}" required class="w-full px-3 py-2 border rounded">
-                        </div>
+                        
+                        <form id="editMemberForm" class="space-y-4">
+                            <input type="hidden" name="member_id" value="${member.id}">
+                            <input type="hidden" name="profile_id" value="${member.profile_id}">
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">First Name *</label>
+                                    <input type="text" name="first_name" value="${member.member_profile?.first_name || ''}" required class="w-full px-3 py-2 border rounded">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Last Name *</label>
+                                    <input type="text" name="last_name" value="${member.member_profile?.last_name || ''}" required class="w-full px-3 py-2 border rounded">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Email *</label>
+                                    <input type="email" name="email" value="${member.member_profile?.email || ''}" required class="w-full px-3 py-2 border rounded">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Phone</label>
+                                    <input type="tel" name="phone" value="${member.member_profile?.phone || ''}" class="w-full px-3 py-2 border rounded">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Membership Type</label>
+                                    <select name="membership_type" class="w-full px-3 py-2 border rounded">
+                                        <option value="student" ${member.membership_type === 'student' ? 'selected' : ''}>Student</option>
+                                        <option value="professional" ${member.membership_type === 'professional' ? 'selected' : ''}>Professional</option>
+                                        <option value="associate" ${member.membership_type === 'associate' ? 'selected' : ''}>Associate</option>
+                                        <option value="alumni" ${member.membership_type === 'alumni' ? 'selected' : ''}>Alumni</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Region</label>
+                                    <select name="region_id" class="w-full px-3 py-2 border rounded">
+                                        <option value="">Select Region</option>
+                                        ${regions ? regions.map(region => `
+                                            <option value="${region.id}" ${member.region_id === region.id ? 'selected' : ''}>${region.name}</option>
+                                        `).join('') : ''}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Membership Status</label>
+                                <select name="membership_status" class="w-full px-3 py-2 border rounded">
+                                    <option value="active" ${member.membership_status === 'active' ? 'selected' : ''}>Active</option>
+                                    <option value="pending" ${member.membership_status === 'pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="inactive" ${member.membership_status === 'inactive' ? 'selected' : ''}>Inactive</option>
+                                    <option value="alumni" ${member.membership_status === 'alumni' ? 'selected' : ''}>Alumni</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-3 pt-4">
+                                <button type="button" onclick="closeModal()" class="px-4 py-2 border rounded hover:bg-gray-50">
+                                    Cancel
+                                </button>
+                                <button type="button" onclick="updateMember()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                    Update Member
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Email *</label>
-                            <input type="email" name="email" value="${member.member_profile?.email || ''}" required class="w-full px-3 py-2 border rounded">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Phone</label>
-                            <input type="tel" name="phone" value="${member.member_profile?.phone || ''}" class="w-full px-3 py-2 border rounded">
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Membership Type</label>
-                            <select name="membership_type" class="w-full px-3 py-2 border rounded">
-                                <option value="student" ${member.membership_type === 'student' ? 'selected' : ''}>Student</option>
-                                <option value="professional" ${member.membership_type === 'professional' ? 'selected' : ''}>Professional</option>
-                                <option value="associate" ${member.membership_type === 'associate' ? 'selected' : ''}>Associate</option>
-                                <option value="alumni" ${member.membership_type === 'alumni' ? 'selected' : ''}>Alumni</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Region</label>
-                            <select name="region_id" class="w-full px-3 py-2 border rounded">
-                                <option value="">Select Region</option>
-                                ${regions ? regions.map(region => `
-                                    <option value="${region.id}" ${member.region_id === region.id ? 'selected' : ''}>${region.name}</option>
-                                `).join('') : ''}
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Membership Status</label>
-                        <select name="membership_status" class="w-full px-3 py-2 border rounded">
-                            <option value="active" ${member.membership_status === 'active' ? 'selected' : ''}>Active</option>
-                            <option value="pending" ${member.membership_status === 'pending' ? 'selected' : ''}>Pending</option>
-                            <option value="inactive" ${member.membership_status === 'inactive' ? 'selected' : ''}>Inactive</option>
-                            <option value="alumni" ${member.membership_status === 'alumni' ? 'selected' : ''}>Alumni</option>
-                        </select>
-                    </div>
-                    
-                    <div class="flex justify-end space-x-3 pt-4">
-                        <button type="button" onclick="closeModal()" class="px-4 py-2 border rounded hover:bg-gray-50">
-                            Cancel
-                        </button>
-                        <button type="button" onclick="updateMember()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                            Update Member
-                        </button>
-                    </div>
-                </form>
-            </div>
-        `;
+                `;
+                
+                showModal(modalContent);
+                
+            } catch (error) {
+                console.error('Error loading edit member form:', error);
+                showToast('Error loading member data: ' + error.message, 'error');
+            }
+        }
         
-        showModal(modalContent);
-        
-    } catch (error) {
-        console.error('Error loading edit member form:', error);
-        showToast('Error loading member data: ' + error.message, 'error');
-    }
-}
         async function updateMember() {
             try {
                 const form = document.getElementById('editMemberForm');
@@ -1949,142 +1960,142 @@ async function loadMembersByStatus(status) {
         }
         
         // VIEW MEMBER DETAILS
-       async function viewMemberDetails(memberId) {
-    try {
-        const supabase = initSupabase();
-        
-        // Get member with all related data using correct joins
-        const { data: member, error } = await supabase
-            .from('members')
-            .select(`
-                *,
-                member_profile:profiles!members_profile_id_fkey (*),
-                member_region:regions!members_region_id_fkey (*),
-                payments (*)
-            `)
-            .eq('id', memberId)
-            .single();
-        
-        if (error) throw error;
-        
-        // Calculate total payments
-        let totalPaid = 0;
-        if (member.payments && member.payments.length > 0) {
-            member.payments.forEach(payment => {
-                if (payment.payment_status === 'completed') {
-                    totalPaid += parseFloat(payment.amount || 0);
-                }
-            });
-        }
-        
-        const modalContent = `
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-gray-800">Member Details</h3>
-                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+        async function viewMemberDetails(memberId) {
+            try {
+                const supabase = initSupabase();
                 
-                <div class="space-y-6">
-                    <!-- Personal Info -->
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h4 class="font-bold text-gray-800 mb-3">Personal Information</h4>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-sm text-gray-600">Full Name</p>
-                                <p class="font-medium">${member.member_profile?.first_name || ''} ${member.member_profile?.last_name || ''}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Email</p>
-                                <p class="font-medium">${member.member_profile?.email || 'N/A'}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Phone</p>
-                                <p class="font-medium">${member.member_profile?.phone || 'N/A'}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">ID Number</p>
-                                <p class="font-medium">${member.member_profile?.id_number || 'N/A'}</p>
-                            </div>
+                // Get member with all related data using correct joins
+                const { data: member, error } = await supabase
+                    .from('members')
+                    .select(`
+                        *,
+                        member_profile:profiles!members_profile_id_fkey (*),
+                        member_region:regions!members_region_id_fkey (*),
+                        payments (*)
+                    `)
+                    .eq('id', memberId)
+                    .single();
+                
+                if (error) throw error;
+                
+                // Calculate total payments
+                let totalPaid = 0;
+                if (member.payments && member.payments.length > 0) {
+                    member.payments.forEach(payment => {
+                        if (payment.payment_status === 'completed') {
+                            totalPaid += parseFloat(payment.amount || 0);
+                        }
+                    });
+                }
+                
+                const modalContent = `
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-gray-800">Member Details</h3>
+                            <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
-                    </div>
-                    
-                    <!-- Membership Info -->
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h4 class="font-bold text-gray-800 mb-3">Membership Information</h4>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-sm text-gray-600">Member ID</p>
-                                <p class="font-medium">${member.membership_number || 'N/A'}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Membership Type</p>
-                                <p class="font-medium">${member.membership_type || 'N/A'}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Region</p>
-                                <p class="font-medium">${member.member_region?.name || 'N/A'}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Status</p>
-                                <span class="px-3 py-1 rounded-full text-xs font-medium ${member.membership_status === 'active' ? 'bg-green-100 text-green-800' : member.membership_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}">
-                                    ${member.membership_status || 'N/A'}
-                                </span>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Join Date</p>
-                                <p class="font-medium">${member.join_date ? new Date(member.join_date).toLocaleDateString() : 'N/A'}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Total Paid</p>
-                                <p class="font-medium">KSh ${totalPaid.toLocaleString()}</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Recent Payments -->
-                    ${member.payments && member.payments.length > 0 ? `
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <h4 class="font-bold text-gray-800 mb-3">Recent Payments</h4>
-                            <div class="space-y-2">
-                                ${member.payments.slice(0, 3).map(payment => `
-                                    <div class="flex justify-between items-center bg-white p-3 rounded border">
-                                        <div>
-                                            <p class="font-medium">${payment.payment_for || 'Payment'}</p>
-                                            <p class="text-sm text-gray-600">${new Date(payment.paid_at || payment.created_at).toLocaleDateString()}</p>
-                                        </div>
-                                        <div class="text-right">
-                                            <p class="font-bold">KSh ${parseFloat(payment.amount || 0).toLocaleString()}</p>
-                                            <span class="px-2 py-1 rounded-full text-xs font-medium ${payment.payment_status === 'completed' ? 'bg-green-100 text-green-800' : payment.payment_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}">
-                                                ${payment.payment_status || 'pending'}
-                                            </span>
-                                        </div>
+                        
+                        <div class="space-y-6">
+                            <!-- Personal Info -->
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h4 class="font-bold text-gray-800 mb-3">Personal Information</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-sm text-gray-600">Full Name</p>
+                                        <p class="font-medium">${member.member_profile?.first_name || ''} ${member.member_profile?.last_name || ''}</p>
                                     </div>
-                                `).join('')}
+                                    <div>
+                                        <p class="text-sm text-gray-600">Email</p>
+                                        <p class="font-medium">${member.member_profile?.email || 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600">Phone</p>
+                                        <p class="font-medium">${member.member_profile?.phone || 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600">ID Number</p>
+                                        <p class="font-medium">${member.member_profile?.id_number || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Membership Info -->
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h4 class="font-bold text-gray-800 mb-3">Membership Information</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-sm text-gray-600">Member ID</p>
+                                        <p class="font-medium">${member.membership_number || 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600">Membership Type</p>
+                                        <p class="font-medium">${member.membership_type || 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600">Region</p>
+                                        <p class="font-medium">${member.member_region?.name || 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600">Status</p>
+                                        <span class="px-3 py-1 rounded-full text-xs font-medium ${member.membership_status === 'active' ? 'bg-green-100 text-green-800' : member.membership_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}">
+                                            ${member.membership_status || 'N/A'}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600">Join Date</p>
+                                        <p class="font-medium">${member.join_date ? new Date(member.join_date).toLocaleDateString() : 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600">Total Paid</p>
+                                        <p class="font-medium">KSh ${totalPaid.toLocaleString()}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Recent Payments -->
+                            ${member.payments && member.payments.length > 0 ? `
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <h4 class="font-bold text-gray-800 mb-3">Recent Payments</h4>
+                                    <div class="space-y-2">
+                                        ${member.payments.slice(0, 3).map(payment => `
+                                            <div class="flex justify-between items-center bg-white p-3 rounded border">
+                                                <div>
+                                                    <p class="font-medium">${payment.payment_for || 'Payment'}</p>
+                                                    <p class="text-sm text-gray-600">${new Date(payment.paid_at || payment.created_at).toLocaleDateString()}</p>
+                                                </div>
+                                                <div class="text-right">
+                                                    <p class="font-bold">KSh ${parseFloat(payment.amount || 0).toLocaleString()}</p>
+                                                    <span class="px-2 py-1 rounded-full text-xs font-medium ${payment.payment_status === 'completed' ? 'bg-green-100 text-green-800' : payment.payment_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}">
+                                                        ${payment.payment_status || 'pending'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            <div class="flex justify-end space-x-3 pt-4">
+                                <button onclick="editMember('${member.id}')" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                    <i class="fas fa-edit mr-2"></i>Edit Member
+                                </button>
+                                <button onclick="closeModal()" class="px-4 py-2 border rounded hover:bg-gray-50">
+                                    Close
+                                </button>
                             </div>
                         </div>
-                    ` : ''}
-                    
-                    <div class="flex justify-end space-x-3 pt-4">
-                        <button onclick="editMember('${member.id}')" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                            <i class="fas fa-edit mr-2"></i>Edit Member
-                        </button>
-                        <button onclick="closeModal()" class="px-4 py-2 border rounded hover:bg-gray-50">
-                            Close
-                        </button>
                     </div>
-                </div>
-            </div>
-        `;
-        
-        showModal(modalContent);
-        
-    } catch (error) {
-        console.error('Error loading member details:', error);
-        showToast('Error loading member details: ' + error.message, 'error');
-    }
-}
+                `;
+                
+                showModal(modalContent);
+                
+            } catch (error) {
+                console.error('Error loading member details:', error);
+                showToast('Error loading member details: ' + error.message, 'error');
+            }
+        }
         
         // REGIONS MANAGER
         async function loadRegionsManager() {
@@ -3114,7 +3125,14 @@ async function loadMembersByStatus(status) {
                 const supabase = initSupabase();
                 const { data: payments, error } = await supabase
                     .from('payments')
-                    .select('*, members(profiles(*))')
+                    .select(`
+                        *,
+                        member:members!payments_member_id_fkey (
+                            profile:profiles!members_profile_id_fkey (
+                                first_name, last_name, email
+                            )
+                        )
+                    `)
                     .order('created_at', { ascending: false });
                 
                 if (error) throw error;
@@ -3141,7 +3159,14 @@ async function loadMembersByStatus(status) {
                 const supabase = initSupabase();
                 const { data: payments, error } = await supabase
                     .from('payments')
-                    .select('*, members(profiles(*))')
+                    .select(`
+                        *,
+                        member:members!payments_member_id_fkey (
+                            profile:profiles!members_profile_id_fkey (
+                                first_name, last_name, email
+                            )
+                        )
+                    `)
                     .eq('payment_status', status)
                     .order('created_at', { ascending: false });
                 
@@ -3209,8 +3234,8 @@ async function loadMembersByStatus(status) {
                                         ${new Date(payment.paid_at || payment.created_at).toLocaleDateString()}
                                     </td>
                                     <td class="px-4 py-3">
-                                        ${payment.members?.profiles?.first_name || ''} ${payment.members?.profiles?.last_name || ''}
-                                        <p class="text-sm text-gray-500">${payment.members?.profiles?.email || ''}</p>
+                                        ${payment.member?.profile?.first_name || ''} ${payment.member?.profile?.last_name || ''}
+                                        <p class="text-sm text-gray-500">${payment.member?.profile?.email || ''}</p>
                                     </td>
                                     <td class="px-4 py-3">
                                         <code class="text-sm">${payment.invoice_number || 'N/A'}</code>
@@ -3271,7 +3296,14 @@ async function loadMembersByStatus(status) {
                 
                 const { data: payment, error } = await supabase
                     .from('payments')
-                    .select('*, members(profiles(*))')
+                    .select(`
+                        *,
+                        member:members!payments_member_id_fkey (
+                            profile:profiles!members_profile_id_fkey (
+                                first_name, last_name, email
+                            )
+                        )
+                    `)
                     .eq('id', paymentId)
                     .single();
                 
@@ -3324,11 +3356,11 @@ async function loadMembersByStatus(status) {
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <p class="text-sm text-gray-600">Member Name</p>
-                                        <p class="font-medium">${payment.members?.profiles?.first_name || ''} ${payment.members?.profiles?.last_name || ''}</p>
+                                        <p class="font-medium">${payment.member?.profile?.first_name || ''} ${payment.member?.profile?.last_name || ''}</p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-600">Email</p>
-                                        <p class="font-medium">${payment.members?.profiles?.email || 'N/A'}</p>
+                                        <p class="font-medium">${payment.member?.profile?.email || 'N/A'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -3383,10 +3415,13 @@ async function loadMembersByStatus(status) {
                 
                 if (error) throw error;
                 
-                // Get members for dropdown
+                // Get members for dropdown with correct joins
                 const { data: members } = await supabase
                     .from('members')
-                    .select('*, profiles(*)')
+                    .select(`
+                        *,
+                        profile:profiles!members_profile_id_fkey (*)
+                    `)
                     .order('created_at', { ascending: false });
                 
                 // Format date for datetime-local input
@@ -3414,7 +3449,7 @@ async function loadMembersByStatus(status) {
                                     <option value="">Select Member</option>
                                     ${members ? members.map(member => `
                                         <option value="${member.id}" ${payment.member_id === member.id ? 'selected' : ''}>
-                                            ${member.profiles?.first_name || ''} ${member.profiles?.last_name || ''} (${member.membership_number || 'No ID'})
+                                            ${member.profile?.first_name || ''} ${member.profile?.last_name || ''} (${member.membership_number || 'No ID'})
                                         </option>
                                     `).join('') : ''}
                                 </select>
@@ -3586,7 +3621,10 @@ async function loadMembersByStatus(status) {
             const supabase = initSupabase();
             const { data: members } = await supabase
                 .from('members')
-                .select('*, profiles(*)')
+                .select(`
+                    *,
+                    profile:profiles!members_profile_id_fkey (*)
+                `)
                 .order('created_at', { ascending: false });
             
             // Generate invoice number
@@ -3611,7 +3649,7 @@ async function loadMembersByStatus(status) {
                                     <option value="">Select Member</option>
                                     ${members ? members.map(member => `
                                         <option value="${member.id}">
-                                            ${member.profiles?.first_name || ''} ${member.profiles?.last_name || ''} 
+                                            ${member.profile?.first_name || ''} ${member.profile?.last_name || ''} 
                                             (${member.membership_number || 'No ID'})
                                         </option>
                                     `).join('') : ''}
@@ -4449,7 +4487,7 @@ async function loadMembersByStatus(status) {
                 // Get members by region
                 const { data: members } = await supabase
                     .from('members')
-                    .select('regions(name)');
+                    .select('membership_status, region_id, regions(name)');
                 
                 if (!members) throw new Error('No data available');
                 
