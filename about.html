@@ -1,101 +1,871 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About KESNNUR - Kenya Students & Novice Nurses</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>About KESNNUR | Kenya Students & Novice Nurses</title>
+    
+    <!-- Meta Description for SEO -->
+    <meta name="description" content="Learn about KESNNUR - Kenya's premier community for nursing students and novice nurses. Our mission, vision, and impact on nursing education.">
+    
+    <!-- Keywords for SEO -->
+    <meta name="keywords" content="KESNNUR about, nursing students Kenya, novice nurses, nursing community Kenya, nursing mentorship, NNAK chapter">
+    
+    <!-- Author -->
+    <meta name="author" content="KESNNUR">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://kesnnur.nnak.or.ke/about.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kesnnur.nnak.or.ke/about.html">
+    <meta property="og:title" content="About KESNNUR | Kenya's Nursing Community">
+    <meta property="og:description" content="Discover KESNNUR's mission to empower nursing students and novice nurses in Kenya through education, mentorship, and community.">
+    <meta property="og:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kesnnur.nnak.or.ke/about.html">
+    <meta property="twitter:title" content="About KESNNUR | Kenya's Nursing Community">
+    <meta property="twitter:description" content="Discover KESNNUR's mission to empower nursing students and novice nurses in Kenya through education, mentorship, and community.">
+    <meta property="twitter:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    <link rel="apple-touch-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'kesnnur-blue': '#1e3a8a',
+                        'kesnnur-light': '#3b82f6',
+                        'kesnnur-teal': '#0d9488',
+                        'kesnnur-gold': '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .kesnnur-blue { color: #1e3a8a; }
-        .bg-kesnnur-blue { background-color: #1e3a8a; }
+        :root {
+            --kesnnur-blue: #1e3a8a;
+            --kesnnur-light: #3b82f6;
+            --kesnnur-teal: #0d9488;
+            --kesnnur-gold: #f59e0b;
+        }
+        
+        /* Skip to content */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #1e3a8a;
+            color: white;
+            padding: 12px;
+            z-index: 10000;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .skip-to-content:focus {
+            top: 0;
+        }
+        
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            padding-top: 0;
+        }
+        
+        .font-display {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Glass effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Card hover effects */
+        .program-card, .value-card, .impact-card {
+            transition: all 0.3s ease;
+        }
+        
+        .program-card:hover, .value-card:hover, .impact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.1);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a;
+            border-radius: 4px;
+        }
+        
+        /* Timeline styling */
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: #1e3a8a;
+            border-radius: 50%;
+        }
+        
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 1.5rem;
+            width: 2px;
+            height: calc(100% - 1rem);
+            background: #e5e7eb;
+        }
+        
+        .timeline-item:last-child:after {
+            display: none;
+        }
+        
+        /* Accessibility */
+        .focus-visible {
+            outline: 2px solid #1e3a8a;
+            outline-offset: 2px;
+        }
     </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Navigation (Same as homepage) -->
-    <nav class="bg-white shadow">
+<body class="bg-gradient-to-br from-gray-50 to-blue-50">
+    <!-- Skip to Content -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
+                <!-- Logo -->
                 <a href="index.html" class="flex items-center space-x-3">
-                    <div class="bg-kesnnur-blue p-2 rounded-lg">
-                        <i class="fas fa-graduation-cap text-white text-2xl"></i>
-                    </div>
+                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                         alt="KESNNUR Logo"
+                         width="40"
+                         height="40"
+                         class="w-10 h-10 rounded-lg object-contain">
                     <div>
-                        <h1 class="text-2xl font-bold kesnnur-blue">KESNNUR</h1>
-                        <p class="text-sm text-gray-600">Kenya Students & Novice Nurses</p>
+                        <h1 class="text-lg md:text-xl font-bold text-blue-900 font-display">KESNNUR</h1>
+                        <p class="text-xs text-gray-600">Students & Novice Nurses</p>
                     </div>
                 </a>
-                <div class="hidden md:flex space-x-6">
-                    <a href="index.html" class="text-gray-700 hover:kesnnur-blue">Home</a>
-                    <a href="about.html" class="kesnnur-blue font-bold">About</a>
-                    <a href="events.html" class="text-gray-700 hover:kesnnur-blue">Events</a>
-                    <a href="resources.html" class="text-gray-700 hover:kesnnur-blue">Resources</a>
-                    <a href="contact.html" class="text-gray-700 hover:kesnnur-blue">Contact</a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium">Home</a>
+                    <a href="about.html" class="text-blue-900 font-medium border-b-2 border-blue-900">About</a>
+                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium">Management</a>
+                    <a href="events.html" class="text-gray-700 hover:text-blue-900 font-medium">Events</a>
+                    <a href="blog.html" class="text-gray-700 hover:text-blue-900 font-medium">Blog</a>
+                    <a href="resources.html" class="text-gray-700 hover:text-blue-900 font-medium">Resources</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium">Contact</a>
+                    <a href="members.html" class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800">
+                        Member Portal
+                    </a>
                 </div>
-                <a href="members.html" class="bg-kesnnur-blue text-white px-4 py-2 rounded-lg">Member Portal</a>
+
+                <!-- Mobile Menu Button -->
+                <button id="menuBtn" class="md:hidden text-blue-900" aria-label="Toggle navigation menu">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white rounded-lg shadow-lg p-6">
+                <div class="space-y-3">
+                    <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-home mr-3"></i>Home
+                    </a>
+                    <a href="about.html" class="block py-3 px-4 bg-blue-50 text-blue-900 rounded-lg">
+                        <i class="fas fa-info-circle mr-3"></i>About
+                    </a>
+                    <a href="management.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-users mr-3"></i>Management
+                    </a>
+                    <a href="events.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-calendar-alt mr-3"></i>Events
+                    </a>
+                    <a href="blog.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-blog mr-3"></i>Blog
+                    </a>
+                    <a href="resources.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-book-medical mr-3"></i>Resources
+                    </a>
+                    <a href="contact.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-envelope mr-3"></i>Contact
+                    </a>
+                    <a href="members.html" class="block py-3 px-4 bg-blue-900 text-white rounded-lg text-center font-medium mt-4">
+                        <i class="fas fa-user mr-3"></i>Member Portal
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- About Content -->
-    <div class="container mx-auto px-4 py-12">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-4xl font-bold mb-6 kesnnur-blue">About KESNNUR</h1>
-            
-            <div class="bg-white rounded-xl shadow p-8 mb-8">
-                <h2 class="text-2xl font-bold mb-4">Who We Are</h2>
-                <p class="text-gray-700 mb-4">
-                    Kenya Students and Novice Nurses (KESNNUR) is a chapter of the National Nurses Association of Kenya (NNAK). 
-                    This is a platform which brings together all nursing college and university nursing students as well as 
-                    newly qualified nurses up to five years post-qualification.
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="relative py-16 bg-gradient-to-r from-blue-900 to-blue-700">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center opacity-10"></div>
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">
+                    About KESNNUR
+                </h1>
+                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                    Kenya Students and Novice Nurses (KESNNUR) is a chapter of the National Nurses Association of Kenya (NNAK) dedicated to empowering Kenya's future nursing leaders.
                 </p>
-                <p class="text-gray-700">
-                    Our mission is to promote professional growth, continuous education, and networking among young nurses 
-                    in Kenya across different professional interests.
+                <div class="flex flex-wrap justify-center gap-3">
+                    <a href="#who-we-are" class="bg-white text-blue-900 px-6 py-3 rounded-xl font-semibold hover:shadow-xl">
+                        <i class="fas fa-users mr-2"></i>Who We Are
+                    </a>
+                    <a href="#vision-mission" class="border-2 border-white text-white px-6 py-3 rounded-xl font-semibold hover:bg-white/10">
+                        <i class="fas fa-bullseye mr-2"></i>Vision & Mission
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Who We Are -->
+        <section id="who-we-are" class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="max-w-6xl mx-auto">
+                    <div class="bg-white rounded-2xl shadow-xl p-8 mb-12">
+                        <div class="flex flex-col md:flex-row md:items-center gap-8">
+                            <div class="md:w-1/3">
+                                <div class="bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-xl p-8 text-center">
+                                    <i class="fas fa-graduation-cap text-6xl mb-6 opacity-80"></i>
+                                    <h3 class="text-2xl font-bold mb-2">KESNNUR</h3>
+                                    <p class="text-blue-100">A Chapter of NNAK</p>
+                                </div>
+                            </div>
+                            <div class="md:w-2/3">
+                                <h2 class="text-3xl font-bold mb-6 text-blue-900">Who We Are</h2>
+                                <p class="text-gray-700 text-lg mb-6">
+                                    Kenya Students and Novice Nurses (KESNNUR) is a premier chapter of the National Nurses Association of Kenya (NNAK). We serve as a dynamic platform that brings together all nursing college students, university nursing students, and newly qualified nurses up to five years post-qualification.
+                                </p>
+                                <p class="text-gray-700 mb-6">
+                                    Our organization is committed to bridging the gap between nursing education and professional practice. We create opportunities for young nurses to develop essential skills, gain practical experience, and build professional networks that last throughout their careers.
+                                </p>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div class="text-center">
+                                        <div class="text-3xl font-bold text-blue-900 mb-1">1,500+</div>
+                                        <div class="text-gray-600 text-sm">Active Members</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-3xl font-bold text-blue-900 mb-1">24</div>
+                                        <div class="text-gray-600 text-sm">Regions Covered</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-3xl font-bold text-blue-900 mb-1">50+</div>
+                                        <div class="text-gray-600 text-sm">Annual Events</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-3xl font-bold text-blue-900 mb-1">100+</div>
+                                        <div class="text-gray-600 text-sm">Mentor Partners</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vision & Mission -->
+        <section id="vision-mission" class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-6xl mx-auto">
+                    <div class="grid md:grid-cols-2 gap-8 mb-12">
+                        <div class="value-card bg-white rounded-2xl shadow-lg p-8">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-blue-100 p-4 rounded-xl mr-4">
+                                    <i class="fas fa-eye text-blue-900 text-2xl"></i>
+                                </div>
+                                <h2 class="text-2xl font-bold text-blue-900">Our Vision</h2>
+                            </div>
+                            <p class="text-gray-700 text-lg mb-6">
+                                To be the leading platform for nursing students and novice nurses in Kenya, empowering them to become competent, compassionate, and innovative healthcare leaders who transform patient care and advance the nursing profession.
+                            </p>
+                            <div class="bg-blue-50 rounded-xl p-4">
+                                <p class="text-blue-900 font-medium">
+                                    <i class="fas fa-quote-left mr-2 opacity-50"></i>
+                                    Building the future of nursing, one student at a time
+                                    <i class="fas fa-quote-right ml-2 opacity-50"></i>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="value-card bg-white rounded-2xl shadow-lg p-8">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-teal-100 p-4 rounded-xl mr-4">
+                                    <i class="fas fa-bullseye text-teal-900 text-2xl"></i>
+                                </div>
+                                <h2 class="text-2xl font-bold text-teal-900">Our Mission</h2>
+                            </div>
+                            <p class="text-gray-700 text-lg mb-6">
+                                To provide comprehensive mentorship, continuous education, and robust networking opportunities that enhance the professional development, well-being, and career progression of nursing students and novice nurses across Kenya.
+                            </p>
+                            <div class="bg-teal-50 rounded-xl p-4">
+                                <p class="text-teal-900 font-medium">
+                                    <i class="fas fa-star mr-2"></i>
+                                    Empowering nurses for excellence in healthcare delivery
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Core Values -->
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold mb-4 text-blue-900">Our Core Values</h2>
+                        <p class="text-gray-600 max-w-3xl mx-auto">Guiding principles that define our approach to nursing education and professional development</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="value-card bg-white rounded-xl shadow-md p-6">
+                            <div class="bg-blue-100 p-3 rounded-lg inline-block mb-4">
+                                <i class="fas fa-heart text-blue-900 text-xl"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3">Compassion</h3>
+                            <p class="text-gray-600 text-sm">We believe in providing care with empathy, kindness, and respect for all patients and colleagues.</p>
+                        </div>
+
+                        <div class="value-card bg-white rounded-xl shadow-md p-6">
+                            <div class="bg-teal-100 p-3 rounded-lg inline-block mb-4">
+                                <i class="fas fa-shield-alt text-teal-900 text-xl"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3">Integrity</h3>
+                            <p class="text-gray-600 text-sm">We uphold the highest ethical standards in all our professional and educational activities.</p>
+                        </div>
+
+                        <div class="value-card bg-white rounded-xl shadow-md p-6">
+                            <div class="bg-purple-100 p-3 rounded-lg inline-block mb-4">
+                                <i class="fas fa-lightbulb text-purple-900 text-xl"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3">Innovation</h3>
+                            <p class="text-gray-600 text-sm">We embrace new ideas and approaches to improve nursing education and healthcare delivery.</p>
+                        </div>
+
+                        <div class="value-card bg-white rounded-xl shadow-md p-6">
+                            <div class="bg-green-100 p-3 rounded-lg inline-block mb-4">
+                                <i class="fas fa-handshake text-green-900 text-xl"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3">Collaboration</h3>
+                            <p class="text-gray-600 text-sm">We work together with all stakeholders to achieve our shared goals in nursing education.</p>
+                        </div>
+
+                        <div class="value-card bg-white rounded-xl shadow-md p-6">
+                            <div class="bg-yellow-100 p-3 rounded-lg inline-block mb-4">
+                                <i class="fas fa-graduation-cap text-yellow-900 text-xl"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3">Excellence</h3>
+                            <p class="text-gray-600 text-sm">We strive for the highest standards in nursing education, practice, and professional development.</p>
+                        </div>
+
+                        <div class="value-card bg-white rounded-xl shadow-md p-6">
+                            <div class="bg-red-100 p-3 rounded-lg inline-block mb-4">
+                                <i class="fas fa-users text-red-900 text-xl"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3">Inclusivity</h3>
+                            <p class="text-gray-600 text-sm">We welcome all nursing students and novice nurses regardless of their background or institution.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Programs -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Our Core Programs</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">Comprehensive programs designed to support every aspect of nursing education and professional development</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="program-card bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-2xl p-8">
+                        <div class="text-center mb-6">
+                            <div class="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-user-graduate text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-3">Professional Growth</h3>
+                        </div>
+                        <p class="text-blue-100 mb-6">
+                            Structured mentorship programs connecting students with experienced nurses, career guidance workshops, and leadership development initiatives.
+                        </p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
+                                <span>One-on-one mentorship matching</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
+                                <span>Career path counseling</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
+                                <span>Leadership training workshops</span>
+                            </li>
+                        </ul>
+                        <a href="mentorship.html" class="inline-block bg-white text-blue-900 px-6 py-2 rounded-lg font-semibold hover:shadow-lg">
+                            Learn More
+                        </a>
+                    </div>
+
+                    <div class="program-card bg-gradient-to-br from-teal-700 to-teal-500 text-white rounded-2xl p-8">
+                        <div class="text-center mb-6">
+                            <div class="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-book-medical text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-3">Continuous Education</h3>
+                        </div>
+                        <p class="text-teal-100 mb-6">
+                            Workshops, seminars, research updates, and skills training sessions to keep nursing students at the forefront of healthcare advancements.
+                        </p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
+                                <span>Clinical skills workshops</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
+                                <span>Research methodology training</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
+                                <span>Latest medical technology updates</span>
+                            </li>
+                        </ul>
+                        <a href="resources.html" class="inline-block bg-white text-teal-900 px-6 py-2 rounded-lg font-semibold hover:shadow-lg">
+                            Explore Resources
+                        </a>
+                    </div>
+
+                    <div class="program-card bg-gradient-to-br from-orange-600 to-orange-400 text-white rounded-2xl p-8">
+                        <div class="text-center mb-6">
+                            <div class="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-heart text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-3">Mental Health Support</h3>
+                        </div>
+                        <p class="text-orange-100 mb-6">
+                            Comprehensive resources, peer support networks, and wellness programs designed specifically for the unique challenges nursing students face.
+                        </p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
+                                <span>Peer support groups</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
+                                <span>Stress management workshops</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
+                                <span>Professional counseling services</span>
+                            </li>
+                        </ul>
+                        <a href="wellness.html" class="inline-block bg-white text-orange-900 px-6 py-2 rounded-lg font-semibold hover:shadow-lg">
+                            Access Support
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Impact -->
+        <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Our Impact</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">Making a difference in nursing education and professional development across Kenya</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="impact-card bg-white rounded-2xl shadow-lg p-8 text-center">
+                        <div class="text-5xl font-bold text-blue-900 mb-4">95%</div>
+                        <h3 class="text-xl font-bold mb-3">Mentorship Satisfaction</h3>
+                        <p class="text-gray-600">Of mentees report significant improvement in clinical confidence and career clarity</p>
+                    </div>
+
+                    <div class="impact-card bg-white rounded-2xl shadow-lg p-8 text-center">
+                        <div class="text-5xl font-bold text-teal-900 mb-4">80%</div>
+                        <h3 class="text-xl font-bold mb-3">Employment Rate</h3>
+                        <p class="text-gray-600">Of our members secure nursing positions within 6 months of graduation</p>
+                    </div>
+
+                    <div class="impact-card bg-white rounded-2xl shadow-lg p-8 text-center">
+                        <div class="text-5xl font-bold text-orange-900 mb-4">75%</div>
+                        <h3 class="text-xl font-bold mb-3">Skill Improvement</h3>
+                        <p class="text-gray-600">Members report enhanced clinical skills through our workshops and training</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Journey -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold mb-4 text-blue-900">Our Journey</h2>
+                        <p class="text-gray-600">From humble beginnings to becoming Kenya's leading nursing student organization</p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-lg p-8">
+                        <div class="timeline-item mb-8 pb-8">
+                            <h3 class="font-bold text-xl mb-2 text-blue-900">Foundation (2022)</h3>
+                            <p class="text-gray-600 mb-2">KESNNUR was established as a chapter of NNAK with a vision to support nursing students across Kenya.</p>
+                        </div>
+                        
+                        <div class="timeline-item mb-8 pb-8">
+                            <h3 class="font-bold text-xl mb-2 text-blue-900">Initial Growth (2023)</h3>
+                            <p class="text-gray-600 mb-2">Expanded to 15 regions, launched mentorship programs, and conducted first national conference.</p>
+                        </div>
+                        
+                        <div class="timeline-item mb-8 pb-8">
+                            <h3 class="font-bold text-xl mb-2 text-blue-900">Partnerships (2024)</h3>
+                            <p class="text-gray-600 mb-2">Established partnerships with leading healthcare institutions and launched digital learning platform.</p>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <h3 class="font-bold text-xl mb-2 text-blue-900">Current Impact (2025)</h3>
+                            <p class="text-gray-600">Serving 1,500+ members across 24 regions with comprehensive nursing education and support programs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-4xl font-bold mb-6">Join the KESNNUR Community</h2>
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                    Become part of Kenya's most dynamic nursing community and accelerate your professional growth.
                 </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8 mb-12">
-                <div class="bg-white rounded-xl shadow p-6">
-                    <h3 class="text-xl font-bold mb-4 kesnnur-blue">Our Vision</h3>
-                    <p>To be the leading platform for nursing students and novice nurses in Kenya, empowering them to become competent, compassionate, and innovative healthcare leaders.</p>
-                </div>
-                <div class="bg-white rounded-xl shadow p-6">
-                    <h3 class="text-xl font-bold mb-4 kesnnur-blue">Our Mission</h3>
-                    <p>To provide mentorship, education, and networking opportunities that enhance the professional development and well-being of nursing students and novice nurses in Kenya.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="register.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-bold hover:shadow-xl">
+                        <i class="fas fa-user-plus mr-2"></i> Join Now
+                    </a>
+                    <a href="contact.html" class="border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-bold hover:bg-white/10">
+                        <i class="fas fa-envelope mr-2"></i> Contact Us
+                    </a>
                 </div>
             </div>
-
-            <!-- Core Programs -->
-            <h2 class="text-3xl font-bold mb-8 kesnnur-blue text-center">Our Core Programs</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-xl p-6">
-                    <i class="fas fa-user-graduate text-3xl mb-4"></i>
-                    <h3 class="font-bold mb-2">Professional Growth</h3>
-                    <p>Mentorship connecting students with experienced nurses</p>
-                </div>
-                <div class="bg-gradient-to-br from-teal-700 to-teal-500 text-white rounded-xl p-6">
-                    <i class="fas fa-book-medical text-3xl mb-4"></i>
-                    <h3 class="font-bold mb-2">Continuous Education</h3>
-                    <p>Workshops, seminars and latest research updates</p>
-                </div>
-                <div class="bg-gradient-to-br from-orange-600 to-orange-400 text-white rounded-xl p-6">
-                    <i class="fas fa-heart text-3xl mb-4"></i>
-                    <h3 class="font-bold mb-2">Mental Health Support</h3>
-                    <p>Resources for wellbeing and resilience</p>
-                </div>
-            </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p>© 2024 KESNNUR - Kenya Students & Novice Nurses</p>
-            <p class="text-gray-400 mt-2">Nurses Complex KNH, Nairobi | +254 791 296 924 | kesnnur@gmail.com</p>
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                             alt="KESNNUR Logo"
+                             width="40"
+                             height="40"
+                             class="w-10 h-10 rounded-lg object-contain bg-white p-1">
+                        <h3 class="text-xl font-bold">KESNNUR</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Empowering Kenya's future nursing leaders through education, mentorship, and community support.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">About KESNNUR</h4>
+                    <div class="space-y-3">
+                        <a href="#who-we-are" class="text-gray-400 hover:text-white block">Who We Are</a>
+                        <a href="#vision-mission" class="text-gray-400 hover:text-white block">Vision & Mission</a>
+                        <a href="management.html" class="text-gray-400 hover:text-white block">Leadership</a>
+                        <a href="impact.html" class="text-gray-400 hover:text-white block">Our Impact</a>
+                        <a href="partners.html" class="text-gray-400 hover:text-white block">Partners</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <div class="space-y-3">
+                        <a href="index.html" class="text-gray-400 hover:text-white block">Home</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white block">Events</a>
+                        <a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a>
+                        <a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a>
+                        <a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Contact</h4>
+                    <div class="space-y-3 text-gray-400">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
+                            <span>Nurses Complex KNH, Nairobi, Kenya</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone mr-3"></i>
+                            <a href="tel:+254791296924" class="hover:text-white">+254 791 296 924</a>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i>
+                            <a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>Copyright © <span id="currentYear">2024</span> KESNNUR. All Rights Reserved.</p>
+                <p class="mt-2 text-sm">A Chapter of the National Nurses Association of Kenya (NNAK)</p>
+                <p class="mt-2">
+                    <a href="privacy.html" class="hover:text-white mx-3">Privacy Policy</a> | 
+                    <a href="terms.html" class="hover:text-white mx-3">Terms of Service</a> | 
+                    <a href="sitemap.xml" class="hover:text-white mx-3">Sitemap</a>
+                </p>
+            </div>
         </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-8 right-8 bg-blue-900 text-white p-3 rounded-full shadow-lg hover:shadow-xl opacity-0 transition-opacity duration-300" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script>
+        // Get current year for copyright
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Mobile menu toggle
+        document.getElementById('menuBtn').addEventListener('click', function() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Back to top button
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0');
+                backToTopButton.classList.add('opacity-100');
+            } else {
+                backToTopButton.classList.remove('opacity-100');
+                backToTopButton.classList.add('opacity-0');
+            }
+        });
+
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    mobileMenu.classList.add('hidden');
+                    
+                    // Scroll to target
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Card hover effects enhancement
+        document.querySelectorAll('.program-card, .value-card, .impact-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Accessibility improvements
+        document.addEventListener('keydown', function(e) {
+            // Close mobile menu on Escape key
+            if (e.key === 'Escape') {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // Focus trap for mobile menu
+        function trapFocus(element) {
+            const focusableElements = element.querySelectorAll(
+                'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstFocusable = focusableElements[0];
+            const lastFocusable = focusableElements[focusableElements.length - 1];
+
+            element.addEventListener('keydown', function(e) {
+                if (e.key !== 'Tab') return;
+
+                if (e.shiftKey) {
+                    if (document.activeElement === firstFocusable) {
+                        lastFocusable.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastFocusable) {
+                        firstFocusable.focus();
+                        e.preventDefault();
+                    }
+                }
+            });
+        }
+
+        // Initialize focus trap for mobile menu when it's opened
+        const mobileMenu = document.getElementById('mobileMenu');
+        trapFocus(mobileMenu);
+
+        // Lazy loading images
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Page load animation
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+            
+            // Add fade-in animation to main content
+            const mainContent = document.getElementById('main-content');
+            mainContent.style.opacity = '0';
+            mainContent.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                mainContent.style.opacity = '1';
+            }, 100);
+        });
+
+        // Service worker registration for PWA (optional)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+
+        // Form validation (if forms exist on page)
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                // Basic form validation can be added here
+                console.log('Form submitted:', this.id || 'unnamed form');
+            });
+        });
+
+        // Add keyboard navigation for cards
+        document.querySelectorAll('.program-card, .value-card, .impact-card').forEach(card => {
+            card.setAttribute('tabindex', '0');
+            
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const link = this.querySelector('a');
+                    if (link) {
+                        link.click();
+                    }
+                }
+            });
+        });
+
+        // Add ARIA labels for better accessibility
+        document.querySelectorAll('i[aria-hidden="true"]').forEach(icon => {
+            const parent = icon.parentElement;
+            if (parent.tagName === 'BUTTON' || parent.tagName === 'A') {
+                if (!parent.getAttribute('aria-label')) {
+                    const text = parent.textContent.trim();
+                    parent.setAttribute('aria-label', text);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
