@@ -1,148 +1,935 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - KESNNUR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Contact KESNNUR | Kenya Students & Novice Nurses</title>
+    
+    <!-- Meta Description for SEO -->
+    <meta name="description" content="Contact KESNNUR - Get in touch with Kenya's leading nursing student community. Reach out to leadership, join our community, or inquire about partnerships.">
+    
+    <!-- Keywords for SEO -->
+    <meta name="keywords" content="contact KESNNUR, nursing students contact Kenya, novice nurses support, nursing mentorship contact, NNAK chapter contact">
+    
+    <!-- Author -->
+    <meta name="author" content="KESNNUR">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://kesnnur.nnak.or.ke/contact.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kesnnur.nnak.or.ke/contact.html">
+    <meta property="og:title" content="Contact KESNNUR | Kenya's Nursing Community">
+    <meta property="og:description" content="Get in touch with KESNNUR for mentorship, partnership, or to join Kenya's premier nursing student community.">
+    <meta property="og:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kesnnur.nnak.or.ke/contact.html">
+    <meta property="twitter:title" content="Contact KESNNUR | Kenya's Nursing Community">
+    <meta property="twitter:description" content="Get in touch with KESNNUR for mentorship, partnership, or to join Kenya's premier nursing student community.">
+    <meta property="twitter:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    <link rel="apple-touch-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'kesnnur-blue': '#1e3a8a',
+                        'kesnnur-light': '#3b82f6',
+                        'kesnnur-teal': '#0d9488',
+                        'kesnnur-gold': '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .kesnnur-blue { color: #1e3a8a; }
-        .bg-kesnnur-blue { background-color: #1e3a8a; }
+        :root {
+            --kesnnur-blue: #1e3a8a;
+            --kesnnur-light: #3b82f6;
+            --kesnnur-teal: #0d9488;
+            --kesnnur-gold: #f59e0b;
+        }
+        
+        /* Skip to content */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #1e3a8a;
+            color: white;
+            padding: 12px;
+            z-index: 10000;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .skip-to-content:focus {
+            top: 0;
+        }
+        
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            padding-top: 0;
+        }
+        
+        .font-display {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Glass effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Card hover effects */
+        .contact-card, .leadership-card {
+            transition: all 0.3s ease;
+        }
+        
+        .contact-card:hover, .leadership-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.1);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a;
+            border-radius: 4px;
+        }
+        
+        /* Form styling */
+        .form-input:focus {
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+            border-color: #1e3a8a;
+        }
+        
+        /* Accessibility */
+        .focus-visible {
+            outline: 2px solid #1e3a8a;
+            outline-offset: 2px;
+        }
     </style>
 </head>
-<body class="bg-gray-50">
-    <nav class="bg-white shadow">
+<body class="bg-gradient-to-br from-gray-50 to-blue-50">
+    <!-- Skip to Content -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
+                <!-- Logo -->
                 <a href="index.html" class="flex items-center space-x-3">
-                    <div class="bg-kesnnur-blue p-2 rounded-lg">
-                        <i class="fas fa-graduation-cap text-white text-2xl"></i>
-                    </div>
+                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                         alt="KESNNUR Logo"
+                         width="40"
+                         height="40"
+                         class="w-10 h-10 rounded-lg object-contain">
                     <div>
-                        <h1 class="text-2xl font-bold kesnnur-blue">KESNNUR</h1>
-                        <p class="text-sm text-gray-600">Kenya Students & Novice Nurses</p>
+                        <h1 class="text-lg md:text-xl font-bold text-blue-900 font-display">KESNNUR</h1>
+                        <p class="text-xs text-gray-600">Students & Novice Nurses</p>
                     </div>
                 </a>
-                <div class="hidden md:flex space-x-6">
-                    <a href="index.html" class="text-gray-700 hover:kesnnur-blue">Home</a>
-                    <a href="about.html" class="text-gray-700 hover:kesnnur-blue">About</a>
-                    <a href="events.html" class="text-gray-700 hover:kesnnur-blue">Events</a>
-                    <a href="resources.html" class="text-gray-700 hover:kesnnur-blue">Resources</a>
-                    <a href="contact.html" class="kesnnur-blue font-bold">Contact</a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium">Home</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium">About</a>
+                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium">Management</a>
+                    <a href="events.html" class="text-gray-700 hover:text-blue-900 font-medium">Events</a>
+                    <a href="blog.html" class="text-gray-700 hover:text-blue-900 font-medium">Blog</a>
+                    <a href="resources.html" class="text-gray-700 hover:text-blue-900 font-medium">Resources</a>
+                    <a href="contact.html" class="text-blue-900 font-medium border-b-2 border-blue-900">Contact</a>
+                    <a href="members.html" class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800">
+                        Member Portal
+                    </a>
                 </div>
-                <a href="members.html" class="bg-kesnnur-blue text-white px-4 py-2 rounded-lg">Member Portal</a>
+
+                <!-- Mobile Menu Button -->
+                <button id="menuBtn" class="md:hidden text-blue-900" aria-label="Toggle navigation menu">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white rounded-lg shadow-lg p-6">
+                <div class="space-y-3">
+                    <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-home mr-3"></i>Home
+                    </a>
+                    <a href="about.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-info-circle mr-3"></i>About
+                    </a>
+                    <a href="management.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-users mr-3"></i>Management
+                    </a>
+                    <a href="events.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-calendar-alt mr-3"></i>Events
+                    </a>
+                    <a href="blog.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-blog mr-3"></i>Blog
+                    </a>
+                    <a href="resources.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-book-medical mr-3"></i>Resources
+                    </a>
+                    <a href="contact.html" class="block py-3 px-4 bg-blue-50 text-blue-900 rounded-lg">
+                        <i class="fas fa-envelope mr-3"></i>Contact
+                    </a>
+                    <a href="members.html" class="block py-3 px-4 bg-blue-900 text-white rounded-lg text-center font-medium mt-4">
+                        <i class="fas fa-user mr-3"></i>Member Portal
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto px-4 py-12">
-        <div class="max-w-6xl mx-auto">
-            <h1 class="text-4xl font-bold mb-2 kesnnur-blue text-center">Contact Us</h1>
-            <p class="text-gray-600 text-center mb-12">Get in touch with KESNNUR leadership and team</p>
-
-            <div class="grid md:grid-cols-2 gap-12">
-                <!-- Contact Form -->
-                <div class="bg-white rounded-xl shadow p-8">
-                    <h2 class="text-2xl font-bold mb-6 kesnnur-blue">Send us a Message</h2>
-                    <form id="contactForm">
-                        <div class="mb-6">
-                            <label class="block text-gray-700 mb-2">Full Name</label>
-                            <input type="text" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 outline-none" placeholder="Your name" required>
-                        </div>
-                        <div class="mb-6">
-                            <label class="block text-gray-700 mb-2">Email Address</label>
-                            <input type="email" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 outline-none" placeholder="your@email.com" required>
-                        </div>
-                        <div class="mb-6">
-                            <label class="block text-gray-700 mb-2">Phone Number</label>
-                            <input type="tel" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 outline-none" placeholder="+254 XXX XXX XXX">
-                        </div>
-                        <div class="mb-6">
-                            <label class="block text-gray-700 mb-2">Message</label>
-                            <textarea rows="5" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 outline-none" placeholder="Your message..." required></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-kesnnur-blue text-white py-3 rounded-lg font-bold hover:bg-blue-800">
-                            Send Message
-                        </button>
-                    </form>
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="relative py-16 bg-gradient-to-r from-blue-900 to-blue-700">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=2067')] bg-cover bg-center opacity-10"></div>
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">
+                    Contact KESNNUR
+                </h1>
+                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                    Get in touch with Kenya's leading nursing student community. We're here to support your journey in nursing.
+                </p>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <a href="#contact-form" class="bg-white text-blue-900 px-6 py-3 rounded-xl font-semibold hover:shadow-xl">
+                        <i class="fas fa-envelope mr-2"></i>Send Message
+                    </a>
+                    <a href="#contact-info" class="border-2 border-white text-white px-6 py-3 rounded-xl font-semibold hover:bg-white/10">
+                        <i class="fas fa-phone mr-2"></i>Contact Info
+                    </a>
                 </div>
+            </div>
+        </section>
 
-                <!-- Contact Info -->
-                <div>
-                    <div class="bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-xl p-8 mb-8">
-                        <h2 class="text-2xl font-bold mb-6">Contact Information</h2>
-                        <div class="space-y-6">
-                            <div class="flex items-start">
-                                <i class="fas fa-map-marker-alt text-xl mt-1 mr-4"></i>
-                                <div>
-                                    <h3 class="font-bold">Address</h3>
-                                    <p>Nurses Complex KNH<br>Nairobi, Kenya</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-phone text-xl mr-4"></i>
-                                <div>
-                                    <h3 class="font-bold">Phone</h3>
-                                    <p>+254 791 296 924</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-envelope text-xl mr-4"></i>
-                                <div>
-                                    <h3 class="font-bold">Email</h3>
-                                    <p>kesnnur@gmail.com</p>
-                                </div>
-                            </div>
+        <!-- Quick Contact -->
+        <section class="py-12 bg-gradient-to-br from-blue-50 to-teal-50">
+            <div class="container mx-auto px-4">
+                <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    <div class="contact-card bg-white rounded-xl shadow-lg p-6 text-center">
+                        <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-phone-alt text-blue-900 text-2xl"></i>
                         </div>
+                        <h3 class="font-bold text-lg mb-2">Call Us</h3>
+                        <p class="text-gray-600 mb-3">Speak directly with our support team</p>
+                        <a href="tel:+254791296924" class="text-blue-900 font-bold hover:underline">+254 791 296 924</a>
                     </div>
 
-                    <!-- Leadership Contacts -->
-                    <div class="bg-white rounded-xl shadow p-6">
-                        <h3 class="text-xl font-bold mb-4 kesnnur-blue">Leadership Contacts</h3>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center border-b pb-3">
-                                <div>
-                                    <h4 class="font-medium">Chairperson</h4>
-                                    <p class="text-sm text-gray-600">National Council</p>
+                    <div class="contact-card bg-white rounded-xl shadow-lg p-6 text-center">
+                        <div class="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-envelope text-teal-900 text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Email Us</h3>
+                        <p class="text-gray-600 mb-3">Send us a message anytime</p>
+                        <a href="mailto:kesnnur@gmail.com" class="text-teal-900 font-bold hover:underline">kesnnur@gmail.com</a>
+                    </div>
+
+                    <div class="contact-card bg-white rounded-xl shadow-lg p-6 text-center">
+                        <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-map-marker-alt text-purple-900 text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Visit Us</h3>
+                        <p class="text-gray-600 mb-3">Meet us at our office</p>
+                        <p class="text-purple-900 font-bold">Nurses Complex KNH, Nairobi</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Form & Info -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="max-w-6xl mx-auto">
+                    <div class="grid lg:grid-cols-2 gap-12">
+                        <!-- Contact Form -->
+                        <div id="contact-form" class="bg-white rounded-2xl shadow-xl p-8">
+                            <h2 class="text-2xl font-bold mb-2 text-blue-900">Send us a Message</h2>
+                            <p class="text-gray-600 mb-6">Fill out the form below and we'll get back to you within 24 hours</p>
+                            
+                            <form id="contactForm" class="space-y-6">
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="firstName" class="block text-gray-700 mb-2 font-medium">First Name *</label>
+                                        <input type="text" id="firstName" 
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none focus:border-blue-900"
+                                               placeholder="John" required>
+                                    </div>
+                                    <div>
+                                        <label for="lastName" class="block text-gray-700 mb-2 font-medium">Last Name *</label>
+                                        <input type="text" id="lastName" 
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none focus:border-blue-900"
+                                               placeholder="Doe" required>
+                                    </div>
                                 </div>
-                                <a href="mailto:chairperson@kesnnur.org" class="text-blue-900 hover:underline">Email</a>
+                                
+                                <div>
+                                    <label for="email" class="block text-gray-700 mb-2 font-medium">Email Address *</label>
+                                    <input type="email" id="email" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none focus:border-blue-900"
+                                           placeholder="john.doe@example.com" required>
+                                </div>
+                                
+                                <div>
+                                    <label for="phone" class="block text-gray-700 mb-2 font-medium">Phone Number</label>
+                                    <input type="tel" id="phone" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none focus:border-blue-900"
+                                           placeholder="+254 XXX XXX XXX">
+                                </div>
+                                
+                                <div>
+                                    <label for="subject" class="block text-gray-700 mb-2 font-medium">Subject *</label>
+                                    <select id="subject" 
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none focus:border-blue-900" required>
+                                        <option value="" disabled selected>Select a subject</option>
+                                        <option value="membership">Membership Inquiry</option>
+                                        <option value="mentorship">Mentorship Program</option>
+                                        <option value="events">Event Information</option>
+                                        <option value="partnership">Partnership Opportunity</option>
+                                        <option value="support">Technical Support</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label for="message" class="block text-gray-700 mb-2 font-medium">Message *</label>
+                                    <textarea id="message" rows="5" 
+                                              class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none focus:border-blue-900"
+                                              placeholder="Type your message here..." required></textarea>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="newsletter" class="mr-3">
+                                    <label for="newsletter" class="text-gray-700">
+                                        Subscribe to our newsletter for updates and announcements
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" 
+                                        class="w-full bg-gradient-to-r from-blue-900 to-blue-700 text-white py-4 rounded-xl font-bold text-lg hover:shadow-xl transition-all duration-300">
+                                    <i class="fas fa-paper-plane mr-2"></i>Send Message
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div id="contact-info">
+                            <!-- Main Contact Info -->
+                            <div class="bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-2xl p-8 mb-8">
+                                <h2 class="text-2xl font-bold mb-6">Contact Information</h2>
+                                <div class="space-y-6">
+                                    <div class="flex items-start">
+                                        <div class="bg-white/20 p-3 rounded-lg mr-4">
+                                            <i class="fas fa-map-marker-alt text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-lg mb-1">Office Address</h3>
+                                            <p class="text-blue-100">Nurses Complex KNH<br>Nairobi, Kenya</p>
+                                            <a href="https://maps.google.com" target="_blank" class="text-white hover:text-blue-200 text-sm mt-2 inline-block">
+                                                <i class="fas fa-directions mr-1"></i>Get Directions
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start">
+                                        <div class="bg-white/20 p-3 rounded-lg mr-4">
+                                            <i class="fas fa-phone-alt text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-lg mb-1">Phone Numbers</h3>
+                                            <p class="text-blue-100">Main: +254 791 296 924</p>
+                                            <p class="text-blue-100">Support: +254 720 000 000</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start">
+                                        <div class="bg-white/20 p-3 rounded-lg mr-4">
+                                            <i class="fas fa-envelope text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-lg mb-1">Email Addresses</h3>
+                                            <p class="text-blue-100">General: kesnnur@gmail.com</p>
+                                            <p class="text-blue-100">Support: support@kesnnur.org</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start">
+                                        <div class="bg-white/20 p-3 rounded-lg mr-4">
+                                            <i class="fas fa-clock text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-lg mb-1">Office Hours</h3>
+                                            <p class="text-blue-100">Monday - Friday: 8:00 AM - 5:00 PM</p>
+                                            <p class="text-blue-100">Saturday: 9:00 AM - 1:00 PM</p>
+                                            <p class="text-blue-100">Sunday: Closed</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex justify-between items-center border-b pb-3">
-                                <div>
-                                    <h4 class="font-medium">Secretary General</h4>
-                                    <p class="text-sm text-gray-600">Administration</p>
+
+                            <!-- Social Media -->
+                            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                                <h3 class="text-xl font-bold mb-4 text-blue-900">Connect With Us</h3>
+                                <p class="text-gray-600 mb-4">Follow us on social media for updates and announcements</p>
+                                <div class="flex space-x-4">
+                                    <a href="#" class="bg-blue-100 text-blue-900 p-3 rounded-lg hover:bg-blue-200">
+                                        <i class="fab fa-twitter text-xl"></i>
+                                    </a>
+                                    <a href="#" class="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700">
+                                        <i class="fab fa-facebook-f text-xl"></i>
+                                    </a>
+                                    <a href="#" class="bg-pink-600 text-white p-3 rounded-lg hover:bg-pink-700">
+                                        <i class="fab fa-instagram text-xl"></i>
+                                    </a>
+                                    <a href="#" class="bg-blue-700 text-white p-3 rounded-lg hover:bg-blue-800">
+                                        <i class="fab fa-linkedin-in text-xl"></i>
+                                    </a>
+                                    <a href="#" class="bg-green-600 text-white p-3 rounded-lg hover:bg-green-700">
+                                        <i class="fab fa-whatsapp text-xl"></i>
+                                    </a>
                                 </div>
-                                <a href="mailto:secretary@kesnnur.org" class="text-blue-900 hover:underline">Email</a>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <h4 class="font-medium">Treasurer</h4>
-                                    <p class="text-sm text-gray-600">Financial Matters</p>
+
+                            <!-- Leadership Contacts -->
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h3 class="text-xl font-bold mb-4 text-blue-900">Leadership Contacts</h3>
+                                <p class="text-gray-600 mb-6">Direct contact information for key leadership positions</p>
+                                
+                                <div class="space-y-4">
+                                    <div class="leadership-card border border-gray-200 rounded-xl p-4 hover:border-blue-900 hover:shadow-md">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <h4 class="font-bold text-blue-900">Chairperson</h4>
+                                                <p class="text-sm text-gray-600">National Council Leadership</p>
+                                            </div>
+                                            <a href="mailto:chairperson@kesnnur.org" 
+                                               class="bg-blue-50 text-blue-900 px-4 py-2 rounded-lg hover:bg-blue-100">
+                                                <i class="fas fa-envelope mr-2"></i>Email
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="leadership-card border border-gray-200 rounded-xl p-4 hover:border-blue-900 hover:shadow-md">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <h4 class="font-bold text-blue-900">Secretary General</h4>
+                                                <p class="text-sm text-gray-600">Administration & Correspondence</p>
+                                            </div>
+                                            <a href="mailto:secretary@kesnnur.org" 
+                                               class="bg-blue-50 text-blue-900 px-4 py-2 rounded-lg hover:bg-blue-100">
+                                                <i class="fas fa-envelope mr-2"></i>Email
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="leadership-card border border-gray-200 rounded-xl p-4 hover:border-blue-900 hover:shadow-md">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <h4 class="font-bold text-blue-900">Treasurer</h4>
+                                                <p class="text-sm text-gray-600">Financial Matters & Dues</p>
+                                            </div>
+                                            <a href="mailto:treasurer@kesnnur.org" 
+                                               class="bg-blue-50 text-blue-900 px-4 py-2 rounded-lg hover:bg-blue-100">
+                                                <i class="fas fa-envelope mr-2"></i>Email
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="leadership-card border border-gray-200 rounded-xl p-4 hover:border-blue-900 hover:shadow-md">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <h4 class="font-bold text-blue-900">Mentorship Coordinator</h4>
+                                                <p class="text-sm text-gray-600">Mentorship Program Inquiries</p>
+                                            </div>
+                                            <a href="mailto:mentorship@kesnnur.org" 
+                                               class="bg-blue-50 text-blue-900 px-4 py-2 rounded-lg hover:bg-blue-100">
+                                                <i class="fas fa-envelope mr-2"></i>Email
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
-                                <a href="mailto:treasurer@kesnnur.org" class="text-blue-900 hover:underline">Email</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p>© 2024 KESNNUR - Kenya Students & Novice Nurses</p>
-            <p class="text-gray-400 mt-2">Nurses Complex KNH, Nairobi | +254 791 296 924 | kesnnur@gmail.com</p>
+        <!-- FAQ Section -->
+        <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold mb-4 text-blue-900">Frequently Asked Questions</h2>
+                        <p class="text-gray-600">Find quick answers to common questions about contacting KESNNUR</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl shadow-lg p-8">
+                        <div class="space-y-6">
+                            <div class="border-b pb-4">
+                                <h3 class="font-bold text-lg mb-2 text-blue-900">How quickly will I get a response?</h3>
+                                <p class="text-gray-600">We aim to respond to all inquiries within 24 hours during business days. For urgent matters, please call our main office number.</p>
+                            </div>
+                            
+                            <div class="border-b pb-4">
+                                <h3 class="font-bold text-lg mb-2 text-blue-900">Can I visit the KESNNUR office?</h3>
+                                <p class="text-gray-600">Yes, our office at Nurses Complex KNH is open Monday to Friday from 8:00 AM to 5:00 PM. We recommend scheduling an appointment in advance.</p>
+                            </div>
+                            
+                            <div class="border-b pb-4">
+                                <h3 class="font-bold text-lg mb-2 text-blue-900">Who should I contact for membership issues?</h3>
+                                <p class="text-gray-600">For membership applications, renewals, or issues, please email membership@kesnnur.org or contact the Secretary General.</p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="font-bold text-lg mb-2 text-blue-900">Do you provide emergency support?</h3>
+                                <p class="text-gray-600">For emergencies related to student welfare, please call our emergency hotline at +254 720 000 000, available 24/7.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="max-w-6xl mx-auto">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold mb-4 text-blue-900">Find Our Office</h2>
+                        <p class="text-gray-600">Located at the Nurses Complex in Kenyatta National Hospital, Nairobi</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                        <div class="h-96 relative">
+                            <!-- Placeholder for Google Map -->
+                            <div class="absolute inset-0 bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center">
+                                <div class="text-center text-white p-8">
+                                    <i class="fas fa-map-marked-alt text-6xl mb-6 opacity-80"></i>
+                                    <h3 class="text-2xl font-bold mb-4">KESNNUR Office Location</h3>
+                                    <p class="text-xl mb-2">Nurses Complex KNH</p>
+                                    <p class="text-blue-200">Nairobi, Kenya</p>
+                                    <a href="https://maps.google.com/?q=Nurses+Complex+KNH+Nairobi" 
+                                       target="_blank"
+                                       class="inline-block bg-white text-blue-900 px-6 py-3 rounded-lg font-bold mt-6 hover:shadow-lg">
+                                        <i class="fas fa-directions mr-2"></i>Open in Google Maps
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-8">
+                            <div class="grid md:grid-cols-3 gap-6">
+                                <div>
+                                    <h4 class="font-bold mb-2 text-blue-900">Parking</h4>
+                                    <p class="text-gray-600">Ample parking available at the Nurses Complex</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-2 text-blue-900">Public Transport</h4>
+                                    <p class="text-gray-600">Accessible via matatus, buses, and taxis</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-2 text-blue-900">Accessibility</h4>
+                                    <p class="text-gray-600">Wheelchair accessible facilities available</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-4xl font-bold mb-6">Ready to Join KESNNUR?</h2>
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                    Become part of Kenya's most dynamic nursing community today.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="register.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-bold hover:shadow-xl">
+                        <i class="fas fa-user-plus mr-2"></i> Join Now
+                    </a>
+                    <a href="tel:+254791296924" class="border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-bold hover:bg-white/10">
+                        <i class="fas fa-phone mr-2"></i> Call Us Now
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                             alt="KESNNUR Logo"
+                             width="40"
+                             height="40"
+                             class="w-10 h-10 rounded-lg object-contain bg-white p-1">
+                        <h3 class="text-xl font-bold">KESNNUR</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Empowering Kenya's future nursing leaders through education, mentorship, and community support.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <div class="space-y-3">
+                        <a href="index.html" class="text-gray-400 hover:text-white block">Home</a>
+                        <a href="about.html" class="text-gray-400 hover:text-white block">About Us</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white block">Events</a>
+                        <a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a>
+                        <a href="contact.html" class="text-gray-400 hover:text-white block">Contact</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Resources</h4>
+                    <div class="space-y-3">
+                        <a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a>
+                        <a href="news.html" class="text-gray-400 hover:text-white block">News</a>
+                        <a href="faq.html" class="text-gray-400 hover:text-white block">FAQ</a>
+                        <a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Contact</h4>
+                    <div class="space-y-3 text-gray-400">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
+                            <span>Nurses Complex KNH, Nairobi, Kenya</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone mr-3"></i>
+                            <a href="tel:+254791296924" class="hover:text-white">+254 791 296 924</a>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i>
+                            <a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-clock mr-3"></i>
+                            <span>Mon-Fri: 8AM-5PM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>Copyright © <span id="currentYear">2024</span> KESNNUR. All Rights Reserved.</p>
+                <p class="mt-2 text-sm">A Chapter of the National Nurses Association of Kenya (NNAK)</p>
+                <p class="mt-2">
+                    <a href="privacy.html" class="hover:text-white mx-3">Privacy Policy</a> | 
+                    <a href="terms.html" class="hover:text-white mx-3">Terms of Service</a> | 
+                    <a href="sitemap.xml" class="hover:text-white mx-3">Sitemap</a>
+                </p>
+            </div>
         </div>
     </footer>
 
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-8 right-8 bg-blue-900 text-white p-3 rounded-full shadow-lg hover:shadow-xl opacity-0 transition-opacity duration-300" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- JavaScript -->
     <script>
+        // Get current year for copyright
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Mobile menu toggle
+        document.getElementById('menuBtn').addEventListener('click', function() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Back to top button
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0');
+                backToTopButton.classList.add('opacity-100');
+            } else {
+                backToTopButton.classList.remove('opacity-100');
+                backToTopButton.classList.add('opacity-0');
+            }
+        });
+
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Contact form submission
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Thank you! Your message has been sent. We will contact you soon.');
-            this.reset();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Show success message
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+            submitBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Show success message
+                const successDiv = document.createElement('div');
+                successDiv.className = 'bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6';
+                successDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-green-600 mr-3 text-xl"></i>
+                        <div>
+                            <h4 class="font-bold">Message Sent Successfully!</h4>
+                            <p class="text-sm">Thank you for contacting KESNNUR. We'll get back to you within 24 hours.</p>
+                        </div>
+                    </div>
+                `;
+                
+                this.insertBefore(successDiv, this.firstChild);
+                
+                // Reset form
+                this.reset();
+                
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                // Scroll to success message
+                successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Remove success message after 10 seconds
+                setTimeout(() => {
+                    successDiv.remove();
+                }, 10000);
+                
+            }, 1500);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    mobileMenu.classList.add('hidden');
+                    
+                    // Scroll to target
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Card hover effects enhancement
+        document.querySelectorAll('.contact-card, .leadership-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Accessibility improvements
+        document.addEventListener('keydown', function(e) {
+            // Close mobile menu on Escape key
+            if (e.key === 'Escape') {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // Phone number formatting
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                if (value.startsWith('254')) {
+                    value = '+254' + value.substring(3);
+                } else if (value.startsWith('0')) {
+                    value = '+254' + value.substring(1);
+                } else if (value.startsWith('7')) {
+                    value = '+254' + value;
+                }
+                
+                // Format with spaces
+                if (value.length > 3) {
+                    value = value.replace(/(\+254)(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4');
+                }
+                
+                e.target.value = value.substring(0, 15); // Limit length
+            });
+        }
+
+        // Focus trap for mobile menu
+        function trapFocus(element) {
+            const focusableElements = element.querySelectorAll(
+                'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstFocusable = focusableElements[0];
+            const lastFocusable = focusableElements[focusableElements.length - 1];
+
+            element.addEventListener('keydown', function(e) {
+                if (e.key !== 'Tab') return;
+
+                if (e.shiftKey) {
+                    if (document.activeElement === firstFocusable) {
+                        lastFocusable.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastFocusable) {
+                        firstFocusable.focus();
+                        e.preventDefault();
+                    }
+                }
+            });
+        }
+
+        // Initialize focus trap for mobile menu when it's opened
+        const mobileMenu = document.getElementById('mobileMenu');
+        trapFocus(mobileMenu);
+
+        // Page load animation
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+            
+            // Add fade-in animation to main content
+            const mainContent = document.getElementById('main-content');
+            mainContent.style.opacity = '0';
+            mainContent.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                mainContent.style.opacity = '1';
+            }, 100);
+        });
+
+        // Add keyboard navigation for contact cards
+        document.querySelectorAll('.contact-card, .leadership-card').forEach(card => {
+            card.setAttribute('tabindex', '0');
+            
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const link = this.querySelector('a');
+                    if (link) {
+                        link.click();
+                    }
+                }
+            });
+        });
+
+        // Copy phone number functionality
+        const phoneNumbers = document.querySelectorAll('a[href^="tel:"]');
+        phoneNumbers.forEach(phoneLink => {
+            phoneLink.addEventListener('click', function(e) {
+                // Only add copy functionality for desktop
+                if (window.innerWidth > 768) {
+                    e.preventDefault();
+                    const phoneNumber = this.getAttribute('href').replace('tel:', '');
+                    
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(phoneNumber).then(() => {
+                        const originalText = this.textContent;
+                        this.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+                        
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                        }, 2000);
+                    });
+                }
+            });
+        });
+
+        // Form validation
+        const contactForm = document.getElementById('contactForm');
+        const formInputs = contactForm.querySelectorAll('input[required], select[required], textarea[required]');
+        
+        formInputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.classList.add('border-red-500');
+                    this.classList.remove('border-gray-300');
+                } else {
+                    this.classList.remove('border-red-500');
+                    this.classList.add('border-gray-300');
+                }
+            });
         });
     </script>
 </body>
