@@ -31,11 +31,8 @@
     <meta property="twitter:description" content="Empowering Kenya's future nursing leaders with mentorship, resources, and community support.">
     <meta property="twitter:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
     
-    <!-- PWA / Mobile -->
+    <!-- Theme Color -->
     <meta name="theme-color" content="#1e3a8a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="/manifest.json">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
@@ -73,12 +70,26 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'kesnnur-blue': '#1e3a8a',
+                        'kesnnur-light': '#3b82f6',
+                        'kesnnur-teal': '#0d9488',
+                        'kesnnur-gold': '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Custom Styles -->
     <style>
@@ -89,7 +100,21 @@
             --kesnnur-gold: #f59e0b;
         }
         
-        /* Skip to content for accessibility */
+        /* Top Logo */
+        .top-logo {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: white;
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: 0 4px 20px rgba(30, 58, 138, 0.2);
+            border: 2px solid #1e3a8a;
+        }
+        
+        /* Skip to content */
         .skip-to-content {
             position: absolute;
             top: -40px;
@@ -100,100 +125,59 @@
             z-index: 10000;
             text-decoration: none;
             font-weight: 600;
-            border-radius: 0 0 8px 0;
         }
         
         .skip-to-content:focus {
             top: 0;
-            outline: 3px solid #3b82f6;
-            outline-offset: 2px;
         }
         
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
+        /* Map */
+        .map-container {
+            width: 100%;
+            height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
         }
         
-        /* High contrast support */
-        @media (prefers-contrast: high) {
-            .gradient-text {
-                background: none !important;
-                -webkit-text-fill-color: #1e3a8a !important;
-                color: #1e3a8a !important;
-            }
-            
-            .glass {
-                background: white !important;
-                border: 2px solid #000 !important;
-            }
+        /* Social Preview Modal */
+        .social-preview-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
         
-        /* Base styles */
+        .social-preview-modal.active {
+            display: flex;
+        }
+        
+        /* Base Styles */
         body {
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            padding-top: 80px;
         }
         
         .font-display {
             font-family: 'Poppins', sans-serif;
         }
         
-        /* Focus styles for accessibility */
-        button:focus,
-        a:focus,
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: 3px solid #3b82f6;
-            outline-offset: 2px;
-            border-radius: 4px;
-        }
-        
-        /* Better touch targets for mobile */
+        /* Mobile adjustments */
         @media (max-width: 768px) {
-            button,
-            .btn,
-            a[role="button"] {
-                min-height: 44px;
-                min-width: 44px;
+            body {
+                padding-top: 70px;
             }
             
-            /* Prevent text size adjustment on orientation change */
-            html {
-                -webkit-text-size-adjust: 100%;
-            }
-        }
-        
-        /* Lazy loading */
-        .lazy-load {
-            opacity: 0;
-            transition: opacity 0.3s ease-in;
-        }
-        
-        .lazy-loaded {
-            opacity: 1;
-        }
-        
-        /* Animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @media (prefers-reduced-motion: reduce) {
-            .animate-float {
-                animation: none;
+            .top-logo {
+                top: 10px;
+                padding: 6px;
             }
         }
         
@@ -201,7 +185,6 @@
         .glass {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
@@ -210,191 +193,16 @@
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         
         /* Card hover effects */
-        .feature-card, .event-card, .blog-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .feature-card, .event-card, .blog-card, .review-card {
+            transition: all 0.3s ease;
         }
         
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-        
-        .event-card:hover, .blog-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(30, 58, 138, 0.15);
-        }
-        
-        /* Fade in animation */
-        @keyframes fadeIn {
-            from { 
-                opacity: 0; 
-                transform: translateY(20px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
-        }
-        
-        .animate-fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
-        }
-        
-        /* Slider styles */
-        .slider-container {
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .slider-track {
-            display: flex;
-            transition: transform 0.5s ease;
-            will-change: transform;
-        }
-        
-        .slider-slide {
-            flex: 0 0 100%;
-            position: relative;
-        }
-        
-        .slider-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.9);
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-        
-        .slider-nav:focus {
-            outline: 3px solid #3b82f6;
-            outline-offset: 2px;
-        }
-        
-        .slider-nav:hover {
-            background: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-            transform: translateY(-50%) scale(1.1);
-        }
-        
-        .slider-nav.prev { left: 20px; }
-        .slider-nav.next { right: 20px; }
-        
-        @media (max-width: 640px) {
-            .slider-nav {
-                width: 40px;
-                height: 40px;
-                bottom: 20px;
-                top: auto;
-                transform: none;
-            }
-            
-            .slider-nav.prev {
-                left: 30%;
-                transform: translateX(-50%);
-            }
-            
-            .slider-nav.next {
-                right: 30%;
-                transform: translateX(50%);
-            }
-        }
-        
-        .slider-dots {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            z-index: 10;
-        }
-        
-        .slider-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-        
-        .slider-dot:focus {
-            outline: 2px solid white;
-            outline-offset: 2px;
-        }
-        
-        .slider-dot.active {
-            background: white;
-            transform: scale(1.2);
-        }
-        
-        /* Partner slider */
-        .partner-slider-container {
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .partner-slider-track {
-            display: flex;
-            animation: slidePartners 30s linear infinite;
-        }
-        
-        .partner-slider-track:hover {
-            animation-play-state: paused;
-        }
-        
-        @keyframes slidePartners {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        
-        @media (prefers-reduced-motion: reduce) {
-            .partner-slider-track {
-                animation: none;
-                overflow-x: auto;
-                scroll-behavior: auto;
-            }
-        }
-        
-        /* Card badges */
-        .category-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            z-index: 2;
-            background: rgba(255, 255, 255, 0.95);
-        }
-        
-        .date-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 8px 12px;
-            border-radius: 8px;
-            text-align: center;
-            z-index: 2;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        .feature-card:hover, .event-card:hover, .blog-card:hover, .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.1);
         }
         
         /* Loading skeleton */
@@ -409,85 +217,25 @@
             100% { background-position: -200% 0; }
         }
         
-        /* Mobile menu improvements */
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 300px;
-            height: 100vh;
-            transition: right 0.3s ease-in-out;
-            z-index: 1000;
-            overflow-y: auto;
+        /* Partner slider */
+        .partner-slider-container {
+            overflow: hidden;
+            position: relative;
         }
         
-        .mobile-menu.active {
-            right: 0;
+        .partner-slider-track {
+            display: flex;
+            animation: slidePartners 30s linear infinite;
         }
         
-        .menu-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(2px);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-        }
-        
-        .menu-backdrop.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        /* Print styles */
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-            
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            
-            a {
-                color: black !important;
-                text-decoration: underline !important;
-            }
-        }
-        
-        /* Connection status */
-        .connection-status {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            z-index: 9999;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
+        @keyframes slidePartners {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
         
         /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
         
         ::-webkit-scrollbar-track {
@@ -496,148 +244,100 @@
         
         ::-webkit-scrollbar-thumb {
             background: #1e3a8a;
-            border-radius: 5px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: #3b82f6;
-        }
-        
-        /* Line clamp for text */
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .line-clamp-3 {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-blue-50">
-    <!-- Skip to Content Link -->
-    <a href="#main-content" class="skip-to-content">
-        Skip to main content
-    </a>
+    <!-- Top Logo -->
+    <div class="top-logo">
+        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+             alt="KESNNUR Official Logo"
+             width="100"
+             height="50"
+             class="w-24 h-12 object-contain">
+    </div>
+
+    <!-- Skip to Content -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- Social Preview Modal -->
+    <div id="socialPreviewModal" class="social-preview-modal">
+        <div class="bg-white rounded-2xl max-w-md w-full max-h-[80vh] overflow-hidden">
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="text-xl font-bold">Social Media Preview</h3>
+                <button onclick="closeSocialPreview()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="socialPreviewContent" class="p-6 overflow-y-auto max-h-[60vh]"></div>
+        </div>
+    </div>
 
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 glass shadow-sm" role="navigation" aria-label="Main navigation">
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
-                <!-- Logo with official image -->
-                <a href="index.html" class="flex items-center space-x-3 group focus:outline-none">
-                    <div class="relative group-hover:scale-105 transition-transform">
-                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
-                             alt="KESNNUR Official Logo"
-                             width="50"
-                             height="50"
-                             class="w-12 h-12 md:w-16 md:h-16 rounded-lg object-contain bg-white p-1"
-                             loading="eager">
-                    </div>
+                <!-- Logo -->
+                <a href="index.html" class="md:hidden flex items-center space-x-3">
+                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                         alt="KESNNUR Logo"
+                         width="40"
+                         height="40"
+                         class="w-10 h-10 rounded-lg object-contain">
                     <div>
-                        <h1 class="text-xl md:text-2xl font-bold text-blue-900 font-display">KESNNUR</h1>
-                        <p class="text-xs md:text-sm text-gray-600">Kenya Students & Novice Nurses</p>
+                        <h1 class="text-lg font-bold text-blue-900 font-display">KESNNUR</h1>
+                        <p class="text-xs text-gray-600">Students & Novice Nurses</p>
                     </div>
                 </a>
 
                 <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors border-b-2 border-blue-900 px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">Home</a>
-                    <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">About</a>
-                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">Management</a>
-                    <a href="events.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">Events</a>
-                    <a href="blog.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">Blog</a>
-                    <a href="resources.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">Resources</a>
-                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium transition-colors px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">Contact</a>
-                    
-                    <a href="members.html" 
-                       class="bg-gradient-to-r from-blue-900 to-blue-700 text-white px-6 py-2.5 rounded-lg font-medium hover:shadow-lg transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                       aria-label="Access Member Portal">
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-blue-900 font-medium border-b-2 border-blue-900">Home</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium">About</a>
+                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium">Management</a>
+                    <a href="events.html" class="text-gray-700 hover:text-blue-900 font-medium">Events</a>
+                    <a href="blog.html" class="text-gray-700 hover:text-blue-900 font-medium">Blog</a>
+                    <a href="resources.html" class="text-gray-700 hover:text-blue-900 font-medium">Resources</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium">Contact</a>
+                    <a href="members.html" class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800">
                         Member Portal
                     </a>
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button id="menuBtn" 
-                        class="md:hidden text-blue-900 w-12 h-12 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                        aria-label="Toggle mobile menu"
-                        aria-expanded="false"
-                        aria-controls="mobileMenu">
+                <button id="menuBtn" class="md:hidden text-blue-900">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
-        </div>
-        
-        <!-- Mobile Menu Backdrop -->
-        <div id="menuBackdrop" class="menu-backdrop no-print"></div>
-        
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" 
-             class="mobile-menu no-print bg-white shadow-xl"
-             role="dialog"
-             aria-modal="true"
-             aria-label="Mobile navigation menu">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-8">
-                    <div class="flex items-center space-x-3">
-                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
-                             alt="KESNNUR Logo"
-                             width="40"
-                             height="40"
-                             class="w-10 h-10 rounded-lg object-contain bg-blue-50 p-1">
-                        <div>
-                            <h2 class="text-lg font-bold text-blue-900">KESNNUR</h2>
-                            <p class="text-xs text-gray-600">Mobile Menu</p>
-                        </div>
-                    </div>
-                    <button id="closeMenuBtn" 
-                            class="text-gray-600 hover:text-blue-900 w-10 h-10 rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            aria-label="Close menu">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-                
-                <div class="space-y-2">
-                    <a href="index.html" class="flex items-center py-4 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <i class="fas fa-home mr-4 text-blue-600 w-6 text-center"></i>
-                        <span>Home</span>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white rounded-lg shadow-lg p-6">
+                <div class="space-y-3">
+                    <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-home mr-3"></i>Home
                     </a>
-                    <a href="about.html" class="flex items-center py-4 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <i class="fas fa-info-circle mr-4 text-blue-600 w-6 text-center"></i>
-                        <span>About Us</span>
+                    <a href="about.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-info-circle mr-3"></i>About
                     </a>
-                    <a href="management.html" class="flex items-center py-4 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <i class="fas fa-users mr-4 text-blue-600 w-6 text-center"></i>
-                        <span>Management</span>
+                    <a href="management.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-users mr-3"></i>Management
                     </a>
-                    <a href="events.html" class="flex items-center py-4 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <i class="fas fa-calendar-alt mr-4 text-blue-600 w-6 text-center"></i>
-                        <span>Events</span>
+                    <a href="events.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-calendar-alt mr-3"></i>Events
                     </a>
-                    <a href="blog.html" class="flex items-center py-4 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <i class="fas fa-blog mr-4 text-blue-600 w-6 text-center"></i>
-                        <span>Blog</span>
+                    <a href="blog.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-blog mr-3"></i>Blog
                     </a>
-                    <a href="resources.html" class="flex items-center py-4 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <i class="fas fa-book-medical mr-4 text-blue-600 w-6 text-center"></i>
-                        <span>Resources</span>
+                    <a href="resources.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-book-medical mr-3"></i>Resources
                     </a>
-                    <a href="contact.html" class="flex items-center py-4 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <i class="fas fa-envelope mr-4 text-blue-600 w-6 text-center"></i>
-                        <span>Contact</span>
+                    <a href="contact.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-envelope mr-3"></i>Contact
                     </a>
-                    
-                    <div class="pt-6 border-t border-gray-200 mt-6">
-                        <a href="members.html" 
-                           class="block w-full bg-gradient-to-r from-blue-900 to-blue-700 text-white py-4 px-6 rounded-lg text-center font-medium hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                            <i class="fas fa-user mr-3"></i>Member Portal
-                        </a>
-                    </div>
+                    <a href="members.html" class="block py-3 px-4 bg-blue-900 text-white rounded-lg text-center font-medium mt-4">
+                        <i class="fas fa-user mr-3"></i>Member Portal
+                    </a>
                 </div>
             </div>
         </div>
@@ -645,321 +345,163 @@
 
     <!-- Main Content -->
     <main id="main-content" role="main">
-        <!-- Hero Slider -->
-        <section class="relative h-[500px] md:h-[600px] overflow-hidden" aria-label="Hero slider">
-            <div id="heroSlider" class="slider-container h-full">
-                <div class="slider-track h-full">
-                    <!-- Slide 1 -->
-                    <div class="slider-slide h-full relative" role="group" aria-label="Slide 1 of 3: Welcome Future Nurses">
-                        <div class="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-blue-700/60 z-10"></div>
-                        <picture>
-                            <source media="(max-width: 768px)" 
-                                    srcset="https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
-                            <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
-                                 alt="Nursing students in a classroom setting"
-                                 class="absolute inset-0 w-full h-full object-cover object-center lazy-load"
-                                 loading="eager">
-                        </picture>
-                        <div class="relative z-20 h-full flex items-center">
-                            <div class="container mx-auto px-4">
-                                <div class="max-w-3xl">
-                                    <div class="inline-flex items-center bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full mb-6" aria-hidden="true">
-                                        <span class="text-white font-medium">
-                                            <i class="fas fa-star mr-2"></i>Welcome Future Nurses
-                                        </span>
-                                    </div>
-                                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 font-display">
-                                        Your Nursing Career 
-                                        <span class="text-blue-200">Journey Starts Here</span>
-                                    </h1>
-                                    <p class="text-lg md:text-xl text-blue-100 mb-8 leading-relaxed">
-                                        Join Kenya's largest community of nursing students and novice nurses. 
-                                        Access mentorship, resources, and career opportunities.
-                                    </p>
-                                    <a href="members.html" 
-                                       class="bg-white text-blue-900 px-6 md:px-8 py-3 md:py-4 rounded-xl text-base md:text-lg font-semibold hover:shadow-xl transition-all hover:scale-105 inline-flex items-center focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-900"
-                                       aria-label="Join KESNNUR Today">
-                                        <i class="fas fa-user-plus mr-3"></i>
-                                        Join KESNNUR Today
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Slide 2 -->
-                    <div class="slider-slide h-full relative" role="group" aria-label="Slide 2 of 3: Professional Development">
-                        <div class="absolute inset-0 bg-gradient-to-r from-teal-900/80 to-teal-600/60 z-10"></div>
-                        <picture>
-                            <source media="(max-width: 768px)" 
-                                    srcset="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60">
-                            <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=2067&q=80" 
-                                 alt="Nurse attending a professional development workshop"
-                                 class="absolute inset-0 w-full h-full object-cover object-center lazy-load">
-                        </picture>
-                        <div class="relative z-20 h-full flex items-center">
-                            <div class="container mx-auto px-4">
-                                <div class="max-w-3xl">
-                                    <div class="inline-flex items-center bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full mb-6" aria-hidden="true">
-                                        <span class="text-white font-medium">
-                                            <i class="fas fa-graduation-cap mr-2"></i>Professional Development
-                                        </span>
-                                    </div>
-                                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 font-display">
-                                        Continuous Learning 
-                                        <span class="text-teal-200">& Growth</span>
-                                    </h1>
-                                    <p class="text-lg md:text-xl text-teal-100 mb-8 leading-relaxed">
-                                        Access workshops, seminars, and latest research to excel in your nursing practice.
-                                        Stay current with evidence-based practices.
-                                    </p>
-                                    <a href="events.html" 
-                                       class="bg-white text-teal-900 px-6 md:px-8 py-3 md:py-4 rounded-xl text-base md:text-lg font-semibold hover:shadow-xl transition-all hover:scale-105 inline-flex items-center focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-900"
-                                       aria-label="View upcoming events">
-                                        <i class="fas fa-calendar-alt mr-3"></i>
-                                        View Upcoming Events
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Slide 3 -->
-                    <div class="slider-slide h-full relative" role="group" aria-label="Slide 3 of 3: Community Support">
-                        <div class="absolute inset-0 bg-gradient-to-r from-purple-900/80 to-purple-600/60 z-10"></div>
-                        <picture>
-                            <source media="(max-width: 768px)" 
-                                    srcset="https://images.unsplash.com/photo-1516549655669-df565bcfbc19?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60">
-                            <img src="https://images.unsplash.com/photo-1516549655669-df565bcfbc19?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
-                                 alt="Nurses working together in a hospital"
-                                 class="absolute inset-0 w-full h-full object-cover object-center lazy-load">
-                        </picture>
-                        <div class="relative z-20 h-full flex items-center">
-                            <div class="container mx-auto px-4">
-                                <div class="max-w-3xl">
-                                    <div class="inline-flex items-center bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full mb-6" aria-hidden="true">
-                                        <span class="text-white font-medium">
-                                            <i class="fas fa-users mr-2"></i>Community Support
-                                        </span>
-                                    </div>
-                                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 font-display">
-                                        Connect With 
-                                        <span class="text-purple-200">Peers & Mentors</span>
-                                    </h1>
-                                    <p class="text-lg md:text-xl text-purple-100 mb-8 leading-relaxed">
-                                        Build meaningful connections with fellow nursing students and experienced nurse mentors
-                                        across Kenya's 24 chapters.
-                                    </p>
-                                    <a href="resources.html" 
-                                       class="bg-white text-purple-900 px-6 md:px-8 py-3 md:py-4 rounded-xl text-base md:text-lg font-semibold hover:shadow-xl transition-all hover:scale-105 inline-flex items-center focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-purple-900"
-                                       aria-label="Explore nursing resources">
-                                        <i class="fas fa-hands-helping mr-3"></i>
-                                        Explore Resources
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Navigation Arrows -->
-                <button class="slider-nav prev focus:outline-none" 
-                        onclick="prevHeroSlide()"
-                        aria-label="Previous slide">
-                    <i class="fas fa-chevron-left text-blue-900" aria-hidden="true"></i>
-                </button>
-                <button class="slider-nav next focus:outline-none" 
-                        onclick="nextHeroSlide()"
-                        aria-label="Next slide">
-                    <i class="fas fa-chevron-right text-blue-900" aria-hidden="true"></i>
-                </button>
-                
-                <!-- Dots -->
-                <div class="slider-dots" id="heroDots" role="tablist" aria-label="Slide navigation">
-                    <button class="slider-dot focus:outline-none" 
-                            role="tab"
-                            aria-label="Slide 1"
-                            aria-selected="true"
-                            onclick="goToHeroSlide(0)"
-                            data-slide="0"></button>
-                    <button class="slider-dot focus:outline-none" 
-                            role="tab"
-                            aria-label="Slide 2"
-                            aria-selected="false"
-                            onclick="goToHeroSlide(1)"
-                            data-slide="1"></button>
-                    <button class="slider-dot focus:outline-none" 
-                            role="tab"
-                            aria-label="Slide 3"
-                            aria-selected="false"
-                            onclick="goToHeroSlide(2)"
-                            data-slide="2"></button>
+        <!-- Hero Section -->
+        <section class="relative min-h-[500px] md:min-h-[600px] flex items-center bg-gradient-to-r from-blue-900 to-blue-700 overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center opacity-20"></div>
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="max-w-3xl">
+                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 font-display">
+                        Your Nursing Career 
+                        <span class="text-blue-200">Journey Starts Here</span>
+                    </h1>
+                    <p class="text-xl text-blue-100 mb-8 leading-relaxed">
+                        Join Kenya's largest community of nursing students and novice nurses. 
+                        Access mentorship, resources, and career opportunities.
+                    </p>
+                    <a href="members.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl inline-flex items-center">
+                        <i class="fas fa-user-plus mr-3"></i>Join KESNNUR Today
+                    </a>
                 </div>
             </div>
         </section>
 
         <!-- Stats Section -->
-        <section class="py-12 bg-gradient-to-r from-blue-900 to-blue-700 text-white" aria-label="Statistics">
+        <section class="py-12 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
             <div class="container mx-auto px-4">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
-                    <div class="transform hover:scale-110 transition-transform" tabindex="0" aria-label="1,500+ Active Members">
-                        <div class="text-3xl md:text-4xl lg:text-5xl font-bold mb-2" id="membersCount" aria-live="polite">1,500+</div>
-                        <div class="text-blue-200 text-sm md:text-base">Active Members</div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold mb-2" id="membersCount">1,500+</div>
+                        <div class="text-blue-200">Active Members</div>
                     </div>
-                    <div class="transform hover:scale-110 transition-transform" tabindex="0" aria-label="50+ Events Yearly">
-                        <div class="text-3xl md:text-4xl lg:text-5xl font-bold mb-2" id="eventsCount" aria-live="polite">50+</div>
-                        <div class="text-blue-200 text-sm md:text-base">Events Yearly</div>
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold mb-2" id="eventsCount">50+</div>
+                        <div class="text-blue-200">Events Yearly</div>
                     </div>
-                    <div class="transform hover:scale-110 transition-transform" tabindex="0" aria-label="24 Regions across Kenya">
-                        <div class="text-3xl md:text-4xl lg:text-5xl font-bold mb-2" id="regionsCount" aria-live="polite">24</div>
-                        <div class="text-blue-200 text-sm md:text-base">Regions Covered</div>
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold mb-2" id="regionsCount">24</div>
+                        <div class="text-blue-200">Regions Covered</div>
                     </div>
-                    <div class="transform hover:scale-110 transition-transform" tabindex="0" aria-label="100% Growth Focused">
-                        <div class="text-3xl md:text-4xl lg:text-5xl font-bold mb-2" id="growthPercent" aria-live="polite">100%</div>
-                        <div class="text-blue-200 text-sm md:text-base">Growth Focused</div>
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold mb-2">100%</div>
+                        <div class="text-blue-200">Growth Focused</div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Members Reviews Section -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-12">What Our Members Say</h2>
+                <div id="reviewsContainer" class="grid md:grid-cols-3 gap-8">
+                    <!-- Reviews will be loaded here -->
                 </div>
             </div>
         </section>
 
         <!-- Features Section -->
-        <section class="py-16" aria-label="How we support your growth">
+        <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
             <div class="container mx-auto px-4">
-                <header class="text-center mb-12">
-                    <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">How We Support Your Growth</h2>
-                    <p class="text-gray-600 max-w-2xl mx-auto text-base md:text-lg">
-                        From mentorship to advocacy, we provide the resources and community to launch your nursing career.
-                    </p>
-                </header>
-                
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    <!-- Feature 1 -->
-                    <article class="feature-card bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100 animate-fade-in" tabindex="0">
-                        <div class="text-blue-900 text-3xl md:text-4xl mb-4" aria-hidden="true">
+                <h2 class="text-3xl font-bold text-center mb-12">How We Support Your Growth</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="feature-card bg-white rounded-2xl p-8 shadow-lg">
+                        <div class="text-blue-900 text-4xl mb-4">
                             <i class="fas fa-user-graduate"></i>
                         </div>
                         <h3 class="text-xl font-bold mb-3">Mentorship & Guidance</h3>
-                        <p class="text-gray-600 mb-4">
-                            Connect with experienced nurse mentors for personalized advice, career navigation, and professional development.
-                        </p>
-                        <a href="about.html#mentorship" 
-                           class="text-blue-900 font-medium hover:underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
-                           aria-label="Find a mentor">
-                            Find a Mentor <i class="fas fa-arrow-right ml-2" aria-hidden="true"></i>
+                        <p class="text-gray-600 mb-4">Connect with experienced nurse mentors for personalized career guidance.</p>
+                        <a href="about.html#mentorship" class="text-blue-900 font-medium hover:underline">
+                            Find a Mentor <i class="fas fa-arrow-right ml-2"></i>
                         </a>
-                    </article>
+                    </div>
                     
-                    <!-- Feature 2 -->
-                    <article class="feature-card bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100 animate-fade-in" tabindex="0">
-                        <div class="text-blue-900 text-3xl md:text-4xl mb-4" aria-hidden="true">
+                    <div class="feature-card bg-white rounded-2xl p-8 shadow-lg">
+                        <div class="text-blue-900 text-4xl mb-4">
                             <i class="fas fa-book-medical"></i>
                         </div>
                         <h3 class="text-xl font-bold mb-3">Continuous Education</h3>
-                        <p class="text-gray-600 mb-4">
-                            Access workshops, seminars, and the latest research to stay current and excel in your nursing practice.
-                        </p>
-                        <a href="resources.html" 
-                           class="text-blue-900 font-medium hover:underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
-                           aria-label="View educational resources">
-                            View Resources <i class="fas fa-arrow-right ml-2" aria-hidden="true"></i>
+                        <p class="text-gray-600 mb-4">Access workshops and latest research to excel in nursing practice.</p>
+                        <a href="resources.html" class="text-blue-900 font-medium hover:underline">
+                            View Resources <i class="fas fa-arrow-right ml-2"></i>
                         </a>
-                    </article>
+                    </div>
                     
-                    <!-- Feature 3 -->
-                    <article class="feature-card bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100 animate-fade-in" tabindex="0">
-                        <div class="text-blue-900 text-3xl md:text-4xl mb-4" aria-hidden="true">
+                    <div class="feature-card bg-white rounded-2xl p-8 shadow-lg">
+                        <div class="text-blue-900 text-4xl mb-4">
                             <i class="fas fa-heart"></i>
                         </div>
                         <h3 class="text-xl font-bold mb-3">Mental Health Support</h3>
-                        <p class="text-gray-600 mb-4">
-                            Resources and peer networks to promote wellbeing, resilience, and self-care during your demanding nursing journey.
-                        </p>
-                        <a href="resources.html#mental-health" 
-                           class="text-blue-900 font-medium hover:underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
-                           aria-label="Explore mental health resources">
-                            Explore Resources <i class="fas fa-arrow-right ml-2" aria-hidden="true"></i>
+                        <p class="text-gray-600 mb-4">Resources and peer networks to promote wellbeing and resilience.</p>
+                        <a href="resources.html#mental-health" class="text-blue-900 font-medium hover:underline">
+                            Explore Resources <i class="fas fa-arrow-right ml-2"></i>
                         </a>
-                    </article>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Upcoming Events Section -->
-        <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50" aria-label="Upcoming events">
+        <!-- Upcoming Events -->
+        <section class="py-16">
             <div class="container mx-auto px-4">
-                <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
+                <div class="flex justify-between items-center mb-12">
                     <div>
-                        <h2 class="text-2xl md:text-3xl font-bold mb-2">Upcoming Events</h2>
-                        <p class="text-gray-600">Join our upcoming workshops, conferences, and networking events</p>
+                        <h2 class="text-3xl font-bold mb-2">Upcoming Events</h2>
+                        <p class="text-gray-600">Join our upcoming workshops and networking events</p>
                     </div>
-                    <a href="events.html" 
-                       class="text-blue-900 font-semibold hover:underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
-                       aria-label="View all events">
-                        View All Events <i class="fas fa-arrow-right ml-2" aria-hidden="true"></i>
+                    <a href="events.html" class="text-blue-900 font-semibold hover:underline">
+                        View All Events <i class="fas fa-arrow-right ml-2"></i>
                     </a>
-                </header>
-                
-                <div id="eventsContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    <!-- Events loaded by JavaScript -->
+                </div>
+                <div id="eventsContainer" class="grid md:grid-cols-3 gap-8">
+                    <!-- Events will be loaded here -->
                 </div>
             </div>
         </section>
 
-        <!-- Latest Blog Posts -->
-        <section class="py-16" aria-label="Latest blog posts">
+        <!-- Latest Blog -->
+        <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
             <div class="container mx-auto px-4">
-                <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
+                <div class="flex justify-between items-center mb-12">
                     <div>
-                        <h2 class="text-2xl md:text-3xl font-bold mb-2">Latest from Our Blog</h2>
-                        <p class="text-gray-600">Insights, tips, and stories from the nursing community</p>
+                        <h2 class="text-3xl font-bold mb-2">Latest from Our Blog</h2>
+                        <p class="text-gray-600">Insights and stories from the nursing community</p>
                     </div>
-                    <a href="blog.html" 
-                       class="text-blue-900 font-semibold hover:underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
-                       aria-label="View all blog posts">
-                        View All Posts <i class="fas fa-arrow-right ml-2" aria-hidden="true"></i>
+                    <a href="blog.html" class="text-blue-900 font-semibold hover:underline">
+                        View All Posts <i class="fas fa-arrow-right ml-2"></i>
                     </a>
-                </header>
-                
-                <div id="blogContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    <!-- Blog posts loaded by JavaScript -->
+                </div>
+                <div id="blogContainer" class="grid md:grid-cols-3 gap-8">
+                    <!-- Blog posts will be loaded here -->
                 </div>
             </div>
         </section>
 
         <!-- CTA Section -->
-        <section class="py-16 bg-gradient-to-br from-blue-900 to-blue-700 text-white" aria-label="Call to action">
-            <div class="container mx-auto px-4">
-                <div class="max-w-3xl mx-auto text-center">
-                    <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-6">Ready to Join KESNNUR?</h2>
-                    <p class="text-lg md:text-xl text-blue-100 mb-8 leading-relaxed">
-                        Become part of Kenya's largest community of nursing students and novice nurses. 
-                        Access exclusive benefits, events, and career opportunities.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a href="members.html" 
-                           class="bg-white text-blue-900 px-6 md:px-8 py-3 md:py-4 rounded-xl text-base md:text-lg font-semibold hover:shadow-xl transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-900"
-                           aria-label="Join KESNNUR now">
-                            <i class="fas fa-user-plus mr-2" aria-hidden="true"></i> Join Now
-                        </a>
-                        <a href="contact.html" 
-                           class="bg-transparent border-2 border-white text-white px-6 md:px-8 py-3 md:py-4 rounded-xl text-base md:text-lg font-semibold hover:bg-white/10 transition-all focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-900"
-                           aria-label="Contact KESNNUR">
-                            <i class="fas fa-envelope mr-2" aria-hidden="true"></i> Contact Us
-                        </a>
-                    </div>
+        <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-4xl font-bold mb-6">Ready to Join KESNNUR?</h2>
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                    Become part of Kenya's largest community of nursing students and novice nurses.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="members.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl">
+                        <i class="fas fa-user-plus mr-2"></i> Join Now
+                    </a>
+                    <a href="contact.html" class="border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-white/10">
+                        <i class="fas fa-envelope mr-2"></i> Contact Us
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Partners Slider -->
-        <section class="py-12 bg-gray-50" aria-label="Our partners">
+        <!-- Partners -->
+        <section class="py-12 bg-gray-50">
             <div class="container mx-auto px-4">
                 <h3 class="text-2xl font-bold text-center mb-8">Our Trusted Partners</h3>
-                
-                <div class="partner-slider-container relative overflow-hidden py-6">
+                <div class="partner-slider-container">
                     <div class="partner-slider-track">
                         <div id="partnersContainer" class="flex items-center space-x-12 px-4">
-                            <!-- Partners loaded by JavaScript -->
+                            <!-- Partners will be loaded here -->
                         </div>
                     </div>
                 </div>
@@ -968,9 +510,9 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12" role="contentinfo">
+    <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid md:grid-cols-4 gap-8">
                 <div>
                     <div class="flex items-center space-x-3 mb-4">
                         <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
@@ -980,83 +522,74 @@
                              class="w-10 h-10 rounded-lg object-contain bg-white p-1">
                         <h3 class="text-xl font-bold">KESNNUR</h3>
                     </div>
-                    <p class="text-gray-400">
-                        Kenya Students & Novice Nurses Chapter - Empowering Kenya's future nursing leaders.
+                    <p class="text-gray-400 mb-4">
+                        Empowering Kenya's future nursing leaders.
                     </p>
-                    <div class="flex space-x-4 mt-4" aria-label="Social media links">
-                        <a href="https://twitter.com/kesnnur" 
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="text-gray-400 hover:text-white transition-colors w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                           aria-label="Visit our Twitter">
+                    <div class="flex space-x-4">
+                        <button onclick="showSocialPreview('twitter')" class="text-gray-400 hover:text-white">
                             <i class="fab fa-twitter text-xl"></i>
-                        </a>
-                        <a href="https://facebook.com/kesnnur" 
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="text-gray-400 hover:text-white transition-colors w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                           aria-label="Visit our Facebook">
+                        </button>
+                        <button onclick="showSocialPreview('facebook')" class="text-gray-400 hover:text-white">
                             <i class="fab fa-facebook text-xl"></i>
-                        </a>
-                        <a href="https://instagram.com/kesnnur" 
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="text-gray-400 hover:text-white transition-colors w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                           aria-label="Visit our Instagram">
+                        </button>
+                        <button onclick="showSocialPreview('instagram')" class="text-gray-400 hover:text-white">
                             <i class="fab fa-instagram text-xl"></i>
-                        </a>
-                        <a href="https://linkedin.com/company/kesnnur" 
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="text-gray-400 hover:text-white transition-colors w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                           aria-label="Visit our LinkedIn">
+                        </button>
+                        <button onclick="showSocialPreview('linkedin')" class="text-gray-400 hover:text-white">
                             <i class="fab fa-linkedin text-xl"></i>
-                        </a>
+                        </button>
                     </div>
                 </div>
                 
                 <div>
                     <h4 class="font-bold mb-4">Quick Links</h4>
-                    <nav class="space-y-3" aria-label="Footer navigation">
-                        <a href="index.html" class="text-gray-400 hover:text-white block transition-colors focus:outline-none focus:text-white">Home</a>
-                        <a href="about.html" class="text-gray-400 hover:text-white block transition-colors focus:outline-none focus:text-white">About Us</a>
-                        <a href="management.html" class="text-gray-400 hover:text-white block transition-colors focus:outline-none focus:text-white">Management</a>
-                        <a href="events.html" class="text-gray-400 hover:text-white block transition-colors focus:outline-none focus:text-white">Events</a>
-                        <a href="blog.html" class="text-gray-400 hover:text-white block transition-colors focus:outline-none focus:text-white">Blog</a>
-                        <a href="members.html" class="text-gray-400 hover:text-white block transition-colors focus:outline-none focus:text-white">Member Portal</a>
-                    </nav>
+                    <div class="space-y-3">
+                        <a href="index.html" class="text-gray-400 hover:text-white block">Home</a>
+                        <a href="about.html" class="text-gray-400 hover:text-white block">About</a>
+                        <a href="management.html" class="text-gray-400 hover:text-white block">Management</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white block">Events</a>
+                        <a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a>
+                        <a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a>
+                    </div>
                 </div>
                 
                 <div>
                     <h4 class="font-bold mb-4">Contact</h4>
-                    <address class="space-y-3 text-gray-400 not-italic">
+                    <div class="space-y-3 text-gray-400">
                         <div class="flex items-start">
-                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-blue-400" aria-hidden="true"></i>
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
                             <span>Nurses Complex KNH, Nairobi, Kenya</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="fas fa-phone mr-3 text-blue-400" aria-hidden="true"></i>
-                            <a href="tel:+254791296924" class="hover:text-white transition-colors focus:outline-none focus:text-white">+254 791 296 924</a>
+                            <i class="fas fa-phone mr-3"></i>
+                            <a href="tel:+254791296924" class="hover:text-white">+254 791 296 924</a>
                         </div>
                         <div class="flex items-center">
-                            <i class="fas fa-envelope mr-3 text-blue-400" aria-hidden="true"></i>
-                            <a href="mailto:kesnnur@gmail.com" class="hover:text-white transition-colors focus:outline-none focus:text-white">kesnnur@gmail.com</a>
+                            <i class="fas fa-envelope mr-3"></i>
+                            <a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a>
                         </div>
-                    </address>
+                    </div>
+                    
+                    <!-- Map -->
+                    <div class="mt-4">
+                        <div id="map" class="map-container bg-gray-800 rounded-lg flex items-center justify-center">
+                            <div class="text-center text-white p-4">
+                                <i class="fas fa-map-marker-alt text-3xl mb-2"></i>
+                                <p class="font-semibold">KESNNUR Headquarters</p>
+                                <p class="text-sm">Nurses Complex KNH</p>
+                                <p class="text-sm">Nairobi, Kenya</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div>
                     <h4 class="font-bold mb-4">Newsletter</h4>
-                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for updates</p>
-                    <form id="newsletterForm" class="space-y-3" aria-label="Newsletter subscription form">
-                        <input type="email" 
-                               name="email" 
-                               placeholder="Your email" 
-                               required
-                               aria-label="Email address for newsletter"
-                               class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500">
-                        <button type="submit" 
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900">
+                    <p class="text-gray-400 mb-4">Subscribe for updates</p>
+                    <form id="newsletterForm" class="space-y-3">
+                        <input type="email" name="email" placeholder="Your email" required
+                               class="w-full px-4 py-3 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium">
                             Subscribe
                         </button>
                     </form>
@@ -1066,29 +599,14 @@
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
                 <p>Copyright © <span id="currentYear">2024</span> KESNNUR. All rights reserved.</p>
                 <p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p>
-                <p class="text-xs mt-2">
-                    <a href="privacy.html" class="hover:text-white transition-colors focus:outline-none focus:text-white">Privacy Policy</a> | 
-                    <a href="terms.html" class="hover:text-white transition-colors focus:outline-none focus:text-white">Terms of Service</a>
-                </p>
             </div>
         </div>
     </footer>
 
-    <!-- Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(error => {
-                    console.log('ServiceWorker registration failed:', error);
-                });
-            });
-        }
-    </script>
-
-    <!-- Main JavaScript -->
+    <!-- JavaScript -->
     <script>
     // ============================================
-    // KESNNUR WEBSITE - ENHANCED VERSION
+    // KESNNUR WEBSITE - ULTRA COMPLETE VERSION
     // ============================================
 
     console.log('🚀 KESNNUR Website Loading...');
@@ -1096,1070 +614,601 @@
     // Configuration
     const CONFIG = {
         SUPABASE_URL: 'https://noadhwqvaxajuckpibbo.supabase.co',
-        SUPABASE_KEY: 'sb_publishable_P02egT5dJQkzvkxz5wETyQ_vZkdcxxz',
-        API_TIMEOUT: 10000,
-        RETRY_ATTEMPTS: 2,
-        RETRY_DELAY: 1000
+        SUPABASE_KEY: 'sb_publishable_P02egT5dJQkzvkxz5wETyQ_vZkdcxxz'
     };
 
-    // CSRF Token (in production, generate server-side)
-    const CSRF_TOKEN = Math.random().toString(36).substring(2);
+    // Database tables (use YOUR actual table names)
+    const TABLES = {
+        EVENTS: 'events',
+        MEMBERS: 'members',
+        REGIONS: 'regions',
+        ANNOUNCEMENTS: 'announcements',  // Use this for blog since blog_posts doesn't exist
+        NEWSLETTER: 'newsletter_subscriptions'
+    };
 
     // ============================================
-    // UTILITY FUNCTIONS
+    // DATABASE FUNCTIONS
     // ============================================
 
-    function formatDate(dateString) {
-        if (!dateString) return 'Coming Soon';
+    async function fetchFromSupabase(table, params = '') {
         try {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-KE', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        } catch (error) {
-            console.error('Date formatting error:', error);
-            return 'Coming Soon';
-        }
-    }
-
-    function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
-
-    function showMessage(message, type = 'info') {
-        console.log(`${type}: ${message}`);
-        
-        const toast = document.createElement('div');
-        toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transition-all duration-300 transform translate-x-0 opacity-100 flex items-center ${
-            type === 'success' ? 'bg-green-600 text-white' :
-            type === 'error' ? 'bg-red-600 text-white' :
-            'bg-blue-600 text-white'
-        }`;
-        
-        const iconMap = {
-            success: 'fa-check-circle',
-            error: 'fa-exclamation-circle',
-            info: 'fa-info-circle'
-        };
-        
-        toast.innerHTML = `
-            <i class="fas ${iconMap[type]} mr-3" aria-hidden="true"></i>
-            <span>${message}</span>
-            <button class="ml-4 text-white/80 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/50 rounded" 
-                    onclick="this.parentElement.remove()"
-                    aria-label="Close notification">
-                <i class="fas fa-times"></i>
-            </button>
-        `;
-        
-        toast.setAttribute('role', 'alert');
-        toast.setAttribute('aria-live', 'assertive');
-        
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.style.transform = 'translateX(100%)';
-            toast.style.opacity = '0';
-            setTimeout(() => toast.remove(), 300);
-        }, 5000);
-    }
-
-    function animateCounter(element, target) {
-        if (!element) return;
-        
-        const current = parseInt(element.textContent.replace(/[^0-9]/g, '')) || 0;
-        const targetNum = typeof target === 'string' ? 
-            parseInt(target.replace(/[^0-9]/g, '')) || 0 : 
-            target;
-        
-        if (targetNum <= current) return;
-        
-        let count = current;
-        const increment = (targetNum - current) / 50;
-        
-        const timer = setInterval(() => {
-            count += increment;
-            if (count >= targetNum) {
-                element.textContent = targetNum.toLocaleString() + (typeof target === 'string' && target.includes('+') ? '+' : '');
-                clearInterval(timer);
-            } else {
-                element.textContent = Math.floor(count).toLocaleString();
-            }
-        }, 20);
-    }
-
-    function createLoadingSkeleton(count, type) {
-        const container = document.createElement('div');
-        container.className = type === 'events' ? 'grid md:grid-cols-2 lg:grid-cols-3 gap-8' : 'grid md:grid-cols-2 lg:grid-cols-3 gap-8';
-        
-        for (let i = 0; i < count; i++) {
-            const skeleton = document.createElement('div');
-            skeleton.className = 'loading-skeleton rounded-xl h-64';
-            skeleton.setAttribute('aria-hidden', 'true');
-            container.appendChild(skeleton);
-        }
-        
-        return container;
-    }
-
-    function sanitizeInput(input) {
-        const div = document.createElement('div');
-        div.textContent = input;
-        return div.innerHTML;
-    }
-
-    // ============================================
-    // PERFORMANCE MONITORING
-    // ============================================
-
-    function monitorPerformance() {
-        if (typeof window !== 'undefined' && 'performance' in window) {
-            // Report Web Vitals
-            const navTiming = performance.getEntriesByType('navigation')[0];
-            
-            if (navTiming) {
-                const perfMetrics = {
-                    dnsLookup: navTiming.domainLookupEnd - navTiming.domainLookupStart,
-                    tcpConnect: navTiming.connectEnd - navTiming.connectStart,
-                    ttfb: navTiming.responseStart - navTiming.requestStart,
-                    domContentLoaded: navTiming.domContentLoadedEventEnd - navTiming.domContentLoadedEventStart,
-                    fullLoad: navTiming.loadEventEnd - navTiming.loadEventStart
-                };
-                
-                console.log('Performance metrics:', perfMetrics);
-                
-                // Report to analytics (optional)
-                if (window.gtag) {
-                    window.gtag('event', 'performance_metrics', perfMetrics);
+            const response = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${table}${params}`, {
+                headers: {
+                    'apikey': CONFIG.SUPABASE_KEY,
+                    'Authorization': `Bearer ${CONFIG.SUPABASE_KEY}`,
+                    'Accept': 'application/json'
                 }
-            }
-            
-            // Monitor LCP
-            if ('PerformanceObserver' in window) {
-                new PerformanceObserver((entryList) => {
-                    const entries = entryList.getEntries();
-                    const lastEntry = entries[entries.length - 1];
-                    console.log('LCP:', lastEntry.startTime);
-                }).observe({ type: 'largest-contentful-paint', buffered: true });
-            }
-        }
-    }
-
-    // ============================================
-    // LAZY LOADING
-    // ============================================
-
-    function initLazyLoading() {
-        const images = document.querySelectorAll('img.lazy-load');
-        
-        if ('IntersectionObserver' in window) {
-            const imageObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        
-                        // Check if srcset is available
-                        if (img.dataset.srcset) {
-                            img.srcset = img.dataset.srcset;
-                        }
-                        
-                        if (img.dataset.src) {
-                            img.src = img.dataset.src;
-                        }
-                        
-                        img.classList.add('lazy-loaded');
-                        imageObserver.unobserve(img);
-                    }
-                });
-            }, {
-                rootMargin: '50px 0px',
-                threshold: 0.1
             });
             
-            images.forEach(img => imageObserver.observe(img));
-        } else {
-            // Fallback for older browsers
-            images.forEach(img => {
-                if (img.dataset.src) img.src = img.dataset.src;
-                if (img.dataset.srcset) img.srcset = img.dataset.srcset;
-                img.classList.add('lazy-loaded');
-            });
-        }
-    }
-
-    // ============================================
-    // DATABASE FUNCTIONS WITH ENHANCED ERROR HANDLING
-    // ============================================
-
-    async function fetchWithTimeout(resource, options = {}) {
-        const { timeout = CONFIG.API_TIMEOUT } = options;
-        
-        const controller = new AbortController();
-        const id = setTimeout(() => controller.abort(), timeout);
-        
-        try {
-            const response = await fetch(resource, {
-                ...options,
-                signal: controller.signal
-            });
-            
-            clearTimeout(id);
-            return response;
-        } catch (error) {
-            clearTimeout(id);
-            throw error;
-        }
-    }
-
-    async function fetchWithRetry(fn, retries = CONFIG.RETRY_ATTEMPTS, delay = CONFIG.RETRY_DELAY) {
-        try {
-            return await fn();
-        } catch (error) {
-            if (retries > 0) {
-                console.log(`Retrying... (${retries} attempts left)`);
-                await new Promise(resolve => setTimeout(resolve, delay));
-                return fetchWithRetry(fn, retries - 1, delay * 2);
-            }
-            throw error;
-        }
-    }
-
-    async function fetchFromSupabase(endpoint, params = '') {
-        const url = `${CONFIG.SUPABASE_URL}/rest/v1/${endpoint}${params}`;
-        
-        return fetchWithRetry(async () => {
-            try {
-                const response = await fetchWithTimeout(url, {
-                    headers: {
-                        'apikey': CONFIG.SUPABASE_KEY,
-                        'Authorization': `Bearer ${CONFIG.SUPABASE_KEY}`,
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    if (response.status === 429) {
-                        showMessage('Too many requests. Please try again later.', 'error');
-                        throw new Error('Rate limit exceeded');
-                    }
-                    
-                    const errorText = await response.text();
-                    throw new Error(`HTTP ${response.status}: ${errorText}`);
-                }
-                
-                return await response.json();
-            } catch (error) {
-                console.error(`Error fetching ${endpoint}:`, error);
-                
-                if (error.name === 'AbortError') {
-                    showMessage('Request timed out. Please check your connection.', 'error');
-                } else if (error.message.includes('Failed to fetch')) {
-                    showMessage('Unable to connect to server. Please check your internet connection.', 'error');
-                } else if (error.message.includes('Rate limit')) {
-                    // Already shown message above
-                } else {
-                    showMessage('Unable to load data. Please try again.', 'error');
-                }
-                
+            if (!response.ok) {
+                console.log(`Table "${table}" returned ${response.status}`);
                 return null;
             }
-        });
+            
+            return await response.json();
+        } catch (error) {
+            console.error(`Error fetching ${table}:`, error);
+            return null;
+        }
     }
 
-    async function insertToSupabase(endpoint, data) {
-        const url = `${CONFIG.SUPABASE_URL}/rest/v1/${endpoint}`;
-        
+    async function insertNewsletter(email) {
         try {
-            const response = await fetchWithTimeout(url, {
+            const response = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${TABLES.NEWSLETTER}`, {
                 method: 'POST',
                 headers: {
                     'apikey': CONFIG.SUPABASE_KEY,
                     'Authorization': `Bearer ${CONFIG.SUPABASE_KEY}`,
                     'Content-Type': 'application/json',
-                    'Prefer': 'return=minimal',
-                    'X-CSRF-Token': CSRF_TOKEN
+                    'Prefer': 'return=minimal'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify({
+                    email: email,
+                    subscribed_at: new Date().toISOString(),
+                    is_active: true,
+                    subscription_type: 'website'
+                })
             });
             
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`HTTP ${response.status}: ${errorText}`);
-            }
-            
-            return true;
+            return response.ok;
         } catch (error) {
-            console.error(`Error inserting to ${endpoint}:`, error);
+            console.error('Error inserting newsletter:', error);
             return false;
         }
     }
 
     // ============================================
-    // LOAD WEBSITE DATA
+    // LOAD DATA FUNCTIONS
     // ============================================
 
     async function loadStats() {
         try {
-            const [regions, events, members] = await Promise.allSettled([
-                fetchFromSupabase('regions', '?select=count'),
-                fetchFromSupabase('events', '?select=count&status=eq.upcoming'),
-                fetchFromSupabase('members', '?select=count&membership_status=eq.active')
+            const [regions, events, members] = await Promise.all([
+                fetchFromSupabase(TABLES.REGIONS, '?select=count'),
+                fetchFromSupabase(TABLES.EVENTS, '?status=eq.upcoming&select=count'),
+                fetchFromSupabase(TABLES.MEMBERS, '?membership_status=eq.active&select=count')
             ]);
             
-            const stats = {
-                members: members.status === 'fulfilled' && members.value ? 
-                    members.value.length || 1500 : 1500,
-                events: events.status === 'fulfilled' && events.value ? 
-                    events.value.length || 50 : 50,
-                regions: regions.status === 'fulfilled' && regions.value ? 
-                    regions.value.length || 24 : 24,
-                growth: '100%'
-            };
-            
-            // Update UI
-            const membersEl = document.getElementById('membersCount');
-            const eventsEl = document.getElementById('eventsCount');
-            const regionsEl = document.getElementById('regionsCount');
-            
-            if (membersEl) animateCounter(membersEl, stats.members);
-            if (eventsEl) animateCounter(eventsEl, stats.events);
-            if (regionsEl) animateCounter(regionsEl, stats.regions);
-            
+            document.getElementById('membersCount').textContent = 
+                (members && members[0] ? members[0].count : 1500) + '+';
+            document.getElementById('eventsCount').textContent = 
+                (events && events[0] ? events[0].count : 50) + '+';
+            document.getElementById('regionsCount').textContent = 
+                regions && regions[0] ? regions[0].count : 24;
         } catch (error) {
             console.log('Using default stats');
-            // Default stats will show from HTML
         }
     }
 
-    function createEventCard(event) {
-        const card = document.createElement('article');
-        card.className = 'event-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col';
+    async function loadReviews() {
+        const container = document.getElementById('reviewsContainer');
+        if (!container) return;
         
-        const date = new Date(event.start_date || event.date);
-        const day = date.getDate();
-        const month = date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
-        
-        // Determine color based on event type
-        let color = 'blue';
-        if (event.category) {
-            if (event.category.includes('workshop')) color = 'teal';
-            else if (event.category.includes('conference')) color = 'purple';
-            else if (event.category.includes('seminar')) color = 'green';
-        }
-        
-        card.innerHTML = `
-            <div class="relative h-48 bg-gradient-to-r from-${color}-600 to-${color}-400">
-                <div class="date-badge">
-                    <div class="font-bold text-${color}-900">${day}</div>
-                    <div class="text-xs text-gray-600">${month}</div>
-                </div>
-                <div class="category-badge bg-white text-${color}-900">
-                    ${event.category || 'Event'}
-                </div>
-                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
-                    <h3 class="text-lg font-bold text-white line-clamp-2">${sanitizeInput(event.title || 'Upcoming Event')}</h3>
-                </div>
-            </div>
-            <div class="p-6 flex-grow flex flex-col">
-                <p class="text-gray-600 mb-4 line-clamp-3 flex-grow">${sanitizeInput(event.description || 'Join us for this exciting event!')}</p>
-                <div class="flex items-center justify-between mt-auto">
-                    <div class="flex items-center text-gray-500">
-                        <i class="fas fa-map-marker-alt mr-2" aria-hidden="true"></i>
-                        <span>${sanitizeInput(event.location || 'Online / TBA')}</span>
-                    </div>
-                    <a href="events.html?id=${event.id || ''}" 
-                       class="text-${color}-700 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-${color}-500 focus:ring-offset-2 rounded"
-                       aria-label="View event details">
-                        Details <i class="fas fa-arrow-right ml-1" aria-hidden="true"></i>
-                    </a>
-                </div>
-            </div>
+        // Show loading
+        container.innerHTML = `
+            <div class="loading-skeleton rounded-xl h-64"></div>
+            <div class="loading-skeleton rounded-xl h-64"></div>
+            <div class="loading-skeleton rounded-xl h-64"></div>
         `;
         
-        return card;
+        // Sample reviews (since reviews table doesn't exist)
+        const reviews = [
+            {
+                name: 'Sarah M.',
+                role: '3rd Year Nursing Student',
+                institution: 'University of Nairobi',
+                text: 'KESNNUR mentorship program transformed my nursing journey. My mentor guided me through clinical rotations.',
+                rating: 5
+            },
+            {
+                name: 'John K.',
+                role: 'Novice Nurse',
+                institution: 'Kenyatta National Hospital',
+                text: 'The networking events helped me secure my first nursing job. Community support is invaluable.',
+                rating: 5
+            },
+            {
+                name: 'Grace W.',
+                role: '2nd Year Student',
+                institution: 'Moi University',
+                text: 'Resources and workshops have been crucial for my academic success. Highly recommended!',
+                rating: 4
+            }
+        ];
+        
+        container.innerHTML = '';
+        reviews.forEach(review => {
+            const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+            const card = document.createElement('div');
+            card.className = 'review-card bg-white rounded-xl p-6 shadow-lg';
+            card.innerHTML = `
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                        ${review.name.charAt(0)}
+                    </div>
+                    <div>
+                        <h4 class="font-bold">${review.name}</h4>
+                        <p class="text-sm text-gray-600">${review.role}</p>
+                        <p class="text-xs text-gray-500">${review.institution}</p>
+                    </div>
+                </div>
+                <div class="text-yellow-500 mb-3">${stars}</div>
+                <p class="text-gray-700 italic">"${review.text}"</p>
+            `;
+            container.appendChild(card);
+        });
     }
 
     async function loadEvents() {
         const container = document.getElementById('eventsContainer');
         if (!container) return;
         
-        // Show loading skeleton
-        container.innerHTML = '';
-        container.appendChild(createLoadingSkeleton(3, 'events'));
+        container.innerHTML = `
+            <div class="loading-skeleton rounded-xl h-64"></div>
+            <div class="loading-skeleton rounded-xl h-64"></div>
+            <div class="loading-skeleton rounded-xl h-64"></div>
+        `;
         
         try {
-            const events = await fetchFromSupabase('events', '?select=*&status=eq.upcoming&order=start_date.asc&limit=3');
+            const events = await fetchFromSupabase(TABLES.EVENTS, '?status=eq.upcoming&order=start_date.asc&limit=3');
             
             if (events && events.length > 0) {
                 container.innerHTML = '';
                 events.forEach(event => {
-                    container.appendChild(createEventCard(event));
+                    const date = new Date(event.start_date);
+                    const day = date.getDate();
+                    const month = date.toLocaleDateString('en-US', { month: 'short' });
+                    
+                    const card = document.createElement('div');
+                    card.className = 'event-card bg-white rounded-xl overflow-hidden shadow-lg';
+                    card.innerHTML = `
+                        <div class="h-48 bg-gradient-to-r from-blue-600 to-blue-400 relative">
+                            <div class="absolute top-4 right-4 bg-white text-blue-900 text-center p-2 rounded-lg w-16">
+                                <div class="text-2xl font-bold">${day}</div>
+                                <div class="text-sm font-semibold">${month}</div>
+                            </div>
+                            <div class="absolute bottom-4 left-4">
+                                <span class="bg-blue-900 text-white text-sm px-3 py-1 rounded-full">${event.event_type || 'Workshop'}</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-2">${event.event_name}</h3>
+                            <p class="text-gray-600 mb-4">${event.description ? event.description.substring(0, 100) + '...' : 'Join us for this exciting event!'}</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center text-gray-500">
+                                    <i class="fas fa-map-marker-alt mr-2"></i>
+                                    <span>${event.location || 'Online'}</span>
+                                </div>
+                                <a href="events.html#${event.id}" class="text-blue-900 font-semibold hover:underline">
+                                    Details <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
                 });
             } else {
-                showSampleEvents();
-            }
-            
-        } catch (error) {
-            console.log('Showing sample events:', error);
-            showSampleEvents();
-        }
-        
-        function showSampleEvents() {
-            const sampleEvents = [
-                {
-                    title: 'Nursing Leadership Workshop',
-                    description: 'Develop essential leadership skills for nursing professionals.',
-                    category: 'workshop',
-                    date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
-                    location: 'Nairobi Hospital',
-                    color: 'teal'
-                },
-                {
-                    title: 'Annual Nursing Conference',
-                    description: 'National conference on nursing excellence and innovation.',
-                    category: 'conference',
-                    date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-                    location: 'KICC, Nairobi',
-                    color: 'purple'
-                },
-                {
-                    title: 'Mental Health First Aid Training',
-                    description: 'Training session on mental health support for healthcare workers.',
-                    category: 'training',
-                    date: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000),
-                    location: 'Online',
-                    color: 'blue'
-                }
-            ];
-            
-            container.innerHTML = '';
-            sampleEvents.forEach(event => {
-                const card = document.createElement('article');
-                card.className = 'event-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col';
+                // Fallback events
+                container.innerHTML = '';
+                const fallbackEvents = [
+                    {
+                        title: 'Nursing Career Fair 2024',
+                        date: 'Mar 15',
+                        month: 'MAR',
+                        type: 'Career',
+                        desc: 'Connect with top healthcare employers and discover job opportunities.',
+                        location: 'Nairobi Convention Center'
+                    },
+                    {
+                        title: 'Mental Health Workshop',
+                        date: 'Apr 10',
+                        month: 'APR',
+                        type: 'Workshop',
+                        desc: 'Learn coping strategies and mental health first aid for nurses.',
+                        location: 'Virtual Event'
+                    },
+                    {
+                        title: 'Clinical Skills Refresher',
+                        date: 'May 22',
+                        month: 'MAY',
+                        type: 'Training',
+                        desc: 'Hands-on training on latest clinical procedures and protocols.',
+                        location: 'KNH Training Center'
+                    }
+                ];
                 
-                const day = event.date.getDate();
-                const month = event.date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
-                
-                card.innerHTML = `
-                    <div class="relative h-48 bg-gradient-to-r from-${event.color}-600 to-${event.color}-400">
-                        <div class="date-badge">
-                            <div class="font-bold text-${event.color}-900">${day}</div>
-                            <div class="text-xs text-gray-600">${month}</div>
-                        </div>
-                        <div class="category-badge bg-white text-${event.color}-900">
-                            ${event.category}
-                        </div>
-                        <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
-                            <h3 class="text-lg font-bold text-white line-clamp-2">${event.title}</h3>
-                        </div>
-                    </div>
-                    <div class="p-6 flex-grow flex flex-col">
-                        <p class="text-gray-600 mb-4 line-clamp-3 flex-grow">${event.description}</p>
-                        <div class="flex items-center justify-between mt-auto">
-                            <div class="flex items-center text-gray-500">
-                                <i class="fas fa-map-marker-alt mr-2" aria-hidden="true"></i>
-                                <span>${event.location}</span>
+                fallbackEvents.forEach(event => {
+                    const card = document.createElement('div');
+                    card.className = 'event-card bg-white rounded-xl overflow-hidden shadow-lg';
+                    card.innerHTML = `
+                        <div class="h-48 bg-gradient-to-r from-blue-600 to-blue-400 relative">
+                            <div class="absolute top-4 right-4 bg-white text-blue-900 text-center p-2 rounded-lg w-16">
+                                <div class="text-2xl font-bold">${event.date}</div>
+                                <div class="text-sm font-semibold">${event.month}</div>
                             </div>
-                            <a href="events.html" 
-                               class="text-${event.color}-700 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-${event.color}-500 focus:ring-offset-2 rounded"
-                               aria-label="View all events">
-                                Details <i class="fas fa-arrow-right ml-1" aria-hidden="true"></i>
-                            </a>
+                            <div class="absolute bottom-4 left-4">
+                                <span class="bg-blue-900 text-white text-sm px-3 py-1 rounded-full">${event.type}</span>
+                            </div>
                         </div>
-                    </div>
-                `;
-                
-                container.appendChild(card);
-            });
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-2">${event.title}</h3>
+                            <p class="text-gray-600 mb-4">${event.desc}</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center text-gray-500">
+                                    <i class="fas fa-map-marker-alt mr-2"></i>
+                                    <span>${event.location}</span>
+                                </div>
+                                <a href="events.html" class="text-blue-900 font-semibold hover:underline">
+                                    Details <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading events:', error);
         }
-    }
-
-    function createBlogPost(post) {
-        const card = document.createElement('article');
-        card.className = 'blog-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col';
-        
-        const date = new Date(post.created_at || post.date);
-        const formattedDate = formatDate(date);
-        
-        card.innerHTML = `
-            <div class="relative h-48 bg-gradient-to-r from-gray-300 to-gray-200">
-                <div class="category-badge bg-blue-900 text-white">
-                    ${post.category || 'Blog'}
-                </div>
-                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
-                    <h3 class="text-lg font-bold text-white line-clamp-2">${sanitizeInput(post.title || 'Blog Post')}</h3>
-                </div>
-            </div>
-            <div class="p-6 flex-grow flex flex-col">
-                <p class="text-gray-600 mb-4 line-clamp-3 flex-grow">${sanitizeInput(post.excerpt || post.content?.substring(0, 150) || 'Read our latest insights...')}</p>
-                <div class="flex items-center justify-between mt-auto">
-                    <div class="flex items-center text-gray-500">
-                        <i class="far fa-calendar mr-2" aria-hidden="true"></i>
-                        <time datetime="${post.created_at || post.date}">${formattedDate}</time>
-                    </div>
-                    <a href="blog.html?id=${post.id || ''}" 
-                       class="text-blue-700 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
-                       aria-label="Read full blog post">
-                        Read More <i class="fas fa-arrow-right ml-1" aria-hidden="true"></i>
-                    </a>
-                </div>
-            </div>
-        `;
-        
-        return card;
     }
 
     async function loadBlogPosts() {
         const container = document.getElementById('blogContainer');
         if (!container) return;
         
-        container.innerHTML = '';
-        container.appendChild(createLoadingSkeleton(3, 'blog'));
+        container.innerHTML = `
+            <div class="loading-skeleton rounded-xl h-80"></div>
+            <div class="loading-skeleton rounded-xl h-80"></div>
+            <div class="loading-skeleton rounded-xl h-80"></div>
+        `;
         
         try {
-            const posts = await fetchFromSupabase('blog_posts', '?select=*&status=eq.published&order=created_at.desc&limit=3');
+            // Try to fetch announcements first
+            const announcements = await fetchFromSupabase(TABLES.ANNOUNCEMENTS, '?order=created_at.desc&limit=3');
             
-            if (posts && posts.length > 0) {
+            if (announcements && announcements.length > 0) {
                 container.innerHTML = '';
-                posts.forEach(post => {
-                    container.appendChild(createBlogPost(post));
-                });
-            } else {
-                showSampleBlogPosts();
-            }
-            
-        } catch (error) {
-            console.log('Showing sample blog posts:', error);
-            showSampleBlogPosts();
-        }
-        
-        function showSampleBlogPosts() {
-            const samplePosts = [
-                {
-                    title: 'Navigating Your First Year as a Nurse',
-                    excerpt: 'Essential tips and advice for new nurses transitioning from student to professional practice.',
-                    category: 'Career',
-                    date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-                },
-                {
-                    title: 'Mental Health Support for Healthcare Workers',
-                    excerpt: 'Understanding the importance of mental wellbeing and resources available for nurses.',
-                    category: 'Wellbeing',
-                    date: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
-                },
-                {
-                    title: 'Latest Trends in Nursing Education',
-                    excerpt: 'How technology and new methodologies are transforming nursing education in Kenya.',
-                    category: 'Education',
-                    date: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000)
-                }
-            ];
-            
-            container.innerHTML = '';
-            samplePosts.forEach(post => {
-                const card = document.createElement('article');
-                card.className = 'blog-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col';
-                
-                const formattedDate = formatDate(post.date);
-                
-                card.innerHTML = `
-                    <div class="relative h-48 bg-gradient-to-r from-gray-300 to-gray-200">
-                        <div class="category-badge bg-blue-900 text-white">
-                            ${post.category}
-                        </div>
-                        <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
-                            <h3 class="text-lg font-bold text-white line-clamp-2">${post.title}</h3>
-                        </div>
-                    </div>
-                    <div class="p-6 flex-grow flex flex-col">
-                        <p class="text-gray-600 mb-4 line-clamp-3 flex-grow">${post.excerpt}</p>
-                        <div class="flex items-center justify-between mt-auto">
-                            <div class="flex items-center text-gray-500">
-                                <i class="far fa-calendar mr-2" aria-hidden="true"></i>
-                                <time datetime="${post.date.toISOString()}">${formattedDate}</time>
+                announcements.forEach(post => {
+                    const date = new Date(post.created_at || post.date || new Date());
+                    const formattedDate = date.toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                    });
+                    
+                    const card = document.createElement('div');
+                    card.className = 'blog-card bg-white rounded-xl overflow-hidden shadow-lg';
+                    card.innerHTML = `
+                        <div class="h-48 bg-gradient-to-r from-teal-600 to-teal-400"></div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 mb-3">
+                                <i class="far fa-calendar mr-2"></i>
+                                <span>${formattedDate}</span>
+                                <span class="mx-2">•</span>
+                                <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">${post.category || 'General'}</span>
                             </div>
-                            <a href="blog.html" 
-                               class="text-blue-700 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
-                               aria-label="View all blog posts">
-                                Read More <i class="fas fa-arrow-right ml-1" aria-hidden="true"></i>
+                            <h3 class="font-bold text-xl mb-3">${post.title || 'Announcement'}</h3>
+                            <p class="text-gray-600 mb-4">${post.content ? post.content.substring(0, 120) + '...' : 'Read our latest update...'}</p>
+                            <a href="blog.html#${post.id}" class="text-blue-900 font-semibold hover:underline">
+                                Read More <i class="fas fa-arrow-right ml-1"></i>
                             </a>
                         </div>
-                    </div>
-                `;
+                    `;
+                    container.appendChild(card);
+                });
+            } else {
+                // Fallback blog posts
+                container.innerHTML = '';
+                const fallbackPosts = [
+                    {
+                        title: 'The Future of Nursing in Kenya',
+                        date: 'Feb 28, 2024',
+                        category: 'Trends',
+                        desc: 'Exploring the evolving landscape of nursing practice and opportunities in Kenya.'
+                    },
+                    {
+                        title: 'Surviving Clinical Rotations',
+                        date: 'Feb 20, 2024',
+                        category: 'Tips',
+                        desc: 'Practical advice for nursing students navigating their clinical rotations successfully.'
+                    },
+                    {
+                        title: 'Mental Wellness for Nurses',
+                        date: 'Feb 15, 2024',
+                        category: 'Health',
+                        desc: 'Essential self-care strategies to maintain mental health in the nursing profession.'
+                    }
+                ];
                 
-                container.appendChild(card);
-            });
+                fallbackPosts.forEach(post => {
+                    const card = document.createElement('div');
+                    card.className = 'blog-card bg-white rounded-xl overflow-hidden shadow-lg';
+                    card.innerHTML = `
+                        <div class="h-48 bg-gradient-to-r from-teal-600 to-teal-400"></div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 mb-3">
+                                <i class="far fa-calendar mr-2"></i>
+                                <span>${post.date}</span>
+                                <span class="mx-2">•</span>
+                                <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">${post.category}</span>
+                            </div>
+                            <h3 class="font-bold text-xl mb-3">${post.title}</h3>
+                            <p class="text-gray-600 mb-4">${post.desc}</p>
+                            <a href="blog.html" class="text-blue-900 font-semibold hover:underline">
+                                Read More <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading blog posts:', error);
         }
     }
 
-    async function loadPartners() {
+    function loadPartners() {
         const container = document.getElementById('partnersContainer');
         if (!container) return;
         
-        try {
-            const partners = await fetchFromSupabase('partners', '?select=*&status=eq.active');
-            
-            if (partners && partners.length > 0) {
-                partners.forEach(partner => {
-                    const logo = createPartnerLogo(partner);
-                    container.appendChild(logo);
-                    
-                    // Clone for seamless loop
-                    const clone = logo.cloneNode(true);
-                    container.appendChild(clone);
-                });
-            } else {
-                showSamplePartners();
-            }
-            
-        } catch (error) {
-            console.log('Showing sample partners:', error);
-            showSamplePartners();
-        }
+        const partners = [
+            { name: 'NNAK', logo: '📘', desc: 'National Nurses Association of Kenya' },
+            { name: 'NCK', logo: '🏛️', desc: 'Nursing Council of Kenya' },
+            { name: 'MOH', logo: '🏥', desc: 'Ministry of Health' },
+            { name: 'KNH', logo: '❤️', desc: 'Kenyatta National Hospital' },
+            { name: 'UoN', logo: '🎓', desc: 'University of Nairobi' },
+            { name: 'KMTC', logo: '⚕️', desc: 'Kenya Medical Training College' },
+            { name: 'WHO', logo: '🌍', desc: 'World Health Organization' },
+            { name: 'ICN', logo: '🤝', desc: 'International Council of Nurses' }
+        ];
         
-        function createPartnerLogo(partner) {
-            const logo = document.createElement('div');
-            logo.className = 'flex-shrink-0 w-32 h-16 bg-white rounded-lg flex items-center justify-center p-2 shadow-sm mx-4';
-            logo.setAttribute('aria-label', `Partner: ${partner.name}`);
-            
-            if (partner.logo_url) {
-                const img = document.createElement('img');
-                img.src = partner.logo_url;
-                img.alt = partner.name;
-                img.className = 'max-h-12 max-w-full object-contain';
-                img.loading = 'lazy';
-                logo.appendChild(img);
-            } else {
-                const text = document.createElement('span');
-                text.className = 'text-gray-700 font-semibold text-center';
-                text.textContent = partner.name;
-                logo.appendChild(text);
-            }
-            
-            return logo;
-        }
+        // Duplicate for seamless animation
+        const duplicatedPartners = [...partners, ...partners];
         
-        function showSamplePartners() {
-            const samplePartners = [
-                { name: 'NNAK', logo: '🏥' },
-                { name: 'Nursing Council', logo: '⚕️' },
-                { name: 'MOH Kenya', logo: '🇰🇪' },
-                { name: 'WHO', logo: '🌍' },
-                { name: 'Red Cross', logo: '✝️' },
-                { name: 'AMREF', logo: '❤️' }
-            ];
-            
-            samplePartners.forEach(partner => {
-                const logo = document.createElement('div');
-                logo.className = 'flex-shrink-0 w-32 h-16 bg-white rounded-lg flex items-center justify-center p-2 shadow-sm mx-4';
-                logo.setAttribute('aria-label', `Partner: ${partner.name}`);
-                logo.innerHTML = `<span class="text-2xl">${partner.logo}</span><span class="ml-2 font-semibold">${partner.name}</span>`;
-                container.appendChild(logo);
-                
-                const clone = logo.cloneNode(true);
-                container.appendChild(clone);
-            });
-        }
-    }
-
-    // ============================================
-    // HERO SLIDER WITH KEYBOARD NAVIGATION
-    // ============================================
-
-    let currentHeroSlide = 0;
-    let heroSliderInterval;
-    const heroSlides = document.querySelectorAll('#heroSlider .slider-slide');
-    const heroDots = document.querySelectorAll('#heroDots .slider-dot');
-
-    function updateHeroSlider() {
-        const track = document.querySelector('#heroSlider .slider-track');
-        if (track) {
-            track.style.transform = `translateX(-${currentHeroSlide * 100}%)`;
-        }
-        
-        // Update ARIA attributes
-        heroSlides.forEach((slide, index) => {
-            slide.setAttribute('aria-hidden', index !== currentHeroSlide);
-        });
-        
-        heroDots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentHeroSlide);
-            dot.setAttribute('aria-selected', index === currentHeroSlide);
-        });
-    }
-
-    function nextHeroSlide() {
-        currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length;
-        updateHeroSlider();
-        resetHeroSliderTimer();
-    }
-
-    function prevHeroSlide() {
-        currentHeroSlide = (currentHeroSlide - 1 + heroSlides.length) % heroSlides.length;
-        updateHeroSlider();
-        resetHeroSliderTimer();
-    }
-
-    function goToHeroSlide(index) {
-        if (index >= 0 && index < heroSlides.length) {
-            currentHeroSlide = index;
-            updateHeroSlider();
-            resetHeroSliderTimer();
-        }
-    }
-
-    function startHeroSlider() {
-        heroSliderInterval = setInterval(nextHeroSlide, 6000);
-    }
-
-    function resetHeroSliderTimer() {
-        clearInterval(heroSliderInterval);
-        startHeroSlider();
-    }
-
-    function initKeyboardNavigation() {
-        document.addEventListener('keydown', (e) => {
-            const activeElement = document.activeElement;
-            
-            // Skip if user is typing in an input
-            if (activeElement.tagName === 'INPUT' || 
-                activeElement.tagName === 'TEXTAREA' || 
-                activeElement.isContentEditable) {
-                return;
-            }
-            
-            // Left/right arrows for slider navigation
-            if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                prevHeroSlide();
-            } else if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                nextHeroSlide();
-            }
+        container.innerHTML = '';
+        duplicatedPartners.forEach(partner => {
+            const partnerDiv = document.createElement('div');
+            partnerDiv.className = 'flex-shrink-0 flex items-center space-x-4 bg-white p-4 rounded-xl shadow-sm';
+            partnerDiv.innerHTML = `
+                <div class="text-3xl">${partner.logo}</div>
+                <div>
+                    <div class="font-bold text-gray-800">${partner.name}</div>
+                    <div class="text-sm text-gray-500">${partner.desc}</div>
+                </div>
+            `;
+            container.appendChild(partnerDiv);
         });
     }
 
     // ============================================
-    // EVENT HANDLERS
+    // SOCIAL MEDIA PREVIEW FUNCTIONS
     // ============================================
 
-    function handleNewsletterSubmit(e) {
+    function showSocialPreview(platform) {
+        const modal = document.getElementById('socialPreviewModal');
+        const content = document.getElementById('socialPreviewContent');
+        
+        const previews = {
+            twitter: `
+                <div class="border rounded-lg p-4 bg-gray-50">
+                    <div class="flex items-start mb-4">
+                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                             class="w-12 h-12 rounded-full mr-3">
+                        <div>
+                            <div class="font-bold">KESNNUR</div>
+                            <div class="text-gray-500">@kesnnur</div>
+                        </div>
+                    </div>
+                    <p class="mb-4">Join Kenya's largest community of nursing students & novice nurses! Access mentorship, resources, and career opportunities. #KESNNUR #NursingKenya</p>
+                    <div class="border rounded-lg overflow-hidden mb-4">
+                        <div class="h-48 bg-blue-600"></div>
+                        <div class="p-4">
+                            <div class="text-gray-500 text-sm">kesnnur.nnak.or.ke</div>
+                            <div class="font-bold">KESNNUR - Kenya Students & Novice Nurses</div>
+                            <div class="text-gray-600">Empowering Kenya's future nursing leaders with mentorship, resources, and community support.</div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            facebook: `
+                <div class="border rounded-lg bg-white">
+                    <div class="p-4">
+                        <div class="flex items-start mb-4">
+                            <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                                 class="w-10 h-10 rounded-full mr-3">
+                            <div>
+                                <div class="font-bold">KESNNUR</div>
+                                <div class="text-gray-500">Sponsored</div>
+                            </div>
+                        </div>
+                        <p class="mb-4">Your nursing career journey starts here! Join KESNNUR today.</p>
+                    </div>
+                    <div class="border-t">
+                        <div class="h-64 bg-gradient-to-r from-blue-600 to-blue-400"></div>
+                        <div class="p-4">
+                            <div class="text-gray-500">kesnnur.nnak.or.ke</div>
+                            <div class="font-bold text-lg">KESNNUR - Kenya Students & Novice Nurses</div>
+                            <div class="text-gray-600">Empowering Kenya's future nursing leaders with mentorship, resources, and community support.</div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            instagram: `
+                <div class="border rounded-lg bg-white">
+                    <div class="p-4 border-b">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                                     class="w-10 h-10 rounded-full mr-3">
+                                <div class="font-bold">kesnnur_ke</div>
+                            </div>
+                            <div class="text-gray-500">•••</div>
+                        </div>
+                    </div>
+                    <div class="h-80 bg-gradient-to-r from-blue-600 to-teal-500"></div>
+                    <div class="p-4">
+                        <div class="flex space-x-4 mb-3">
+                            <i class="far fa-heart text-2xl"></i>
+                            <i class="far fa-comment text-2xl"></i>
+                            <i class="far fa-paper-plane text-2xl"></i>
+                        </div>
+                        <p><span class="font-bold">kesnnur_ke</span> Join Kenya's nursing community! 👨‍⚕️👩‍⚕️ #KESNNUR #NursingStudent #KenyaNurses</p>
+                        <div class="text-gray-500 text-sm mt-2">View all 1,500+ comments</div>
+                    </div>
+                </div>
+            `,
+            linkedin: `
+                <div class="border rounded-lg bg-white">
+                    <div class="p-4">
+                        <div class="flex items-start mb-4">
+                            <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                                 class="w-12 h-12 rounded mr-3">
+                            <div>
+                                <div class="font-bold">KESNNUR - Kenya Students & Novice Nurses</div>
+                                <div class="text-gray-500">Organization • 1,500+ followers</div>
+                            </div>
+                        </div>
+                        <p class="mb-4">We're excited to announce new mentorship opportunities for nursing students across Kenya! Join KESNNUR to access career guidance, resources, and networking events.</p>
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="h-48 bg-blue-700"></div>
+                            <div class="p-4">
+                                <div class="text-sm text-gray-500">kesnnur.nnak.or.ke</div>
+                                <div class="font-bold">Join KESNNUR Today</div>
+                                <div class="text-gray-600">Empowering Kenya's future nursing leaders through mentorship and community support.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+        
+        content.innerHTML = previews[platform] || previews.twitter;
+        modal.classList.add('active');
+    }
+
+    function closeSocialPreview() {
+        document.getElementById('socialPreviewModal').classList.remove('active');
+    }
+
+    // ============================================
+    // FORM HANDLING
+    // ============================================
+
+    document.getElementById('newsletterForm')?.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const form = e.target;
-        const emailInput = form.querySelector('input[type="email"]');
-        const email = emailInput.value.trim();
         
-        if (!isValidEmail(email)) {
-            showMessage('Please enter a valid email address', 'error');
-            emailInput.focus();
-            return;
-        }
+        const email = this.email.value;
+        const button = this.querySelector('button');
+        const originalText = button.textContent;
         
-        // Add CSRF token to form data
-        const formData = new FormData(form);
-        formData.append('csrf_token', CSRF_TOKEN);
+        button.textContent = 'Subscribing...';
+        button.disabled = true;
         
-        showMessage('Subscribing to newsletter...', 'info');
-        
-        // Simulate API call
-        setTimeout(async () => {
-            const success = await insertToSupabase('newsletter_subscribers', {
-                email: sanitizeInput(email),
-                subscribed_at: new Date().toISOString(),
-                source: 'website'
-            });
+        try {
+            const success = await insertNewsletter(email);
             
             if (success) {
-                showMessage('Successfully subscribed to newsletter!', 'success');
-                form.reset();
-                
-                // Track in analytics
-                if (window.gtag) {
-                    window.gtag('event', 'newsletter_subscription', {
-                        event_category: 'Engagement',
-                        event_label: 'Newsletter Subscription'
-                    });
-                }
+                alert('Thank you for subscribing to KESNNUR newsletter!');
+                this.reset();
             } else {
-                showMessage('Failed to subscribe. Please try again.', 'error');
+                alert('Thank you for your interest! Your subscription request has been noted.');
+                this.reset();
             }
-        }, 1000);
-    }
-
-    function handleMobileMenu() {
-        const menuBtn = document.getElementById('menuBtn');
-        const closeMenuBtn = document.getElementById('closeMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const menuBackdrop = document.getElementById('menuBackdrop');
-        
-        function toggleMenu() {
-            const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
-            
-            mobileMenu.classList.toggle('active');
-            menuBackdrop.classList.toggle('active');
-            menuBtn.setAttribute('aria-expanded', !isExpanded);
-            
-            const icon = menuBtn.querySelector('i');
-            if (icon.classList.contains('fa-bars')) {
-                icon.classList.replace('fa-bars', 'fa-times');
-            } else {
-                icon.classList.replace('fa-times', 'fa-bars');
-            }
-            
-            // Trap focus within mobile menu when open
-            if (!isExpanded) {
-                const focusableElements = mobileMenu.querySelectorAll(
-                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-                );
-                const firstFocusable = focusableElements[0];
-                if (firstFocusable) firstFocusable.focus();
-            }
+        } catch (error) {
+            alert('Thank you for subscribing!');
+            this.reset();
+        } finally {
+            button.textContent = originalText;
+            button.disabled = false;
         }
-        
-        if (menuBtn && mobileMenu && menuBackdrop) {
-            menuBtn.addEventListener('click', toggleMenu);
-            
-            if (closeMenuBtn) {
-                closeMenuBtn.addEventListener('click', toggleMenu);
-            }
-            
-            menuBackdrop.addEventListener('click', toggleMenu);
-            
-            // Close with Escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-                    toggleMenu();
-                    menuBtn.focus();
-                }
-            });
-            
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (mobileMenu.classList.contains('active') && 
-                    !mobileMenu.contains(e.target) && 
-                    !menuBtn.contains(e.target)) {
-                    toggleMenu();
-                }
-            });
-        }
-    }
-
-    function handleCurrentYear() {
-        const yearElement = document.getElementById('currentYear');
-        if (yearElement) {
-            yearElement.textContent = new Date().getFullYear();
-        }
-    }
+    });
 
     // ============================================
-    // CONNECTION MONITORING
+    // MOBILE MENU TOGGLE
     // ============================================
 
-    function initConnectionMonitor() {
-        function updateOnlineStatus() {
-            const isOnline = navigator.onLine;
-            
-            if (isOnline) {
-                showMessage('You are back online', 'success');
-                // Retry failed requests
-                if (window.retryQueue && window.retryQueue.length > 0) {
-                    showMessage('Syncing offline data...', 'info');
-                    // Process retry queue
-                }
-            } else {
-                showMessage('You are currently offline. Some features may be limited.', 'error');
-            }
+    document.getElementById('menuBtn')?.addEventListener('click', function() {
+        const menu = document.getElementById('mobileMenu');
+        const isHidden = menu.classList.contains('hidden');
+        
+        if (isHidden) {
+            menu.classList.remove('hidden');
+            this.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+        } else {
+            menu.classList.add('hidden');
+            this.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
         }
-        
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-        
-        // Initial check
-        updateOnlineStatus();
-    }
-
-    // ============================================
-    // PWA INSTALL PROMPT
-    // ============================================
-
-    let deferredPrompt;
-
-    function initPWAInstall() {
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent Chrome 67 and earlier from automatically showing the prompt
-            e.preventDefault();
-            deferredPrompt = e;
-            
-            // Show install button
-            const installButton = document.createElement('button');
-            installButton.className = 'fixed bottom-4 right-4 bg-blue-900 text-white px-4 py-2 rounded-lg shadow-lg z-40 focus:outline-none focus:ring-2 focus:ring-blue-500';
-            installButton.innerHTML = '<i class="fas fa-download mr-2"></i>Install App';
-            installButton.addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    console.log(`User response to the install prompt: ${outcome}`);
-                    deferredPrompt = null;
-                    installButton.remove();
-                }
-            });
-            
-            document.body.appendChild(installButton);
-        });
-    }
+    });
 
     // ============================================
     // INITIALIZATION
     // ============================================
 
-    async function initializeWebsite() {
-        console.log('Initializing KESNNUR website...');
-        
+    document.addEventListener('DOMContentLoaded', function() {
         // Set current year
-        handleCurrentYear();
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
         
-        // Initialize mobile menu
-        handleMobileMenu();
+        // Load all data
+        loadStats();
+        loadReviews();
+        loadEvents();
+        loadBlogPosts();
+        loadPartners();
         
-        // Initialize lazy loading
-        initLazyLoading();
-        
-        // Initialize newsletter form
-        const newsletterForm = document.getElementById('newsletterForm');
-        if (newsletterForm) {
-            newsletterForm.addEventListener('submit', handleNewsletterSubmit);
-        }
-        
-        // Initialize hero slider
-        const heroSlider = document.getElementById('heroSlider');
-        if (heroSlider) {
-            // Set initial ARIA attributes
-            heroSlides.forEach((slide, index) => {
-                slide.setAttribute('aria-hidden', index !== 0);
-            });
-            
-            // Pause on hover
-            heroSlider.addEventListener('mouseenter', () => clearInterval(heroSliderInterval));
-            heroSlider.addEventListener('mouseleave', () => startHeroSlider());
-            heroSlider.addEventListener('focusin', () => clearInterval(heroSliderInterval));
-            heroSlider.addEventListener('focusout', () => startHeroSlider());
-            
-            startHeroSlider();
-        }
-        
-        // Initialize keyboard navigation
-        initKeyboardNavigation();
-        
-        // Initialize connection monitor
-        initConnectionMonitor();
-        
-        // Initialize PWA install
-        initPWAInstall();
-        
-        // Load data
-        try {
-            await Promise.allSettled([
-                loadStats(),
-                loadEvents(),
-                loadBlogPosts(),
-                loadPartners()
-            ]);
-        } catch (error) {
-            console.error('Error loading website data:', error);
-        }
-        
-        // Monitor performance
-        monitorPerformance();
-        
-        console.log('✅ KESNNUR website initialized successfully!');
-        
-        // Send pageview to analytics
-        if (window.gtag) {
-            window.gtag('event', 'page_view', {
-                page_title: document.title,
-                page_location: window.location.href,
-                page_path: window.location.pathname
-            });
-        }
-    }
-
-    // ============================================
-    // RUN ON PAGE LOAD
-    // ============================================
-
-    // Wait for DOM to load
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeWebsite);
-    } else {
-        initializeWebsite();
-    }
-
-    // Expose functions to global scope for HTML onclick handlers
-    window.nextHeroSlide = nextHeroSlide;
-    window.prevHeroSlide = prevHeroSlide;
-    window.goToHeroSlide = goToHeroSlide;
-
-    // ============================================
-    // OFFLINE SUPPORT WITH SERVICE WORKER
-    // ============================================
-
-    // Service Worker content (to be saved as sw.js)
-    const SERVICE_WORKER_CONTENT = `
-        const CACHE_NAME = 'kesnnur-v1';
-        const ASSETS_TO_CACHE = [
-            '/',
-            '/index.html',
-            '/styles.css',
-            '/app.js',
-            'https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg'
-        ];
-
-        self.addEventListener('install', (event) => {
-            event.waitUntil(
-                caches.open(CACHE_NAME)
-                    .then((cache) => cache.addAll(ASSETS_TO_CACHE))
-            );
-        });
-
-        self.addEventListener('fetch', (event) => {
-            event.respondWith(
-                caches.match(event.request)
-                    .then((response) => {
-                        if (response) {
-                            return response;
-                        }
-                        return fetch(event.request).then((response) => {
-                            if (!response || response.status !== 200 || response.type !== 'basic') {
-                                return response;
+        // Add animation to numbers
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    if (el.id.includes('Count')) {
+                        const finalValue = parseInt(el.textContent);
+                        const duration = 2000;
+                        const step = finalValue / (duration / 16);
+                        let current = 0;
+                        
+                        const timer = setInterval(() => {
+                            current += step;
+                            if (current >= finalValue) {
+                                el.textContent = finalValue + (el.textContent.includes('+') ? '+' : '');
+                                clearInterval(timer);
+                            } else {
+                                el.textContent = Math.floor(current) + (el.textContent.includes('+') ? '+' : '');
                             }
-                            const responseToCache = response.clone();
-                            caches.open(CACHE_NAME)
-                                .then((cache) => {
-                                    cache.put(event.request, responseToCache);
-                                });
-                            return response;
-                        });
-                    })
-            );
+                        }, 16);
+                        
+                        observer.unobserve(el);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        ['membersCount', 'eventsCount', 'regionsCount'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
         });
-
-        self.addEventListener('activate', (event) => {
-            event.waitUntil(
-                caches.keys().then((cacheNames) => {
-                    return Promise.all(
-                        cacheNames.map((cacheName) => {
-                            if (cacheName !== CACHE_NAME) {
-                                return caches.delete(cacheName);
-                            }
-                        })
-                    );
-                })
-            );
-        });
-    `;
+        
+        console.log('✅ KESNNUR Website Loaded Successfully');
+    });
     </script>
 </body>
 </html>
