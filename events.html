@@ -1,153 +1,1369 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events - KESNNUR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Events - KESNNUR | Nursing Events & Conferences</title>
+    
+    <!-- Meta Description for SEO -->
+    <meta name="description" content="Discover upcoming nursing events, conferences, workshops, and webinars from KESNNUR - Kenya's nursing community.">
+    
+    <!-- Keywords for SEO -->
+    <meta name="keywords" content="KESNNUR events, nursing conferences Kenya, nursing workshops, healthcare events, nursing webinars, nursing seminars">
+    
+    <!-- Author -->
+    <meta name="author" content="KESNNUR">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://kesnnur.nnak.or.ke/events.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kesnnur.nnak.or.ke/events.html">
+    <meta property="og:title" content="KESNNUR Events | Nursing Conferences & Workshops">
+    <meta property="og:description" content="Join our nursing events, conferences, and workshops for professional development and networking.">
+    <meta property="og:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kesnnur.nnak.or.ke/events.html">
+    <meta property="twitter:title" content="KESNNUR Events | Nursing Conferences & Workshops">
+    <meta property="twitter:description" content="Join our nursing events, conferences, and workshops for professional development and networking.">
+    <meta property="twitter:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    <link rel="apple-touch-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'kesnnur-blue': '#1e3a8a',
+                        'kesnnur-light': '#3b82f6',
+                        'kesnnur-teal': '#0d9488',
+                        'kesnnur-gold': '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .kesnnur-blue { color: #1e3a8a; }
-        .bg-kesnnur-blue { background-color: #1e3a8a; }
-        .event-card { transition: transform 0.3s; }
-        .event-card:hover { transform: translateY(-5px); }
+        :root {
+            --kesnnur-blue: #1e3a8a;
+            --kesnnur-light: #3b82f6;
+            --kesnnur-teal: #0d9488;
+            --kesnnur-gold: #f59e0b;
+        }
+        
+        /* Skip to content */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #1e3a8a;
+            color: white;
+            padding: 12px;
+            z-index: 10000;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .skip-to-content:focus {
+            top: 0;
+        }
+        
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            padding-top: 0;
+        }
+        
+        .font-display {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Glass effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Card hover effects */
+        .event-card, .past-event-card {
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(30, 58, 138, 0.15);
+        }
+        
+        .past-event-card:hover {
+            transform: translateX(5px);
+            background-color: #f8fafc;
+        }
+        
+        /* Calendar styles */
+        .calendar-day {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .calendar-day.event-day {
+            background-color: #1e3a8a;
+            color: white;
+        }
+        
+        .calendar-day:hover:not(.empty) {
+            background-color: #e5e7eb;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a;
+            border-radius: 4px;
+        }
+        
+        /* Event type badges */
+        .event-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .event-badge.conference {
+            background-color: #dbeafe;
+            color: #1e3a8a;
+        }
+        
+        .event-badge.workshop {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .event-badge.webinar {
+            background-color: #f0f9ff;
+            color: #0369a1;
+        }
+        
+        .event-badge.networking {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .event-badge.summit {
+            background-color: #f3e8ff;
+            color: #6b21a8;
+        }
     </style>
 </head>
-<body class="bg-gray-50">
-    <nav class="bg-white shadow">
+<body class="bg-gradient-to-br from-gray-50 to-blue-50">
+    <!-- Skip to Content -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
+                <!-- Logo -->
                 <a href="index.html" class="flex items-center space-x-3">
-                    <div class="bg-kesnnur-blue p-2 rounded-lg">
-                        <i class="fas fa-graduation-cap text-white text-2xl"></i>
-                    </div>
+                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                         alt="KESNNUR Logo"
+                         width="40"
+                         height="40"
+                         class="w-10 h-10 rounded-lg object-contain">
                     <div>
-                        <h1 class="text-2xl font-bold kesnnur-blue">KESNNUR</h1>
-                        <p class="text-sm text-gray-600">Kenya Students & Novice Nurses</p>
+                        <h1 class="text-lg md:text-xl font-bold text-blue-900 font-display">KESNNUR</h1>
+                        <p class="text-xs text-gray-600">Students & Novice Nurses</p>
                     </div>
                 </a>
-                <div class="hidden md:flex space-x-6">
-                    <a href="index.html" class="text-gray-700 hover:kesnnur-blue">Home</a>
-                    <a href="about.html" class="text-gray-700 hover:kesnnur-blue">About</a>
-                    <a href="events.html" class="kesnnur-blue font-bold">Events</a>
-                    <a href="resources.html" class="text-gray-700 hover:kesnnur-blue">Resources</a>
-                    <a href="contact.html" class="text-gray-700 hover:kesnnur-blue">Contact</a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium">Home</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium">About</a>
+                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium">Management</a>
+                    <a href="events.html" class="text-blue-900 font-medium border-b-2 border-blue-900">Events</a>
+                    <a href="blog.html" class="text-gray-700 hover:text-blue-900 font-medium">Blog</a>
+                    <a href="resources.html" class="text-gray-700 hover:text-blue-900 font-medium">Resources</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium">Contact</a>
+                    <a href="members.html" class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800">
+                        Member Portal
+                    </a>
                 </div>
-                <a href="members.html" class="bg-kesnnur-blue text-white px-4 py-2 rounded-lg">Member Portal</a>
+
+                <!-- Mobile Menu Button -->
+                <button id="menuBtn" class="md:hidden text-blue-900">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white rounded-lg shadow-lg p-6">
+                <div class="space-y-3">
+                    <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-home mr-3"></i>Home
+                    </a>
+                    <a href="about.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-info-circle mr-3"></i>About
+                    </a>
+                    <a href="management.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-users mr-3"></i>Management
+                    </a>
+                    <a href="events.html" class="block py-3 px-4 bg-blue-50 text-blue-900 rounded-lg">
+                        <i class="fas fa-calendar-alt mr-3"></i>Events
+                    </a>
+                    <a href="blog.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-blog mr-3"></i>Blog
+                    </a>
+                    <a href="resources.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-book-medical mr-3"></i>Resources
+                    </a>
+                    <a href="contact.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-envelope mr-3"></i>Contact
+                    </a>
+                    <a href="members.html" class="block py-3 px-4 bg-blue-900 text-white rounded-lg text-center font-medium mt-4">
+                        <i class="fas fa-user mr-3"></i>Member Portal
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto px-4 py-12">
-        <h1 class="text-4xl font-bold mb-2 kesnnur-blue text-center">Upcoming Events</h1>
-        <p class="text-gray-600 text-center mb-12">Join our events for networking, learning, and growth</p>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Event 1 -->
-            <div class="event-card bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-4">
-                    <div class="text-sm">CONFERENCE</div>
-                    <h3 class="text-xl font-bold">KESNNUR 2nd Annual Scientific Conference & AGM</h3>
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="relative py-16 bg-gradient-to-r from-blue-900 to-blue-700">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center opacity-10"></div>
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">
+                    KESNNUR Events
+                </h1>
+                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                    Join our upcoming conferences, workshops, webinars, and networking events. Connect, learn, and grow with Kenya's nursing community.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#upcoming-events" class="bg-white text-blue-900 px-8 py-3 rounded-xl font-bold hover:shadow-xl">
+                        <i class="fas fa-calendar-check mr-2"></i>View Upcoming Events
+                    </a>
+                    <a href="#calendar-view" class="border-2 border-white text-white px-8 py-3 rounded-xl font-bold hover:bg-white/10">
+                        <i class="fas fa-calendar-alt mr-2"></i>Calendar View
+                    </a>
                 </div>
-                <div class="p-6">
-                    <div class="flex items-center text-gray-600 mb-4">
-                        <i class="fas fa-calendar-day mr-2"></i>
-                        <span>Coming Soon</span>
+            </div>
+        </section>
+
+        <!-- Calendar Section -->
+        <section id="calendar-view" class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="bg-white rounded-2xl shadow-xl p-8 mb-16">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-8">
+                        <div>
+                            <h2 class="text-2xl font-bold mb-2">Events Calendar</h2>
+                            <p class="text-gray-600">Browse events by month and register for upcoming programs</p>
+                        </div>
+                        <div class="mt-4 md:mt-0">
+                            <div class="flex items-center space-x-4">
+                                <button id="prevMonth" class="p-2 rounded-lg hover:bg-gray-100">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <h3 id="currentMonth" class="text-lg font-semibold text-gray-800">March 2024</h3>
+                                <button id="nextMonth" class="p-2 rounded-lg hover:bg-gray-100">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center text-gray-600 mb-4">
-                        <i class="fas fa-map-marker-alt mr-2"></i>
-                        <span>Nairobi, Kenya</span>
+                    
+                    <div class="overflow-x-auto">
+                        <div id="calendar" class="min-w-full">
+                            <!-- Calendar will be generated by JavaScript -->
+                        </div>
                     </div>
-                    <p class="text-gray-700 mb-6">Join the premier nursing conference featuring research presentations, workshops, and networking.</p>
-                    <button class="w-full bg-kesnnur-blue text-white py-2 rounded-lg hover:bg-blue-800">
-                        Register Interest
+                    
+                    <!-- Calendar Legend -->
+                    <div class="mt-8 pt-8 border-t border-gray-200">
+                        <h4 class="font-medium text-gray-700 mb-4">Event Types:</h4>
+                        <div class="flex flex-wrap gap-3">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-blue-600 mr-2"></div>
+                                <span class="text-sm text-gray-600">Conference</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
+                                <span class="text-sm text-gray-600">Workshop</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-cyan-600 mr-2"></div>
+                                <span class="text-sm text-gray-600">Webinar</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-amber-600 mr-2"></div>
+                                <span class="text-sm text-gray-600">Networking</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-purple-600 mr-2"></div>
+                                <span class="text-sm text-gray-600">Summit</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upcoming Events -->
+        <section id="upcoming-events" class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-12">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-2">Upcoming Events</h2>
+                        <p class="text-gray-600">Register for our upcoming conferences, workshops, and networking events</p>
+                    </div>
+                    <div class="mt-4 md:mt-0">
+                        <div class="relative">
+                            <input type="text" id="eventSearch" placeholder="Search events..." 
+                                   class="pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full md:w-80">
+                            <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Events Grid -->
+                <div id="eventsContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Event 1 -->
+                    <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-blue-900 to-blue-700 relative overflow-hidden">
+                            <div class="absolute top-4 left-4">
+                                <span class="event-badge conference">Conference</span>
+                            </div>
+                            <div class="absolute bottom-4 left-4">
+                                <div class="text-white text-3xl font-bold">15</div>
+                                <div class="text-blue-100 font-semibold">APR 2024</div>
+                            </div>
+                            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center opacity-30"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-4">KESNNUR 2nd Annual Scientific Conference & AGM</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-gray-600">
+                                    <i class="far fa-calendar mr-3 text-blue-900"></i>
+                                    <span>April 15-17, 2024</span>
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <i class="fas fa-map-marker-alt mr-3 text-blue-900"></i>
+                                    <span>Nairobi Convention Center, Kenya</span>
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <i class="far fa-clock mr-3 text-blue-900"></i>
+                                    <span>9:00 AM - 5:00 PM EAT</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mb-6">
+                                Join Kenya's premier nursing conference featuring research presentations, expert workshops, and the Annual General Meeting. Network with nursing leaders and advance your career.
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-blue-900">Members: Free</span>
+                                <button class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors register-btn" 
+                                        data-event="kesnnur-conference-2024">
+                                    Register Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event 2 -->
+                    <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-teal-700 to-teal-500 relative overflow-hidden">
+                            <div class="absolute top-4 left-4">
+                                <span class="event-badge summit">Summit</span>
+                            </div>
+                            <div class="absolute bottom-4 left-4">
+                                <div class="text-white text-3xl font-bold">22</div>
+                                <div class="text-teal-100 font-semibold">MAY 2024</div>
+                            </div>
+                            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center opacity-30"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-4">Kenya Young Nurses Leadership Summit 2024</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-gray-600">
+                                    <i class="far fa-calendar mr-3 text-teal-900"></i>
+                                    <span>May 22-24, 2024</span>
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <i class="fas fa-map-marker-alt mr-3 text-teal-900"></i>
+                                    <span>KICC, Nairobi</span>
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <i class="far fa-clock mr-3 text-teal-900"></i>
+                                    <span>8:30 AM - 4:30 PM EAT</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mb-6">
+                                Developing the next generation of nursing leaders through intensive leadership training, mentorship sessions, and strategic networking opportunities.
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-teal-900">Early Bird: Ksh 5,000</span>
+                                <button class="bg-teal-700 text-white px-6 py-2 rounded-lg font-medium hover:bg-teal-600 transition-colors register-btn" 
+                                        data-event="leadership-summit-2024">
+                                    Register Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event 3 -->
+                    <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-purple-700 to-purple-500 relative overflow-hidden">
+                            <div class="absolute top-4 left-4">
+                                <span class="event-badge webinar">Webinar</span>
+                            </div>
+                            <div class="absolute bottom-4 left-4">
+                                <div class="text-white text-3xl font-bold">10</div>
+                                <div class="text-purple-100 font-semibold">APR 2024</div>
+                            </div>
+                            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center opacity-30"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-4">Virtual Meeting for Nurses & Midwives</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-gray-600">
+                                    <i class="far fa-calendar mr-3 text-purple-900"></i>
+                                    <span>April 10, 2024</span>
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <i class="fas fa-video mr-3 text-purple-900"></i>
+                                    <span>Online - Zoom</span>
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <i class="far fa-clock mr-3 text-purple-900"></i>
+                                    <span>7:00 PM - 8:30 PM EAT</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mb-6">
+                                Monthly virtual meeting focusing on emerging trends in nursing practice, knowledge sharing, and professional networking. Special guest speaker on nursing innovation.
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-purple-900">Free Registration</span>
+                                <button class="bg-purple-700 text-white px-6 py-2 rounded-lg font-medium hover:bg-purple-600 transition-colors register-btn" 
+                                        data-event="virtual-meeting-april">
+                                    Join Meeting
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event 4 -->
+                    <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-green-700 to-green-500 relative overflow-hidden">
+                            <div class="absolute top-4 left-4">
+                                <span class="event-badge workshop">Workshop</span>
+                            </div>
+                            <div class="absolute bottom-4 left-4">
+                                <div class="text-white text-3xl font-bold">5</div>
+                                <div class="text-green-100 font-semibold">JUN 2024</div>
+                            </div>
+                            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080')] bg-cover bg-center opacity-30"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-4">Advanced Clinical Skills Workshop</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-gray-600">
+                                    <i class="far fa-calendar mr-3 text-green-900"></i>
+                                    <span>June 5-6, 2024</span>
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <i class="fas fa-map-marker-alt mr-3 text-green-900"></i>
+                                    <span>KNH Training Center, Nairobi</span>
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <i class="far fa-clock mr-3 text-green-900"></i>
+                                    <span>8:00 AM - 4:00 PM EAT</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mb-6">
+                                Hands-on training workshop covering advanced clinical procedures, emergency response protocols, and the latest evidence-based practices in nursing care.
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-green-900">Members: Ksh 3,000</span>
+                                <button class="bg-green-700 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-600 transition-colors register-btn" 
+                                        data-event="clinical-workshop-june">
+                                    Book Workshop
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event 5 -->
+                    <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-amber-700 to-amber-500 relative overflow-hidden">
+                            <div class="absolute top-4 left-4">
+                                <span class="event-badge networking">Networking</span>
+                            </div>
+                            <div class="absolute bottom-4 left-4">
+                                <div class="text-white text-3xl font-bold">28</div>
+                                <div class="text-amber-100 font-semibold">APR 2024</div>
+                            </div>
+                            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069')] bg-cover bg-center opacity-30"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-4">KESNNUR National Networking Dinner</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-gray-600">
+                                    <i class="far fa-calendar mr-3 text-amber-900"></i>
+                                    <span>April 28, 2024</span>
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <i class="fas fa-map-marker-alt mr-3 text-amber-900"></i>
+                                    <span>Sarova Stanley, Nairobi</span>
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <i class="far fa-clock mr-3 text-amber-900"></i>
+                                    <span>6:30 PM - 10:00 PM EAT</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mb-6">
+                                Annual networking dinner bringing together nursing students, novice nurses, and industry professionals for an evening of connection and celebration.
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-amber-900">Members: Ksh 2,500</span>
+                                <button class="bg-amber-700 text-white px-6 py-2 rounded-lg font-medium hover:bg-amber-600 transition-colors register-btn" 
+                                        data-event="networking-dinner-april">
+                                    Book Tickets
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event 6 -->
+                    <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-cyan-700 to-cyan-500 relative overflow-hidden">
+                            <div class="absolute top-4 left-4">
+                                <span class="event-badge webinar">Webinar Series</span>
+                            </div>
+                            <div class="absolute bottom-4 left-4">
+                                <div class="text-white text-3xl font-bold">12</div>
+                                <div class="text-cyan-100 font-semibold">MAY 2024</div>
+                            </div>
+                            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=2067')] bg-cover bg-center opacity-30"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-4">Mental Health in Nursing Webinar Series</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-gray-600">
+                                    <i class="far fa-calendar mr-3 text-cyan-900"></i>
+                                    <span>May 12, 19, 26 2024</span>
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <i class="fas fa-video mr-3 text-cyan-900"></i>
+                                    <span>Online - Microsoft Teams</span>
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <i class="far fa-clock mr-3 text-cyan-900"></i>
+                                    <span>6:00 PM - 7:30 PM EAT</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mb-6">
+                                Three-part webinar series focusing on mental health support for nurses, stress management techniques, and building resilience in healthcare settings.
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-cyan-900">Free for All</span>
+                                <button class="bg-cyan-700 text-white px-6 py-2 rounded-lg font-medium hover:bg-cyan-600 transition-colors register-btn" 
+                                        data-event="mental-health-webinar">
+                                    Register Series
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More Button -->
+                <div class="text-center mt-12">
+                    <button id="loadMoreEvents" class="bg-white border-2 border-blue-900 text-blue-900 px-8 py-3 rounded-xl text-lg font-semibold hover:bg-blue-50 transition-all">
+                        <i class="fas fa-sync-alt mr-2"></i> Load More Events
                     </button>
                 </div>
             </div>
-
-            <!-- Event 2 -->
-            <div class="event-card bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="bg-gradient-to-r from-teal-700 to-teal-500 text-white p-4">
-                    <div class="text-sm">SUMMIT</div>
-                    <h3 class="text-xl font-bold">KENYA YOUNG NURSES LEADERSHIP SUMMIT 2025</h3>
-                </div>
-                <div class="p-6">
-                    <div class="flex items-center text-gray-600 mb-4">
-                        <i class="fas fa-calendar-day mr-2"></i>
-                        <span>2025</span>
-                    </div>
-                    <div class="flex items-center text-gray-600 mb-4">
-                        <i class="fas fa-map-marker-alt mr-2"></i>
-                        <span>To be announced</span>
-                    </div>
-                    <p class="text-gray-700 mb-6">Developing the next generation of nursing leaders in Kenya through intensive training and mentorship.</p>
-                    <button class="w-full bg-kesnnur-blue text-white py-2 rounded-lg hover:bg-blue-800">
-                        Learn More
-                    </button>
-                </div>
-            </div>
-
-            <!-- Event 3 -->
-            <div class="event-card bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="bg-gradient-to-r from-purple-700 to-purple-500 text-white p-4">
-                    <div class="text-sm">WEBINAR</div>
-                    <h3 class="text-xl font-bold">Virtual Meeting for Nurses and Midwives</h3>
-                </div>
-                <div class="p-6">
-                    <div class="flex items-center text-gray-600 mb-4">
-                        <i class="fas fa-calendar-day mr-2"></i>
-                        <span>Monthly</span>
-                    </div>
-                    <div class="flex items-center text-gray-600 mb-4">
-                        <i class="fas fa-video mr-2"></i>
-                        <span>Online</span>
-                    </div>
-                    <p class="text-gray-700 mb-6">Join our monthly virtual meetings for knowledge sharing and professional networking.</p>
-                    <button class="w-full bg-kesnnur-blue text-white py-2 rounded-lg hover:bg-blue-800">
-                        Join Next Meeting
-                    </button>
-                </div>
-            </div>
-        </div>
+        </section>
 
         <!-- Past Events -->
-        <div class="mt-16">
-            <h2 class="text-2xl font-bold mb-8 kesnnur-blue">Recent Events</h2>
-            <div class="bg-white rounded-xl shadow p-6">
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center border-b pb-3">
-                        <div>
-                            <h4 class="font-bold">THE EASTERN REGION CAMPUS CONVOY</h4>
-                            <p class="text-gray-600">Campus outreach program</p>
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-12 text-center">Recent Past Events</h2>
+                
+                <div class="max-w-4xl mx-auto">
+                    <!-- Past Event 1 -->
+                    <div class="past-event-card bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between">
+                            <div class="mb-4 md:mb-0">
+                                <h3 class="font-bold text-xl mb-2">THE EASTERN REGION CAMPUS CONVOY</h3>
+                                <div class="flex items-center text-gray-600 mb-2">
+                                    <i class="far fa-calendar mr-2"></i>
+                                    <span>February 2024</span>
+                                    <span class="mx-3">•</span>
+                                    <i class="fas fa-map-marker-alt mr-2"></i>
+                                    <span>Eastern Region Universities</span>
+                                </div>
+                                <p class="text-gray-700">Campus outreach program connecting with nursing students across Eastern Region universities.</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-semibold">
+                                    <i class="fas fa-check-circle mr-1 text-green-500"></i> Completed
+                                </span>
+                                <button class="text-blue-900 font-medium hover:underline view-gallery-btn" data-event="eastern-convoy">
+                                    View Gallery
+                                </button>
+                            </div>
                         </div>
-                        <span class="text-sm bg-gray-100 px-3 py-1 rounded">Completed</span>
                     </div>
-                    <div class="flex justify-between items-center border-b pb-3">
-                        <div>
-                            <h4 class="font-bold">COAST REGION CAMPUS CONVOY</h4>
-                            <p class="text-gray-600">Coastal universities tour</p>
+
+                    <!-- Past Event 2 -->
+                    <div class="past-event-card bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between">
+                            <div class="mb-4 md:mb-0">
+                                <h3 class="font-bold text-xl mb-2">COAST REGION CAMPUS CONVOY</h3>
+                                <div class="flex items-center text-gray-600 mb-2">
+                                    <i class="far fa-calendar mr-2"></i>
+                                    <span>January 2024</span>
+                                    <span class="mx-3">•</span>
+                                    <i class="fas fa-map-marker-alt mr-2"></i>
+                                    <span>Coastal Universities</span>
+                                </div>
+                                <p class="text-gray-700">Comprehensive tour of coastal universities promoting KESNNUR membership and nursing opportunities.</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-semibold">
+                                    <i class="fas fa-check-circle mr-1 text-green-500"></i> Completed
+                                </span>
+                                <button class="text-blue-900 font-medium hover:underline view-gallery-btn" data-event="coast-convoy">
+                                    View Gallery
+                                </button>
+                            </div>
                         </div>
-                        <span class="text-sm bg-gray-100 px-3 py-1 rounded">Completed</span>
                     </div>
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h4 class="font-bold">THE KESNNUR NATIONAL DINNER</h4>
-                            <p class="text-gray-600">Annual networking dinner</p>
+
+                    <!-- Past Event 3 -->
+                    <div class="past-event-card bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between">
+                            <div class="mb-4 md:mb-0">
+                                <h3 class="font-bold text-xl mb-2">THE KESNNUR NATIONAL DINNER</h3>
+                                <div class="flex items-center text-gray-600 mb-2">
+                                    <i class="far fa-calendar mr-2"></i>
+                                    <span>December 2023</span>
+                                    <span class="mx-3">•</span>
+                                    <i class="fas fa-map-marker-alt mr-2"></i>
+                                    <span>Nairobi</span>
+                                </div>
+                                <p class="text-gray-700">Annual networking dinner celebrating achievements and building community among nursing professionals.</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-semibold">
+                                    <i class="fas fa-check-circle mr-1 text-green-500"></i> Completed
+                                </span>
+                                <button class="text-blue-900 font-medium hover:underline view-gallery-btn" data-event="national-dinner">
+                                    View Gallery
+                                </button>
+                            </div>
                         </div>
-                        <span class="text-sm bg-gray-100 px-3 py-1 rounded">Completed</span>
+                    </div>
+
+                    <!-- Past Event 4 -->
+                    <div class="past-event-card bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between">
+                            <div class="mb-4 md:mb-0">
+                                <h3 class="font-bold text-xl mb-2">MENTAL HEALTH AWARENESS WORKSHOP</h3>
+                                <div class="flex items-center text-gray-600 mb-2">
+                                    <i class="far fa-calendar mr-2"></i>
+                                    <span>November 2023</span>
+                                    <span class="mx-3">•</span>
+                                    <i class="fas fa-map-marker-alt mr-2"></i>
+                                    <span>Virtual & Nairobi</span>
+                                </div>
+                                <p class="text-gray-700">Workshop focused on mental health awareness and support strategies for nursing students and professionals.</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-semibold">
+                                    <i class="fas fa-check-circle mr-1 text-green-500"></i> Completed
+                                </span>
+                                <button class="text-blue-900 font-medium hover:underline view-gallery-btn" data-event="mental-health-workshop">
+                                    View Gallery
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-4xl font-bold mb-6">Host an Event with KESNNUR</h2>
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                    Interested in hosting a nursing workshop, conference, or networking event? Partner with us to reach Kenya's nursing community.
+                </p>
+                <a href="contact.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-bold hover:shadow-xl inline-flex items-center">
+                    <i class="fas fa-calendar-plus mr-2"></i> Propose an Event
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                             alt="KESNNUR Logo"
+                             width="40"
+                             height="40"
+                             class="w-10 h-10 rounded-lg object-contain bg-white p-1">
+                        <h3 class="text-xl font-bold">KESNNUR</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Connecting Kenya's nursing community through events, education, and networking.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Event Types</h4>
+                    <div class="space-y-3">
+                        <a href="#" class="text-gray-400 hover:text-white block">Conferences</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Workshops</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Webinars</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Networking Events</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Summits</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Campus Convoys</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <div class="space-y-3">
+                        <a href="index.html" class="text-gray-400 hover:text-white block">Home</a>
+                        <a href="about.html" class="text-gray-400 hover:text-white block">About</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white block">Events</a>
+                        <a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a>
+                        <a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a>
+                        <a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Contact</h4>
+                    <div class="space-y-3 text-gray-400">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
+                            <span>Nurses Complex KNH, Nairobi, Kenya</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone mr-3"></i>
+                            <a href="tel:+254791296924" class="hover:text-white">+254 791 296 924</a>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i>
+                            <a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>Copyright © <span id="currentYear">2024</span> KESNNUR. All rights reserved.</p>
+                <p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Event Registration Modal -->
+    <div id="registrationModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+            <div id="modalContent" class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <!-- Modal content will be inserted here -->
             </div>
         </div>
     </div>
 
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p>© 2024 KESNNUR - Kenya Students & Novice Nurses</p>
-            <p class="text-gray-400 mt-2">Nurses Complex KNH, Nairobi | +254 791 296 924 | kesnnur@gmail.com</p>
-        </div>
-    </footer>
+    <!-- JavaScript -->
+    <script>
+    // ============================================
+    // EVENTS PAGE FUNCTIONALITY
+    // ============================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', function() {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                
+                if (isHidden) {
+                    mobileMenu.classList.remove('hidden');
+                    this.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    this.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+                }
+            });
+        }
+        
+        // Initialize calendar
+        initializeCalendar();
+        
+        // Event search functionality
+        const searchInput = document.getElementById('eventSearch');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const events = document.querySelectorAll('.event-card');
+                
+                events.forEach(event => {
+                    const title = event.querySelector('h3').textContent.toLowerCase();
+                    const description = event.querySelector('p').textContent.toLowerCase();
+                    const location = event.querySelector('.fa-map-marker-alt + span').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || description.includes(searchTerm) || location.includes(searchTerm)) {
+                        event.style.display = 'block';
+                        setTimeout(() => {
+                            event.style.opacity = '1';
+                            event.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else {
+                        event.style.opacity = '0';
+                        event.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            event.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        }
+        
+        // Event registration buttons
+        const registerButtons = document.querySelectorAll('.register-btn');
+        registerButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const eventId = this.getAttribute('data-event');
+                showRegistrationModal(eventId);
+            });
+        });
+        
+        // View gallery buttons for past events
+        const galleryButtons = document.querySelectorAll('.view-gallery-btn');
+        galleryButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const eventId = this.getAttribute('data-event');
+                showEventGallery(eventId);
+            });
+        });
+        
+        // Load more events button
+        const loadMoreBtn = document.getElementById('loadMoreEvents');
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', function() {
+                loadMoreEvents();
+            });
+        }
+        
+        // Calendar navigation
+        document.getElementById('prevMonth')?.addEventListener('click', function() {
+            navigateCalendar(-1);
+        });
+        
+        document.getElementById('nextMonth')?.addEventListener('click', function() {
+            navigateCalendar(1);
+        });
+    });
+    
+    // Calendar functionality
+    let currentDate = new Date();
+    
+    function initializeCalendar() {
+        renderCalendar(currentDate);
+    }
+    
+    function renderCalendar(date) {
+        const calendarEl = document.getElementById('calendar');
+        const monthYearEl = document.getElementById('currentMonth');
+        
+        // Set month/year header
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+                          "July", "August", "September", "October", "November", "December"];
+        monthYearEl.textContent = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+        
+        // Get first day of month and total days
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        const totalDays = lastDay.getDate();
+        const firstDayIndex = firstDay.getDay(); // 0 = Sunday, 1 = Monday, etc.
+        
+        // Calendar events data (simulated)
+        const events = {
+            10: { type: 'webinar', title: 'Virtual Meeting' },
+            15: { type: 'conference', title: 'KESNNUR Conference' },
+            22: { type: 'summit', title: 'Leadership Summit' },
+            28: { type: 'networking', title: 'Networking Dinner' },
+            5: { type: 'workshop', title: 'Clinical Skills' }
+        };
+        
+        // Generate calendar HTML
+        let calendarHTML = `
+            <div class="grid grid-cols-7 gap-2 mb-2">
+                <div class="text-center font-semibold text-gray-700 p-2">Sun</div>
+                <div class="text-center font-semibold text-gray-700 p-2">Mon</div>
+                <div class="text-center font-semibold text-gray-700 p-2">Tue</div>
+                <div class="text-center font-semibold text-gray-700 p-2">Wed</div>
+                <div class="text-center font-semibold text-gray-700 p-2">Thu</div>
+                <div class="text-center font-semibold text-gray-700 p-2">Fri</div>
+                <div class="text-center font-semibold text-gray-700 p-2">Sat</div>
+            </div>
+            <div class="grid grid-cols-7 gap-2">
+        `;
+        
+        // Empty cells for days before first day of month
+        for (let i = 0; i < firstDayIndex; i++) {
+            calendarHTML += `<div class="calendar-day empty"></div>`;
+        }
+        
+        // Days of the month
+        for (let day = 1; day <= totalDays; day++) {
+            const hasEvent = events[day];
+            const isToday = day === new Date().getDate() && 
+                          date.getMonth() === new Date().getMonth() && 
+                          date.getFullYear() === new Date().getFullYear();
+            
+            let dayClass = "calendar-day";
+            let dayContent = day;
+            
+            if (hasEvent) {
+                dayClass += " event-day cursor-pointer";
+                dayContent = `
+                    <div class="relative">
+                        ${day}
+                        <div class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-${hasEvent.type === 'conference' ? 'blue' : 
+                                                                                     hasEvent.type === 'workshop' ? 'green' : 
+                                                                                     hasEvent.type === 'webinar' ? 'cyan' : 
+                                                                                     hasEvent.type === 'networking' ? 'amber' : 'purple'}-600"></div>
+                    </div>
+                `;
+            } else if (isToday) {
+                dayClass += " bg-blue-100 text-blue-900 font-bold";
+            }
+            
+            calendarHTML += `<div class="${dayClass}" data-day="${day}" data-month="${date.getMonth()}" data-year="${date.getFullYear()}">${dayContent}</div>`;
+            
+            // New row after Saturday
+            if ((firstDayIndex + day) % 7 === 0 && day !== totalDays) {
+                calendarHTML += '</div><div class="grid grid-cols-7 gap-2">';
+            }
+        }
+        
+        calendarHTML += '</div>';
+        calendarEl.innerHTML = calendarHTML;
+        
+        // Add click events to days with events
+        document.querySelectorAll('.calendar-day.event-day').forEach(dayEl => {
+            dayEl.addEventListener('click', function() {
+                const day = this.getAttribute('data-day');
+                const month = this.getAttribute('data-month');
+                const year = this.getAttribute('data-year');
+                showDayEvents(parseInt(day), parseInt(month), parseInt(year));
+            });
+        });
+    }
+    
+    function navigateCalendar(direction) {
+        currentDate.setMonth(currentDate.getMonth() + direction);
+        renderCalendar(new Date(currentDate));
+    }
+    
+    function showDayEvents(day, month, year) {
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+                          "July", "August", "September", "October", "November", "December"];
+        
+        // Sample events for demonstration
+        const dayEvents = [
+            { title: "KESNNUR 2nd Annual Conference", time: "9:00 AM - 5:00 PM", type: "conference" },
+            { title: "Virtual Networking Session", time: "7:00 PM - 8:30 PM", type: "webinar" }
+        ];
+        
+        let eventsHTML = dayEvents.map(event => `
+            <div class="p-4 mb-3 rounded-lg ${event.type === 'conference' ? 'bg-blue-50' : 'bg-cyan-50'}">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="font-bold text-gray-800">${event.title}</h4>
+                        <p class="text-sm text-gray-600 mt-1">
+                            <i class="far fa-clock mr-1"></i> ${event.time}
+                        </p>
+                    </div>
+                    <span class="event-badge ${event.type}">${event.type}</span>
+                </div>
+                <button class="mt-3 text-blue-900 font-medium hover:underline text-sm">
+                    View Details
+                </button>
+            </div>
+        `).join('');
+        
+        const modalContent = `
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-900">Events on ${monthNames[month]} ${day}, ${year}</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                ${eventsHTML || '<p class="text-gray-600">No events scheduled for this day.</p>'}
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <button onclick="closeModal()" class="w-full bg-blue-900 text-white py-3 rounded-lg font-medium hover:bg-blue-800">
+                        Close
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        showModal(modalContent);
+    }
+    
+    function showRegistrationModal(eventId) {
+        const eventDetails = {
+            'kesnnur-conference-2024': {
+                title: 'KESNNUR 2nd Annual Scientific Conference & AGM',
+                date: 'April 15-17, 2024',
+                location: 'Nairobi Convention Center',
+                fee: 'Members: Free | Non-members: Ksh 10,000'
+            },
+            'leadership-summit-2024': {
+                title: 'Kenya Young Nurses Leadership Summit 2024',
+                date: 'May 22-24, 2024',
+                location: 'KICC, Nairobi',
+                fee: 'Early Bird: Ksh 5,000 | Regular: Ksh 7,000'
+            },
+            'virtual-meeting-april': {
+                title: 'Virtual Meeting for Nurses & Midwives',
+                date: 'April 10, 2024',
+                location: 'Online - Zoom',
+                fee: 'Free Registration'
+            }
+        };
+        
+        const event = eventDetails[eventId] || eventDetails['kesnnur-conference-2024'];
+        
+        const modalContent = `
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-900">Register for Event</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold text-lg mb-2">${event.title}</h4>
+                    <div class="space-y-2 text-gray-600">
+                        <div class="flex items-center">
+                            <i class="far fa-calendar mr-2"></i>
+                            <span>${event.date}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span>${event.location}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-tag mr-2"></i>
+                            <span>${event.fee}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <form id="eventRegistrationForm" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Full Name</label>
+                        <input type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Email Address</label>
+                        <input type="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Phone Number</label>
+                        <input type="tel" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">KESNNUR Membership Number (if applicable)</label>
+                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </form>
+                
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <button onclick="submitRegistration('${eventId}')" class="w-full bg-blue-900 text-white py-3 rounded-lg font-medium hover:bg-blue-800 mb-3">
+                        Complete Registration
+                    </button>
+                    <button onclick="closeModal()" class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        showModal(modalContent);
+    }
+    
+    function showEventGallery(eventId) {
+        const galleryContent = `
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-900">Event Gallery</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <p class="text-gray-600 mb-6">Photos from past events will be displayed here. Check back soon for updates!</p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-gray-100 rounded-lg h-32 flex items-center justify-center">
+                        <i class="fas fa-image text-gray-400 text-3xl"></i>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg h-32 flex items-center justify-center">
+                        <i class="fas fa-image text-gray-400 text-3xl"></i>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg h-32 flex items-center justify-center">
+                        <i class="fas fa-image text-gray-400 text-3xl"></i>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg h-32 flex items-center justify-center">
+                        <i class="fas fa-image text-gray-400 text-3xl"></i>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <button onclick="closeModal()" class="w-full bg-blue-900 text-white py-3 rounded-lg font-medium hover:bg-blue-800">
+                        Close Gallery
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        showModal(galleryContent);
+    }
+    
+    function showModal(content) {
+        document.getElementById('modalContent').innerHTML = content;
+        document.getElementById('registrationModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        document.getElementById('registrationModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+    
+    function submitRegistration(eventId) {
+        const form = document.getElementById('eventRegistrationForm');
+        if (form.checkValidity()) {
+            // In a real application, you would submit to your server here
+            alert('Registration submitted successfully! You will receive a confirmation email shortly.');
+            closeModal();
+        } else {
+            form.reportValidity();
+        }
+    }
+    
+    function loadMoreEvents() {
+        const button = document.getElementById('loadMoreEvents');
+        const container = document.getElementById('eventsContainer');
+        
+        // Show loading state
+        const buttonText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Loading...';
+        button.disabled = true;
+        
+        // Simulate API call
+        setTimeout(() => {
+            // Additional events data
+            const additionalEvents = [
+                {
+                    title: "Research Methodology Workshop",
+                    type: "workshop",
+                    color: "from-green-700 to-green-500",
+                    date: "July 8-9, 2024",
+                    location: "University of Nairobi",
+                    description: "Comprehensive workshop on research design, methodology, and data analysis for nursing research projects.",
+                    price: "Students: Ksh 2,000"
+                },
+                {
+                    title: "Nursing Career Fair 2024",
+                    type: "networking",
+                    color: "from-amber-700 to-amber-500",
+                    date: "August 15, 2024",
+                    location: "Nairobi Safari Club",
+                    description: "Connect with top healthcare employers and discover nursing job opportunities across Kenya.",
+                    price: "Free Admission"
+                }
+            ];
+            
+            // Add new events
+            additionalEvents.forEach(event => {
+                const eventEl = document.createElement('div');
+                eventEl.className = 'event-card bg-white rounded-2xl shadow-lg overflow-hidden';
+                eventEl.style.opacity = '0';
+                eventEl.style.transform = 'translateY(20px)';
+                eventEl.style.transition = 'all 0.3s ease';
+                
+                eventEl.innerHTML = `
+                    <div class="h-48 bg-gradient-to-r ${event.color} relative overflow-hidden">
+                        <div class="absolute top-4 left-4">
+                            <span class="event-badge ${event.type}">${event.type}</span>
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <div class="text-white text-3xl font-bold">${event.date.split(' ')[1].replace(',', '')}</div>
+                            <div class="text-white/80 font-semibold">${event.date.split(' ')[0].toUpperCase()}</div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl mb-4">${event.title}</h3>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center text-gray-600">
+                                <i class="far fa-calendar mr-3"></i>
+                                <span>${event.date}</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-map-marker-alt mr-3"></i>
+                                <span>${event.location}</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6">${event.description}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-semibold text-gray-900">${event.price}</span>
+                            <button class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors register-btn">
+                                Register Now
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(eventEl);
+                
+                // Animate in
+                setTimeout(() => {
+                    eventEl.style.opacity = '1';
+                    eventEl.style.transform = 'translateY(0)';
+                }, 100);
+                
+                // Add event listener to new button
+                eventEl.querySelector('.register-btn').addEventListener('click', function() {
+                    showRegistrationModal('additional-event');
+                });
+            });
+            
+            // Reset button
+            button.innerHTML = buttonText;
+            button.disabled = false;
+            
+            // Hide button if enough events loaded
+            if (container.children.length >= 8) {
+                button.style.display = 'none';
+            }
+            
+            // Show success message
+            showToast('More events loaded successfully!', 'success');
+        }, 1500);
+    }
+    
+    function showToast(message, type = 'info') {
+        // Remove existing toast
+        const existingToast = document.querySelector('.custom-toast');
+        if (existingToast) existingToast.remove();
+        
+        // Create toast
+        const toast = document.createElement('div');
+        toast.className = `custom-toast fixed top-4 right-4 z-50 px-6 py-3 rounded-xl shadow-lg text-white font-medium transform translate-x-full transition-transform duration-300 ${
+            type === 'success' ? 'bg-green-600' : 'bg-blue-600'
+        }`;
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} mr-3"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Animate in
+        setTimeout(() => {
+            toast.style.transform = 'translateX(0)';
+        }, 10);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            toast.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 3000);
+    }
+    
+    console.log('✅ Events Page Loaded Successfully');
+    </script>
 </body>
 </html>
