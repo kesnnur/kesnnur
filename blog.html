@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Blog - KESNNUR | Nursing Insights & Updates</title>
+    
+    <!-- Meta Description for SEO -->
+    <meta name="description" content="Read the latest articles, nursing insights, research updates, and stories from KESNNUR - Kenya's nursing community.">
+    
+    <!-- Keywords for SEO -->
+    <meta name="keywords" content="KESNNUR blog, nursing articles, nursing Kenya, healthcare insights, nursing students blog, nursing research">
+    
+    <!-- Author -->
+    <meta name="author" content="KESNNUR">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://kesnnur.nnak.or.ke/blog.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kesnnur.nnak.or.ke/blog.html">
+    <meta property="og:title" content="KESNNUR Blog | Nursing Insights & Community Updates">
+    <meta property="og:description" content="Stay updated with the latest nursing articles, research, and community stories from KESNNUR.">
+    <meta property="og:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kesnnur.nnak.or.ke/blog.html">
+    <meta property="twitter:title" content="KESNNUR Blog | Nursing Insights & Community Updates">
+    <meta property="twitter:description" content="Stay updated with the latest nursing articles, research, and community stories from KESNNUR.">
+    <meta property="twitter:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    <link rel="apple-touch-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'kesnnur-blue': '#1e3a8a',
+                        'kesnnur-light': '#3b82f6',
+                        'kesnnur-teal': '#0d9488',
+                        'kesnnur-gold': '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --kesnnur-blue: #1e3a8a;
+            --kesnnur-light: #3b82f6;
+            --kesnnur-teal: #0d9488;
+            --kesnnur-gold: #f59e0b;
+        }
+        
+        /* Skip to content */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #1e3a8a;
+            color: white;
+            padding: 12px;
+            z-index: 10000;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .skip-to-content:focus {
+            top: 0;
+        }
+        
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            padding-top: 0;
+        }
+        
+        .font-display {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Glass effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Card hover effects */
+        .blog-card, .category-card {
+            transition: all 0.3s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.1);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a;
+            border-radius: 4px;
+        }
+        
+        /* Article content styles */
+        .article-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        .article-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin: 1.25rem 0 0.75rem;
+        }
+        
+        .article-content p {
+            line-height: 1.8;
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid #1e3a8a;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background-color: #f8fafc;
+            font-style: italic;
+            color: #475569;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-blue-50">
+    <!-- Skip to Content -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center space-x-3">
+                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                         alt="KESNNUR Logo"
+                         width="40"
+                         height="40"
+                         class="w-10 h-10 rounded-lg object-contain">
+                    <div>
+                        <h1 class="text-lg md:text-xl font-bold text-blue-900 font-display">KESNNUR</h1>
+                        <p class="text-xs text-gray-600">Students & Novice Nurses</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium">Home</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium">About</a>
+                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium">Management</a>
+                    <a href="events.html" class="text-gray-700 hover:text-blue-900 font-medium">Events</a>
+                    <a href="blog.html" class="text-blue-900 font-medium border-b-2 border-blue-900">Blog</a>
+                    <a href="resources.html" class="text-gray-700 hover:text-blue-900 font-medium">Resources</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium">Contact</a>
+                    <a href="members.html" class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800">
+                        Member Portal
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="menuBtn" class="md:hidden text-blue-900">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white rounded-lg shadow-lg p-6">
+                <div class="space-y-3">
+                    <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-home mr-3"></i>Home
+                    </a>
+                    <a href="about.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-info-circle mr-3"></i>About
+                    </a>
+                    <a href="management.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-users mr-3"></i>Management
+                    </a>
+                    <a href="events.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-calendar-alt mr-3"></i>Events
+                    </a>
+                    <a href="blog.html" class="block py-3 px-4 bg-blue-50 text-blue-900 rounded-lg">
+                        <i class="fas fa-blog mr-3"></i>Blog
+                    </a>
+                    <a href="resources.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-book-medical mr-3"></i>Resources
+                    </a>
+                    <a href="contact.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-envelope mr-3"></i>Contact
+                    </a>
+                    <a href="members.html" class="block py-3 px-4 bg-blue-900 text-white rounded-lg text-center font-medium mt-4">
+                        <i class="fas fa-user mr-3"></i>Member Portal
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="relative py-16 bg-gradient-to-r from-blue-900 to-blue-700">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center opacity-10"></div>
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">
+                    KESNNUR Blog
+                </h1>
+                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                    Insights, stories, and updates from Kenya's nursing community. Stay informed about the latest in nursing education, practice, and research.
+                </p>
+                <div class="relative max-w-xl mx-auto">
+                    <input type="search" id="blogSearch" placeholder="Search articles..." 
+                           class="w-full px-6 py-4 rounded-xl border-0 focus:ring-2 focus:ring-white focus:outline-none text-lg bg-white/20 text-white placeholder-blue-200">
+                    <i class="fas fa-search absolute right-6 top-4 text-blue-200"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Post -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white rounded-2xl overflow-hidden shadow-2xl">
+                    <div class="grid md:grid-cols-2">
+                        <div class="p-8 md:p-12 flex flex-col justify-center">
+                            <div class="inline-flex items-center bg-white/20 px-4 py-2 rounded-full text-sm font-bold mb-4">
+                                <i class="fas fa-star mr-2"></i> FEATURED ARTICLE
+                            </div>
+                            <h2 class="text-3xl font-bold mb-4">The Future of Nursing Education in Kenya</h2>
+                            <p class="text-blue-100 mb-6 text-lg">
+                                Exploring how technological advancements and curriculum reforms are shaping the next generation of Kenyan nurses. Learn about the innovations transforming nursing education.
+                            </p>
+                            <div class="flex items-center mb-6">
+                                <div class="flex items-center mr-6">
+                                    <i class="far fa-user mr-2"></i>
+                                    <span>Dr. Sarah Mwangi</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="far fa-calendar mr-2"></i>
+                                    <span>March 15, 2024</span>
+                                </div>
+                            </div>
+                            <a href="#featured-article" class="bg-white text-blue-900 px-8 py-3 rounded-xl font-bold hover:shadow-xl inline-flex items-center self-start">
+                                Read Full Article <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                        <div class="h-64 md:h-auto bg-gradient-to-br from-blue-800 to-teal-600 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Content -->
+        <section class="py-8">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col lg:flex-row gap-12">
+                    <!-- Main Content -->
+                    <div class="lg:w-2/3">
+                        <!-- Categories -->
+                        <div class="mb-12">
+                            <h2 class="text-2xl font-bold mb-6">Browse by Category</h2>
+                            <div class="flex flex-wrap gap-4">
+                                <button class="category-btn active px-6 py-3 rounded-xl font-medium bg-blue-900 text-white">
+                                    All Articles
+                                </button>
+                                <button class="category-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50">
+                                    Clinical Practice
+                                </button>
+                                <button class="category-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50">
+                                    Education
+                                </button>
+                                <button class="category-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50">
+                                    Research
+                                </button>
+                                <button class="category-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50">
+                                    Career Development
+                                </button>
+                                <button class="category-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50">
+                                    Mental Health
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Articles Grid -->
+                        <div id="articlesContainer" class="grid md:grid-cols-2 gap-8">
+                            <!-- Article 1 -->
+                            <article class="blog-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                                <div class="h-48 bg-gradient-to-r from-blue-600 to-blue-400 relative">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="bg-white text-blue-900 text-xs font-bold px-3 py-1 rounded-full">Education</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                                        <i class="far fa-calendar mr-2"></i>
+                                        <span>March 10, 2024</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="far fa-clock mr-1"></i>
+                                        <span>5 min read</span>
+                                    </div>
+                                    <h3 class="font-bold text-xl mb-3">Mastering Clinical Rotations: A Student's Guide</h3>
+                                    <p class="text-gray-600 mb-4">Practical tips and strategies for nursing students to excel during clinical rotations and make the most of hands-on learning experiences.</p>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-900 font-bold mr-2">
+                                                JM
+                                            </div>
+                                            <span class="text-sm text-gray-700">Jane Muthoni</span>
+                                        </div>
+                                        <a href="#" class="text-blue-900 font-medium hover:underline">
+                                            Read More <i class="fas fa-arrow-right ml-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Article 2 -->
+                            <article class="blog-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                                <div class="h-48 bg-gradient-to-r from-teal-600 to-teal-400 relative">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="bg-white text-teal-900 text-xs font-bold px-3 py-1 rounded-full">Research</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                                        <i class="far fa-calendar mr-2"></i>
+                                        <span>March 5, 2024</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="far fa-clock mr-1"></i>
+                                        <span>8 min read</span>
+                                    </div>
+                                    <h3 class="font-bold text-xl mb-3">Innovations in Kenyan Healthcare: 2024 Review</h3>
+                                    <p class="text-gray-600 mb-4">A comprehensive look at the latest healthcare innovations and technological advancements making waves in Kenyan hospitals and clinics.</p>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-900 font-bold mr-2">
+                                                DK
+                                            </div>
+                                            <span class="text-sm text-gray-700">Dr. Kevin Omondi</span>
+                                        </div>
+                                        <a href="#" class="text-blue-900 font-medium hover:underline">
+                                            Read More <i class="fas fa-arrow-right ml-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Article 3 -->
+                            <article class="blog-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                                <div class="h-48 bg-gradient-to-r from-purple-600 to-purple-400 relative">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="bg-white text-purple-900 text-xs font-bold px-3 py-1 rounded-full">Mental Health</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                                        <i class="far fa-calendar mr-2"></i>
+                                        <span>February 28, 2024</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="far fa-clock mr-1"></i>
+                                        <span>6 min read</span>
+                                    </div>
+                                    <h3 class="font-bold text-xl mb-3">Coping with Stress in Nursing Practice</h3>
+                                    <p class="text-gray-600 mb-4">Essential self-care strategies and mental health resources for nurses dealing with workplace stress and burnout prevention.</p>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-900 font-bold mr-2">
+                                                AW
+                                            </div>
+                                            <span class="text-sm text-gray-700">Anne Wambui</span>
+                                        </div>
+                                        <a href="#" class="text-blue-900 font-medium hover:underline">
+                                            Read More <i class="fas fa-arrow-right ml-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Article 4 -->
+                            <article class="blog-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                                <div class="h-48 bg-gradient-to-r from-orange-600 to-orange-400 relative">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="bg-white text-orange-900 text-xs font-bold px-3 py-1 rounded-full">Career Development</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                                        <i class="far fa-calendar mr-2"></i>
+                                        <span>February 20, 2024</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="far fa-clock mr-1"></i>
+                                        <span>7 min read</span>
+                                    </div>
+                                    <h3 class="font-bold text-xl mb-3">Navigating Your First Nursing Job</h3>
+                                    <p class="text-gray-600 mb-4">A complete guide for novice nurses transitioning from student to professional, including tips for interviews, orientation, and career growth.</p>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-orange-900 font-bold mr-2">
+                                                PK
+                                            </div>
+                                            <span class="text-sm text-gray-700">Peter Kamau</span>
+                                        </div>
+                                        <a href="#" class="text-blue-900 font-medium hover:underline">
+                                            Read More <i class="fas fa-arrow-right ml-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Article 5 -->
+                            <article class="blog-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                                <div class="h-48 bg-gradient-to-r from-green-600 to-green-400 relative">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="bg-white text-green-900 text-xs font-bold px-3 py-1 rounded-full">Clinical Practice</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                                        <i class="far fa-calendar mr-2"></i>
+                                        <span>February 15, 2024</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="far fa-clock mr-1"></i>
+                                        <span>4 min read</span>
+                                    </div>
+                                    <h3 class="font-bold text-xl mb-3">Infection Prevention Best Practices 2024</h3>
+                                    <p class="text-gray-600 mb-4">Updated guidelines and protocols for infection control in healthcare settings, with practical implementation strategies.</p>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-900 font-bold mr-2">
+                                                LN
+                                            </div>
+                                            <span class="text-sm text-gray-700">Lucy Njeri</span>
+                                        </div>
+                                        <a href="#" class="text-blue-900 font-medium hover:underline">
+                                            Read More <i class="fas fa-arrow-right ml-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Article 6 -->
+                            <article class="blog-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                                <div class="h-48 bg-gradient-to-r from-red-600 to-red-400 relative">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="bg-white text-red-900 text-xs font-bold px-3 py-1 rounded-full">Education</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                                        <i class="far fa-calendar mr-2"></i>
+                                        <span>February 10, 2024</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="far fa-clock mr-1"></i>
+                                        <span>5 min read</span>
+                                    </div>
+                                    <h3 class="font-bold text-xl mb-3">Study Strategies for Nursing Exams</h3>
+                                    <p class="text-gray-600 mb-4">Effective study techniques and time management strategies to help nursing students excel in their examinations.</p>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-red-900 font-bold mr-2">
+                                                MM
+                                            </div>
+                                            <span class="text-sm text-gray-700">Mary Mwangi</span>
+                                        </div>
+                                        <a href="#" class="text-blue-900 font-medium hover:underline">
+                                            Read More <i class="fas fa-arrow-right ml-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+                        <!-- Load More Button -->
+                        <div class="text-center mt-12">
+                            <button id="loadMoreBtn" class="bg-white border-2 border-blue-900 text-blue-900 px-8 py-3 rounded-xl text-lg font-semibold hover:bg-blue-50 transition-all">
+                                <i class="fas fa-sync-alt mr-2"></i> Load More Articles
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="lg:w-1/3">
+                        <!-- Newsletter Subscription -->
+                        <div class="bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-2xl p-8 mb-8">
+                            <div class="text-center mb-6">
+                                <i class="fas fa-newspaper text-4xl mb-4 opacity-80"></i>
+                                <h3 class="text-xl font-bold mb-2">Subscribe to Updates</h3>
+                                <p class="text-blue-100">Get the latest articles and news delivered to your inbox</p>
+                            </div>
+                            <form id="blogNewsletterForm" class="space-y-4">
+                                <input type="email" placeholder="Your email address" required
+                                       class="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white border-0">
+                                <button type="submit" class="w-full bg-white text-blue-900 py-3 rounded-xl font-bold hover:bg-gray-100 transition-colors">
+                                    Subscribe Now
+                                </button>
+                            </form>
+                            <p class="text-sm text-blue-200 text-center mt-4">No spam. Unsubscribe anytime.</p>
+                        </div>
+
+                        <!-- Popular Articles -->
+                        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                            <h3 class="font-bold text-xl mb-6 text-blue-900">Popular Articles</h3>
+                            <div class="space-y-6">
+                                <a href="#" class="flex items-start group">
+                                    <div class="w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-400 rounded-lg mr-4 flex-shrink-0"></div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 group-hover:text-blue-900 mb-1">The Nursing Shortage in Kenya</h4>
+                                        <p class="text-sm text-gray-500">March 1, 2024</p>
+                                    </div>
+                                </a>
+                                <a href="#" class="flex items-start group">
+                                    <div class="w-16 h-16 bg-gradient-to-r from-teal-600 to-teal-400 rounded-lg mr-4 flex-shrink-0"></div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 group-hover:text-blue-900 mb-1">Digital Health Tools for Nurses</h4>
+                                        <p class="text-sm text-gray-500">February 25, 2024</p>
+                                    </div>
+                                </a>
+                                <a href="#" class="flex items-start group">
+                                    <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg mr-4 flex-shrink-0"></div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 group-hover:text-blue-900 mb-1">Building Resilience in Healthcare</h4>
+                                        <p class="text-sm text-gray-500">February 18, 2024</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Categories Widget -->
+                        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                            <h3 class="font-bold text-xl mb-6 text-blue-900">Categories</h3>
+                            <div class="space-y-3">
+                                <a href="#" class="flex items-center justify-between group">
+                                    <span class="text-gray-700 group-hover:text-blue-900">Clinical Practice</span>
+                                    <span class="bg-blue-50 text-blue-900 text-sm px-2 py-1 rounded">12</span>
+                                </a>
+                                <a href="#" class="flex items-center justify-between group">
+                                    <span class="text-gray-700 group-hover:text-blue-900">Education</span>
+                                    <span class="bg-blue-50 text-blue-900 text-sm px-2 py-1 rounded">8</span>
+                                </a>
+                                <a href="#" class="flex items-center justify-between group">
+                                    <span class="text-gray-700 group-hover:text-blue-900">Research</span>
+                                    <span class="bg-blue-50 text-blue-900 text-sm px-2 py-1 rounded">6</span>
+                                </a>
+                                <a href="#" class="flex items-center justify-between group">
+                                    <span class="text-gray-700 group-hover:text-blue-900">Career Development</span>
+                                    <span class="bg-blue-50 text-blue-900 text-sm px-2 py-1 rounded">10</span>
+                                </a>
+                                <a href="#" class="flex items-center justify-between group">
+                                    <span class="text-gray-700 group-hover:text-blue-900">Mental Health</span>
+                                    <span class="bg-blue-50 text-blue-900 text-sm px-2 py-1 rounded">7</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Tags Widget -->
+                        <div class="bg-white rounded-2xl shadow-lg p-8">
+                            <h3 class="font-bold text-xl mb-6 text-blue-900">Popular Tags</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="#" class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-100">Nursing Education</a>
+                                <a href="#" class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-100">Healthcare</a>
+                                <a href="#" class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-100">Student Life</a>
+                                <a href="#" class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-100">Career Tips</a>
+                                <a href="#" class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-100">Research</a>
+                                <a href="#" class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-100">Wellness</a>
+                                <a href="#" class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-100">Technology</a>
+                                <a href="#" class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-100">Leadership</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Article Detail -->
+        <section id="featured-article" class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <div class="h-64 bg-gradient-to-r from-blue-600 to-teal-500 relative">
+                            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center"></div>
+                        </div>
+                        <div class="p-8 md:p-12">
+                            <div class="flex items-center mb-6">
+                                <div class="flex items-center mr-6">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-900 font-bold mr-3">
+                                        SM
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold">Dr. Sarah Mwangi</h4>
+                                        <p class="text-sm text-gray-600">Nursing Educator</p>
+                                    </div>
+                                </div>
+                                <div class="text-gray-500">
+                                    <i class="far fa-calendar mr-2"></i>
+                                    <span>March 15, 2024</span>
+                                    <span class="mx-3">•</span>
+                                    <i class="far fa-clock mr-2"></i>
+                                    <span>10 min read</span>
+                                </div>
+                            </div>
+                            
+                            <h2 class="text-3xl font-bold mb-6 text-blue-900">The Future of Nursing Education in Kenya: Embracing Innovation and Excellence</h2>
+                            
+                            <div class="article-content mb-8">
+                                <p class="text-lg text-gray-700 mb-6">
+                                    The landscape of nursing education in Kenya is undergoing a significant transformation, driven by technological advancements, evolving healthcare needs, and innovative teaching methodologies. As we look toward the future, it's essential to understand how these changes will shape the next generation of Kenyan nurses.
+                                </p>
+                                
+                                <h3>Technological Integration in Nursing Education</h3>
+                                <p>
+                                    The integration of technology into nursing education has accelerated dramatically in recent years. Simulation labs equipped with high-fidelity mannequins, virtual reality training modules, and online learning platforms are becoming standard in nursing programs across Kenya.
+                                </p>
+                                
+                                <blockquote>
+                                    "Technology is not replacing the human touch in nursing education but enhancing our ability to prepare competent, confident, and compassionate nurses for the challenges of modern healthcare."
+                                </blockquote>
+                                
+                                <h3>Curriculum Reforms and Competency-Based Education</h3>
+                                <p>
+                                    Kenyan nursing education is shifting towards competency-based approaches that emphasize practical skills, critical thinking, and clinical judgment. The Nursing Council of Kenya has been at the forefront of these reforms, ensuring that nursing graduates are well-prepared for the realities of healthcare practice.
+                                </p>
+                                
+                                <h3>The Role of Clinical Partnerships</h3>
+                                <p>
+                                    Strong partnerships between nursing schools and healthcare facilities are crucial for providing students with diverse clinical experiences. These collaborations allow students to apply theoretical knowledge in real-world settings under the guidance of experienced practitioners.
+                                </p>
+                                
+                                <h3>Challenges and Opportunities</h3>
+                                <p>
+                                    While progress has been significant, challenges remain in terms of resource allocation, faculty development, and equitable access to quality nursing education across all regions of Kenya. Addressing these challenges requires collaborative efforts from educators, policymakers, and healthcare leaders.
+                                </p>
+                                
+                                <h3>Looking Ahead: 2025 and Beyond</h3>
+                                <p>
+                                    As we look to the future, nursing education in Kenya must continue to evolve to meet the changing needs of the population. This includes incorporating global health perspectives, strengthening research capabilities, and preparing nurses for leadership roles in healthcare.
+                                </p>
+                            </div>
+                            
+                            <div class="flex items-center justify-between border-t border-gray-200 pt-8">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-gray-700">Share:</span>
+                                    <div class="flex space-x-3">
+                                        <a href="#" class="text-blue-900 hover:text-blue-700">
+                                            <i class="fab fa-twitter text-xl"></i>
+                                        </a>
+                                        <a href="#" class="text-blue-900 hover:text-blue-700">
+                                            <i class="fab fa-facebook text-xl"></i>
+                                        </a>
+                                        <a href="#" class="text-blue-900 hover:text-blue-700">
+                                            <i class="fab fa-linkedin text-xl"></i>
+                                        </a>
+                                        <a href="#" class="text-blue-900 hover:text-blue-700">
+                                            <i class="fas fa-link text-xl"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-2 text-gray-400"></i>
+                                    <span class="text-gray-600">2.5K views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-4xl font-bold mb-6">Want to Contribute to Our Blog?</h2>
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                    Share your nursing insights, research findings, or personal experiences with our community of nursing students and professionals.
+                </p>
+                <a href="contact.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-bold hover:shadow-xl inline-flex items-center">
+                    <i class="fas fa-pen mr-2"></i> Submit Your Article
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                             alt="KESNNUR Logo"
+                             width="40"
+                             height="40"
+                             class="w-10 h-10 rounded-lg object-contain bg-white p-1">
+                        <h3 class="text-xl font-bold">KESNNUR</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Sharing knowledge and building community through nursing insights and stories.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Blog Categories</h4>
+                    <div class="space-y-3">
+                        <a href="#" class="text-gray-400 hover:text-white block">Clinical Practice</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Nursing Education</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Research & Innovation</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Career Development</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Mental Health & Wellness</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Student Stories</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <div class="space-y-3">
+                        <a href="index.html" class="text-gray-400 hover:text-white block">Home</a>
+                        <a href="about.html" class="text-gray-400 hover:text-white block">About</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white block">Events</a>
+                        <a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a>
+                        <a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a>
+                        <a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Contact</h4>
+                    <div class="space-y-3 text-gray-400">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
+                            <span>Nurses Complex KNH, Nairobi, Kenya</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone mr-3"></i>
+                            <a href="tel:+254791296924" class="hover:text-white">+254 791 296 924</a>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i>
+                            <a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>Copyright © <span id="currentYear">2024</span> KESNNUR. All rights reserved.</p>
+                <p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+    // ============================================
+    // BLOG PAGE FUNCTIONALITY
+    // ============================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', function() {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                
+                if (isHidden) {
+                    mobileMenu.classList.remove('hidden');
+                    this.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    this.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+                }
+            });
+        }
+        
+        // Category filtering
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const articles = document.querySelectorAll('.blog-card');
+        const searchInput = document.getElementById('blogSearch');
+        
+        // Filter by category
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const category = this.textContent.trim().toLowerCase();
+                
+                // Update active button
+                categoryButtons.forEach(btn => {
+                    btn.classList.remove('active', 'bg-blue-900', 'text-white');
+                    btn.classList.add('bg-white', 'border', 'border-blue-900', 'text-blue-900');
+                });
+                
+                this.classList.remove('bg-white', 'border', 'border-blue-900', 'text-blue-900');
+                this.classList.add('active', 'bg-blue-900', 'text-white');
+                
+                // Filter articles
+                articles.forEach(article => {
+                    const articleCategory = article.querySelector('span.bg-white').textContent.toLowerCase();
+                    
+                    if (category === 'all articles' || articleCategory.includes(category) || 
+                        (category === 'education' && articleCategory === 'education') ||
+                        (category === 'research' && articleCategory === 'research') ||
+                        (category === 'career development' && articleCategory === 'career development') ||
+                        (category === 'mental health' && articleCategory === 'mental health') ||
+                        (category === 'clinical practice' && articleCategory === 'clinical practice')) {
+                        article.style.display = 'block';
+                        setTimeout(() => {
+                            article.style.opacity = '1';
+                            article.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else {
+                        article.style.opacity = '0';
+                        article.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            article.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+        
+        // Search functionality
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                articles.forEach(article => {
+                    const title = article.querySelector('h3').textContent.toLowerCase();
+                    const description = article.querySelector('p').textContent.toLowerCase();
+                    const category = article.querySelector('span.bg-white').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || description.includes(searchTerm) || category.includes(searchTerm)) {
+                        article.style.display = 'block';
+                        setTimeout(() => {
+                            article.style.opacity = '1';
+                            article.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else {
+                        article.style.opacity = '0';
+                        article.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            article.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        }
+        
+        // Load more articles
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', function() {
+                const buttonText = this.innerHTML;
+                
+                // Show loading state
+                this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Loading...';
+                this.disabled = true;
+                
+                // Simulate loading more articles
+                setTimeout(() => {
+                    const articlesContainer = document.getElementById('articlesContainer');
+                    const newArticles = [
+                        {
+                            title: 'Telehealth Nursing in Rural Kenya',
+                            category: 'Clinical Practice',
+                            color: 'from-cyan-600 to-cyan-400',
+                            textColor: 'text-cyan-900',
+                            bgColor: 'bg-cyan-100',
+                            date: 'February 5, 2024',
+                            readTime: '6 min',
+                            author: 'David Ochieng',
+                            initials: 'DO',
+                            description: 'Exploring the implementation and impact of telehealth services in rural Kenyan healthcare settings.'
+                        },
+                        {
+                            title: 'Ethical Dilemmas in Nursing Practice',
+                            category: 'Education',
+                            color: 'from-indigo-600 to-indigo-400',
+                            textColor: 'text-indigo-900',
+                            bgColor: 'bg-indigo-100',
+                            date: 'January 30, 2024',
+                            readTime: '8 min',
+                            author: 'Prof. Grace Akinyi',
+                            initials: 'GA',
+                            description: 'Navigating complex ethical situations in clinical practice: Case studies and guidance.'
+                        },
+                        {
+                            title: 'Work-Life Balance for Nurses',
+                            category: 'Mental Health',
+                            color: 'from-pink-600 to-pink-400',
+                            textColor: 'text-pink-900',
+                            bgColor: 'bg-pink-100',
+                            date: 'January 25, 2024',
+                            readTime: '5 min',
+                            author: 'Susan Wanjiru',
+                            initials: 'SW',
+                            description: 'Practical strategies for maintaining work-life balance and preventing burnout in nursing.'
+                        },
+                        {
+                            title: 'Specialization Paths in Nursing',
+                            category: 'Career Development',
+                            color: 'from-amber-600 to-amber-400',
+                            textColor: 'text-amber-900',
+                            bgColor: 'bg-amber-100',
+                            date: 'January 20, 2024',
+                            readTime: '7 min',
+                            author: 'Dr. James Mbugua',
+                            initials: 'JM',
+                            description: 'A guide to nursing specializations in Kenya: Requirements, opportunities, and career paths.'
+                        }
+                    ];
+                    
+                    newArticles.forEach(article => {
+                        const articleElement = document.createElement('article');
+                        articleElement.className = 'blog-card bg-white rounded-2xl shadow-lg overflow-hidden';
+                        articleElement.style.opacity = '0';
+                        articleElement.style.transform = 'translateY(20px)';
+                        articleElement.style.transition = 'all 0.3s ease';
+                        
+                        articleElement.innerHTML = `
+                            <div class="h-48 bg-gradient-to-r ${article.color} relative">
+                                <div class="absolute top-4 left-4">
+                                    <span class="bg-white ${article.textColor} text-xs font-bold px-3 py-1 rounded-full">${article.category}</span>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center text-sm text-gray-500 mb-3">
+                                    <i class="far fa-calendar mr-2"></i>
+                                    <span>${article.date}</span>
+                                    <span class="mx-2">•</span>
+                                    <i class="far fa-clock mr-1"></i>
+                                    <span>${article.readTime} read</span>
+                                </div>
+                                <h3 class="font-bold text-xl mb-3">${article.title}</h3>
+                                <p class="text-gray-600 mb-4">${article.description}</p>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 ${article.bgColor} rounded-full flex items-center justify-center ${article.textColor} font-bold mr-2">
+                                            ${article.initials}
+                                        </div>
+                                        <span class="text-sm text-gray-700">${article.author}</span>
+                                    </div>
+                                    <a href="#" class="text-blue-900 font-medium hover:underline">
+                                        Read More <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                        
+                        articlesContainer.appendChild(articleElement);
+                        
+                        // Animate in
+                        setTimeout(() => {
+                            articleElement.style.opacity = '1';
+                            articleElement.style.transform = 'translateY(0)';
+                        }, 100);
+                    });
+                    
+                    // Reset button
+                    this.innerHTML = buttonText;
+                    this.disabled = false;
+                    
+                    // Show message
+                    showToast('More articles loaded successfully!', 'success');
+                    
+                    // Hide button if we've loaded enough (for demo)
+                    if (articlesContainer.children.length >= 12) {
+                        this.style.display = 'none';
+                    }
+                }, 2000);
+            });
+        }
+        
+        // Newsletter form
+        const newsletterForm = document.getElementById('blogNewsletterForm');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type="email"]').value;
+                
+                // Show loading
+                const button = this.querySelector('button');
+                const originalText = button.textContent;
+                button.textContent = 'Subscribing...';
+                button.disabled = true;
+                
+                // Simulate subscription
+                setTimeout(() => {
+                    button.textContent = 'Subscribed!';
+                    button.classList.remove('bg-white', 'text-blue-900', 'hover:bg-gray-100');
+                    button.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600');
+                    
+                    // Reset after 2 seconds
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.disabled = false;
+                        button.classList.remove('bg-green-500', 'text-white', 'hover:bg-green-600');
+                        button.classList.add('bg-white', 'text-blue-900', 'hover:bg-gray-100');
+                        this.reset();
+                        
+                        showToast('Successfully subscribed to blog updates!', 'success');
+                    }, 2000);
+                }, 1500);
+            });
+        }
+        
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            // Remove existing toast
+            const existingToast = document.querySelector('.custom-toast');
+            if (existingToast) existingToast.remove();
+            
+            // Create toast
+            const toast = document.createElement('div');
+            toast.className = `custom-toast fixed top-4 right-4 z-50 px-6 py-3 rounded-xl shadow-lg text-white font-medium transform translate-x-full transition-transform duration-300 ${
+                type === 'success' ? 'bg-green-600' : 'bg-blue-600'
+            }`;
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} mr-3"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // Smooth scroll for featured article
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId.startsWith('#')) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+        
+        console.log('✅ Blog Page Loaded Successfully');
+    });
+    </script>
+</body>
+</html>
