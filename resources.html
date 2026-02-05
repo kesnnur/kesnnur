@@ -1,134 +1,935 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resources - KESNNUR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Resources - KESNNUR | Kenya Students & Novice Nurses</title>
+    
+    <!-- Meta Description for SEO -->
+    <meta name="description" content="Access nursing resources, research papers, guidelines, and learning materials from KESNNUR - Kenya's largest community for nursing students and novice nurses.">
+    
+    <!-- Keywords for SEO -->
+    <meta name="keywords" content="KESNNUR resources, nursing guidelines, research papers, nursing templates, nursing education, Kenya nurses, nursing students">
+    
+    <!-- Author -->
+    <meta name="author" content="KESNNUR">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://kesnnur.nnak.or.ke/resources.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kesnnur.nnak.or.ke/resources.html">
+    <meta property="og:title" content="Resources - KESNNUR | Nursing Resources & Materials">
+    <meta property="og:description" content="Access nursing resources, research papers, guidelines, and learning materials from KESNNUR.">
+    <meta property="og:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kesnnur.nnak.or.ke/resources.html">
+    <meta property="twitter:title" content="Resources - KESNNUR | Nursing Resources & Materials">
+    <meta property="twitter:description" content="Access nursing resources, research papers, guidelines, and learning materials from KESNNUR.">
+    <meta property="twitter:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    <link rel="apple-touch-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'kesnnur-blue': '#1e3a8a',
+                        'kesnnur-light': '#3b82f6',
+                        'kesnnur-teal': '#0d9488',
+                        'kesnnur-gold': '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .kesnnur-blue { color: #1e3a8a; }
-        .bg-kesnnur-blue { background-color: #1e3a8a; }
-        .resource-card { transition: all 0.3s; }
-        .resource-card:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        :root {
+            --kesnnur-blue: #1e3a8a;
+            --kesnnur-light: #3b82f6;
+            --kesnnur-teal: #0d9488;
+            --kesnnur-gold: #f59e0b;
+        }
+        
+        /* Skip to content */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #1e3a8a;
+            color: white;
+            padding: 12px;
+            z-index: 10000;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .skip-to-content:focus {
+            top: 0;
+        }
+        
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            padding-top: 0; /* Removed top padding since no top logo */
+        }
+        
+        .font-display {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Glass effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Card hover effects */
+        .resource-card {
+            transition: all 0.3s ease;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.1);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a;
+            border-radius: 4px;
+        }
+        
+        /* Filter button active state */
+        .filter-btn.active {
+            background-color: #1e3a8a;
+            color: white;
+        }
     </style>
 </head>
-<body class="bg-gray-50">
-    <nav class="bg-white shadow">
+<body class="bg-gradient-to-br from-gray-50 to-blue-50">
+    <!-- Skip to Content -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
+                <!-- Logo -->
                 <a href="index.html" class="flex items-center space-x-3">
-                    <div class="bg-kesnnur-blue p-2 rounded-lg">
-                        <i class="fas fa-graduation-cap text-white text-2xl"></i>
-                    </div>
+                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                         alt="KESNNUR Logo"
+                         width="40"
+                         height="40"
+                         class="w-10 h-10 rounded-lg object-contain">
                     <div>
-                        <h1 class="text-2xl font-bold kesnnur-blue">KESNNUR</h1>
-                        <p class="text-sm text-gray-600">Kenya Students & Novice Nurses</p>
+                        <h1 class="text-lg md:text-xl font-bold text-blue-900 font-display">KESNNUR</h1>
+                        <p class="text-xs text-gray-600">Students & Novice Nurses</p>
                     </div>
                 </a>
-                <div class="hidden md:flex space-x-6">
-                    <a href="index.html" class="text-gray-700 hover:kesnnur-blue">Home</a>
-                    <a href="about.html" class="text-gray-700 hover:kesnnur-blue">About</a>
-                    <a href="events.html" class="text-gray-700 hover:kesnnur-blue">Events</a>
-                    <a href="resources.html" class="kesnnur-blue font-bold">Resources</a>
-                    <a href="contact.html" class="text-gray-700 hover:kesnnur-blue">Contact</a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium">Home</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium">About</a>
+                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium">Management</a>
+                    <a href="events.html" class="text-gray-700 hover:text-blue-900 font-medium">Events</a>
+                    <a href="blog.html" class="text-gray-700 hover:text-blue-900 font-medium">Blog</a>
+                    <a href="resources.html" class="text-blue-900 font-medium border-b-2 border-blue-900">Resources</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium">Contact</a>
+                    <a href="members.html" class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800">
+                        Member Portal
+                    </a>
                 </div>
-                <a href="members.html" class="bg-kesnnur-blue text-white px-4 py-2 rounded-lg">Member Portal</a>
+
+                <!-- Mobile Menu Button -->
+                <button id="menuBtn" class="md:hidden text-blue-900">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white rounded-lg shadow-lg p-6">
+                <div class="space-y-3">
+                    <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-home mr-3"></i>Home
+                    </a>
+                    <a href="about.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-info-circle mr-3"></i>About
+                    </a>
+                    <a href="management.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-users mr-3"></i>Management
+                    </a>
+                    <a href="events.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-calendar-alt mr-3"></i>Events
+                    </a>
+                    <a href="blog.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-blog mr-3"></i>Blog
+                    </a>
+                    <a href="resources.html" class="block py-3 px-4 bg-blue-50 text-blue-900 rounded-lg">
+                        <i class="fas fa-book-medical mr-3"></i>Resources
+                    </a>
+                    <a href="contact.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-envelope mr-3"></i>Contact
+                    </a>
+                    <a href="members.html" class="block py-3 px-4 bg-blue-900 text-white rounded-lg text-center font-medium mt-4">
+                        <i class="fas fa-user mr-3"></i>Member Portal
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto px-4 py-12">
-        <h1 class="text-4xl font-bold mb-2 kesnnur-blue text-center">Resources Library</h1>
-        <p class="text-gray-600 text-center mb-12">Download materials, research papers, and learning resources</p>
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="relative py-20 bg-gradient-to-r from-blue-900 to-blue-700">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080')] bg-cover bg-center opacity-20"></div>
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">
+                    Resources Library
+                </h1>
+                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                    Access nursing resources, research papers, guidelines, templates, and learning materials to support your nursing journey.
+                </p>
+                <div class="bg-white/10 glass rounded-xl p-6 max-w-2xl mx-auto">
+                    <p class="text-white mb-4">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Exclusive resources available to KESNNUR members
+                    </p>
+                    <a href="members.html" class="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold hover:shadow-lg inline-flex items-center">
+                        <i class="fas fa-user-plus mr-2"></i>Become a Member
+                    </a>
+                </div>
+            </div>
+        </section>
 
-        <div class="grid md:grid-cols-4 gap-6 mb-8">
-            <button class="bg-kesnnur-blue text-white py-3 rounded-lg font-medium">All Resources</button>
-            <button class="bg-white border border-kesnnur-blue text-kesnnur-blue py-3 rounded-lg">Research Papers</button>
-            <button class="bg-white border border-kesnnur-blue text-kesnnur-blue py-3 rounded-lg">Guidelines</button>
-            <button class="bg-white border border-kesnnur-blue text-kesnnur-blue py-3 rounded-lg">Templates</button>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8">
-            <!-- Resource 1 -->
-            <div class="resource-card bg-white rounded-xl shadow p-6">
-                <div class="flex items-center mb-4">
-                    <div class="bg-blue-100 p-3 rounded-lg mr-4">
-                        <i class="fas fa-file-pdf text-blue-900 text-2xl"></i>
+        <!-- Stats Section -->
+        <section class="py-12 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold mb-2">200+</div>
+                        <div class="text-blue-200">Resources</div>
                     </div>
                     <div>
-                        <h3 class="font-bold text-lg">KESNNUR Membership Guidelines 2024</h3>
-                        <p class="text-gray-600 text-sm">PDF • 2.4 MB</p>
-                    </div>
-                </div>
-                <p class="text-gray-700 mb-6">Complete guidelines for KESNNUR membership registration and benefits.</p>
-                <button class="w-full bg-kesnnur-blue text-white py-2 rounded-lg hover:bg-blue-800">
-                    <i class="fas fa-download mr-2"></i>Download
-                </button>
-            </div>
-
-            <!-- Resource 2 -->
-            <div class="resource-card bg-white rounded-xl shadow p-6">
-                <div class="flex items-center mb-4">
-                    <div class="bg-teal-100 p-3 rounded-lg mr-4">
-                        <i class="fas fa-file-medical text-teal-900 text-2xl"></i>
+                        <div class="text-4xl md:text-5xl font-bold mb-2">50+</div>
+                        <div class="text-blue-200">Research Papers</div>
                     </div>
                     <div>
-                        <h3 class="font-bold text-lg">Nursing Research Template</h3>
-                        <p class="text-gray-600 text-sm">DOCX • 1.8 MB</p>
-                    </div>
-                </div>
-                <p class="text-gray-700 mb-6">Standard template for nursing research proposals and papers.</p>
-                <button class="w-full bg-kesnnur-blue text-white py-2 rounded-lg hover:bg-blue-800">
-                    <i class="fas fa-download mr-2"></i>Download
-                </button>
-            </div>
-
-            <!-- Resource 3 -->
-            <div class="resource-card bg-white rounded-xl shadow p-6">
-                <div class="flex items-center mb-4">
-                    <div class="bg-orange-100 p-3 rounded-lg mr-4">
-                        <i class="fas fa-calendar-alt text-orange-900 text-2xl"></i>
+                        <div class="text-4xl md:text-5xl font-bold mb-2">30+</div>
+                        <div class="text-blue-200">Guidelines</div>
                     </div>
                     <div>
-                        <h3 class="font-bold text-lg">KESNNUR 2026 Calendar of Events</h3>
-                        <p class="text-gray-600 text-sm">PDF • 3.1 MB</p>
-                    </div>
-                </div>
-                <p class="text-gray-700 mb-6">Official calendar of events, workshops, and conferences for 2026.</p>
-                <button class="w-full bg-kesnnur-blue text-white py-2 rounded-lg hover:bg-blue-800">
-                    <i class="fas fa-download mr-2"></i>Download
-                </button>
-            </div>
-        </div>
-
-        <!-- Learning Section -->
-        <div class="mt-16">
-            <h2 class="text-2xl font-bold mb-8 kesnnur-blue">Online Learning</h2>
-            <div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white rounded-2xl p-8">
-                <div class="flex flex-col md:flex-row items-center">
-                    <div class="md:w-2/3">
-                        <h3 class="text-2xl font-bold mb-4">Partnership with Lecturio GmbH</h3>
-                        <p class="mb-6">We have officially signed a Memorandum of Understanding (MoU) with Lecturio GmbH, marking the start of our partnership to provide quality nursing education resources.</p>
-                        <button class="bg-white text-blue-900 px-6 py-3 rounded-lg font-bold hover:bg-gray-100">
-                            Access Learning Platform
-                        </button>
-                    </div>
-                    <div class="md:w-1/3 mt-6 md:mt-0">
-                        <i class="fas fa-graduation-cap text-6xl opacity-50"></i>
+                        <div class="text-4xl md:text-5xl font-bold mb-2">500+</div>
+                        <div class="text-blue-200">Downloads/Month</div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p>© 2024 KESNNUR - Kenya Students & Novice Nurses</p>
-            <p class="text-gray-400 mt-2">Nurses Complex KNH, Nairobi | +254 791 296 924 | kesnnur@gmail.com</p>
+        <!-- Resources Section -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-12">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-2">Browse Resources</h2>
+                        <p class="text-gray-600">Filter by category to find exactly what you need</p>
+                    </div>
+                    <div class="mt-4 md:mt-0">
+                        <div class="relative">
+                            <input type="text" id="resourceSearch" placeholder="Search resources..." 
+                                   class="pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full md:w-80">
+                            <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div class="flex flex-wrap gap-3 mb-12">
+                    <button class="filter-btn active px-6 py-3 rounded-xl font-medium bg-blue-900 text-white" data-filter="all">
+                        All Resources
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50" data-filter="research">
+                        Research Papers
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50" data-filter="guidelines">
+                        Guidelines
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50" data-filter="templates">
+                        Templates
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50" data-filter="lectures">
+                        Lecture Notes
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50" data-filter="career">
+                        Career Development
+                    </button>
+                </div>
+
+                <!-- Resources Grid -->
+                <div id="resourcesContainer" class="grid md:grid-cols-3 gap-8">
+                    <!-- Resource 1 -->
+                    <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="guidelines">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-blue-100 p-4 rounded-xl mr-4">
+                                <i class="fas fa-file-pdf text-blue-900 text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">KESNNUR Membership Guidelines 2024</h3>
+                                <div class="flex items-center text-gray-600 mt-1">
+                                    <span class="mr-4">PDF • 2.4 MB</span>
+                                    <span class="text-sm bg-blue-50 text-blue-700 px-2 py-1 rounded">Guidelines</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6">Complete guidelines for KESNNUR membership registration, benefits, and code of conduct for nursing students and novice nurses.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Updated: Feb 15, 2024</span>
+                            <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
+                                    data-resource="membership-guidelines">
+                                <i class="fas fa-download mr-2"></i>Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Resource 2 -->
+                    <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="templates">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-teal-100 p-4 rounded-xl mr-4">
+                                <i class="fas fa-file-medical text-teal-900 text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">Nursing Research Proposal Template</h3>
+                                <div class="flex items-center text-gray-600 mt-1">
+                                    <span class="mr-4">DOCX • 1.8 MB</span>
+                                    <span class="text-sm bg-teal-50 text-teal-700 px-2 py-1 rounded">Templates</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6">Standard template for nursing research proposals with sections for literature review, methodology, and ethical considerations.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Updated: Jan 28, 2024</span>
+                            <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
+                                    data-resource="research-template">
+                                <i class="fas fa-download mr-2"></i>Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Resource 3 -->
+                    <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="career">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-orange-100 p-4 rounded-xl mr-4">
+                                <i class="fas fa-calendar-alt text-orange-900 text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">KESNNUR 2024 Calendar of Events</h3>
+                                <div class="flex items-center text-gray-600 mt-1">
+                                    <span class="mr-4">PDF • 3.1 MB</span>
+                                    <span class="text-sm bg-orange-50 text-orange-700 px-2 py-1 rounded">Career</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6">Official calendar of workshops, conferences, networking events, and training programs for 2024. Updated quarterly.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Updated: Mar 1, 2024</span>
+                            <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
+                                    data-resource="calendar-2024">
+                                <i class="fas fa-download mr-2"></i>Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Resource 4 -->
+                    <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="research">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-purple-100 p-4 rounded-xl mr-4">
+                                <i class="fas fa-flask text-purple-900 text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">Clinical Nursing Research in Kenya</h3>
+                                <div class="flex items-center text-gray-600 mt-1">
+                                    <span class="mr-4">PDF • 4.2 MB</span>
+                                    <span class="text-sm bg-purple-50 text-purple-700 px-2 py-1 rounded">Research</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6">Comprehensive research paper on clinical nursing practices and innovations in Kenyan healthcare settings.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Published: Dec 2023</span>
+                            <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
+                                    data-resource="clinical-research">
+                                <i class="fas fa-download mr-2"></i>Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Resource 5 -->
+                    <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="guidelines">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-green-100 p-4 rounded-xl mr-4">
+                                <i class="fas fa-hand-holding-medical text-green-900 text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">Infection Control Guidelines</h3>
+                                <div class="flex items-center text-gray-600 mt-1">
+                                    <span class="mr-4">PDF • 2.1 MB</span>
+                                    <span class="text-sm bg-green-50 text-green-700 px-2 py-1 rounded">Guidelines</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6">Updated infection prevention and control guidelines for nursing students and novice nurses in clinical settings.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Updated: Feb 10, 2024</span>
+                            <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
+                                    data-resource="infection-control">
+                                <i class="fas fa-download mr-2"></i>Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Resource 6 -->
+                    <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="lectures">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-red-100 p-4 rounded-xl mr-4">
+                                <i class="fas fa-book-medical text-red-900 text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">Pharmacology Lecture Notes</h3>
+                                <div class="flex items-center text-gray-600 mt-1">
+                                    <span class="mr-4">PDF • 5.3 MB</span>
+                                    <span class="text-sm bg-red-50 text-red-700 px-2 py-1 rounded">Lecture Notes</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6">Comprehensive pharmacology notes covering drug classifications, administration, and nursing considerations.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Updated: Jan 15, 2024</span>
+                            <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
+                                    data-resource="pharmacology-notes">
+                                <i class="fas fa-download mr-2"></i>Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More Button -->
+                <div class="text-center mt-12">
+                    <button id="loadMoreBtn" class="bg-white border-2 border-blue-900 text-blue-900 px-8 py-3 rounded-xl text-lg font-semibold hover:bg-blue-50">
+                        <i class="fas fa-sync-alt mr-2"></i> Load More Resources
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learning Partnership Section -->
+        <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+            <div class="container mx-auto px-4">
+                <div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white rounded-2xl overflow-hidden shadow-2xl">
+                    <div class="flex flex-col md:flex-row">
+                        <div class="md:w-2/3 p-8 md:p-12">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-white/20 p-3 rounded-lg mr-4">
+                                    <i class="fas fa-handshake text-2xl"></i>
+                                </div>
+                                <div>
+                                    <span class="text-blue-200 text-sm font-semibold">EXCLUSIVE PARTNERSHIP</span>
+                                </div>
+                            </div>
+                            <h2 class="text-3xl font-bold mb-6">Partnership with Lecturio GmbH</h2>
+                            <p class="text-blue-100 mb-6 text-lg">
+                                We have officially signed a Memorandum of Understanding (MoU) with Lecturio GmbH, marking the beginning of our strategic partnership to provide world-class nursing education resources to our members.
+                            </p>
+                            <div class="grid grid-cols-2 gap-6 mb-8">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-blue-200 mr-3"></i>
+                                    <span>Access to 2,000+ nursing video lectures</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-blue-200 mr-3"></i>
+                                    <span>Interactive quizzes and assessments</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-blue-200 mr-3"></i>
+                                    <span>NCLEX-style question bank</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-blue-200 mr-3"></i>
+                                    <span>Continuing education credits</span>
+                                </div>
+                            </div>
+                            <a href="members.html" class="bg-white text-blue-900 px-8 py-3 rounded-xl text-lg font-bold hover:shadow-xl inline-flex items-center">
+                                <i class="fas fa-external-link-alt mr-3"></i>Access Learning Platform
+                            </a>
+                        </div>
+                        <div class="md:w-1/3 bg-gradient-to-br from-blue-800 to-teal-700 flex items-center justify-center p-8">
+                            <div class="text-center">
+                                <i class="fas fa-graduation-cap text-8xl opacity-50 mb-6"></i>
+                                <h3 class="text-2xl font-bold mb-4">Lecturio</h3>
+                                <p class="text-blue-100">Medical Education Platform</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Additional Resources -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-12">More Learning Tools</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
+                        <div class="text-blue-900 text-5xl mb-6">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Video Library</h3>
+                        <p class="text-gray-600 mb-6">Access recorded workshops, lectures, and training sessions from past events.</p>
+                        <a href="#" class="text-blue-900 font-semibold hover:underline">
+                            Browse Videos <i class="fas fa-play-circle ml-2"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
+                        <div class="text-blue-900 text-5xl mb-6">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Journal Access</h3>
+                        <p class="text-gray-600 mb-6">Get access to nursing journals and academic publications through our partnerships.</p>
+                        <a href="#" class="text-blue-900 font-semibold hover:underline">
+                            View Journals <i class="fas fa-external-link-alt ml-2"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
+                        <div class="text-blue-900 text-5xl mb-6">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Discussion Forums</h3>
+                        <p class="text-gray-600 mb-6">Join discussions, ask questions, and share knowledge with fellow nursing students.</p>
+                        <a href="members.html" class="text-blue-900 font-semibold hover:underline">
+                            Join Discussion <i class="fas fa-comment ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-4xl font-bold mb-6">Need Specific Resources?</h2>
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                    Can't find what you're looking for? Request resources or suggest topics for our next resource collection.
+                </p>
+                <a href="contact.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl inline-flex items-center">
+                    <i class="fas fa-envelope mr-2"></i> Request Resources
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                             alt="KESNNUR Logo"
+                             width="40"
+                             height="40"
+                             class="w-10 h-10 rounded-lg object-contain bg-white p-1">
+                        <h3 class="text-xl font-bold">KESNNUR</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Empowering Kenya's future nursing leaders through resources and education.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Resource Categories</h4>
+                    <div class="space-y-3">
+                        <a href="#" class="text-gray-400 hover:text-white block">Research Papers</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Clinical Guidelines</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Study Templates</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Lecture Notes</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Career Resources</a>
+                        <a href="#" class="text-gray-400 hover:text-white block">Video Library</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <div class="space-y-3">
+                        <a href="index.html" class="text-gray-400 hover:text-white block">Home</a>
+                        <a href="about.html" class="text-gray-400 hover:text-white block">About</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white block">Events</a>
+                        <a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a>
+                        <a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a>
+                        <a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Contact</h4>
+                    <div class="space-y-3 text-gray-400">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
+                            <span>Nurses Complex KNH, Nairobi, Kenya</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone mr-3"></i>
+                            <a href="tel:+254791296924" class="hover:text-white">+254 791 296 924</a>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i>
+                            <a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>Copyright © <span id="currentYear">2024</span> KESNNUR. All rights reserved.</p>
+                <p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p>
+            </div>
         </div>
     </footer>
+
+    <!-- JavaScript -->
+    <script>
+    // ============================================
+    // RESOURCES PAGE FUNCTIONALITY
+    // ============================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', function() {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                
+                if (isHidden) {
+                    mobileMenu.classList.remove('hidden');
+                    this.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    this.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+                }
+            });
+        }
+        
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const resources = document.querySelectorAll('.resource-card');
+        const searchInput = document.getElementById('resourceSearch');
+        
+        // Filter by category
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+                
+                // Update active button
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active', 'bg-blue-900', 'text-white');
+                    btn.classList.add('bg-white', 'border', 'border-blue-900', 'text-blue-900');
+                });
+                
+                this.classList.remove('bg-white', 'border', 'border-blue-900', 'text-blue-900');
+                this.classList.add('active', 'bg-blue-900', 'text-white');
+                
+                // Filter resources
+                resources.forEach(resource => {
+                    const category = resource.getAttribute('data-category');
+                    
+                    if (filter === 'all' || category === filter) {
+                        resource.style.display = 'block';
+                        setTimeout(() => {
+                            resource.style.opacity = '1';
+                            resource.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else {
+                        resource.style.opacity = '0';
+                        resource.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            resource.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+        
+        // Search functionality
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                resources.forEach(resource => {
+                    const title = resource.querySelector('h3').textContent.toLowerCase();
+                    const description = resource.querySelector('p').textContent.toLowerCase();
+                    const category = resource.getAttribute('data-category');
+                    
+                    if (title.includes(searchTerm) || description.includes(searchTerm) || category.includes(searchTerm)) {
+                        resource.style.display = 'block';
+                        setTimeout(() => {
+                            resource.style.opacity = '1';
+                            resource.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else {
+                        resource.style.opacity = '0';
+                        resource.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            resource.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        }
+        
+        // Download button functionality
+        const downloadButtons = document.querySelectorAll('.download-btn');
+        
+        downloadButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const resourceName = this.getAttribute('data-resource');
+                const buttonText = this.innerHTML;
+                
+                // Show loading state
+                this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Downloading...';
+                this.disabled = true;
+                
+                // Simulate download
+                setTimeout(() => {
+                    // Create a temporary link for download (in real scenario, this would be actual file)
+                    const tempLink = document.createElement('a');
+                    tempLink.href = '#'; // Replace with actual file URL
+                    tempLink.download = `${resourceName}.pdf`;
+                    tempLink.click();
+                    
+                    // Reset button
+                    this.innerHTML = buttonText;
+                    this.disabled = false;
+                    
+                    // Show success message
+                    showToast('Resource downloaded successfully!', 'success');
+                }, 1500);
+            });
+        });
+        
+        // Load more resources
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', function() {
+                const buttonText = this.innerHTML;
+                
+                // Show loading state
+                this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Loading...';
+                this.disabled = true;
+                
+                // Simulate loading more resources
+                setTimeout(() => {
+                    // In a real scenario, this would fetch more resources from an API
+                    const resourcesContainer = document.getElementById('resourcesContainer');
+                    const newResources = [
+                        {
+                            title: 'Mental Health Nursing Handbook',
+                            icon: 'fas fa-brain',
+                            iconColor: 'text-indigo-900',
+                            iconBg: 'bg-indigo-100',
+                            category: 'guidelines',
+                            size: '3.2 MB',
+                            description: 'Comprehensive guide to mental health nursing practices and interventions.',
+                            date: 'Feb 5, 2024'
+                        },
+                        {
+                            title: 'Clinical Placement Logbook',
+                            icon: 'fas fa-clipboard-check',
+                            iconColor: 'text-cyan-900',
+                            iconBg: 'bg-cyan-100',
+                            category: 'templates',
+                            size: '2.7 MB',
+                            description: 'Digital logbook template for tracking clinical hours and experiences.',
+                            date: 'Jan 30, 2024'
+                        },
+                        {
+                            title: 'Nursing Leadership Guide',
+                            icon: 'fas fa-flag',
+                            iconColor: 'text-amber-900',
+                            iconBg: 'bg-amber-100',
+                            category: 'career',
+                            size: '4.1 MB',
+                            description: 'Developing leadership skills for nursing students and novice nurses.',
+                            date: 'Feb 18, 2024'
+                        }
+                    ];
+                    
+                    newResources.forEach(resource => {
+                        const resourceElement = document.createElement('div');
+                        resourceElement.className = 'resource-card bg-white rounded-2xl shadow-lg p-6';
+                        resourceElement.setAttribute('data-category', resource.category);
+                        resourceElement.style.opacity = '0';
+                        resourceElement.style.transform = 'translateY(20px)';
+                        resourceElement.style.transition = 'all 0.3s ease';
+                        
+                        resourceElement.innerHTML = `
+                            <div class="flex items-center mb-6">
+                                <div class="${resource.iconBg} p-4 rounded-xl mr-4">
+                                    <i class="${resource.icon} ${resource.iconColor} text-3xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-xl">${resource.title}</h3>
+                                    <div class="flex items-center text-gray-600 mt-1">
+                                        <span class="mr-4">PDF • ${resource.size}</span>
+                                        <span class="text-sm bg-gray-100 text-gray-700 px-2 py-1 rounded capitalize">${resource.category}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mb-6">${resource.description}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Updated: ${resource.date}</span>
+                                <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
+                                        data-resource="${resource.title.toLowerCase().replace(/\s+/g, '-')}">
+                                    <i class="fas fa-download mr-2"></i>Download
+                                </button>
+                            </div>
+                        `;
+                        
+                        resourcesContainer.appendChild(resourceElement);
+                        
+                        // Animate in
+                        setTimeout(() => {
+                            resourceElement.style.opacity = '1';
+                            resourceElement.style.transform = 'translateY(0)';
+                        }, 100);
+                        
+                        // Add download event listener to new button
+                        const newDownloadBtn = resourceElement.querySelector('.download-btn');
+                        newDownloadBtn.addEventListener('click', function() {
+                            const resourceName = this.getAttribute('data-resource');
+                            const buttonText = this.innerHTML;
+                            
+                            this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Downloading...';
+                            this.disabled = true;
+                            
+                            setTimeout(() => {
+                                this.innerHTML = buttonText;
+                                this.disabled = false;
+                                showToast('Resource downloaded successfully!', 'success');
+                            }, 1500);
+                        });
+                    });
+                    
+                    // Reset button
+                    this.innerHTML = buttonText;
+                    this.disabled = false;
+                    
+                    // Show message
+                    showToast('More resources loaded successfully!', 'success');
+                    
+                    // Hide button if we've loaded enough (for demo)
+                    if (resourcesContainer.children.length >= 12) {
+                        this.style.display = 'none';
+                    }
+                }, 2000);
+            });
+        }
+        
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            // Remove existing toast
+            const existingToast = document.querySelector('.custom-toast');
+            if (existingToast) existingToast.remove();
+            
+            // Create toast
+            const toast = document.createElement('div');
+            toast.className = `custom-toast fixed top-4 right-4 z-50 px-6 py-3 rounded-xl shadow-lg text-white font-medium transform translate-x-full transition-transform duration-300 ${
+                type === 'success' ? 'bg-green-600' : 'bg-blue-600'
+            }`;
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} mr-3"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        console.log('✅ Resources Page Loaded Successfully');
+    });
+    </script>
 </body>
 </html>
