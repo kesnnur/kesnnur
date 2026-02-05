@@ -1,22 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Registration - KESNNUR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Member Registration - KESNNUR | Kenya Students & Novice Nurses</title>
+    
+    <!-- Meta Description for SEO -->
+    <meta name="description" content="Join KESNNUR as a member. Register as a student nurse, novice nurse, or professional nurse. Access exclusive benefits, networking, and resources.">
+    
+    <!-- Keywords for SEO -->
+    <meta name="keywords" content="KESNNUR registration, nursing membership, student nurse registration, novice nurse Kenya, nursing association membership">
+    
+    <!-- Author -->
+    <meta name="author" content="KESNNUR">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://kesnnur.nnak.or.ke/register.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kesnnur.nnak.or.ke/register.html">
+    <meta property="og:title" content="Member Registration - KESNNUR | Join Our Nursing Community">
+    <meta property="og:description" content="Join Kenya's largest community of nursing students and novice nurses. Register today for exclusive benefits.">
+    <meta property="og:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kesnnur.nnak.or.ke/register.html">
+    <meta property="twitter:title" content="Member Registration - KESNNUR | Join Our Nursing Community">
+    <meta property="twitter:description" content="Join Kenya's largest community of nursing students and novice nurses. Register today for exclusive benefits.">
+    <meta property="twitter:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    <link rel="apple-touch-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'kesnnur-blue': '#1e3a8a',
+                        'kesnnur-light': '#3b82f6',
+                        'kesnnur-teal': '#0d9488',
+                        'kesnnur-gold': '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Custom Styles -->
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .kesnnur-blue { color: #1e3a8a; }
-        .bg-kesnnur-blue { background-color: #1e3a8a; }
-        .membership-card { transition: all 0.3s; }
-        .membership-card:hover { transform: translateY(-5px); }
+        :root {
+            --kesnnur-blue: #1e3a8a;
+            --kesnnur-light: #3b82f6;
+            --kesnnur-teal: #0d9488;
+            --kesnnur-gold: #f59e0b;
+        }
+        
+        /* Skip to content */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #1e3a8a;
+            color: white;
+            padding: 12px;
+            z-index: 10000;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .skip-to-content:focus {
+            top: 0;
+        }
+        
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            padding-top: 0;
+        }
+        
+        .font-display {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Card hover effects */
+        .membership-card {
+            transition: all 0.3s ease;
+        }
+        
+        .membership-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(30, 58, 138, 0.15);
+        }
+        
         .step-indicator {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -24,450 +121,685 @@
             font-weight: bold;
             background-color: #e5e7eb;
             color: #6b7280;
+            transition: all 0.3s ease;
         }
+        
         .step-indicator.active {
             background-color: #1e3a8a;
             color: white;
+            transform: scale(1.1);
         }
+        
         .step-line {
-            height: 2px;
+            height: 3px;
             flex-grow: 1;
             background-color: #e5e7eb;
-            margin: 0 8px;
+            margin: 0 10px;
+            transition: all 0.3s ease;
         }
+        
         .step-line.active {
             background-color: #1e3a8a;
         }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a;
+            border-radius: 4px;
+        }
+        
+        /* Form input focus */
+        .form-input:focus {
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gradient-to-br from-gray-50 to-blue-50">
+    <!-- Skip to Content -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
     <!-- Navigation -->
-    <nav class="bg-white shadow">
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
+                <!-- Logo -->
                 <a href="index.html" class="flex items-center space-x-3">
-                    <div class="bg-kesnnur-blue p-2 rounded-lg">
-                        <i class="fas fa-graduation-cap text-white text-2xl"></i>
-                    </div>
+                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                         alt="KESNNUR Logo"
+                         width="40"
+                         height="40"
+                         class="w-10 h-10 rounded-lg object-contain">
                     <div>
-                        <h1 class="text-2xl font-bold kesnnur-blue">KESNNUR</h1>
-                        <p class="text-sm text-gray-600">Kenya Students & Novice Nurses</p>
+                        <h1 class="text-lg md:text-xl font-bold text-blue-900 font-display">KESNNUR</h1>
+                        <p class="text-xs text-gray-600">Students & Novice Nurses</p>
                     </div>
                 </a>
-                <div class="hidden md:flex space-x-6">
-                    <a href="index.html" class="text-gray-700 hover:kesnnur-blue">Home</a>
-                    <a href="about.html" class="text-gray-700 hover:kesnnur-blue">About</a>
-                    <a href="events.html" class="text-gray-700 hover:kesnnur-blue">Events</a>
-                    <a href="resources.html" class="text-gray-700 hover:kesnnur-blue">Resources</a>
-                    <a href="contact.html" class="text-gray-700 hover:kesnnur-blue">Contact</a>
-                </div>
-                <div>
-                    <a href="member-login.html" class="bg-kesnnur-blue text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors">
-                        <i class="fas fa-sign-in-alt mr-2"></i>Member Login
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium">Home</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium">About</a>
+                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium">Management</a>
+                    <a href="events.html" class="text-gray-700 hover:text-blue-900 font-medium">Events</a>
+                    <a href="blog.html" class="text-gray-700 hover:text-blue-900 font-medium">Blog</a>
+                    <a href="resources.html" class="text-gray-700 hover:text-blue-900 font-medium">Resources</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium">Contact</a>
+                    <a href="member-login.html" class="text-gray-700 hover:text-blue-900 font-medium">Login</a>
+                    <a href="register.html" class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800">
+                        Join Now
                     </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="menuBtn" class="md:hidden text-blue-900">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white rounded-lg shadow-lg p-6">
+                <div class="space-y-3">
+                    <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-home mr-3"></i>Home
+                    </a>
+                    <a href="about.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-info-circle mr-3"></i>About
+                    </a>
+                    <a href="management.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-users mr-3"></i>Management
+                    </a>
+                    <a href="events.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-calendar-alt mr-3"></i>Events
+                    </a>
+                    <a href="blog.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-blog mr-3"></i>Blog
+                    </a>
+                    <a href="resources.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-book-medical mr-3"></i>Resources
+                    </a>
+                    <a href="contact.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                        <i class="fas fa-envelope mr-3"></i>Contact
+                    </a>
+                    <div class="pt-3 border-t">
+                        <a href="member-login.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg mb-3">
+                            <i class="fas fa-sign-in-alt mr-3"></i>Member Login
+                        </a>
+                        <a href="register.html" class="block py-3 px-4 bg-blue-900 text-white rounded-lg text-center font-medium">
+                            <i class="fas fa-user-plus mr-3"></i>Join KESNNUR
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="container mx-auto px-4 py-12">
-        <div class="max-w-6xl mx-auto">
-            <!-- Page Header -->
-            <div class="text-center mb-12">
-                <h1 class="text-4xl font-bold kesnnur-blue mb-4">Become a KESNNUR Member</h1>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Join our community of nursing students and novice nurses. Access exclusive benefits, 
-                    networking opportunities, and professional development resources.
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="relative py-16 bg-gradient-to-r from-blue-900 to-blue-700">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2053')] bg-cover bg-center opacity-10"></div>
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">
+                    Join KESNNUR Today
+                </h1>
+                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                    Become part of Kenya's largest community of nursing students and novice nurses. 
+                    Access mentorship, exclusive resources, and career opportunities.
                 </p>
-            </div>
-
-            <!-- Registration Steps -->
-            <div class="bg-white rounded-2xl shadow-xl p-8 mb-12">
-                <div class="flex items-center justify-center mb-10">
-                    <div class="flex items-center">
-                        <div class="step-indicator active">1</div>
-                        <div class="step-line active"></div>
-                        <div class="step-indicator">2</div>
-                        <div class="step-line"></div>
-                        <div class="step-indicator">3</div>
-                    </div>
-                </div>
-                <div class="text-center mb-2">
-                    <h3 class="text-lg font-semibold text-gray-700">Registration Steps</h3>
-                    <div class="flex justify-center space-x-8 mt-2">
-                        <span class="text-sm font-medium kesnnur-blue">Create Account</span>
-                        <span class="text-sm text-gray-500">Verify Email</span>
-                        <span class="text-sm text-gray-500">Complete Profile</span>
-                    </div>
-                </div>
-
-                <!-- Registration Form -->
-                <div class="max-w-2xl mx-auto">
-                    <form id="registerForm">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div>
-                                <label class="block text-gray-700 mb-2 font-medium">
-                                    First Name <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text" name="first_name" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
-                                       placeholder="Enter your first name"
-                                       required>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 mb-2 font-medium">
-                                    Last Name <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text" name="last_name" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
-                                       placeholder="Enter your last name"
-                                       required>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-6">
-                            <label class="block text-gray-700 mb-2 font-medium">
-                                Email Address <span class="text-red-500">*</span>
-                            </label>
-                            <input type="email" name="email" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
-                                   placeholder="you@example.com"
-                                   required>
-                            <p class="text-sm text-gray-500 mt-1">We'll send a verification email to this address</p>
-                        </div>
-                        
-                        <div class="mb-6">
-                            <label class="block text-gray-700 mb-2 font-medium">
-                                Phone Number <span class="text-red-500">*</span>
-                            </label>
-                            <input type="tel" name="phone" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
-                                   placeholder="+254 712 345 678"
-                                   required>
-                        </div>
-                        
-                        <div class="mb-6">
-                            <label class="block text-gray-700 mb-2 font-medium">
-                                Membership Type <span class="text-red-500">*</span>
-                            </label>
-                            <select name="membership_type" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition appearance-none bg-white"
-                                    required>
-                                <option value="">Select your membership category</option>
-                                <option value="student">Student Member (Ksh 100/month)</option>
-                                <option value="novice">Novice Nurse (Ksh 300/month)</option>
-                                <option value="professional">Professional Nurse (Ksh 2,000/year)</option>
-                                <option value="alumni">Alumni Member (Ksh 1,500/year)</option>
-                            </select>
-                        </div>
-                        
-                        <div class="mb-6">
-                            <label class="block text-gray-700 mb-2 font-medium">Institution/Organization</label>
-                            <input type="text" name="institution" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
-                                   placeholder="e.g., University of Nairobi, Kenyatta Hospital">
-                        </div>
-                        
-                        <div id="studentFields" class="hidden mb-6">
-                            <label class="block text-gray-700 mb-2 font-medium">Student ID Number</label>
-                            <input type="text" name="student_id" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
-                                   placeholder="e.g., S1234567">
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div>
-                                <label class="block text-gray-700 mb-2 font-medium">
-                                    Password <span class="text-red-500">*</span>
-                                </label>
-                                <input type="password" name="password" id="password"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
-                                       placeholder="Create a password"
-                                       required minlength="8">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 mb-2 font-medium">
-                                    Confirm Password <span class="text-red-500">*</span>
-                                </label>
-                                <input type="password" name="confirm_password" id="confirmPassword"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
-                                       placeholder="Confirm your password"
-                                       required minlength="8">
-                            </div>
-                        </div>
-                        
-                        <div class="mb-6">
-                            <div class="space-y-2" id="passwordRequirements">
-                                <p class="text-sm font-medium text-gray-700">Password must contain:</p>
-                                <div class="flex items-center">
-                                    <i class="fas fa-circle text-xs mr-2 text-gray-300" id="lengthCheck"></i>
-                                    <span class="text-sm text-gray-600">At least 8 characters</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-circle text-xs mr-2 text-gray-300" id="matchCheck"></i>
-                                    <span class="text-sm text-gray-600">Passwords must match</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-8">
-                            <label class="flex items-start">
-                                <input type="checkbox" name="terms" class="mt-1 mr-3" required>
-                                <span class="text-gray-700">
-                                    I agree to the 
-                                    <a href="terms.html" class="text-blue-900 hover:underline font-medium">Terms of Service</a> 
-                                    and 
-                                    <a href="privacy.html" class="text-blue-900 hover:underline font-medium">Privacy Policy</a>
-                                    <span class="text-red-500">*</span>
-                                </span>
-                            </label>
-                            <label class="flex items-start mt-4">
-                                <input type="checkbox" name="newsletter" class="mt-1 mr-3">
-                                <span class="text-gray-700">
-                                    I would like to receive newsletters and updates about KESNNUR events and opportunities
-                                </span>
-                            </label>
-                        </div>
-                        
-                        <div id="registerError" class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg hidden">
-                            <div class="flex items-center">
-                                <i class="fas fa-exclamation-circle mr-3"></i>
-                                <div>
-                                    <span id="registerErrorText"></span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div id="registerSuccess" class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg hidden">
-                            <div class="flex items-center">
-                                <i class="fas fa-check-circle mr-3"></i>
-                                <div>
-                                    <span id="registerSuccessText"></span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <button type="submit" id="registerButton" 
-                                class="w-full bg-gradient-to-r from-blue-900 to-blue-700 text-white py-4 rounded-xl font-bold text-lg hover:opacity-90 transition-opacity focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                            <span id="registerButtonText">Create My Account</span>
-                            <i class="fas fa-spinner fa-spin ml-2" id="registerSpinner" style="display: none;"></i>
-                        </button>
-                        
-                        <div class="mt-6 text-center">
-                            <p class="text-gray-600">
-                                Already have an account? 
-                                <a href="member-login.html" class="text-blue-900 font-medium hover:underline">
-                                    Sign in here
-                                </a>
-                            </p>
-                        </div>
-                    </form>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#membershipPlans" class="bg-white text-blue-900 px-8 py-3 rounded-xl font-bold hover:shadow-xl">
+                        <i class="fas fa-crown mr-2"></i>View Membership Plans
+                    </a>
+                    <a href="#registerForm" class="border-2 border-white text-white px-8 py-3 rounded-xl font-bold hover:bg-white/10">
+                        <i class="fas fa-user-plus mr-2"></i>Register Now
+                    </a>
                 </div>
             </div>
-            
-            <!-- Membership Plans -->
-            <div id="membershipPlans" class="mb-16">
-                <h2 class="text-3xl font-bold mb-8 kesnnur-blue text-center">Choose Your Membership Plan</h2>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Student Membership -->
-                    <div class="membership-card bg-white rounded-xl shadow-lg p-8">
-                        <div class="text-center mb-6">
-                            <div class="inline-block bg-blue-100 text-blue-900 px-4 py-2 rounded-full text-sm font-bold mb-2">
-                                For Students
-                            </div>
-                            <h3 class="text-2xl font-bold mb-2">Student Member</h3>
-                            <div class="text-4xl font-bold kesnnur-blue mb-1">Ksh 100<span class="text-lg text-gray-600">/month</span></div>
-                            <p class="text-gray-500">or Ksh 1,000/year</p>
-                        </div>
-                        <ul class="space-y-3 mb-8">
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
-                                <span>Access to all workshops and seminars</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
-                                <span>50% discount on conference tickets</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
-                                <span>Exclusive resource library access</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
-                                <span>Student networking events</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
-                                <span>Certificate of membership</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
-                                <span>Monthly career newsletter</span>
-                            </li>
-                        </ul>
-                        <button onclick="scrollToForm()" class="w-full bg-gradient-to-r from-blue-900 to-blue-700 text-white py-3 rounded-lg font-bold hover:opacity-90 transition-opacity">
-                            Select Student Plan
-                        </button>
-                    </div>
+        </section>
 
-                    <!-- Novice Nurse -->
-                    <div class="membership-card bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-xl shadow-xl p-8 transform scale-105 relative">
-                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                            <div class="bg-yellow-500 text-white px-4 py-2 rounded-full text-sm font-bold">
-                                MOST POPULAR
+        <!-- Registration Section -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="max-w-6xl mx-auto">
+                    <!-- Registration Steps -->
+                    <div class="bg-white rounded-2xl shadow-xl p-8 mb-16">
+                        <!-- Steps Header -->
+                        <div class="flex items-center justify-center mb-10">
+                            <div class="flex items-center">
+                                <div class="step-indicator active">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div class="step-line active"></div>
+                                <div class="step-indicator">
+                                    <i class="far fa-envelope"></i>
+                                </div>
+                                <div class="step-line"></div>
+                                <div class="step-indicator">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
                             </div>
                         </div>
-                        <div class="text-center mb-6 pt-4">
-                            <h3 class="text-2xl font-bold mb-2">Novice Nurse</h3>
-                            <div class="text-4xl font-bold mb-1">Ksh 300<span class="text-lg opacity-80">/month</span></div>
-                            <p class="opacity-80">or Ksh 3,000/year</p>
+                        <div class="text-center mb-8">
+                            <h2 class="text-2xl font-bold mb-2">Registration Process</h2>
+                            <div class="flex justify-center space-x-8 mt-4">
+                                <span class="text-sm font-medium text-blue-900">Create Account</span>
+                                <span class="text-sm text-gray-500">Verify Email</span>
+                                <span class="text-sm text-gray-500">Complete Profile</span>
+                            </div>
                         </div>
-                        <ul class="space-y-3 mb-8">
-                            <li class="flex items-start">
-                                <i class="fas fa-check mr-2 mt-1"></i>
-                                <span>All student member benefits</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check mr-2 mt-1"></i>
-                                <span>Free conference registration</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check mr-2 mt-1"></i>
-                                <span>Mentorship program access</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check mr-2 mt-1"></i>
-                                <span>Leadership training workshops</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check mr-2 mt-1"></i>
-                                <span>Research collaboration opportunities</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check mr-2 mt-1"></i>
-                                <span>Professional development webinars</span>
-                            </li>
-                        </ul>
-                        <button onclick="scrollToForm()" class="w-full bg-white text-blue-900 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors">
-                            Select Novice Plan
-                        </button>
-                    </div>
 
-                    <!-- Professional -->
-                    <div class="membership-card bg-white rounded-xl shadow-lg p-8">
-                        <div class="text-center mb-6">
-                            <div class="inline-block bg-purple-100 text-purple-900 px-4 py-2 rounded-full text-sm font-bold mb-2">
-                                For Professionals
-                            </div>
-                            <h3 class="text-2xl font-bold mb-2">Professional Nurse</h3>
-                            <div class="text-4xl font-bold kesnnur-blue mb-1">Ksh 2,000<span class="text-lg text-gray-600">/year</span></div>
-                            <p class="text-gray-500">Renew annually</p>
+                        <!-- Registration Form -->
+                        <div id="registerForm" class="max-w-2xl mx-auto">
+                            <form id="registerFormElement">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                    <div>
+                                        <label class="block text-gray-700 mb-2 font-medium">
+                                            First Name <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="text" name="first_name" 
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 form-input transition-all"
+                                               placeholder="Enter your first name"
+                                               required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-2 font-medium">
+                                            Last Name <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="text" name="last_name" 
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 form-input transition-all"
+                                               placeholder="Enter your last name"
+                                               required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <label class="block text-gray-700 mb-2 font-medium">
+                                        Email Address <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="email" name="email" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 form-input transition-all"
+                                           placeholder="you@example.com"
+                                           required>
+                                    <p class="text-sm text-gray-500 mt-2">
+                                        <i class="fas fa-info-circle mr-1"></i> We'll send a verification email to this address
+                                    </p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <label class="block text-gray-700 mb-2 font-medium">
+                                        Phone Number <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="flex items-center">
+                                        <span class="bg-gray-100 text-gray-700 px-4 py-3 rounded-l-xl border border-r-0 border-gray-300">
+                                            +254
+                                        </span>
+                                        <input type="tel" name="phone" 
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-r-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 form-input transition-all"
+                                               placeholder="712 345 678"
+                                               required pattern="[0-9]{9}" title="9-digit Kenyan phone number">
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <label class="block text-gray-700 mb-2 font-medium">
+                                        Membership Type <span class="text-red-500">*</span>
+                                    </label>
+                                    <select name="membership_type" 
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 form-input transition-all appearance-none bg-white"
+                                            required>
+                                        <option value="">Select your membership category</option>
+                                        <option value="student">Student Member (Ksh 100/month)</option>
+                                        <option value="novice">Novice Nurse (Ksh 300/month)</option>
+                                        <option value="professional">Professional Nurse (Ksh 2,000/year)</option>
+                                        <option value="alumni">Alumni Member (Ksh 1,500/year)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <label class="block text-gray-700 mb-2 font-medium">Institution/Organization</label>
+                                    <input type="text" name="institution" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 form-input transition-all"
+                                           placeholder="e.g., University of Nairobi, Kenyatta Hospital">
+                                </div>
+                                
+                                <div id="studentFields" class="hidden mb-6">
+                                    <label class="block text-gray-700 mb-2 font-medium">Student ID Number</label>
+                                    <input type="text" name="student_id" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 form-input transition-all"
+                                           placeholder="e.g., S1234567">
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                    <div>
+                                        <label class="block text-gray-700 mb-2 font-medium">
+                                            Password <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <input type="password" name="password" id="password"
+                                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 form-input transition-all pr-10"
+                                                   placeholder="Create a password"
+                                                   required minlength="8">
+                                            <button type="button" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600 toggle-password">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-2 font-medium">
+                                            Confirm Password <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <input type="password" name="confirm_password" id="confirmPassword"
+                                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 form-input transition-all pr-10"
+                                                   placeholder="Confirm your password"
+                                                   required minlength="8">
+                                            <button type="button" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600 toggle-password">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <div class="bg-blue-50 rounded-xl p-4">
+                                        <p class="text-sm font-medium text-blue-900 mb-3">Password Requirements:</p>
+                                        <div class="space-y-2" id="passwordRequirements">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-circle text-xs mr-3 text-gray-300" id="lengthCheck"></i>
+                                                <span class="text-sm text-gray-700">At least 8 characters</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <i class="fas fa-circle text-xs mr-3 text-gray-300" id="matchCheck"></i>
+                                                <span class="text-sm text-gray-700">Passwords must match</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-8">
+                                    <div class="space-y-4">
+                                        <label class="flex items-start">
+                                            <input type="checkbox" name="terms" class="mt-1 mr-3 h-5 w-5 text-blue-900 rounded focus:ring-blue-500" required>
+                                            <span class="text-gray-700">
+                                                I agree to the 
+                                                <a href="terms.html" class="text-blue-900 hover:underline font-medium">Terms of Service</a> 
+                                                and 
+                                                <a href="privacy.html" class="text-blue-900 hover:underline font-medium">Privacy Policy</a>
+                                                <span class="text-red-500">*</span>
+                                            </span>
+                                        </label>
+                                        <label class="flex items-start">
+                                            <input type="checkbox" name="newsletter" class="mt-1 mr-3 h-5 w-5 text-blue-900 rounded focus:ring-blue-500">
+                                            <span class="text-gray-700">
+                                                I would like to receive newsletters and updates about KESNNUR events and opportunities
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Error Message -->
+                                <div id="registerError" class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl hidden">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-exclamation-circle mr-3 text-xl"></i>
+                                        <div>
+                                            <h4 class="font-bold mb-1">Registration Failed</h4>
+                                            <span id="registerErrorText"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Success Message -->
+                                <div id="registerSuccess" class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl hidden">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-check-circle mr-3 text-2xl"></i>
+                                        <div>
+                                            <h4 class="font-bold mb-1">Registration Successful!</h4>
+                                            <span id="registerSuccessText"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Submit Button -->
+                                <button type="submit" id="registerButton" 
+                                        class="w-full bg-gradient-to-r from-blue-900 to-blue-700 text-white py-4 rounded-xl font-bold text-lg hover:shadow-xl transition-all focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <span id="registerButtonText">Create My Account</span>
+                                    <i class="fas fa-spinner fa-spin ml-2" id="registerSpinner" style="display: none;"></i>
+                                </button>
+                                
+                                <div class="mt-6 text-center">
+                                    <p class="text-gray-600">
+                                        Already have an account? 
+                                        <a href="member-login.html" class="text-blue-900 font-medium hover:underline">
+                                            <i class="fas fa-sign-in-alt mr-1"></i>Sign in here
+                                        </a>
+                                    </p>
+                                </div>
+                            </form>
                         </div>
-                        <ul class="space-y-3 mb-8">
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
-                                <span>All novice nurse benefits</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
-                                <span>Become a mentor to students</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
-                                <span>Eligible for council positions</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
-                                <span>Speaker opportunities at events</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
-                                <span>Advanced CPD workshops</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
-                                <span>Access to research grants</span>
-                            </li>
-                        </ul>
-                        <button onclick="scrollToForm()" class="w-full bg-gradient-to-r from-blue-900 to-blue-700 text-white py-3 rounded-lg font-bold hover:opacity-90 transition-opacity">
-                            Select Professional Plan
-                        </button>
+                    </div>
+                    
+                    <!-- Membership Plans -->
+                    <div id="membershipPlans" class="mb-16">
+                        <h2 class="text-3xl font-bold mb-12 text-center">Choose Your Membership Plan</h2>
+                        <div class="grid md:grid-cols-3 gap-8">
+                            <!-- Student Membership -->
+                            <div class="membership-card bg-white rounded-2xl shadow-lg p-8">
+                                <div class="text-center mb-6">
+                                    <div class="inline-block bg-blue-100 text-blue-900 px-4 py-2 rounded-full text-sm font-bold mb-4">
+                                        <i class="fas fa-user-graduate mr-2"></i> For Students
+                                    </div>
+                                    <h3 class="text-2xl font-bold mb-3">Student Member</h3>
+                                    <div class="text-4xl font-bold text-blue-900 mb-1">Ksh 100<span class="text-lg text-gray-600">/month</span></div>
+                                    <p class="text-gray-500">or Ksh 1,000/year</p>
+                                </div>
+                                <ul class="space-y-3 mb-8">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                        <span>Access to all workshops and seminars</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                        <span>50% discount on conference tickets</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                        <span>Exclusive resource library access</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                        <span>Student networking events</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                        <span>Certificate of membership</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                        <span>Monthly career newsletter</span>
+                                    </li>
+                                </ul>
+                                <button onclick="selectMembershipPlan('student')" class="w-full bg-gradient-to-r from-blue-900 to-blue-700 text-white py-3 rounded-xl font-bold hover:shadow-lg transition-all">
+                                    <i class="fas fa-check-circle mr-2"></i> Select Student Plan
+                                </button>
+                            </div>
+
+                            <!-- Novice Nurse -->
+                            <div class="membership-card bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-2xl shadow-2xl p-8 relative transform scale-105 z-10">
+                                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                                    <div class="bg-yellow-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                                        <i class="fas fa-star mr-2"></i> MOST POPULAR
+                                    </div>
+                                </div>
+                                <div class="text-center mb-6 pt-4">
+                                    <div class="inline-block bg-white/20 text-white px-4 py-2 rounded-full text-sm font-bold mb-4">
+                                        <i class="fas fa-user-nurse mr-2"></i> For Novice Nurses
+                                    </div>
+                                    <h3 class="text-2xl font-bold mb-3">Novice Nurse</h3>
+                                    <div class="text-4xl font-bold mb-1">Ksh 300<span class="text-lg opacity-80">/month</span></div>
+                                    <p class="opacity-80">or Ksh 3,000/year</p>
+                                </div>
+                                <ul class="space-y-3 mb-8">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check mr-3 mt-1"></i>
+                                        <span>All student member benefits</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check mr-3 mt-1"></i>
+                                        <span>Free conference registration</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check mr-3 mt-1"></i>
+                                        <span>Mentorship program access</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check mr-3 mt-1"></i>
+                                        <span>Leadership training workshops</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check mr-3 mt-1"></i>
+                                        <span>Research collaboration opportunities</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check mr-3 mt-1"></i>
+                                        <span>Professional development webinars</span>
+                                    </li>
+                                </ul>
+                                <button onclick="selectMembershipPlan('novice')" class="w-full bg-white text-blue-900 py-3 rounded-xl font-bold hover:shadow-lg transition-all">
+                                    <i class="fas fa-check-circle mr-2"></i> Select Novice Plan
+                                </button>
+                            </div>
+
+                            <!-- Professional -->
+                            <div class="membership-card bg-white rounded-2xl shadow-lg p-8">
+                                <div class="text-center mb-6">
+                                    <div class="inline-block bg-purple-100 text-purple-900 px-4 py-2 rounded-full text-sm font-bold mb-4">
+                                        <i class="fas fa-user-md mr-2"></i> For Professionals
+                                    </div>
+                                    <h3 class="text-2xl font-bold mb-3">Professional Nurse</h3>
+                                    <div class="text-4xl font-bold text-blue-900 mb-1">Ksh 2,000<span class="text-lg text-gray-600">/year</span></div>
+                                    <p class="text-gray-500">Renew annually</p>
+                                </div>
+                                <ul class="space-y-3 mb-8">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                        <span>All novice nurse benefits</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                        <span>Become a mentor to students</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                        <span>Eligible for council positions</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                        <span>Speaker opportunities at events</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                        <span>Advanced CPD workshops</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                        <span>Access to research grants</span>
+                                    </li>
+                                </ul>
+                                <button onclick="selectMembershipPlan('professional')" class="w-full bg-gradient-to-r from-blue-900 to-blue-700 text-white py-3 rounded-xl font-bold hover:shadow-lg transition-all">
+                                    <i class="fas fa-check-circle mr-2"></i> Select Professional Plan
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Benefits -->
+                        <div class="mt-16 bg-gradient-to-r from-blue-50 to-teal-50 rounded-2xl p-8">
+                            <h3 class="text-2xl font-bold text-blue-900 mb-8 text-center">All Members Receive These Benefits</h3>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div class="flex items-start">
+                                    <div class="bg-white p-4 rounded-xl shadow-sm mr-4">
+                                        <i class="fas fa-network-wired text-blue-900 text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 mb-2">Networking Community</h4>
+                                        <p class="text-gray-600">Connect with fellow nursing students and professionals across Kenya through our exclusive platform.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="bg-white p-4 rounded-xl shadow-sm mr-4">
+                                        <i class="fas fa-graduation-cap text-blue-900 text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 mb-2">Professional Development</h4>
+                                        <p class="text-gray-600">Access workshops, seminars, CPD courses, and continuous learning opportunities to advance your career.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="bg-white p-4 rounded-xl shadow-sm mr-4">
+                                        <i class="fas fa-briefcase-medical text-blue-900 text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 mb-2">Career Support</h4>
+                                        <p class="text-gray-600">Get access to exclusive job listings, internships, mentorship programs, and career counseling.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="bg-white p-4 rounded-xl shadow-sm mr-4">
+                                        <i class="fas fa-hands-helping text-blue-900 text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 mb-2">Community Support</h4>
+                                        <p class="text-gray-600">Join a supportive community of peers and experienced professionals for guidance and collaboration.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-4xl font-bold mb-6">Ready to Start Your Journey?</h2>
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                    Join over 1,500 nursing students and novice nurses who are already part of the KESNNUR community.
+                </p>
+                <a href="#registerForm" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-bold hover:shadow-xl inline-flex items-center">
+                    <i class="fas fa-user-plus mr-2"></i> Register Now
+                </a>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+                <div class="max-w-3xl mx-auto">
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <h3 class="font-bold text-lg mb-2 text-blue-900">Who can join KESNNUR?</h3>
+                            <p class="text-gray-600">KESNNUR welcomes all nursing students, novice nurses (within 3 years of graduation), and professional nurses who support our mission of empowering future nursing leaders in Kenya.</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <h3 class="font-bold text-lg mb-2 text-blue-900">How much does membership cost?</h3>
+                            <p class="text-gray-600">We offer flexible membership plans: Student (Ksh 100/month), Novice Nurse (Ksh 300/month), and Professional Nurse (Ksh 2,000/year). Annual payments receive a 20% discount.</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <h3 class="font-bold text-lg mb-2 text-blue-900">When will I receive my membership card?</h3>
+                            <p class="text-gray-600">Digital membership cards are available immediately after registration. Physical cards are processed within 2-3 weeks and shipped to your registered address.</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <h3 class="font-bold text-lg mb-2 text-blue-900">Can I upgrade my membership plan later?</h3>
+                            <p class="text-gray-600">Yes! You can upgrade your membership plan at any time. The new rate will be prorated based on your remaining membership period.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
+                             alt="KESNNUR Logo"
+                             width="40"
+                             height="40"
+                             class="w-10 h-10 rounded-lg object-contain bg-white p-1">
+                        <h3 class="text-xl font-bold">KESNNUR</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Empowering Kenya's future nursing leaders through community and resources.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
                     </div>
                 </div>
                 
-                <!-- Additional Info -->
-                <div class="mt-12 bg-blue-50 rounded-xl p-8">
-                    <h3 class="text-xl font-bold text-blue-900 mb-4">Membership Benefits Include:</h3>
-                    <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-bold mb-4">Membership</h4>
+                    <div class="space-y-3">
+                        <a href="register.html" class="text-gray-400 hover:text-white block">Join KESNNUR</a>
+                        <a href="member-login.html" class="text-gray-400 hover:text-white block">Member Login</a>
+                        <a href="membership-benefits.html" class="text-gray-400 hover:text-white block">Benefits</a>
+                        <a href="membership-faq.html" class="text-gray-400 hover:text-white block">FAQ</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <div class="space-y-3">
+                        <a href="index.html" class="text-gray-400 hover:text-white block">Home</a>
+                        <a href="about.html" class="text-gray-400 hover:text-white block">About</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white block">Events</a>
+                        <a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a>
+                        <a href="contact.html" class="text-gray-400 hover:text-white block">Contact</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Contact</h4>
+                    <div class="space-y-3 text-gray-400">
                         <div class="flex items-start">
-                            <div class="bg-blue-100 p-3 rounded-lg mr-4">
-                                <i class="fas fa-network-wired text-blue-900"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 mb-1">Networking</h4>
-                                <p class="text-gray-600">Connect with fellow nursing students and professionals across Kenya</p>
-                            </div>
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
+                            <span>Nurses Complex KNH, Nairobi, Kenya</span>
                         </div>
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-3 rounded-lg mr-4">
-                                <i class="fas fa-graduation-cap text-blue-900"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 mb-1">Professional Development</h4>
-                                <p class="text-gray-600">Access workshops, seminars, and continuous learning opportunities</p>
-                            </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone mr-3"></i>
+                            <a href="tel:+254791296924" class="hover:text-white">+254 791 296 924</a>
                         </div>
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-3 rounded-lg mr-4">
-                                <i class="fas fa-briefcase-medical text-blue-900"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 mb-1">Career Opportunities</h4>
-                                <p class="text-gray-600">Get access to job listings, internships, and mentorship programs</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-3 rounded-lg mr-4">
-                                <i class="fas fa-hands-helping text-blue-900"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 mb-1">Community Support</h4>
-                                <p class="text-gray-600">Join a supportive community of peers and experienced professionals</p>
-                            </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i>
+                            <a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="container mx-auto px-4">
-            <div class="text-center">
-                <p>© <span id="currentYear"></span> KESNNUR - Kenya Students & Novice Nurses</p>
-                <p class="text-gray-400 mt-2">Nurses Complex KNH, Nairobi | +254 791 296 924 | kesnnur@gmail.com</p>
-                <div class="mt-4 space-x-6">
-                    <a href="index.html" class="text-gray-400 hover:text-white">Home</a>
-                    <a href="about.html" class="text-gray-400 hover:text-white">About</a>
-                    <a href="contact.html" class="text-gray-400 hover:text-white">Contact</a>
-                    <a href="member-login.html" class="text-gray-400 hover:text-white">Member Login</a>
-                </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>Copyright © <span id="currentYear">2024</span> KESNNUR. All rights reserved.</p>
+                <p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p>
             </div>
         </div>
     </footer>
 
-<script>
+    <!-- JavaScript -->
+    <script>
+    // ============================================
+    // MEMBER REGISTRATION FUNCTIONALITY
+    // ============================================
+
     // Initialize Supabase
     const supabaseClient = window.supabase.createClient(
         'https://noadhwqvaxajuckpibbo.supabase.co',
         'sb_publishable_P02egT5dJQkzvkxz5wETyQ_vZkdcxxz'
     );
 
-    // Initialize app
     document.addEventListener('DOMContentLoaded', function() {
-        // Set current year in footer
+        // Set current year
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         
         // Setup event listeners
@@ -503,8 +835,26 @@
 
     // Setup event listeners
     function setupEventListeners() {
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', function() {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                
+                if (isHidden) {
+                    mobileMenu.classList.remove('hidden');
+                    this.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    this.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+                }
+            });
+        }
+        
         // Registration form
-        const registerForm = document.getElementById('registerForm');
+        const registerForm = document.getElementById('registerFormElement');
         if (registerForm) {
             registerForm.addEventListener('submit', handleRegistration);
         }
@@ -530,6 +880,23 @@
             passwordField.addEventListener('input', validatePassword);
             confirmField.addEventListener('input', validatePassword);
         }
+        
+        // Toggle password visibility
+        const toggleButtons = document.querySelectorAll('.toggle-password');
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'fas fa-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'fas fa-eye';
+                }
+            });
+        });
     }
 
     // Handle registration
@@ -574,6 +941,9 @@
         try {
             console.log('Starting registration for:', data.email);
             
+            // Format phone number
+            const phoneNumber = `+254${data.phone.replace(/\D/g, '')}`;
+            
             // 1. Create auth user
             const { data: authData, error: authError } = await supabaseClient.auth.signUp({
                 email: data.email,
@@ -582,7 +952,7 @@
                     data: {
                         first_name: data.first_name,
                         last_name: data.last_name,
-                        phone: data.phone,
+                        phone: phoneNumber,
                         membership_type: data.membership_type
                     }
                 }
@@ -615,7 +985,7 @@
                     email: data.email,
                     first_name: data.first_name,
                     last_name: data.last_name,
-                    phone: data.phone,
+                    phone: phoneNumber,
                     role: 'member',
                     status: 'pending',
                     created_at: new Date().toISOString(),
@@ -639,7 +1009,7 @@
                     email: data.email,
                     first_name: data.first_name,
                     last_name: data.last_name,
-                    phone: data.phone,
+                    phone: phoneNumber,
                     membership_type: data.membership_type,
                     institution: data.institution || '',
                     student_id: data.student_id || '',
@@ -704,7 +1074,8 @@
             // Update button
             buttonText.textContent = 'Account Created!';
             button.disabled = true;
-            button.classList.add('bg-green-600', 'from-green-600', 'to-green-600');
+            button.classList.remove('from-blue-900', 'to-blue-700', 'hover:shadow-xl');
+            button.classList.add('bg-green-600', 'hover:bg-green-600');
             
             // Scroll to success message
             successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -739,17 +1110,17 @@
         
         // Check length
         if (password.length >= 8) {
-            lengthCheck.className = 'fas fa-check text-xs mr-2 text-green-500';
+            lengthCheck.className = 'fas fa-check text-xs mr-3 text-green-500';
         } else {
-            lengthCheck.className = 'fas fa-times text-xs mr-2 text-red-500';
+            lengthCheck.className = 'fas fa-times text-xs mr-3 text-red-500';
         }
         
         // Check match (only if confirm has value)
         if (confirmPassword) {
             if (password === confirmPassword && password.length >= 8) {
-                matchCheck.className = 'fas fa-check text-xs mr-2 text-green-500';
+                matchCheck.className = 'fas fa-check text-xs mr-3 text-green-500';
             } else {
-                matchCheck.className = 'fas fa-times text-xs mr-2 text-red-500';
+                matchCheck.className = 'fas fa-times text-xs mr-3 text-red-500';
             }
         }
     }
@@ -768,16 +1139,6 @@
         container.classList.remove('hidden');
     }
     
-    function scrollToForm() {
-        const form = document.getElementById('registerForm');
-        form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // Auto-select membership type based on button clicked
-        const membershipSelect = document.querySelector('select[name="membership_type"]');
-        // This would need to be customized based on which button was clicked
-    }
-
-    // Auto-select membership type when clicking plan buttons
     function selectMembershipPlan(plan) {
         const membershipSelect = document.querySelector('select[name="membership_type"]');
         if (membershipSelect) {
@@ -787,21 +1148,15 @@
             membershipSelect.dispatchEvent(new Event('change'));
             
             // Scroll to form
-            scrollToForm();
+            document.getElementById('registerForm').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+            
+            // Highlight the selected option
+            membershipSelect.focus();
         }
     }
-
-    // Update plan selection buttons
-    document.addEventListener('DOMContentLoaded', function() {
-        // Update the plan selection buttons
-        const planButtons = document.querySelectorAll('.membership-card button');
-        planButtons.forEach((button, index) => {
-            const plans = ['student', 'novice', 'professional'];
-            if (index < plans.length) {
-                button.setAttribute('onclick', `selectMembershipPlan('${plans[index]}')`);
-            }
-        });
-    });
-</script>
+    </script>
 </body>
 </html>
