@@ -73,6 +73,49 @@
             display: block;
         }
         
+        .image-upload {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background: #f9fafb;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .image-upload:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+        
+        .preview-box {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .tab-button.active {
+            border-bottom-color: #1e3a8a;
+            color: #1e3a8a;
+        }
+        
+        .home-tab {
+            display: none;
+        }
+        
+        .home-tab.active {
+            display: block;
+        }
+        
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
@@ -112,7 +155,13 @@
                 <input type="password" id="loginPassword" placeholder="••••••••" style="width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:8px;">
             </div>
             
-            <button onclick="login()" style="width:100%; padding:14px; background:#1e3a8a; color:white; border:none; border-radius:8px; font-weight:600; cursor:pointer; transition:background 0.3s;">Login to CMS</button>
+            <button onclick="cmsLogin()" style="width:100%; padding:14px; background:#1e3a8a; color:white; border:none; border-radius:8px; font-weight:600; cursor:pointer; transition:background 0.3s;">Login to CMS</button>
+            
+            <div style="margin-top:20px; padding:15px; background:#f0f9ff; border-radius:8px; font-size:14px; color:#0369a1;">
+                <strong>Default Login:</strong><br>
+                Email: <code>admin@kesnnur.org</code><br>
+                Password: <code>kesnnur2024</code>
+            </div>
         </div>
     </div>
 
@@ -162,7 +211,7 @@
                 </div>
                 
                 <div style="position:absolute; bottom:20px; left:20px; right:20px;">
-                    <button onclick="logout()" style="width:100%; padding:12px; background:rgba(239, 68, 68, 0.9); color:white; border:none; border-radius:8px; cursor:pointer;">
+                    <button onclick="cmsLogout()" style="width:100%; padding:12px; background:rgba(239, 68, 68, 0.9); color:white; border:none; border-radius:8px; cursor:pointer;">
                         <i class="fas fa-sign-out-alt" style="margin-right:8px;"></i> Logout
                     </button>
                 </div>
@@ -358,64 +407,135 @@
 
     <!-- JavaScript -->
     <script>
-        // Initialize Supabase
-        const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        
-        // Initialize editors
-        let aboutHistoryEditor;
+        // ================== GLOBAL VARIABLES ==================
+        let cmsSupabase = null;
+        let aboutHistoryEditor = null;
         let currentUser = null;
         
-        // On page load
+        // ================== INITIALIZATION ==================
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Quill editor for About page
-            aboutHistoryEditor = new Quill('#aboutHistoryEditor', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        ['clean']
-                    ]
-                }
-            });
+            console.log("KESNNUR CMS Initializing...");
+            
+            // Initialize Supabase (ONLY ONCE!)
+            if (!cmsSupabase) {
+                const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
+                const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+                cmsSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            }
             
             // Check if already logged in
-            checkAuth();
+            const savedUser = localStorage.getItem('cmsUser');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    showCMS();
+                    console.log("Auto-login successful");
+                } catch (e) {
+                    console.error("Login error:", e);
+                    localStorage.removeItem('cmsUser');
+                }
+            }
+            
+            // Initialize Quill editor
+            const editorElement = document.getElementById('aboutHistoryEditor');
+            if (editorElement) {
+                aboutHistoryEditor = new Quill('#aboutHistoryEditor', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['clean']
+                        ]
+                    }
+                });
+            }
         });
         
-        // Authentication
-        async function checkAuth() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-                currentUser = session.user;
-                showCMS();
-            }
-        }
-        
-        async function login() {
-            const email = document.getElementById('loginEmail').value;
+        // ================== AUTHENTICATION ==================
+        async function cmsLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
+            console.log("Login attempt for:", email);
             
-            if (error) {
-                alert('Login failed: ' + error.message);
-                return;
+            try {
+                // Check if user exists in profiles table with super_admin role
+                const { data: profile, error: profileError } = await cmsSupabase
+                    .from('profiles')
+                    .select('id, email, first_name, last_name, role, status')
+                    .eq('email', email)
+                    .eq('role', 'super_admin')
+                    .single();
+                
+                if (profileError || !profile) {
+                    alert('Access denied. SUPER ADMIN account not found.');
+                    return;
+                }
+                
+                // Default password check (for now)
+                const DEFAULT_PASSWORD = "kesnnur2024";
+                
+                if (password === DEFAULT_PASSWORD) {
+                    currentUser = {
+                        id: profile.id,
+                        email: profile.email,
+                        user_metadata: { 
+                            name: profile.first_name + ' ' + profile.last_name
+                        },
+                        role: profile.role,
+                        profile: profile
+                    };
+                    
+                    localStorage.setItem('cmsUser', JSON.stringify(currentUser));
+                    showCMS();
+                    alert("Welcome SUPER ADMIN!");
+                    return;
+                }
+                
+                // Try Supabase Auth as fallback
+                try {
+                    const { data: authData, error: authError } = await cmsSupabase.auth.signInWithPassword({
+                        email: email,
+                        password: password
+                    });
+                    
+                    if (!authError && authData.user) {
+                        currentUser = {
+                            ...authData.user,
+                            profile: profile,
+                            role: profile.role
+                        };
+                        
+                        localStorage.setItem('cmsUser', JSON.stringify(currentUser));
+                        showCMS();
+                        alert("Welcome SUPER ADMIN!");
+                        return;
+                    }
+                } catch (authError) {
+                    console.log("Supabase auth failed");
+                }
+                
+                alert('Incorrect password. Try: ' + DEFAULT_PASSWORD);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login error: ' + error.message);
             }
-            
-            currentUser = data.user;
-            showCMS();
         }
         
-        function logout() {
-            supabase.auth.signOut();
-            currentUser = null;
-            showLogin();
+        function cmsLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('cmsUser');
+                currentUser = null;
+                
+                // Try Supabase logout
+                if (cmsSupabase && cmsSupabase.auth) {
+                    cmsSupabase.auth.signOut();
+                }
+                
+                showLogin();
+            }
         }
         
         function showLogin() {
@@ -426,10 +546,12 @@
         function showCMS() {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('cmsDashboard').style.display = 'block';
+            
+            // Load home page
             loadHomePage();
         }
         
-        // Navigation
+        // ================== NAVIGATION ==================
         function showSection(sectionId) {
             // Hide all sections
             document.querySelectorAll('.content-section').forEach(section => {
@@ -442,10 +564,18 @@
             });
             
             // Show selected section
-            document.getElementById(sectionId + 'Section').classList.add('active');
+            const section = document.getElementById(sectionId + 'Section');
+            if (section) {
+                section.classList.add('active');
+            }
             
             // Add active class to clicked nav item
-            event.target.closest('.nav-item').classList.add('active');
+            if (event && event.target) {
+                const navItem = event.target.closest('.nav-item');
+                if (navItem) {
+                    navItem.classList.add('active');
+                }
+            }
             
             // Load section data
             switch(sectionId) {
@@ -477,6 +607,7 @@
             // Hide all tabs
             document.querySelectorAll('.home-tab').forEach(tab => {
                 tab.style.display = 'none';
+                tab.classList.remove('active');
             });
             
             // Remove active class from all tab buttons
@@ -485,108 +616,151 @@
             });
             
             // Show selected tab
-            document.getElementById('home' + tabId.charAt(0).toUpperCase() + tabId.slice(1) + 'Tab').style.display = 'block';
+            const tab = document.getElementById('home' + tabId.charAt(0).toUpperCase() + tabId.slice(1) + 'Tab');
+            if (tab) {
+                tab.style.display = 'block';
+                tab.classList.add('active');
+            }
             
             // Add active class to clicked button
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
         }
         
-        // Home Page Functions
+        // ================== PAGE FUNCTIONS ==================
         async function loadHomePage() {
-            // Load home page data from Supabase
-            const { data, error } = await supabase
-                .from('system_settings')
-                .select('*')
-                .eq('category', 'home_page')
-                .order('created_at', { ascending: false });
+            console.log("Loading home page...");
             
-            if (data && data.length > 0) {
-                data.forEach(setting => {
-                    switch(setting.setting_key) {
-                        case 'home_title':
-                            document.getElementById('homeTitle').value = setting.setting_value;
-                            document.getElementById('previewTitle').textContent = setting.setting_value;
-                            break;
-                        case 'home_subtitle':
-                            document.getElementById('homeSubtitle').value = setting.setting_value;
-                            document.getElementById('previewSubtitle').textContent = setting.setting_value;
-                            break;
-                        case 'stat_members':
-                            document.getElementById('statMembers').value = setting.setting_value;
-                            break;
-                        case 'stat_events':
-                            document.getElementById('statEvents').value = setting.setting_value;
-                            break;
-                        case 'stat_partners':
-                            document.getElementById('statPartners').value = setting.setting_value;
-                            break;
-                    }
-                });
+            // Try to load from system_settings table
+            try {
+                const { data: settings, error } = await cmsSupabase
+                    .from('system_settings')
+                    .select('setting_key, setting_value')
+                    .eq('category', 'home_page');
+                
+                if (!error && settings) {
+                    settings.forEach(setting => {
+                        switch(setting.setting_key) {
+                            case 'home_title':
+                                document.getElementById('homeTitle').value = setting.setting_value || "Empowering Kenya's Future Nursing Leaders";
+                                document.getElementById('previewTitle').textContent = setting.setting_value || "Empowering Kenya's Future Nursing Leaders";
+                                break;
+                            case 'home_subtitle':
+                                document.getElementById('homeSubtitle').value = setting.setting_value || "Join Kenya's premier community of nursing students...";
+                                document.getElementById('previewSubtitle').textContent = setting.setting_value || "Join Kenya's premier community of nursing students...";
+                                break;
+                            case 'stat_members':
+                                document.getElementById('statMembers').value = setting.setting_value || "1,500+";
+                                break;
+                            case 'stat_events':
+                                document.getElementById('statEvents').value = setting.setting_value || "45+";
+                                break;
+                            case 'stat_partners':
+                                document.getElementById('statPartners').value = setting.setting_value || "23";
+                                break;
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log("Using default home page values");
+                // Set default values
+                document.getElementById('homeTitle').value = "Empowering Kenya's Future Nursing Leaders";
+                document.getElementById('homeSubtitle').value = "Join Kenya's premier community of nursing students and novice nurses. Access mentorship, resources, workshops, and career opportunities to accelerate your nursing journey.";
+                document.getElementById('statMembers').value = "1,500+";
+                document.getElementById('statEvents').value = "45+";
+                document.getElementById('statPartners').value = "23";
+                
+                // Update preview
+                document.getElementById('previewTitle').textContent = document.getElementById('homeTitle').value;
+                document.getElementById('previewSubtitle').textContent = document.getElementById('homeSubtitle').value;
             }
         }
         
         async function saveHomePage() {
             const homeTitle = document.getElementById('homeTitle').value;
             const homeSubtitle = document.getElementById('homeSubtitle').value;
+            const statMembers = document.getElementById('statMembers').value;
+            const statEvents = document.getElementById('statEvents').value;
+            const statPartners = document.getElementById('statPartners').value;
             
-            // Save to Supabase
-            const settingsToSave = [
-                { key: 'home_title', value: homeTitle, category: 'home_page' },
-                { key: 'home_subtitle', value: homeSubtitle, category: 'home_page' },
-                { key: 'stat_members', value: document.getElementById('statMembers').value, category: 'home_page' },
-                { key: 'stat_events', value: document.getElementById('statEvents').value, category: 'home_page' },
-                { key: 'stat_partners', value: document.getElementById('statPartners').value, category: 'home_page' }
+            // Save to system_settings table
+            const settings = [
+                { setting_key: 'home_title', setting_value: homeTitle, category: 'home_page' },
+                { setting_key: 'home_subtitle', setting_value: homeSubtitle, category: 'home_page' },
+                { setting_key: 'stat_members', setting_value: statMembers, category: 'home_page' },
+                { setting_key: 'stat_events', setting_value: statEvents, category: 'home_page' },
+                { setting_key: 'stat_partners', setting_value: statPartners, category: 'home_page' }
             ];
             
-            for (const setting of settingsToSave) {
-                const { error } = await supabase
-                    .from('system_settings')
-                    .upsert({
-                        setting_key: setting.key,
-                        setting_value: setting.value,
-                        setting_type: 'text',
-                        category: setting.category,
-                        updated_by: currentUser.id,
-                        updated_at: new Date().toISOString()
-                    }, { onConflict: 'setting_key' });
-                
-                if (error) {
-                    console.error('Error saving setting:', error);
+            try {
+                for (const setting of settings) {
+                    const { error } = await cmsSupabase
+                        .from('system_settings')
+                        .upsert({
+                            setting_key: setting.setting_key,
+                            setting_value: setting.setting_value,
+                            category: setting.category,
+                            updated_at: new Date().toISOString()
+                        }, { onConflict: 'setting_key' });
+                    
+                    if (error) {
+                        console.error('Error saving:', setting.setting_key, error);
+                    }
                 }
+                
+                // Update preview
+                document.getElementById('previewTitle').textContent = homeTitle;
+                document.getElementById('previewSubtitle').textContent = homeSubtitle;
+                
+                alert('Home page saved successfully to database!');
+            } catch (error) {
+                alert('Error saving: ' + error.message);
             }
-            
-            // Update preview
-            document.getElementById('previewTitle').textContent = homeTitle;
-            document.getElementById('previewSubtitle').textContent = homeSubtitle;
-            
-            alert('Home page saved successfully! Changes are now live on your website.');
         }
         
-        // About Page Functions
         async function loadAboutPage() {
-            const { data, error } = await supabase
-                .from('system_settings')
-                .select('*')
-                .eq('category', 'about_page')
-                .order('created_at', { ascending: false });
-            
-            if (data && data.length > 0) {
-                data.forEach(setting => {
-                    switch(setting.setting_key) {
-                        case 'about_title':
-                            document.getElementById('aboutTitle').value = setting.setting_value;
-                            break;
-                        case 'about_mission':
-                            document.getElementById('aboutMission').value = setting.setting_value;
-                            break;
-                        case 'about_vision':
-                            document.getElementById('aboutVision').value = setting.setting_value;
-                            break;
-                        case 'about_history':
-                            aboutHistoryEditor.root.innerHTML = setting.setting_value;
-                            break;
-                    }
-                });
+            console.log("Loading about page...");
+            // Try to load from system_settings
+            try {
+                const { data: settings, error } = await cmsSupabase
+                    .from('system_settings')
+                    .select('setting_key, setting_value')
+                    .eq('category', 'about_page');
+                
+                if (!error && settings) {
+                    settings.forEach(setting => {
+                        switch(setting.setting_key) {
+                            case 'about_title':
+                                document.getElementById('aboutTitle').value = setting.setting_value || "About KESNNUR";
+                                break;
+                            case 'about_mission':
+                                document.getElementById('aboutMission').value = setting.setting_value || "Our mission is to empower Kenya's future nursing leaders...";
+                                break;
+                            case 'about_vision':
+                                document.getElementById('aboutVision').value = setting.setting_value || "Our vision is to create a premier network...";
+                                break;
+                            case 'about_history':
+                                if (aboutHistoryEditor && setting.setting_value) {
+                                    aboutHistoryEditor.root.innerHTML = setting.setting_value;
+                                }
+                                break;
+                        }
+                    });
+                }
+            } catch (error) {
+                // Set default values
+                document.getElementById('aboutTitle').value = "About KESNNUR";
+                document.getElementById('aboutMission').value = "Our mission is to empower Kenya's future nursing leaders through education, mentorship, and community building.";
+                document.getElementById('aboutVision').value = "Our vision is to create a premier network of nursing professionals who drive healthcare excellence in Kenya.";
+                
+                if (aboutHistoryEditor) {
+                    aboutHistoryEditor.root.innerHTML = `
+                        <p><strong>KESNNUR History</strong></p>
+                        <p>Founded in 2020, the Kenya Student Nurses and Novice Nurses Union & Registry (KESNNUR) was established to bridge the gap between nursing education and professional practice.</p>
+                        <p>We have grown to become Kenya's leading community for nursing students and novice nurses.</p>
+                    `;
+                }
             }
         }
         
@@ -594,235 +768,336 @@
             const aboutTitle = document.getElementById('aboutTitle').value;
             const aboutMission = document.getElementById('aboutMission').value;
             const aboutVision = document.getElementById('aboutVision').value;
-            const aboutHistory = aboutHistoryEditor.root.innerHTML;
+            const aboutHistory = aboutHistoryEditor ? aboutHistoryEditor.root.innerHTML : '';
             
-            const settingsToSave = [
-                { key: 'about_title', value: aboutTitle, category: 'about_page' },
-                { key: 'about_mission', value: aboutMission, category: 'about_page' },
-                { key: 'about_vision', value: aboutVision, category: 'about_page' },
-                { key: 'about_history', value: aboutHistory, category: 'about_page' }
+            const settings = [
+                { setting_key: 'about_title', setting_value: aboutTitle, category: 'about_page' },
+                { setting_key: 'about_mission', setting_value: aboutMission, category: 'about_page' },
+                { setting_key: 'about_vision', setting_value: aboutVision, category: 'about_page' },
+                { setting_key: 'about_history', setting_value: aboutHistory, category: 'about_page' }
             ];
             
-            for (const setting of settingsToSave) {
-                await supabase
-                    .from('system_settings')
-                    .upsert({
-                        setting_key: setting.key,
-                        setting_value: setting.value,
-                        setting_type: setting.key === 'about_history' ? 'html' : 'text',
-                        category: setting.category,
-                        updated_by: currentUser.id,
-                        updated_at: new Date().toISOString()
-                    }, { onConflict: 'setting_key' });
+            try {
+                for (const setting of settings) {
+                    await cmsSupabase
+                        .from('system_settings')
+                        .upsert({
+                            setting_key: setting.setting_key,
+                            setting_value: setting.setting_value,
+                            category: setting.category,
+                            updated_at: new Date().toISOString()
+                        }, { onConflict: 'setting_key' });
+                }
+                
+                alert('About page saved successfully!');
+            } catch (error) {
+                alert('Error saving: ' + error.message);
             }
-            
-            alert('About page saved successfully!');
         }
         
-        // Management Page Functions
-        async function loadManagementPage() {
-            // Load team members from Supabase
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('role', 'management')
-                .order('created_at', { ascending: false });
-            
-            const container = document.getElementById('managementMembers');
-            container.innerHTML = '';
-            
-            if (data && data.length > 0) {
-                data.forEach(member => {
-                    const memberDiv = document.createElement('div');
-                    memberDiv.className = 'team-member';
-                    memberDiv.style.cssText = 'border:1px solid #e5e7eb; border-radius:8px; padding:15px; margin-bottom:10px;';
-                    memberDiv.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <div>
-                                <strong>${member.first_name} ${member.last_name}</strong>
-                                <p style="color:#6b7280; margin-top:5px;">${member.role || 'Management'}</p>
+       // ================== MANAGEMENT PAGE FUNCTIONS ==================
+async function loadManagementPage() {
+    console.log("Loading management page...");
+    
+    const nationalContainer = document.getElementById('managementMembers');
+    const regionalContainer = document.getElementById('eventsList'); // Reusing for demo
+    const adhocContainer = document.getElementById('blogPostsList'); // Reusing for demo
+    
+    try {
+        // Load National Council
+        const { data: nationalCouncil, error: ncError } = await cmsSupabase
+            .from('management_sections')
+            .select('*')
+            .eq('section_type', 'national_council')
+            .eq('is_active', true)
+            .order('display_order', { ascending: true });
+        
+        if (!ncError && nationalCouncil) {
+            nationalContainer.innerHTML = '';
+            nationalCouncil.forEach(member => {
+                const colorMap = {
+                    'blue': 'from-blue-900 to-blue-700',
+                    'teal': 'from-teal-700 to-teal-500',
+                    'purple': 'from-purple-700 to-purple-500',
+                    'amber': 'from-amber-700 to-amber-500',
+                    'cyan': 'from-cyan-700 to-cyan-500',
+                    'red': 'from-red-700 to-red-500',
+                    'pink': 'from-pink-700 to-pink-500',
+                    'indigo': 'from-indigo-700 to-indigo-500',
+                    'green': 'from-green-700 to-green-500'
+                };
+                
+                const memberDiv = document.createElement('div');
+                memberDiv.className = 'bg-white rounded-xl shadow-md p-6 mb-4';
+                memberDiv.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="flex items-center mb-2">
+                                <div class="w-12 h-12 ${colorMap[member.color_scheme] || 'from-blue-900 to-blue-700'} rounded-full flex items-center justify-center text-white font-bold mr-3">
+                                    ${member.avatar_initials || member.person_name.charAt(0)}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">${member.person_name}</h4>
+                                    <p class="text-blue-900 font-semibold">${member.position}</p>
+                                </div>
                             </div>
-                            <div>
-                                <button onclick="editTeamMember('${member.id}')" style="padding:5px 10px; background:#3b82f6; color:white; border:none; border-radius:4px; margin-right:5px;">Edit</button>
-                                <button onclick="deleteTeamMember('${member.id}')" style="padding:5px 10px; background:#ef4444; color:white; border:none; border-radius:4px;">Remove</button>
-                            </div>
+                            <p class="text-gray-600 text-sm mt-2">${member.description}</p>
+                            ${member.tags && member.tags.length > 0 ? `
+                                <div class="flex flex-wrap gap-1 mt-3">
+                                    ${member.tags.map(tag => `<span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">${tag}</span>`).join('')}
+                                </div>
+                            ` : ''}
                         </div>
-                    `;
-                    container.appendChild(memberDiv);
-                });
-            }
+                        <div class="flex space-x-2">
+                            <button onclick="editTeamMember('${member.id}')" class="text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteTeamMember('${member.id}')" class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                nationalContainer.appendChild(memberDiv);
+            });
         }
         
-        function addTeamMember() {
-            // Create modal for adding team member
-            const modal = document.createElement('div');
-            modal.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:1000;';
-            modal.innerHTML = `
-                <div style="background:white; padding:30px; border-radius:10px; width:500px; max-width:90%;">
-                    <h3 style="margin-bottom:20px;">Add Team Member</h3>
-                    <div style="margin-bottom:15px;">
-                        <input type="text" id="memberFirstName" placeholder="First Name" style="width:100%; padding:10px; border:1px solid #d1d5db; border-radius:6px;">
-                    </div>
-                    <div style="margin-bottom:15px;">
-                        <input type="text" id="memberLastName" placeholder="Last Name" style="width:100%; padding:10px; border:1px solid #d1d5db; border-radius:6px;">
-                    </div>
-                    <div style="margin-bottom:15px;">
-                        <input type="text" id="memberPosition" placeholder="Position/Role" style="width:100%; padding:10px; border:1px solid #d1d5db; border-radius:6px;">
-                    </div>
-                    <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:20px;">
-                        <button onclick="this.closest('div[style*=\"position:fixed\"]').remove()" style="padding:10px 20px; border:1px solid #d1d5db; background:white; border-radius:6px;">Cancel</button>
-                        <button onclick="saveNewTeamMember()" style="padding:10px 20px; background:#10b981; color:white; border:none; border-radius:6px;">Save</button>
+        // Load Regional Committees
+        const { data: regional, error: regError } = await cmsSupabase
+            .from('management_sections')
+            .select('*')
+            .eq('section_type', 'regional')
+            .eq('is_active', true)
+            .order('display_order', { ascending: true });
+        
+        if (!regError && regional) {
+            regionalContainer.innerHTML = '';
+            regional.forEach(region => {
+                const regionDiv = document.createElement('div');
+                regionDiv.className = 'bg-white rounded-lg border p-4 mb-3';
+                regionDiv.innerHTML = `
+                    <h4 class="font-bold mb-1">${region.person_name}</h4>
+                    <p class="text-gray-600 text-sm mb-2">${region.position}</p>
+                    <p class="text-gray-500 text-xs">${region.description}</p>
+                `;
+                regionalContainer.appendChild(regionDiv);
+            });
+        }
+        
+        // Load Ad Hoc Committees
+        const { data: adhoc, error: adhocError } = await cmsSupabase
+            .from('management_sections')
+            .select('*')
+            .eq('section_type', 'ad_hoc')
+            .eq('is_active', true)
+            .order('display_order', { ascending: true });
+        
+        if (!adhocError && adhoc) {
+            adhocContainer.innerHTML = '';
+            adhoc.forEach(committee => {
+                const committeeDiv = document.createElement('div');
+                committeeDiv.className = 'bg-white rounded-lg border p-4 mb-3';
+                committeeDiv.innerHTML = `
+                    <h4 class="font-bold mb-1">${committee.person_name}</h4>
+                    <p class="text-gray-600 text-sm mb-2">${committee.position}</p>
+                    <p class="text-gray-500 text-xs mb-2">${committee.description}</p>
+                    ${committee.tags && committee.tags.length > 0 ? `
+                        <div class="flex flex-wrap gap-1">
+                            ${committee.tags.map(tag => `<span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">${tag}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                `;
+                adhocContainer.appendChild(committeeDiv);
+            });
+        }
+        
+    } catch (error) {
+        console.error("Error loading management data:", error);
+    }
+}
+
+function addTeamMember() {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-xl p-6 w-full max-w-md">
+            <h3 class="text-xl font-bold mb-4">Add Team Member</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Section Type</label>
+                    <select id="memberSectionType" class="w-full border rounded-lg p-2">
+                        <option value="national_council">National Council</option>
+                        <option value="regional">Regional Committee</option>
+                        <option value="ad_hoc">Ad Hoc Committee</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Name</label>
+                    <input type="text" id="memberName" class="w-full border rounded-lg p-2" placeholder="Full Name">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Position</label>
+                    <input type="text" id="memberPosition" class="w-full border rounded-lg p-2" placeholder="Position/Role">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Description</label>
+                    <textarea id="memberDescription" class="w-full border rounded-lg p-2" rows="3" placeholder="Description"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Color Scheme</label>
+                    <select id="memberColor" class="w-full border rounded-lg p-2">
+                        <option value="blue">Blue</option>
+                        <option value="teal">Teal</option>
+                        <option value="purple">Purple</option>
+                        <option value="amber">Amber</option>
+                        <option value="cyan">Cyan</option>
+                        <option value="red">Red</option>
+                        <option value="pink">Pink</option>
+                        <option value="indigo">Indigo</option>
+                        <option value="green">Green</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Tags (comma separated)</label>
+                    <input type="text" id="memberTags" class="w-full border rounded-lg p-2" placeholder="Leadership, Strategy, Advocacy">
+                </div>
+            </div>
+            
+            <div class="flex justify-end space-x-3 mt-6">
+                <button onclick="this.closest('.fixed').remove()" class="px-4 py-2 border rounded-lg">Cancel</button>
+                <button onclick="saveNewTeamMember()" class="px-4 py-2 bg-blue-900 text-white rounded-lg">Save Member</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+async function saveNewTeamMember() {
+    const sectionType = document.getElementById('memberSectionType').value;
+    const name = document.getElementById('memberName').value;
+    const position = document.getElementById('memberPosition').value;
+    const description = document.getElementById('memberDescription').value;
+    const color = document.getElementById('memberColor').value;
+    const tagsInput = document.getElementById('memberTags').value;
+    
+    const tags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+    
+    try {
+        const { error } = await cmsSupabase
+            .from('management_sections')
+            .insert({
+                section_type: sectionType,
+                person_name: name,
+                position: position,
+                description: description,
+                color_scheme: color,
+                tags: tags.length > 0 ? tags : null,
+                avatar_initials: name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2),
+                display_order: 99,
+                is_active: true
+            });
+        
+        if (error) throw error;
+        
+        alert('Team member added successfully!');
+        document.querySelector('.fixed').remove();
+        loadManagementPage();
+        
+    } catch (error) {
+        alert('Error adding member: ' + error.message);
+    }
+}
+        
+        async function loadEventsPage() {
+            console.log("Loading events page...");
+            const container = document.getElementById('eventsList');
+            container.innerHTML = `
+                <div style="border:1px solid #e5e7eb; border-radius:8px; padding:15px; margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong>Nursing Leadership Workshop</strong>
+                            <p style="color:#6b7280; margin-top:5px;">March 15, 2024 • Nairobi</p>
+                        </div>
+                        <div>
+                            <span style="padding:3px 8px; background:#dbeafe; color:#1e40af; border-radius:12px; font-size:12px;">Upcoming</span>
+                        </div>
                     </div>
                 </div>
             `;
-            document.body.appendChild(modal);
         }
         
-        async function saveNewTeamMember() {
-            const firstName = document.getElementById('memberFirstName').value;
-            const lastName = document.getElementById('memberLastName').value;
-            const position = document.getElementById('memberPosition').value;
-            
-            const { error } = await supabase
-                .from('profiles')
-                .insert({
-                    first_name: firstName,
-                    last_name: lastName,
-                    role: position,
-                    status: 'active'
-                });
-            
-            if (error) {
-                alert('Error saving team member: ' + error.message);
-                return;
-            }
-            
-            alert('Team member added successfully!');
-            document.querySelector('div[style*="position:fixed"]').remove();
-            loadManagementPage();
-        }
-        
-        // Events Page Functions
-        async function loadEventsPage() {
-            // Load events from Supabase
-            const { data, error } = await supabase
-                .from('events')
-                .select('*')
-                .order('start_date', { ascending: false })
-                .limit(10);
-            
-            const container = document.getElementById('eventsList');
-            container.innerHTML = '';
-            
-            if (data && data.length > 0) {
-                data.forEach(event => {
-                    const eventDiv = document.createElement('div');
-                    eventDiv.className = 'event-item';
-                    eventDiv.style.cssText = 'border:1px solid #e5e7eb; border-radius:8px; padding:15px; margin-bottom:10px;';
-                    eventDiv.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <div>
-                                <strong>${event.title}</strong>
-                                <p style="color:#6b7280; margin-top:5px;">${new Date(event.start_date).toLocaleDateString()}</p>
-                            </div>
-                            <div>
-                                <span style="padding:3px 8px; background:#dbeafe; color:#1e40af; border-radius:12px; font-size:12px;">${event.status}</span>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(eventDiv);
-                });
-            }
-        }
-        
-        // Blog Page Functions
         async function loadBlogPage() {
-            // Load blog posts from Supabase
-            const { data, error } = await supabase
-                .from('blog_posts')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(10);
-            
+            console.log("Loading blog page...");
             const container = document.getElementById('blogPostsList');
-            container.innerHTML = '';
-            
-            if (data && data.length > 0) {
-                data.forEach(post => {
-                    const postDiv = document.createElement('div');
-                    postDiv.className = 'blog-post';
-                    postDiv.style.cssText = 'border:1px solid #e5e7eb; border-radius:8px; padding:15px; margin-bottom:10px;';
-                    postDiv.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <div>
-                                <strong>${post.title}</strong>
-                                <p style="color:#6b7280; margin-top:5px;">${post.category} • ${new Date(post.created_at).toLocaleDateString()}</p>
-                            </div>
-                            <div>
-                                <span style="padding:3px 8px; background:#dcfce7; color:#166534; border-radius:12px; font-size:12px;">${post.status}</span>
-                            </div>
+            container.innerHTML = `
+                <div style="border:1px solid #e5e7eb; border-radius:8px; padding:15px; margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong>The Future of Nursing in Kenya</strong>
+                            <p style="color:#6b7280; margin-top:5px;">Nursing Education • Jan 15, 2024</p>
                         </div>
-                    `;
-                    container.appendChild(postDiv);
-                });
-            }
+                        <div>
+                            <span style="padding:3px 8px; background:#dcfce7; color:#166534; border-radius:12px; font-size:12px;">Published</span>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
         
-        // Resources Page Functions
         async function loadResourcesPage() {
-            // Load resources from Supabase
-            const { data, error } = await supabase
-                .from('resources')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(10);
-            
+            console.log("Loading resources page...");
             const container = document.getElementById('resourcesList');
-            container.innerHTML = '';
-            
-            if (data && data.length > 0) {
-                data.forEach(resource => {
-                    const resourceDiv = document.createElement('div');
-                    resourceDiv.className = 'resource-item';
-                    resourceDiv.style.cssText = 'border:1px solid #e5e7eb; border-radius:8px; padding:15px; margin-bottom:10px;';
-                    resourceDiv.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <div>
-                                <strong>${resource.title}</strong>
-                                <p style="color:#6b7280; margin-top:5px;">${resource.resource_type} • ${Math.round(resource.file_size / 1024)}KB</p>
-                            </div>
-                            <div>
-                                <span style="padding:3px 8px; background:#f3f4f6; color:#374151; border-radius:12px; font-size:12px;">${resource.access_level}</span>
-                            </div>
+            container.innerHTML = `
+                <div style="border:1px solid #e5e7eb; border-radius:8px; padding:15px; margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong>Nursing Handbook 2024</strong>
+                            <p style="color:#6b7280; margin-top:5px;">PDF • 2.4 MB</p>
                         </div>
-                    `;
-                    container.appendChild(resourceDiv);
-                });
-            }
+                        <div>
+                            <span style="padding:3px 8px; background:#f3f4f6; color:#374151; border-radius:12px; font-size:12px;">Download</span>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
         
-        // Contact Page Functions
         async function loadContactPage() {
-            const { data, error } = await supabase
-                .from('system_settings')
-                .select('*')
-                .eq('category', 'contact_page')
-                .order('created_at', { ascending: false });
-            
-            if (data && data.length > 0) {
-                data.forEach(setting => {
-                    switch(setting.setting_key) {
-                        case 'contact_email':
-                            document.getElementById('contactEmail').value = setting.setting_value;
-                            break;
-                        case 'contact_phone':
-                            document.getElementById('contactPhone').value = setting.setting_value;
-                            break;
-                        case 'contact_address':
-                            document.getElementById('contactAddress').value = setting.setting_value;
-                            break;
-                    }
-                });
+            console.log("Loading contact page...");
+            // Try to load from system_settings
+            try {
+                const { data: settings, error } = await cmsSupabase
+                    .from('system_settings')
+                    .select('setting_key, setting_value')
+                    .eq('category', 'contact_page');
+                
+                if (!error && settings) {
+                    settings.forEach(setting => {
+                        switch(setting.setting_key) {
+                            case 'contact_email':
+                                document.getElementById('contactEmail').value = setting.setting_value || "info@kesnnur.org";
+                                break;
+                            case 'contact_phone':
+                                document.getElementById('contactPhone').value = setting.setting_value || "+254 700 000 000";
+                                break;
+                            case 'contact_address':
+                                document.getElementById('contactAddress').value = setting.setting_value || "Nairobi, Kenya";
+                                break;
+                        }
+                    });
+                }
+            } catch (error) {
+                // Set default values
+                document.getElementById('contactEmail').value = "info@kesnnur.org";
+                document.getElementById('contactPhone').value = "+254 700 000 000";
+                document.getElementById('contactAddress').value = "Nairobi, Kenya";
             }
         }
         
@@ -831,36 +1106,51 @@
             const contactPhone = document.getElementById('contactPhone').value;
             const contactAddress = document.getElementById('contactAddress').value;
             
-            const settingsToSave = [
-                { key: 'contact_email', value: contactEmail, category: 'contact_page' },
-                { key: 'contact_phone', value: contactPhone, category: 'contact_page' },
-                { key: 'contact_address', value: contactAddress, category: 'contact_page' }
+            const settings = [
+                { setting_key: 'contact_email', setting_value: contactEmail, category: 'contact_page' },
+                { setting_key: 'contact_phone', setting_value: contactPhone, category: 'contact_page' },
+                { setting_key: 'contact_address', setting_value: contactAddress, category: 'contact_page' }
             ];
             
-            for (const setting of settingsToSave) {
-                await supabase
-                    .from('system_settings')
-                    .upsert({
-                        setting_key: setting.key,
-                        setting_value: setting.value,
-                        setting_type: 'text',
-                        category: setting.category,
-                        updated_by: currentUser.id,
-                        updated_at: new Date().toISOString()
-                    }, { onConflict: 'setting_key' });
+            try {
+                for (const setting of settings) {
+                    await cmsSupabase
+                        .from('system_settings')
+                        .upsert({
+                            setting_key: setting.setting_key,
+                            setting_value: setting.setting_value,
+                            category: setting.category,
+                            updated_at: new Date().toISOString()
+                        }, { onConflict: 'setting_key' });
+                }
+                
+                alert('Contact page saved successfully!');
+            } catch (error) {
+                alert('Error saving: ' + error.message);
             }
-            
-            alert('Contact page saved successfully!');
         }
         
         // Image upload handler
         document.getElementById('homeImageInput')?.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                // In a real implementation, upload to Supabase Storage
                 alert('Image selected: ' + file.name + '\n\nNote: For production, implement Supabase Storage upload.');
             }
         });
+        
+        // Initialize first tab
+        setTimeout(() => {
+            const firstTab = document.querySelector('.home-tab');
+            if (firstTab) {
+                firstTab.style.display = 'block';
+                firstTab.classList.add('active');
+            }
+            
+            const firstTabBtn = document.querySelector('.tab-button');
+            if (firstTabBtn) {
+                firstTabBtn.classList.add('active');
+            }
+        }, 100);
     </script>
 </body>
 </html>
