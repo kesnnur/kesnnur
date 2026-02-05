@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KESNNUR - Complete CMS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Quill Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    
+    <!-- FileSaver.js -->
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    
+    <style>
+        :root {
+            --kesnnur-blue: #1e3a8a;
+            --kesnnur-light: #3b82f6;
+        }
+        
+        .cms-sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+        }
+        
+        .cms-main {
+            margin-left: 280px;
+            background: #f8fafc;
+        }
+        
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .editor-panel {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .content-block {
+            border: 2px dashed #d1d5db;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .content-block:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+        
+        .block-controls {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: white;
+            border-radius: 20px;
+            padding: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .content-block:hover .block-controls {
+            display: flex;
+        }
+        
+        .preview-frame {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-published { background: #10b981; color: white; }
+        .status-draft { background: #f59e0b; color: white; }
+        .status-archived { background: #6b7280; color: white; }
+        
+        .image-upload-area {
+            border: 3px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            background: #f9fafb;
+            transition: all 0.3s;
+        }
+        
+        .image-upload-area:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+        
+        .image-upload-area.dragover {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+        
+        .file-list-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: white;
+        }
+        
+        .file-list-item:hover {
+            background: #f8fafc;
+        }
+        
+        .backup-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            background: white;
+        }
+        
+        .backup-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+        }
+        
+        .stat-card {
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid;
+        }
+        
+        .stat-card.blue { border-left-color: #1e3a8a; }
+        .stat-card.green { border-left-color: #10b981; }
+        .stat-card.yellow { border-left-color: #f59e0b; }
+        .stat-card.purple { border-left-color: #8b5cf6; }
+        
+        .notification-dot {
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 5px;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+        }
+        
+        @media (max-width: 1024px) {
+            .cms-sidebar {
+                position: fixed;
+                left: -280px;
+                z-index: 50;
+                height: 100vh;
+                transition: left 0.3s;
+            }
+            
+            .cms-sidebar.active {
+                left: 0;
+            }
+            
+            .cms-main {
+                margin-left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+        
+        .ql-editor {
+            min-height: 300px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab-button.active {
+            border-bottom-color: #1e3a8a;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+        
+        .color-picker {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        
+        .color-picker.selected {
+            border-color: #1e3a8a;
+            transform: scale(1.1);
+        }
+        
+        .backdrop {
+            backdrop-filter: blur(5px);
+        }
+        
+        .content-section {
+            display: block;
+        }
+        
+        .content-section.hidden {
+            display: none;
+        }
+        
+        .tab-content {
+            display: block;
+        }
+        
+        .tab-content.hidden {
+            display: none;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-blue-900 to-blue-700 z-50">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
+            <div class="text-center mb-8">
+                <div class="w-24 h-24 mx-auto mb-4 rounded-xl bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center">
+                    <i class="fas fa-cog text-white text-4xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800">KESNNUR CMS</h1>
+                <p class="text-gray-600 mt-2">Complete Website Management System</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">Email Address</label>
+                    <input type="email" 
+                           id="loginEmail"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                           placeholder="admin@kesnnur.org"
+                           required>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">Password</label>
+                    <input type="password" 
+                           id="loginPassword"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                           placeholder="••••••••"
+                           required>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500">
+                        <span class="ml-2 text-gray-700">Remember me</span>
+                    </label>
+                    <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Forgot password?</a>
+                </div>
+                
+                <button type="submit" 
+                        class="w-full bg-gradient-to-r from-blue-900 to-blue-700 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                    Sign In to Dashboard
+                </button>
+                
+                <div class="text-center text-sm text-gray-600 pt-4 border-t">
+                    <p>Default: <strong>admin@kesnnur.org</strong> / <strong>kesnnur2024</strong></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main CMS Dashboard -->
+    <div id="cmsDashboard" class="min-h-screen flex" style="display: none;">
+        <!-- Sidebar -->
+        <div class="cms-sidebar text-white flex flex-col">
+            <!-- Logo -->
+            <div class="p-6 border-b border-white/10">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-blue-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-lg">KESNNUR CMS</h2>
+                        <p class="text-blue-200 text-sm">v1.0.0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="p-4 border-b border-white/10">
+                <div class="text-blue-200 text-xs font-semibold uppercase tracking-wider mb-2">Website Status</div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">Pages Online</span>
+                        <span class="font-bold" id="statPages">8</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">Visitors Today</span>
+                        <span class="font-bold" id="statVisitors">124</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">Last Backup</span>
+                        <span class="font-bold text-sm" id="statBackup">Today</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="flex-1 p-4 overflow-y-auto">
+                <div class="space-y-1">
+                    <div class="text-blue-200 text-xs font-semibold uppercase tracking-wider mb-2">Dashboard</div>
+                    
+                    <a href="#dashboard" onclick="showSection('dashboard')" class="nav-item active flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    
+                    <div class="text-blue-200 text-xs font-semibold uppercase tracking-wider mb-2 mt-6">Content</div>
+                    
+                    <a href="#pages" onclick="showSection('pages')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-file-alt"></i>
+                        <span>All Pages</span>
+                        <span class="ml-auto bg-white/20 px-2 py-1 rounded text-xs">8</span>
+                    </a>
+                    
+                    <a href="#homepage" onclick="showSection('homepage')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-home"></i>
+                        <span>Homepage</span>
+                        <span class="notification-dot"></span>
+                    </a>
+                    
+                    <a href="#about" onclick="showSection('about')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-info-circle"></i>
+                        <span>About Page</span>
+                    </a>
+                    
+                    <a href="#contact" onclick="showSection('contact')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-envelope"></i>
+                        <span>Contact Page</span>
+                    </a>
+                    
+                    <a href="#events" onclick="showSection('events')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Events Page</span>
+                        <span class="ml-auto bg-white/20 px-2 py-1 rounded text-xs">5</span>
+                    </a>
+                    
+                    <a href="#blog" onclick="showSection('blog')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Blog</span>
+                        <span class="ml-auto bg-white/20 px-2 py-1 rounded text-xs">12</span>
+                    </a>
+                    
+                    <a href="#resources" onclick="showSection('resources')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-book-medical"></i>
+                        <span>Resources</span>
+                    </a>
+                    
+                    <a href="#management" onclick="showSection('management')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-users"></i>
+                        <span>Management</span>
+                    </a>
+                    
+                    <div class="text-blue-200 text-xs font-semibold uppercase tracking-wider mb-2 mt-6">Media & Files</div>
+                    
+                    <a href="#media" onclick="showSection('media')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-images"></i>
+                        <span>Media Library</span>
+                    </a>
+                    
+                    <a href="#documents" onclick="showSection('documents')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Documents</span>
+                    </a>
+                    
+                    <div class="text-blue-200 text-xs font-semibold uppercase tracking-wider mb-2 mt-6">Settings</div>
+                    
+                    <a href="#settings" onclick="showSection('settings')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-cog"></i>
+                        <span>Website Settings</span>
+                    </a>
+                    
+                    <a href="#seo" onclick="showSection('seo')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-search"></i>
+                        <span>SEO & Analytics</span>
+                    </a>
+                    
+                    <a href="#backup" onclick="showSection('backup')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-database"></i>
+                        <span>Backup & Restore</span>
+                    </a>
+                    
+                    <a href="#users" onclick="showSection('users')" class="nav-item flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Users & Permissions</span>
+                    </a>
+                </div>
+            </nav>
+            
+            <!-- User & Logout -->
+            <div class="p-4 border-t border-white/10">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+                        <span class="font-bold">A</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium" id="userName">Administrator</div>
+                        <div class="text-blue-200 text-sm">Super Admin</div>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="w-full flex items-center justify-center space-x-2 p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="cms-main flex-1">
+            <!-- Top Bar -->
+            <header class="bg-white border-b px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <!-- Left: Menu & Title -->
+                    <div class="flex items-center space-x-4">
+                        <button id="mobileMenuBtn" class="mobile-menu-btn text-gray-600 hover:text-blue-600">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        <div>
+                            <h1 id="pageTitle" class="text-xl font-bold text-gray-800">Dashboard</h1>
+                            <div class="text-sm text-gray-600" id="breadcrumb">KESNNUR Content Management System</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Actions -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Publish Button -->
+                        <button id="publishBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition flex items-center space-x-2">
+                            <i class="fas fa-rocket"></i>
+                            <span>Publish Changes</span>
+                        </button>
+                        
+                        <!-- Preview Button -->
+                        <button id="previewBtn" class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition flex items-center space-x-2">
+                            <i class="fas fa-eye"></i>
+                            <span>Preview</span>
+                        </button>
+                        
+                        <!-- Notifications -->
+                        <div class="relative">
+                            <button id="notificationsBtn" class="relative text-gray-600 hover:text-blue-600 p-2">
+                                <i class="fas fa-bell text-xl"></i>
+                                <span class="notification-dot absolute top-1 right-1"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="p-6">
+                <!-- Dashboard Section -->
+                <section id="dashboardSection" class="content-section">
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="stat-card blue bg-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-3xl font-bold text-gray-800">8</div>
+                                    <div class="text-gray-600">Website Pages</div>
+                                </div>
+                                <i class="fas fa-file-alt text-blue-600 text-3xl"></i>
+                            </div>
+                            <div class="mt-4">
+                                <div class="text-sm text-green-600">
+                                    <i class="fas fa-arrow-up mr-1"></i> 2 new this month
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card green bg-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-3xl font-bold text-gray-800">1,524</div>
+                                    <div class="text-gray-600">Total Members</div>
+                                </div>
+                                <i class="fas fa-users text-green-600 text-3xl"></i>
+                            </div>
+                            <div class="mt-4">
+                                <div class="text-sm text-green-600">
+                                    <i class="fas fa-arrow-up mr-1"></i> 12% growth
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card yellow bg-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-3xl font-bold text-gray-800">124</div>
+                                    <div class="text-gray-600">Visitors Today</div>
+                                </div>
+                                <i class="fas fa-chart-line text-yellow-600 text-3xl"></i>
+                            </div>
+                            <div class="mt-4">
+                                <div class="text-sm text-green-600">
+                                    <i class="fas fa-arrow-up mr-1"></i> 8.5% increase
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card purple bg-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-3xl font-bold text-gray-800">5</div>
+                                    <div class="text-gray-600">Pending Tasks</div>
+                                </div>
+                                <i class="fas fa-tasks text-purple-600 text-3xl"></i>
+                            </div>
+                            <div class="mt-4">
+                                <div class="text-sm text-red-600">
+                                    <i class="fas fa-exclamation-circle mr-1"></i> Review needed
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        <div class="editor-panel p-6">
+                            <h3 class="font-bold text-lg mb-4">Quick Actions</h3>
+                            <div class="space-y-3">
+                                <button onclick="showSection('homepage')" class="w-full text-left p-4 border rounded-lg hover:border-blue-300 hover:bg-blue-50 transition flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-home text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">Edit Homepage</div>
+                                        <div class="text-sm text-gray-600">Update hero, stats, features</div>
+                                    </div>
+                                </button>
+                                
+                                <button onclick="showSection('blog')" class="w-full text-left p-4 border rounded-lg hover:border-green-300 hover:bg-green-50 transition flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-plus text-green-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">Add Blog Post</div>
+                                        <div class="text-sm text-gray-600">Create new article</div>
+                                    </div>
+                                </button>
+                                
+                                <button onclick="showSection('events')" class="w-full text-left p-4 border rounded-lg hover:border-yellow-300 hover:bg-yellow-50 transition flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-calendar-plus text-yellow-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">Add Event</div>
+                                        <div class="text-sm text-gray-600">Schedule new workshop</div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Activity -->
+                        <div class="editor-panel p-6 lg:col-span-2">
+                            <h3 class="font-bold text-lg mb-4">Recent Activity</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg">
+                                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                                        <i class="fas fa-edit text-blue-600 text-sm"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="font-medium">Updated Homepage content</div>
+                                        <div class="text-sm text-gray-600">Changed hero section text and statistics</div>
+                                        <div class="text-xs text-gray-500 mt-1">10 minutes ago</div>
+                                    </div>
+                                    <button class="text-blue-600 hover:text-blue-800">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg">
+                                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mt-1">
+                                        <i class="fas fa-user-plus text-green-600 text-sm"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="font-medium">New member registration</div>
+                                        <div class="text-sm text-gray-600">Sarah Mwangi (3rd Year Student) joined</div>
+                                        <div class="text-xs text-gray-500 mt-1">2 hours ago</div>
+                                    </div>
+                                    <button class="text-green-600 hover:text-green-800">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg">
+                                    <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mt-1">
+                                        <i class="fas fa-upload text-purple-600 text-sm"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="font-medium">Resource uploaded</div>
+                                        <div class="text-sm text-gray-600">"Nursing Handbook.pdf" added to resources</div>
+                                        <div class="text-xs text-gray-500 mt-1">5 hours ago</div>
+                                    </div>
+                                    <button class="text-purple-600 hover:text-purple-800">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Website Health -->
+                    <div class="editor-panel p-6">
+                        <h3 class="font-bold text-lg mb-4">Website Health Status</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="text-center p-4 border rounded-lg border-green-200 bg-green-50">
+                                <div class="text-green-600 text-2xl mb-2">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="font-medium">SEO Score</div>
+                                <div class="text-2xl font-bold text-green-700">94%</div>
+                            </div>
+                            
+                            <div class="text-center p-4 border rounded-lg border-blue-200 bg-blue-50">
+                                <div class="text-blue-600 text-2xl mb-2">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <div class="font-medium">Performance</div>
+                                <div class="text-2xl font-bold text-blue-700">Fast</div>
+                            </div>
+                            
+                            <div class="text-center p-4 border rounded-lg border-yellow-200 bg-yellow-50">
+                                <div class="text-yellow-600 text-2xl mb-2">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="font-medium">Security</div>
+                                <div class="text-2xl font-bold text-yellow-700">Secure</div>
+                            </div>
+                            
+                            <div class="text-center p-4 border rounded-lg border-red-200 bg-red-50">
+                                <div class="text-red-600 text-2xl mb-2">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="font-medium">Broken Links</div>
+                                <div class="text-2xl font-bold text-red-700">2</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- All Pages Section -->
+                <section id="pagesSection" class="content-section hidden">
+                    <div class="editor-panel p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">All Website Pages</h2>
+                            <button onclick="createNewPage()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center space-x-2">
+                                <i class="fas fa-plus"></i>
+                                <span>New Page</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Pages Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="pagesGrid">
+                            <!-- Pages will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HOMEPAGE EDITOR -->
+                <section id="homepageSection" class="content-section hidden">
+                    <div class="editor-panel p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">Homepage Editor</h2>
+                            <div class="flex space-x-3">
+                                <button onclick="previewPage('index')" class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition">
+                                    <i class="fas fa-eye mr-2"></i>Preview
+                                </button>
+                                <button onclick="saveHomepage()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                                    <i class="fas fa-save mr-2"></i>Save Homepage
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Tabs -->
+                        <div class="border-b mb-6">
+                            <div class="flex space-x-1">
+                                <button data-tab="hero" class="tab-button active">Hero Section</button>
+                                <button data-tab="stats" class="tab-button">Statistics</button>
+                                <button data-tab="features" class="tab-button">Features</button>
+                                <button data-tab="testimonials" class="tab-button">Testimonials</button>
+                                <button data-tab="cta" class="tab-button">Call to Action</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Hero Section Editor -->
+                        <div id="heroTab" class="tab-content">
+                            <div class="space-y-6">
+                                <div class="content-block" data-block="hero-title">
+                                    <div class="block-controls">
+                                        <button class="text-blue-600 p-1"><i class="fas fa-edit"></i></button>
+                                        <button class="text-red-600 p-1"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                    <label class="block text-gray-700 mb-2 font-medium">Hero Title</label>
+                                    <input type="text" 
+                                           id="homepageHeroTitle"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                           value="Empowering Kenya's Future Nursing Leaders"
+                                           placeholder="Enter hero title">
+                                </div>
+                                
+                                <div class="content-block" data-block="hero-subtitle">
+                                    <div class="block-controls">
+                                        <button class="text-blue-600 p-1"><i class="fas fa-edit"></i></button>
+                                        <button class="text-red-600 p-1"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                    <label class="block text-gray-700 mb-2 font-medium">Hero Subtitle</label>
+                                    <textarea id="homepageHeroSubtitle"
+                                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                              rows="3"
+                                              placeholder="Enter hero description">Join Kenya's premier community of nursing students and novice nurses. Access mentorship, resources, workshops, and career opportunities to accelerate your nursing journey.</textarea>
+                                </div>
+                                
+                                <div class="content-block" data-block="hero-buttons">
+                                    <div class="block-controls">
+                                        <button class="text-blue-600 p-1"><i class="fas fa-edit"></i></button>
+                                        <button class="text-red-600 p-1"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                    <label class="block text-gray-700 mb-2 font-medium">Call to Action Buttons</label>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm text-gray-600 mb-1">Primary Button Text</label>
+                                            <input type="text" 
+                                                   id="heroBtn1Text"
+                                                   class="w-full px-3 py-2 border border-gray-300 rounded"
+                                                   value="Join KESNNUR">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm text-gray-600 mb-1">Secondary Button Text</label>
+                                            <input type="text" 
+                                                   id="heroBtn2Text"
+                                                   class="w-full px-3 py-2 border border-gray-300 rounded"
+                                                   value="Learn More">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="content-block" data-block="hero-image">
+                                    <div class="block-controls">
+                                        <button class="text-blue-600 p-1"><i class="fas fa-edit"></i></button>
+                                        <button class="text-red-600 p-1"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                    <label class="block text-gray-700 mb-2 font-medium">Background Image</label>
+                                    <div class="image-upload-area" id="heroImageUpload" onclick="document.getElementById('heroImageInput').click()">
+                                        <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
+                                        <p class="text-gray-600 mb-2">Drag & drop or click to upload</p>
+                                        <p class="text-sm text-gray-500">Recommended: 1920x600px, JPG or PNG</p>
+                                        <input type="file" id="heroImageInput" class="hidden" accept="image/*">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Statistics Tab -->
+                        <div id="statsTab" class="tab-content hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="content-block" data-block="stat-members">
+                                    <label class="block text-gray-700 mb-2 font-medium">Members Count</label>
+                                    <input type="text" 
+                                           id="statMembersCount"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                           value="1,500+">
+                                    <div class="mt-2 text-sm text-gray-600">Displayed as "Active Members"</div>
+                                </div>
+                                
+                                <div class="content-block" data-block="stat-events">
+                                    <label class="block text-gray-700 mb-2 font-medium">Events Held</label>
+                                    <input type="text" 
+                                           id="statEventsCount"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                           value="45+">
+                                    <div class="mt-2 text-sm text-gray-600">Displayed as "Workshops & Events"</div>
+                                </div>
+                                
+                                <div class="content-block" data-block="stat-partners">
+                                    <label class="block text-gray-700 mb-2 font-medium">Partnerships</label>
+                                    <input type="text" 
+                                           id="statPartnersCount"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                           value="23">
+                                    <div class="mt-2 text-sm text-gray-600">Displayed as "Hospital Partners"</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Features Tab -->
+                        <div id="featuresTab" class="tab-content hidden">
+                            <div class="space-y-6">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="font-bold text-lg">Features Section</h3>
+                                    <button onclick="addFeature()" class="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm">
+                                        <i class="fas fa-plus mr-1"></i>Add Feature
+                                    </button>
+                                </div>
+                                
+                                <div id="featuresContainer">
+                                    <!-- Features will be added here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BLOG SECTION -->
+                <section id="blogSection" class="content-section hidden">
+                    <div class="editor-panel p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">Blog Management</h2>
+                            <button onclick="createNewBlogPost()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center space-x-2">
+                                <i class="fas fa-plus"></i>
+                                <span>New Blog Post</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Blog Editor -->
+                        <div id="blogEditor" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="md:col-span-2">
+                                    <div class="content-block">
+                                        <label class="block text-gray-700 mb-2 font-medium">Blog Title</label>
+                                        <input type="text" 
+                                               id="blogTitle"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                               placeholder="Enter blog post title">
+                                    </div>
+                                    
+                                    <div class="content-block mt-6">
+                                        <label class="block text-gray-700 mb-2 font-medium">Content</label>
+                                        <div id="blogContentEditor" style="height: 400px;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="content-block">
+                                        <label class="block text-gray-700 mb-2 font-medium">Featured Image</label>
+                                        <div class="image-upload-area" onclick="document.getElementById('blogImageInput').click()">
+                                            <i class="fas fa-image text-2xl text-gray-400 mb-2"></i>
+                                            <p class="text-sm text-gray-600">Upload featured image</p>
+                                            <input type="file" id="blogImageInput" class="hidden" accept="image/*">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="content-block mt-6">
+                                        <label class="block text-gray-700 mb-2 font-medium">Categories</label>
+                                        <div class="space-y-2">
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="rounded text-blue-600">
+                                                <span class="ml-2">Nursing Education</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="rounded text-blue-600">
+                                                <span class="ml-2">Career Guidance</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="rounded text-blue-600">
+                                                <span class="ml-2">Clinical Skills</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="rounded text-blue-600">
+                                                <span class="ml-2">Research</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="content-block mt-6">
+                                        <label class="block text-gray-700 mb-2 font-medium">Status</label>
+                                        <select id="blogStatus" class="w-full px-3 py-2 border border-gray-300 rounded">
+                                            <option value="draft">Draft</option>
+                                            <option value="published">Published</option>
+                                            <option value="scheduled">Scheduled</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <button onclick="saveBlogPost()" class="w-full mt-6 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition">
+                                        <i class="fas fa-save mr-2"></i>Publish Blog Post
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Blog Posts List -->
+                        <div id="blogPosts" class="mt-8">
+                            <h3 class="font-bold text-lg mb-4">Recent Blog Posts</h3>
+                            <div class="space-y-4" id="blogPostsList">
+                                <!-- Blog posts will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MEDIA LIBRARY -->
+                <section id="mediaSection" class="content-section hidden">
+                    <div class="editor-panel p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Media Library</h2>
+                        
+                        <!-- Upload Area -->
+                        <div class="image-upload-area mb-8" id="mediaUploadArea" onclick="document.getElementById('mediaUploadInput').click()">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                            <h3 class="text-xl font-medium text-gray-700 mb-2">Drop files here or click to upload</h3>
+                            <p class="text-gray-600">Upload images, documents, PDFs, and other media files</p>
+                            <input type="file" id="mediaUploadInput" class="hidden" accept="image/*,.pdf,.doc,.docx" multiple>
+                        </div>
+                        
+                        <!-- Media Grid -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="mediaGrid">
+                            <!-- Media files will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SETTINGS SECTION -->
+                <section id="settingsSection" class="content-section hidden">
+                    <div class="editor-panel p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Website Settings</h2>
+                        
+                        <!-- Settings Tabs -->
+                        <div class="border-b mb-6">
+                            <div class="flex space-x-1">
+                                <button data-setting-tab="general" class="tab-button active">General</button>
+                                <button data-setting-tab="appearance" class="tab-button">Appearance</button>
+                                <button data-setting-tab="contact" class="tab-button">Contact Info</button>
+                                <button data-setting-tab="social" class="tab-button">Social Media</button>
+                            </div>
+                        </div>
+                        
+                        <!-- General Settings -->
+                        <div id="generalTab" class="tab-content">
+                            <div class="space-y-6">
+                                <div class="content-block">
+                                    <label class="block text-gray-700 mb-2 font-medium">Website Title</label>
+                                    <input type="text" 
+                                           id="websiteTitle"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                           value="KESNNUR - Kenya's Nursing Network">
+                                </div>
+                                
+                                <div class="content-block">
+                                    <label class="block text-gray-700 mb-2 font-medium">Website Description</label>
+                                    <textarea id="websiteDescription"
+                                              class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                              rows="3">Empowering Kenya's future nursing leaders through education, mentorship, and community.</textarea>
+                                </div>
+                                
+                                <div class="content-block">
+                                    <label class="block text-gray-700 mb-2 font-medium">Site Logo</label>
+                                    <div class="flex items-center space-x-4">
+                                        <div class="w-20 h-20 border rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-image text-gray-400"></i>
+                                        </div>
+                                        <div>
+                                            <button onclick="document.getElementById('logoUpload').click()" class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+                                                Upload Logo
+                                            </button>
+                                            <input type="file" id="logoUpload" class="hidden" accept="image/*">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Appearance Settings -->
+                        <div id="appearanceTab" class="tab-content hidden">
+                            <div class="content-block">
+                                <label class="block text-gray-700 mb-2 font-medium">Primary Color</label>
+                                <div class="flex space-x-3">
+                                    <div class="color-picker bg-blue-900" data-color="#1e3a8a"></div>
+                                    <div class="color-picker bg-blue-600" data-color="#2563eb"></div>
+                                    <div class="color-picker bg-green-600" data-color="#059669"></div>
+                                    <div class="color-picker bg-purple-600" data-color="#7c3aed"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Save Settings Button -->
+                        <div class="mt-8">
+                            <button onclick="saveSettings()" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
+                                <i class="fas fa-save mr-2"></i>Save All Settings
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BACKUP & RESTORE -->
+                <section id="backupSection" class="content-section hidden">
+                    <div class="editor-panel p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Backup & Restore</h2>
+                        
+                        <!-- Create Backup -->
+                        <div class="backup-card mb-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="font-bold text-lg">Create New Backup</h3>
+                                    <p class="text-gray-600">Backup all website data and content</p>
+                                </div>
+                                <button onclick="createBackup()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                                    <i class="fas fa-database mr-2"></i>Create Backup
+                                </button>
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                Last backup: <span id="lastBackupTime">Today, 10:30 AM</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Backup List -->
+                        <h3 class="font-bold text-lg mb-4">Available Backups</h3>
+                        <div class="space-y-4" id="backupsList">
+                            <!-- Backups will be listed here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- USERS & PERMISSIONS -->
+                <section id="usersSection" class="content-section hidden">
+                    <div class="editor-panel p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">Users & Permissions</h2>
+                            <button onclick="showAddUserModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                                <i class="fas fa-user-plus mr-2"></i>Add User
+                            </button>
+                        </div>
+                        
+                        <!-- Users Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="px-4 py-3 text-left">User</th>
+                                        <th class="px-4 py-3 text-left">Role</th>
+                                        <th class="px-4 py-3 text-left">Last Active</th>
+                                        <th class="px-4 py-3 text-left">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTable">
+                                    <!-- Users will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ABOUT PAGE EDITOR -->
+                <section id="aboutSection" class="content-section hidden">
+                    <div class="editor-panel p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">About Page Editor</h2>
+                        <!-- About page content will go here -->
+                    </div>
+                </section>
+
+                <!-- CONTACT PAGE EDITOR -->
+                <section id="contactSection" class="content-section hidden">
+                    <div class="editor-panel p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Contact Page Editor</h2>
+                        <!-- Contact page content will go here -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content p-6">
+            <h3 class="font-bold text-lg mb-4">Add New User</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Full Name</label>
+                    <input type="text" id="newUserName" class="w-full px-3 py-2 border rounded">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" id="newUserEmail" class="w-full px-3 py-2 border rounded">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Role</label>
+                    <select id="newUserRole" class="w-full px-3 py-2 border rounded">
+                        <option value="editor">Editor</option>
+                        <option value="admin">Administrator</option>
+                        <option value="viewer">Viewer</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3 mt-6">
+                <button onclick="closeModal('addUserModal')" class="px-4 py-2 border rounded-lg">Cancel</button>
+                <button onclick="addNewUser()" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Add User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content p-0" style="max-width: 90%; height: 90vh;">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="font-bold text-lg">Page Preview</h3>
+                <button onclick="closeModal('previewModal')" class="text-gray-600 hover:text-gray-800">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <iframe id="previewFrame" class="w-full h-full" style="min-height: 500px;"></iframe>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize global variables
+        let quillEditor;
+        let currentUser = null;
+        let websiteData = {
+            pages: [],
+            settings: {},
+            backups: [],
+            media: [],
+            users: []
+        };
+
+        // DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCMS();
+        });
+
+        function initializeCMS() {
+            // Initialize Quill Editor
+            quillEditor = new Quill('#blogContentEditor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Set default login credentials
+            document.getElementById('loginEmail').value = 'admin@kesnnur.org';
+            document.getElementById('loginPassword').value = 'kesnnur2024';
+
+            // Load sample data
+            loadSampleData();
+
+            // Add event listeners
+            setupEventListeners();
+        }
+
+        function setupEventListeners() {
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleLogin();
+            });
+
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
+            // Mobile menu
+            document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+
+            // Tab navigation
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+
+            // Setting tabs
+            document.querySelectorAll('[data-setting-tab]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-setting-tab');
+                    switchSettingTab(tabId);
+                });
+            });
+
+            // Image upload handlers
+            setupImageUploads();
+
+            // Publish button
+            document.getElementById('publishBtn').addEventListener('click', publishChanges);
+
+            // Preview button
+            document.getElementById('previewBtn').addEventListener('click', previewCurrentPage);
+
+            // Notifications
+            document.getElementById('notificationsBtn').addEventListener('click', showNotifications);
+        }
+
+        function loadSampleData() {
+            // Sample pages data
+            websiteData.pages = [
+                { id: 1, title: 'Homepage', slug: 'index', status: 'published', lastModified: '2024-01-15' },
+                { id: 2, title: 'About Us', slug: 'about', status: 'published', lastModified: '2024-01-10' },
+                { id: 3, title: 'Contact', slug: 'contact', status: 'published', lastModified: '2024-01-12' },
+                { id: 4, title: 'Events', slug: 'events', status: 'published', lastModified: '2024-01-14' },
+                { id: 5, title: 'Blog', slug: 'blog', status: 'published', lastModified: '2024-01-13' },
+                { id: 6, title: 'Resources', slug: 'resources', status: 'draft', lastModified: '2024-01-15' },
+                { id: 7, title: 'Membership', slug: 'membership', status: 'published', lastModified: '2024-01-11' },
+                { id: 8, title: 'Partners', slug: 'partners', status: 'published', lastModified: '2024-01-09' }
+            ];
+
+            // Sample blog posts
+            websiteData.blogPosts = [
+                { id: 1, title: 'The Future of Nursing in Kenya', date: '2024-01-15', author: 'Dr. Jane Mwangi', views: 245 },
+                { id: 2, title: 'Clinical Skills Workshop Recap', date: '2024-01-12', author: 'John Kimani', views: 189 },
+                { id: 3, title: 'Mental Health Awareness for Nurses', date: '2024-01-10', author: 'Sarah Omondi', views: 312 }
+            ];
+
+            // Sample media files
+            websiteData.media = [
+                { id: 1, name: 'hero-image.jpg', type: 'image', size: '2.4 MB', date: '2024-01-15' },
+                { id: 2, name: 'nursing-handbook.pdf', type: 'document', size: '3.1 MB', date: '2024-01-14' },
+                { id: 3, name: 'workshop-photo.png', type: 'image', size: '1.8 MB', date: '2024-01-13' }
+            ];
+
+            // Sample users
+            websiteData.users = [
+                { id: 1, name: 'Administrator', email: 'admin@kesnnur.org', role: 'admin', lastActive: 'Today' },
+                { id: 2, name: 'Jane Mwangi', email: 'jane@kesnnur.org', role: 'editor', lastActive: 'Yesterday' },
+                { id: 3, name: 'John Kimani', email: 'john@kesnnur.org', role: 'editor', lastActive: '2 days ago' }
+            ];
+
+            // Sample backups
+            websiteData.backups = [
+                { id: 1, name: 'Backup_2024_01_15', date: '2024-01-15', size: '24.5 MB' },
+                { id: 2, name: 'Backup_2024_01_10', date: '2024-01-10', size: '23.8 MB' },
+                { id: 3, name: 'Backup_2024_01_05', date: '2024-01-05', size: '22.1 MB' }
+            ];
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Simple validation
+            if (email === 'admin@kesnnur.org' && password === 'kesnnur2024') {
+                currentUser = {
+                    name: 'Administrator',
+                    email: email,
+                    role: 'admin'
+                };
+
+                // Hide login, show dashboard
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('cmsDashboard').style.display = 'flex';
+
+                // Update UI
+                document.getElementById('userName').textContent = currentUser.name;
+                
+                // Show dashboard by default
+                showSection('dashboard');
+                
+                // Show success message
+                showNotification('Login successful! Welcome to KESNNUR CMS.', 'success');
+            } else {
+                showNotification('Invalid credentials. Please try again.', 'error');
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Show login screen, hide dashboard
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('cmsDashboard').style.display = 'none';
+                
+                // Reset form
+                document.getElementById('loginForm').reset();
+                currentUser = null;
+                
+                showNotification('Logged out successfully.', 'info');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const sidebar = document.querySelector('.cms-sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Show selected section
+            const section = document.getElementById(sectionId + 'Section');
+            if (section) {
+                section.classList.remove('hidden');
+                
+                // Update page title and breadcrumb
+                updatePageTitle(sectionId);
+                
+                // Add active class to corresponding nav item
+                const navItem = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+                if (navItem) {
+                    navItem.classList.add('active');
+                }
+
+                // Load section-specific data
+                loadSectionData(sectionId);
+            }
+        }
+
+        function updatePageTitle(sectionId) {
+            const titles = {
+                'dashboard': 'Dashboard',
+                'pages': 'All Pages',
+                'homepage': 'Homepage Editor',
+                'about': 'About Page Editor',
+                'contact': 'Contact Page Editor',
+                'events': 'Events Management',
+                'blog': 'Blog Management',
+                'resources': 'Resources Library',
+                'management': 'Management Team',
+                'media': 'Media Library',
+                'documents': 'Documents',
+                'settings': 'Website Settings',
+                'seo': 'SEO & Analytics',
+                'backup': 'Backup & Restore',
+                'users': 'Users & Permissions'
+            };
+
+            const breadcrumbs = {
+                'dashboard': 'KESNNUR Content Management System',
+                'pages': 'Manage all website pages',
+                'homepage': 'Edit homepage content and layout',
+                'about': 'Edit about page content',
+                'contact': 'Manage contact information',
+                'events': 'Create and manage events',
+                'blog': 'Write and manage blog posts',
+                'resources': 'Upload and organize resources',
+                'management': 'Manage team members',
+                'media': 'Upload and manage media files',
+                'documents': 'Manage PDFs and documents',
+                'settings': 'Configure website settings',
+                'seo': 'Search engine optimization',
+                'backup': 'Backup and restore website data',
+                'users': 'Manage user accounts and permissions'
+            };
+
+            document.getElementById('pageTitle').textContent = titles[sectionId] || 'Dashboard';
+            document.getElementById('breadcrumb').textContent = breadcrumbs[sectionId] || 'KESNNUR Content Management System';
+        }
+
+        function loadSectionData(sectionId) {
+            switch(sectionId) {
+                case 'pages':
+                    loadPages();
+                    break;
+                case 'blog':
+                    loadBlogPosts();
+                    break;
+                case 'media':
+                    loadMedia();
+                    break;
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'backup':
+                    loadBackups();
+                    break;
+            }
+        }
+
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected tab
+            const tab = document.getElementById(tabId + 'Tab');
+            if (tab) {
+                tab.classList.remove('hidden');
+            }
+
+            // Add active class to clicked button
+            const button = document.querySelector(`[data-tab="${tabId}"]`);
+            if (button) {
+                button.classList.add('active');
+            }
+        }
+
+        function switchSettingTab(tabId) {
+            // Hide all setting tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+
+            // Remove active class from all setting tab buttons
+            document.querySelectorAll('[data-setting-tab]').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected tab
+            const tab = document.getElementById(tabId + 'Tab');
+            if (tab) {
+                tab.classList.remove('hidden');
+            }
+
+            // Add active class to clicked button
+            const button = document.querySelector(`[data-setting-tab="${tabId}"]`);
+            if (button) {
+                button.classList.add('active');
+            }
+        }
+
+        function setupImageUploads() {
+            const uploadAreas = [
+                { id: 'heroImageUpload', inputId: 'heroImageInput' },
+                { id: 'blogImageUpload', inputId: 'blogImageInput' },
+                { id: 'mediaUploadArea', inputId: 'mediaUploadInput' }
+            ];
+
+            uploadAreas.forEach(area => {
+                const uploadArea = document.getElementById(area.id);
+                const input = document.getElementById(area.inputId);
+
+                if (uploadArea && input) {
+                    uploadArea.addEventListener('click', () => input.click());
+                    
+                    uploadArea.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        uploadArea.classList.add('dragover');
+                    });
+
+                    uploadArea.addEventListener('dragleave', () => {
+                        uploadArea.classList.remove('dragover');
+                    });
+
+                    uploadArea.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        uploadArea.classList.remove('dragover');
+                        input.files = e.dataTransfer.files;
+                        handleImageUpload(input.files, area.id);
+                    });
+
+                    input.addEventListener('change', () => {
+                        handleImageUpload(input.files, area.id);
+                    });
+                }
+            });
+        }
+
+        function handleImageUpload(files, areaId) {
+            if (files.length > 0) {
+                const file = files[0];
+                const fileName = file.name;
+                const fileType = file.type;
+                
+                // Check if it's an image
+                if (fileType.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // Show preview
+                        const uploadArea = document.getElementById(areaId);
+                        uploadArea.innerHTML = `
+                            <img src="${e.target.result}" class="max-w-full h-auto rounded-lg mb-2">
+                            <p class="text-sm text-gray-600">${fileName}</p>
+                            <button onclick="removeImage('${areaId}')" class="text-red-600 text-sm mt-2">
+                                <i class="fas fa-times mr-1"></i>Remove
+                            </button>
+                        `;
+                        
+                        showNotification(`Image "${fileName}" uploaded successfully!`, 'success');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    showNotification('Please upload only image files.', 'error');
+                }
+            }
+        }
+
+        function removeImage(areaId) {
+            const uploadArea = document.getElementById(areaId);
+            const originalHtml = `
+                <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
+                <p class="text-gray-600 mb-2">Drag & drop or click to upload</p>
+                <p class="text-sm text-gray-500">Recommended: 1920x600px, JPG or PNG</p>
+                <input type="file" id="${areaId.replace('Upload', 'Input')}" class="hidden" accept="image/*">
+            `;
+            uploadArea.innerHTML = originalHtml;
+            
+            // Reattach event listeners
+            const inputId = areaId.replace('Upload', 'Input');
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.addEventListener('change', () => handleImageUpload(input.files, areaId));
+            }
+        }
+
+        function loadPages() {
+            const pagesGrid = document.getElementById('pagesGrid');
+            if (!pagesGrid) return;
+
+            pagesGrid.innerHTML = '';
+
+            websiteData.pages.forEach(page => {
+                const statusClass = page.status === 'published' ? 'status-published' :
+                                   page.status === 'draft' ? 'status-draft' : 'status-archived';
+                
+                const pageCard = `
+                    <div class="border rounded-lg overflow-hidden hover:shadow-lg transition">
+                        <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-4 text-white">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold">${page.title}</h3>
+                                <span class="${statusClass}">${page.status}</span>
+                            </div>
+                            <p class="text-sm opacity-90 mt-1">/${page.slug}</p>
+                        </div>
+                        <div class="p-4 bg-white">
+                            <div class="text-sm text-gray-600 mb-4">
+                                Last modified: ${page.lastModified}
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="editPage(${page.id})" class="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+                                    <i class="fas fa-edit mr-1"></i>Edit
+                                </button>
+                                <button onclick="previewPage('${page.slug}')" class="flex-1 border border-gray-300 py-2 rounded hover:bg-gray-50">
+                                    <i class="fas fa-eye mr-1"></i>Preview
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                pagesGrid.innerHTML += pageCard;
+            });
+        }
+
+        function loadBlogPosts() {
+            const blogPostsList = document.getElementById('blogPostsList');
+            if (!blogPostsList) return;
+
+            blogPostsList.innerHTML = '';
+
+            websiteData.blogPosts.forEach(post => {
+                const postElement = `
+                    <div class="border rounded-lg p-4 hover:bg-gray-50">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold">${post.title}</h4>
+                                <div class="text-sm text-gray-600 mt-1">
+                                    By ${post.author} • ${post.date} • ${post.views} views
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="editBlogPost(${post.id})" class="text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteBlogPost(${post.id})" class="text-red-600 hover:text-red-800">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                blogPostsList.innerHTML += postElement;
+            });
+        }
+
+        function loadMedia() {
+            const mediaGrid = document.getElementById('mediaGrid');
+            if (!mediaGrid) return;
+
+            mediaGrid.innerHTML = '';
+
+            websiteData.media.forEach(file => {
+                const icon = file.type === 'image' ? 'fa-image' : 'fa-file';
+                const fileElement = `
+                    <div class="border rounded-lg p-3">
+                        <div class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center mb-2">
+                            <i class="fas ${icon} text-3xl text-gray-400"></i>
+                        </div>
+                        <div class="text-sm font-medium truncate">${file.name}</div>
+                        <div class="text-xs text-gray-600">${file.size} • ${file.date}</div>
+                    </div>
+                `;
+                
+                mediaGrid.innerHTML += fileElement;
+            });
+        }
+
+        function loadUsers() {
+            const usersTable = document.getElementById('usersTable');
+            if (!usersTable) return;
+
+            usersTable.innerHTML = '';
+
+            websiteData.users.forEach(user => {
+                const row = `
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-4 py-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <span class="font-bold text-blue-600">${user.name.charAt(0)}</span>
+                                </div>
+                                <div>
+                                    <div class="font-medium">${user.name}</div>
+                                    <div class="text-sm text-gray-600">${user.email}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3">
+                            <span class="px-3 py-1 rounded-full text-xs ${
+                                user.role === 'admin' ? 'bg-purple-100 text-purple-800' :
+                                user.role === 'editor' ? 'bg-blue-100 text-blue-800' :
+                                'bg-gray-100 text-gray-800'
+                            }">
+                                ${user.role}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 text-gray-600">${user.lastActive}</td>
+                        <td class="px-4 py-3">
+                            <div class="flex space-x-2">
+                                <button onclick="editUser(${user.id})" class="text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteUser(${user.id})" class="text-red-600 hover:text-red-800">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                
+                usersTable.innerHTML += row;
+            });
+        }
+
+        function loadBackups() {
+            const backupsList = document.getElementById('backupsList');
+            if (!backupsList) return;
+
+            backupsList.innerHTML = '';
+
+            websiteData.backups.forEach(backup => {
+                const backupCard = `
+                    <div class="backup-card flex justify-between items-center">
+                        <div>
+                            <div class="font-medium">${backup.name}</div>
+                            <div class="text-sm text-gray-600">${backup.date} • ${backup.size}</div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="restoreBackup(${backup.id})" class="text-green-600 hover:text-green-800">
+                                <i class="fas fa-redo mr-1"></i>Restore
+                            </button>
+                            <button onclick="downloadBackup(${backup.id})" class="text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-download mr-1"></i>Download
+                            </button>
+                            <button onclick="deleteBackup(${backup.id})" class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                backupsList.innerHTML += backupCard;
+            });
+        }
+
+        function createNewPage() {
+            showNotification('New page creation feature is under development.', 'info');
+        }
+
+        function saveHomepage() {
+            const heroTitle = document.getElementById('homepageHeroTitle').value;
+            const heroSubtitle = document.getElementById('homepageHeroSubtitle').value;
+            
+            // Save to localStorage or send to server in real implementation
+            localStorage.setItem('homepageHeroTitle', heroTitle);
+            localStorage.setItem('homepageHeroSubtitle', heroSubtitle);
+            
+            showNotification('Homepage saved successfully!', 'success');
+        }
+
+        function addFeature() {
+            const container = document.getElementById('featuresContainer');
+            const featureId = Date.now();
+            
+            const featureHTML = `
+                <div class="content-block" id="feature-${featureId}">
+                    <div class="block-controls">
+                        <button onclick="editFeature(${featureId})" class="text-blue-600 p-1"><i class="fas fa-edit"></i></button>
+                        <button onclick="removeFeature(${featureId})" class="text-red-600 p-1"><i class="fas fa-trash"></i></button>
+                    </div>
+                    <label class="block text-gray-700 mb-2 font-medium">Feature Title</label>
+                    <input type="text" class="w-full px-3 py-2 border rounded mb-3" placeholder="Enter feature title">
+                    <label class="block text-gray-700 mb-2 font-medium">Feature Description</label>
+                    <textarea class="w-full px-3 py-2 border rounded" rows="2" placeholder="Enter feature description"></textarea>
+                </div>
+            `;
+            
+            container.innerHTML += featureHTML;
+        }
+
+        function removeFeature(featureId) {
+            const feature = document.getElementById(`feature-${featureId}`);
+            if (feature) {
+                feature.remove();
+                showNotification('Feature removed', 'info');
+            }
+        }
+
+        function createNewBlogPost() {
+            // Show blog editor
+            document.getElementById('blogEditor').classList.remove('hidden');
+            document.getElementById('blogPosts').classList.add('hidden');
+            
+            // Reset form
+            document.getElementById('blogTitle').value = '';
+            quillEditor.setContents([]);
+        }
+
+        function saveBlogPost() {
+            const title = document.getElementById('blogTitle').value;
+            const content = quillEditor.root.innerHTML;
+            const status = document.getElementById('blogStatus').value;
+            
+            if (!title.trim()) {
+                showNotification('Please enter a blog title', 'error');
+                return;
+            }
+            
+            // In real implementation, save to server
+            const newPost = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                status: status,
+                date: new Date().toISOString().split('T')[0],
+                author: currentUser.name,
+                views: 0
+            };
+            
+            websiteData.blogPosts.unshift(newPost);
+            
+            // Show success message
+            showNotification(`Blog post "${title}" saved as ${status}!`, 'success');
+            
+            // Show blog posts list
+            document.getElementById('blogEditor').classList.add('hidden');
+            document.getElementById('blogPosts').classList.remove('hidden');
+            
+            // Reload blog posts
+            loadBlogPosts();
+        }
+
+        function createBackup() {
+            showNotification('Creating backup...', 'info');
+            
+            // Simulate backup creation
+            setTimeout(() => {
+                const backupId = Date.now();
+                const backupName = `Backup_${new Date().toISOString().split('T')[0].replace(/-/g, '_')}`;
+                
+                const newBackup = {
+                    id: backupId,
+                    name: backupName,
+                    date: new Date().toISOString().split('T')[0],
+                    size: '25.2 MB'
+                };
+                
+                websiteData.backups.unshift(newBackup);
+                
+                // Update last backup time
+                document.getElementById('lastBackupTime').textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                // Reload backups
+                loadBackups();
+                
+                showNotification(`Backup "${backupName}" created successfully!`, 'success');
+            }, 2000);
+        }
+
+        function restoreBackup(backupId) {
+            if (confirm('Are you sure you want to restore this backup? This will overwrite current data.')) {
+                showNotification('Restoring backup...', 'info');
+                setTimeout(() => {
+                    showNotification('Backup restored successfully!', 'success');
+                }, 1500);
+            }
+        }
+
+        function downloadBackup(backupId) {
+            const backup = websiteData.backups.find(b => b.id === backupId);
+            if (backup) {
+                // Create a dummy file to download
+                const blob = new Blob([`Backup: ${backup.name}\nDate: ${backup.date}\nSize: ${backup.size}`], {type: 'text/plain'});
+                saveAs(blob, `${backup.name}.txt`);
+                showNotification(`Downloading ${backup.name}...`, 'info');
+            }
+        }
+
+        function deleteBackup(backupId) {
+            if (confirm('Are you sure you want to delete this backup?')) {
+                websiteData.backups = websiteData.backups.filter(b => b.id !== backupId);
+                loadBackups();
+                showNotification('Backup deleted', 'info');
+            }
+        }
+
+        function showAddUserModal() {
+            document.getElementById('addUserModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function addNewUser() {
+            const name = document.getElementById('newUserName').value;
+            const email = document.getElementById('newUserEmail').value;
+            const role = document.getElementById('newUserRole').value;
+            
+            if (!name || !email) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            const newUser = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                role: role,
+                lastActive: 'Never'
+            };
+            
+            websiteData.users.push(newUser);
+            closeModal('addUserModal');
+            loadUsers();
+            showNotification(`User "${name}" added successfully!`, 'success');
+            
+            // Clear form
+            document.getElementById('newUserName').value = '';
+            document.getElementById('newUserEmail').value = '';
+            document.getElementById('newUserRole').value = 'editor';
+        }
+
+        function editUser(userId) {
+            const user = websiteData.users.find(u => u.id === userId);
+            if (user) {
+                document.getElementById('newUserName').value = user.name;
+                document.getElementById('newUserEmail').value = user.email;
+                document.getElementById('newUserRole').value = user.role;
+                showAddUserModal();
+            }
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                websiteData.users = websiteData.users.filter(u => u.id !== userId);
+                loadUsers();
+                showNotification('User deleted', 'info');
+            }
+        }
+
+        function saveSettings() {
+            const title = document.getElementById('websiteTitle').value;
+            const description = document.getElementById('websiteDescription').value;
+            
+            // Save to localStorage
+            localStorage.setItem('websiteTitle', title);
+            localStorage.setItem('websiteDescription', description);
+            
+            showNotification('Settings saved successfully!', 'success');
+        }
+
+        function previewPage(pageSlug) {
+            const modal = document.getElementById('previewModal');
+            const iframe = document.getElementById('previewFrame');
+            
+            // For demo purposes, show a simple preview
+            iframe.srcdoc = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Preview - ${pageSlug}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        h1 { color: #1e3a8a; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Preview of ${pageSlug} Page</h1>
+                    <p>This is a preview of how the "${pageSlug}" page will look on your website.</p>
+                    <p>In a real implementation, this would show the actual page content.</p>
+                </body>
+                </html>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function previewCurrentPage() {
+            const currentSection = document.querySelector('.content-section:not(.hidden)').id;
+            const pageMap = {
+                'homepageSection': 'index',
+                'aboutSection': 'about',
+                'contactSection': 'contact',
+                'blogSection': 'blog',
+                'eventsSection': 'events'
+            };
+            
+            const pageSlug = pageMap[currentSection] || 'dashboard';
+            previewPage(pageSlug);
+        }
+
+        function publishChanges() {
+            showNotification('Publishing all changes...', 'info');
+            
+            // Simulate publishing
+            setTimeout(() => {
+                showNotification('All changes published successfully! Website is now live.', 'success');
+            }, 2000);
+        }
+
+        function showNotifications() {
+            const notifications = [
+                { id: 1, message: 'New member registration pending review', time: '5 min ago', type: 'info' },
+                { id: 2, message: 'Blog post scheduled for publishing', time: '1 hour ago', type: 'success' },
+                { id: 3, message: 'Server maintenance scheduled for tonight', time: '2 hours ago', type: 'warning' }
+            ];
+            
+            // Create notifications dropdown
+            const dropdown = document.createElement('div');
+            dropdown.className = 'absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border z-50';
+            dropdown.innerHTML = `
+                <div class="p-4 border-b">
+                    <h3 class="font-bold">Notifications</h3>
+                </div>
+                <div class="max-h-96 overflow-y-auto">
+                    ${notifications.map(notif => `
+                        <div class="p-4 border-b hover:bg-gray-50">
+                            <div class="flex justify-between">
+                                <div class="font-medium">${notif.message}</div>
+                                <div class="text-xs text-gray-500">${notif.time}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="p-3 text-center border-t">
+                    <button class="text-blue-600 text-sm">Mark all as read</button>
+                </div>
+            `;
+            
+            // Remove existing dropdown if any
+            const existing = document.querySelector('.notification-dropdown');
+            if (existing) existing.remove();
+            
+            dropdown.classList.add('notification-dropdown');
+            document.querySelector('.relative').appendChild(dropdown);
+            
+            // Close dropdown when clicking outside
+            setTimeout(() => {
+                const closeDropdown = (e) => {
+                    if (!dropdown.contains(e.target) && e.target.id !== 'notificationsBtn') {
+                        dropdown.remove();
+                        document.removeEventListener('click', closeDropdown);
+                    }
+                };
+                document.addEventListener('click', closeDropdown);
+            }, 100);
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-600' : 
+                           type === 'error' ? 'bg-red-600' : 
+                           type === 'warning' ? 'bg-yellow-600' : 'bg-blue-600';
+            
+            notification.className = `fixed top-4 right-4 text-white px-6 py-3 rounded-lg shadow-lg ${bgColor} z-50 transform translate-x-full transition-transform`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i class="fas ${
+                        type === 'success' ? 'fa-check-circle' : 
+                        type === 'error' ? 'fa-exclamation-circle' : 
+                        type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'
+                    }"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 5000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + S to save
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                const currentSection = document.querySelector('.content-section:not(.hidden)').id;
+                
+                if (currentSection === 'homepageSection') {
+                    saveHomepage();
+                } else if (currentSection === 'settingsSection') {
+                    saveSettings();
+                } else if (currentSection === 'blogSection') {
+                    saveBlogPost();
+                } else {
+                    showNotification('Changes saved!', 'success');
+                }
+            }
+            
+            // Esc to close modals
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+            }
+        });
+
+        // Color picker functionality
+        document.querySelectorAll('.color-picker').forEach(picker => {
+            picker.addEventListener('click', function() {
+                // Remove selected class from all pickers
+                document.querySelectorAll('.color-picker').forEach(p => {
+                    p.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked picker
+                this.classList.add('selected');
+                
+                // Get color value
+                const color = this.getAttribute('data-color');
+                
+                // Apply color to website (in real implementation, this would update CSS variables)
+                document.documentElement.style.setProperty('--kesnnur-blue', color);
+                
+                showNotification(`Primary color changed to ${color}`, 'success');
+            });
+        });
+    </script>
+</body>
+</html>
