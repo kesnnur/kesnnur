@@ -9,7 +9,7 @@
     <meta name="description" content="Kenya Students & Novice Nurses (KESNNUR) - Kenya's largest community for nursing students and novice nurses. Access mentorship, resources, workshops, and career opportunities.">
     
     <!-- Keywords for SEO -->
-    <meta name="keywords" content="KESNNUR, Kenya nurses, nursing students, novice nurses, nursing mentorship, nursing Kenya, nursing career, nursing resources, NNAK">
+    <meta name="keywords" content="KESNNur, Kenya nurses, nursing students, novice nurses, nursing mentorship, nursing Kenya, nursing career, nursing resources, NNAK">
     
     <!-- Author -->
     <meta name="author" content="KESNNUR">
@@ -100,20 +100,6 @@
             --kesnnur-gold: #f59e0b;
         }
         
-        /* Top Logo */
-        .top-logo {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            background: white;
-            border-radius: 12px;
-            padding: 8px;
-            box-shadow: 0 4px 20px rgba(30, 58, 138, 0.2);
-            border: 2px solid #1e3a8a;
-        }
-        
         /* Skip to content */
         .skip-to-content {
             position: absolute;
@@ -162,24 +148,14 @@
         body {
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            padding-top: 80px;
+            padding-top: 0; /* REMOVED: padding-top: 80px; */
         }
         
         .font-display {
             font-family: 'Poppins', sans-serif;
         }
         
-        /* Mobile adjustments */
-        @media (max-width: 768px) {
-            body {
-                padding-top: 70px;
-            }
-            
-            .top-logo {
-                top: 10px;
-                padding: 6px;
-            }
-        }
+        /* REMOVED: Mobile adjustments for top-logo */
         
         /* Glass effect */
         .glass {
@@ -249,15 +225,6 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-blue-50">
-    <!-- Top Logo -->
-    <div class="top-logo">
-        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
-             alt="KESNNUR Official Logo"
-             width="100"
-             height="50"
-             class="w-24 h-12 object-contain">
-    </div>
-
     <!-- Skip to Content -->
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
@@ -274,24 +241,24 @@
         </div>
     </div>
 
-    <!-- Navigation -->
+    <!-- UPDATED HEADER - NOW EXACTLY LIKE ABOUT PAGE -->
     <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
-                <!-- Logo -->
-                <a href="index.html" class="md:hidden flex items-center space-x-3">
+                <!-- Logo - NOW EXACTLY LIKE ABOUT PAGE -->
+                <a href="index.html" class="flex items-center space-x-3">
                     <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
                          alt="KESNNUR Logo"
                          width="40"
                          height="40"
                          class="w-10 h-10 rounded-lg object-contain">
                     <div>
-                        <h1 class="text-lg font-bold text-blue-900 font-display">KESNNUR</h1>
+                        <h1 class="text-lg md:text-xl font-bold text-blue-900 font-display">KESNNUR</h1>
                         <p class="text-xs text-gray-600">Students & Novice Nurses</p>
                     </div>
                 </a>
 
-                <!-- Desktop Menu -->
+                <!-- Desktop Menu - NOW EXACTLY LIKE ABOUT PAGE -->
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="text-blue-900 font-medium border-b-2 border-blue-900">Home</a>
                     <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium">About</a>
@@ -305,16 +272,16 @@
                     </a>
                 </div>
 
-                <!-- Mobile Menu Button -->
+                <!-- Mobile Menu Button - NOW EXACTLY LIKE ABOUT PAGE -->
                 <button id="menuBtn" class="md:hidden text-blue-900">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
             
-            <!-- Mobile Menu -->
+            <!-- Mobile Menu - NOW EXACTLY LIKE ABOUT PAGE -->
             <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white rounded-lg shadow-lg p-6">
                 <div class="space-y-3">
-                    <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
+                    <a href="index.html" class="block py-3 px-4 bg-blue-50 text-blue-900 rounded-lg">
                         <i class="fas fa-home mr-3"></i>Home
                     </a>
                     <a href="about.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
@@ -343,6 +310,7 @@
         </div>
     </nav>
 
+    <!-- KEEPING ALL ORIGINAL CONTENT BELOW EXACTLY AS IT WAS -->
     <!-- Main Content -->
     <main id="main-content" role="main">
         <!-- Hero Section -->
@@ -602,6 +570,11 @@
             </div>
         </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-8 right-8 bg-blue-900 text-white p-3 rounded-full shadow-lg hover:shadow-xl opacity-0 transition-opacity duration-300" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 
     <!-- JavaScript -->
     <script>
