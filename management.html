@@ -850,70 +850,232 @@
         }
     }
     
-    function renderNationalCouncil(members) {
-        const container = document.getElementById('national-council-container');
+   // ============================================
+// RENDER NATIONAL COUNCIL WITH PICTURES & ALL SOCIAL MEDIA
+// ============================================
+function renderNationalCouncil(members) {
+    const container = document.getElementById('national-council-container');
+    
+    if (!members || members.length === 0) {
+        document.getElementById('national-error').style.display = 'block';
+        return;
+    }
+    
+    container.innerHTML = '';
+    
+    // Color mapping for gradients
+    const colorMap = {
+        'blue': { from: 'from-blue-900', to: 'to-blue-700', text: 'text-blue-900', bg: 'bg-blue-100' },
+        'teal': { from: 'from-teal-700', to: 'to-teal-500', text: 'text-teal-900', bg: 'bg-teal-100' },
+        'purple': { from: 'from-purple-700', to: 'to-purple-500', text: 'text-purple-900', bg: 'bg-purple-100' },
+        'amber': { from: 'from-amber-700', to: 'to-amber-500', text: 'text-amber-900', bg: 'bg-amber-100' },
+        'cyan': { from: 'from-cyan-700', to: 'to-cyan-500', text: 'text-cyan-900', bg: 'bg-cyan-100' },
+        'red': { from: 'from-red-700', to: 'to-red-500', text: 'text-red-900', bg: 'bg-red-100' },
+        'pink': { from: 'from-pink-700', to: 'to-pink-500', text: 'text-pink-900', bg: 'bg-pink-100' },
+        'indigo': { from: 'from-indigo-700', to: 'to-indigo-500', text: 'text-indigo-900', bg: 'bg-indigo-100' },
+        'green': { from: 'from-green-700', to: 'to-green-500', text: 'text-green-900', bg: 'bg-green-100' },
+        'orange': { from: 'from-orange-700', to: 'to-orange-500', text: 'text-orange-900', bg: 'bg-orange-100' }
+    };
+    
+    members.forEach(member => {
+        const colors = colorMap[member.color_scheme] || colorMap.blue;
+        const initials = member.person_name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+        const hasImage = member.profile_image_url && member.profile_image_url.trim() !== '';
+        const socialHandles = member.social_handles || {};
         
-        if (!members || members.length === 0) {
-            document.getElementById('national-error').style.display = 'block';
-            return;
-        }
+        // Get position badge text
+        const positionBadge = getPositionBadge(member.position);
         
-        container.innerHTML = '';
-        
-        // Color mapping for gradients
-        const colorMap = {
-            'blue': { from: 'from-blue-900', to: 'to-blue-700', text: 'text-blue-900', bg: 'bg-blue-100' },
-            'teal': { from: 'from-teal-700', to: 'to-teal-500', text: 'text-teal-900', bg: 'bg-teal-100' },
-            'purple': { from: 'from-purple-700', to: 'to-purple-500', text: 'text-purple-900', bg: 'bg-purple-100' },
-            'amber': { from: 'from-amber-700', to: 'to-amber-500', text: 'text-amber-900', bg: 'bg-amber-100' },
-            'cyan': { from: 'from-cyan-700', to: 'to-cyan-500', text: 'text-cyan-900', bg: 'bg-cyan-100' },
-            'red': { from: 'from-red-700', to: 'to-red-500', text: 'text-red-900', bg: 'bg-red-100' },
-            'pink': { from: 'from-pink-700', to: 'to-pink-500', text: 'text-pink-900', bg: 'bg-pink-100' },
-            'indigo': { from: 'from-indigo-700', to: 'to-indigo-500', text: 'text-indigo-900', bg: 'bg-indigo-100' },
-            'green': { from: 'from-green-700', to: 'to-green-500', text: 'text-green-900', bg: 'bg-green-100' },
-            'orange': { from: 'from-orange-700', to: 'to-orange-500', text: 'text-orange-900', bg: 'bg-orange-100' }
+        // Function to check if social handle exists
+        const hasSocialHandle = (platform) => {
+            return socialHandles[platform] && socialHandles[platform].trim() !== '';
         };
         
-        members.forEach(member => {
-            const colors = colorMap[member.color_scheme] || colorMap.blue;
-            const initials = member.person_name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-            
-            const memberHTML = `
-                <div class="team-card bg-white rounded-2xl shadow-lg overflow-hidden animate-fade-in">
-                    <div class="h-48 bg-gradient-to-r ${colors.from} ${colors.to} relative">
-                        <div class="absolute top-4 left-4">
-                            <span class="bg-white ${colors.text} text-xs font-bold px-3 py-1 rounded-full">
-                                ${member.position.includes('Chair') ? 'Chairperson' : 
-                                  member.position.includes('Secretary') ? 'Secretariat' :
-                                  member.position.includes('Finance') ? 'Finance' :
-                                  member.position.includes('Organizing') ? 'Events' :
-                                  member.position.split(' ')[0]}
-                            </span>
-                        </div>
-                        <div class="absolute bottom-4 left-4">
-                            <div class="text-white text-3xl font-bold">${initials}</div>
-                        </div>
+        // Generate social media icons HTML
+        const socialIconsHTML = `
+            <div class="flex space-x-3 mt-4">
+                ${hasSocialHandle('twitter') ? `
+                    <a href="https://twitter.com/${socialHandles.twitter.replace('@', '')}" 
+                       target="_blank" 
+                       class="text-blue-500 hover:text-blue-700 transition-colors"
+                       title="Twitter">
+                        <i class="fab fa-twitter text-lg"></i>
+                    </a>
+                ` : ''}
+                
+                ${hasSocialHandle('linkedin') ? `
+                    <a href="${socialHandles.linkedin.startsWith('http') ? socialHandles.linkedin : 'https://' + socialHandles.linkedin}" 
+                       target="_blank" 
+                       class="text-blue-800 hover:text-blue-900 transition-colors"
+                       title="LinkedIn">
+                        <i class="fab fa-linkedin text-lg"></i>
+                    </a>
+                ` : ''}
+                
+                ${hasSocialHandle('instagram') ? `
+                    <a href="https://instagram.com/${socialHandles.instagram.replace('@', '')}" 
+                       target="_blank" 
+                       class="text-pink-600 hover:text-pink-800 transition-colors"
+                       title="Instagram">
+                        <i class="fab fa-instagram text-lg"></i>
+                    </a>
+                ` : ''}
+                
+                ${hasSocialHandle('facebook') ? `
+                    <a href="https://facebook.com/${socialHandles.facebook}" 
+                       target="_blank" 
+                       class="text-blue-600 hover:text-blue-800 transition-colors"
+                       title="Facebook">
+                        <i class="fab fa-facebook text-lg"></i>
+                    </a>
+                ` : ''}
+                
+                ${hasSocialHandle('email') ? `
+                    <a href="mailto:${socialHandles.email}" 
+                       class="text-red-600 hover:text-red-800 transition-colors"
+                       title="Email">
+                        <i class="fas fa-envelope text-lg"></i>
+                    </a>
+                ` : ''}
+            </div>
+        `;
+        
+        const memberHTML = `
+            <div class="team-card bg-white rounded-2xl shadow-lg overflow-hidden animate-fade-in">
+                <div class="h-48 bg-gradient-to-r ${colors.from} ${colors.to} relative overflow-hidden">
+                    <div class="absolute top-4 left-4">
+                        <span class="bg-white ${colors.text} text-xs font-bold px-3 py-1 rounded-full">
+                            ${positionBadge}
+                        </span>
                     </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-2">${member.person_name}</h3>
-                        <p class="${colors.text} font-semibold mb-4">${member.position}</p>
-                        <p class="text-gray-600 mb-6">${member.description}</p>
-                        ${member.tags && member.tags.length > 0 ? `
-                            <div class="flex flex-wrap gap-2">
-                                ${member.tags.map(tag => `
-                                    <span class="committee-tag ${colors.bg} ${colors.text.replace('900', '800')}">${tag}</span>
-                                `).join('')}
+                    
+                    <!-- Profile Picture or Initials -->
+                    <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+                        <div class="flex items-center">
+                            <div class="w-16 h-16 rounded-full ${hasImage ? '' : 'bg-white/20'} border-2 border-white flex items-center justify-center overflow-hidden mr-3">
+                                ${hasImage ? 
+                                    `<img src="${member.profile_image_url}" 
+                                          alt="${member.person_name}" 
+                                          class="w-full h-full object-cover">` :
+                                    `<span class="text-white text-2xl font-bold">${initials}</span>`
+                                }
+                            </div>
+                            <div class="text-white">
+                                <h3 class="font-bold text-lg">${member.person_name}</h3>
+                                <p class="text-sm opacity-90">${member.position}</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Social Media Icons (in header) -->
+                        ${hasSocialHandle('twitter') || hasSocialHandle('linkedin') || 
+                          hasSocialHandle('instagram') || hasSocialHandle('facebook') || 
+                          hasSocialHandle('email') ? `
+                            <div class="flex space-x-2">
+                                ${hasSocialHandle('twitter') ? `
+                                    <a href="https://twitter.com/${socialHandles.twitter.replace('@', '')}" 
+                                       target="_blank" 
+                                       class="text-white/80 hover:text-white transition-colors"
+                                       title="Twitter">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                ` : ''}
+                                
+                                ${hasSocialHandle('linkedin') ? `
+                                    <a href="${socialHandles.linkedin.startsWith('http') ? socialHandles.linkedin : 'https://' + socialHandles.linkedin}" 
+                                       target="_blank" 
+                                       class="text-white/80 hover:text-white transition-colors"
+                                       title="LinkedIn">
+                                        <i class="fab fa-linkedin"></i>
+                                    </a>
+                                ` : ''}
                             </div>
                         ` : ''}
                     </div>
                 </div>
-            `;
-            
-            container.innerHTML += memberHTML;
-        });
+                
+                <div class="p-6">
+                    <!-- Name and Position (duplicated from header for mobile view) -->
+                    <div class="md:hidden mb-4">
+                        <h3 class="font-bold text-xl mb-1">${member.person_name}</h3>
+                        <p class="${colors.text} font-semibold">${member.position}</p>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-4">${member.description}</p>
+                    
+                    ${member.tags && member.tags.length > 0 ? `
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${member.tags.map(tag => `
+                                <span class="committee-tag ${colors.bg} ${colors.text.replace('900', '800')}">${tag}</span>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Social Media Handles (detailed view) -->
+                    ${hasSocialHandle('twitter') || hasSocialHandle('linkedin') || 
+                      hasSocialHandle('instagram') || hasSocialHandle('facebook') || 
+                      hasSocialHandle('email') ? `
+                        <div class="pt-4 border-t border-gray-200">
+                            <h4 class="font-medium text-gray-700 mb-2">Connect</h4>
+                            <div class="flex flex-wrap gap-3">
+                                ${hasSocialHandle('twitter') ? `
+                                    <div class="flex items-center">
+                                        <i class="fab fa-twitter text-blue-500 mr-2"></i>
+                                        <span class="text-sm text-gray-600">${socialHandles.twitter}</span>
+                                    </div>
+                                ` : ''}
+                                
+                                ${hasSocialHandle('linkedin') ? `
+                                    <div class="flex items-center">
+                                        <i class="fab fa-linkedin text-blue-800 mr-2"></i>
+                                        <span class="text-sm text-gray-600">${socialHandles.linkedin}</span>
+                                    </div>
+                                ` : ''}
+                                
+                                ${hasSocialHandle('instagram') ? `
+                                    <div class="flex items-center">
+                                        <i class="fab fa-instagram text-pink-600 mr-2"></i>
+                                        <span class="text-sm text-gray-600">${socialHandles.instagram}</span>
+                                    </div>
+                                ` : ''}
+                                
+                                ${hasSocialHandle('facebook') ? `
+                                    <div class="flex items-center">
+                                        <i class="fab fa-facebook text-blue-600 mr-2"></i>
+                                        <span class="text-sm text-gray-600">${socialHandles.facebook}</span>
+                                    </div>
+                                ` : ''}
+                                
+                                ${hasSocialHandle('email') ? `
+                                    <div class="flex items-center">
+                                        <i class="fas fa-envelope text-red-600 mr-2"></i>
+                                        <span class="text-sm text-gray-600">${socialHandles.email}</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Social Media Icons (footer) -->
+                    ${socialIconsHTML}
+                </div>
+            </div>
+        `;
         
-        container.style.display = 'grid';
-    }
+        container.innerHTML += memberHTML;
+    });
+    
+    container.style.display = 'grid';
+}
+
+// Helper function to get position badge
+function getPositionBadge(position) {
+    if (position.includes('Chair')) return 'Chairperson';
+    if (position.includes('Secretary')) return 'Secretariat';
+    if (position.includes('Finance')) return 'Finance';
+    if (position.includes('Organizing')) return 'Events';
+    if (position.includes('Representative')) return 'Representative';
+    return position.split(' ')[0];
+}
     
     function renderRegionalCommittees(committees) {
         const container = document.getElementById('regional-committees-container');
