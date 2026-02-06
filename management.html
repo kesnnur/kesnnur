@@ -63,12 +63,6 @@
     
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        // Initialize Supabase client (SAME AS YOUR CMS)
-        const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    </script>
     
     <!-- Custom Styles -->
     <style>
@@ -630,12 +624,44 @@
     <!-- JavaScript -->
     <script>
     // ============================================
+    // GLOBAL SUPABASE CLIENT
+    // ============================================
+    let supabaseClient = null;
+
+    // ============================================
+    // INITIALIZE SUPABASE
+    // ============================================
+    function initSupabase() {
+        if (!window.supabase) {
+            console.error('Supabase library not loaded');
+            return false;
+        }
+        
+        try {
+            const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+            
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            console.log('✅ Supabase client initialized successfully');
+            return true;
+        } catch (error) {
+            console.error('Error initializing Supabase:', error);
+            return false;
+        }
+    }
+
+    // ============================================
     // MANAGEMENT PAGE FUNCTIONALITY
     // ============================================
-
     document.addEventListener('DOMContentLoaded', function() {
         // Set current year
         document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Initialize Supabase
+        if (!initSupabase()) {
+            console.warn('⚠️ Supabase initialization failed, using static content');
+            showErrorStates();
+        }
         
         // Mobile menu toggle
         const menuBtn = document.getElementById('menuBtn');
@@ -768,13 +794,19 @@
     // ============================================
     // LOAD MANAGEMENT DATA FROM SUPABASE CMS
     // ============================================
-    
     async function loadManagementData() {
         console.log('🔄 Loading management data from Supabase CMS...');
         
+        // Check if supabase client is ready
+        if (!supabaseClient) {
+            console.error('Supabase client not initialized');
+            showErrorStates();
+            return;
+        }
+        
         try {
             // Fetch all active management sections
-            const { data: sections, error } = await supabase
+            const { data: sections, error } = await supabaseClient
                 .from('management_sections')
                 .select('*')
                 .eq('is_active', true)
