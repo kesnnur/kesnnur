@@ -1046,14 +1046,17 @@ function generateSocialIcons(socialHandles) {
 }
 
 function addTeamMember() {
+    let selectedFile = null;
+    let uploadProgress = 0;
+    
     const modal = document.createElement('div');
     modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
     modal.innerHTML = `
-        <div class="bg-white rounded-xl p-6 w-full max-w-2xl">
+        <div class="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <h3 class="text-xl font-bold mb-4">Add Team Member</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Left Column: Basic Info -->
+                <!-- Left Column: Basic Info & Photo Upload -->
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium mb-1">Section Type</label>
@@ -1074,10 +1077,38 @@ function addTeamMember() {
                         <input type="text" id="memberPosition" class="w-full border rounded-lg p-2" placeholder="Position/Role">
                     </div>
                     
+                    <!-- Photo Upload Section -->
                     <div>
-                        <label class="block text-sm font-medium mb-1">Profile Image URL</label>
-                        <input type="text" id="memberImageUrl" class="w-full border rounded-lg p-2" placeholder="https://example.com/profile.jpg">
-                        <p class="text-xs text-gray-500 mt-1">Leave empty for colored initials background</p>
+                        <label class="block text-sm font-medium mb-1">Profile Photo</label>
+                        <div class="mt-1">
+                            <!-- Upload Box -->
+                            <div id="uploadBox" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 transition-colors">
+                                <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600 mb-1">Click to upload profile photo</p>
+                                <p class="text-xs text-gray-500">PNG, JPG up to 5MB</p>
+                                <input type="file" id="memberPhoto" class="hidden" accept="image/*">
+                            </div>
+                            
+                            <!-- Preview Section -->
+                            <div id="photoPreview" class="mt-4 hidden">
+                                <div class="flex items-center space-x-4">
+                                    <img id="previewImage" class="w-20 h-20 rounded-full object-cover border-2 border-blue-200">
+                                    <div class="flex-1">
+                                        <p id="fileName" class="text-sm font-medium"></p>
+                                        <p id="fileSize" class="text-xs text-gray-500"></p>
+                                        <div class="mt-2 flex items-center space-x-2">
+                                            <div id="uploadProgressBar" class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div id="progressFill" class="h-full bg-blue-600 transition-all duration-300" style="width: 0%"></div>
+                                            </div>
+                                            <span id="progressText" class="text-xs text-gray-600">0%</span>
+                                        </div>
+                                    </div>
+                                    <button type="button" id="removePhoto" class="text-red-600 hover:text-red-800">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div>
@@ -1138,20 +1169,105 @@ function addTeamMember() {
             
             <div class="flex justify-end space-x-3 mt-6">
                 <button onclick="this.closest('.fixed').remove()" class="px-4 py-2 border rounded-lg">Cancel</button>
-                <button onclick="saveNewTeamMember()" class="px-4 py-2 bg-blue-900 text-white rounded-lg">Save Member</button>
+                <button onclick="saveNewTeamMemberWithPhoto()" class="px-4 py-2 bg-blue-900 text-white rounded-lg">
+                    <i class="fas fa-save mr-2"></i> Save Member
+                </button>
             </div>
         </div>
     `;
     
     document.body.appendChild(modal);
+    
+    // Add event listeners for file upload
+    setTimeout(() => {
+        const uploadBox = document.getElementById('uploadBox');
+        const fileInput = document.getElementById('memberPhoto');
+        const previewSection = document.getElementById('photoPreview');
+        const previewImage = document.getElementById('previewImage');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const removePhoto = document.getElementById('removePhoto');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        
+        // Click upload box to trigger file input
+        uploadBox.addEventListener('click', () => fileInput.click());
+        
+        // Handle file selection
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file (PNG, JPG, JPEG)');
+                    return;
+                }
+                
+                // Validate file size (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    return;
+                }
+                
+                selectedFile = file;
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                    previewSection.classList.remove('hidden');
+                    uploadBox.classList.add('hidden');
+                    
+                    // Show file info
+                    fileName.textContent = file.name;
+                    fileSize.textContent = formatFileSize(file.size);
+                    
+                    // Reset progress
+                    uploadProgress = 0;
+                    progressFill.style.width = '0%';
+                    progressText.textContent = '0%';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Remove photo
+        removePhoto.addEventListener('click', () => {
+            selectedFile = null;
+            fileInput.value = '';
+            previewSection.classList.add('hidden');
+            uploadBox.classList.remove('hidden');
+            
+            // Reset progress
+            uploadProgress = 0;
+            progressFill.style.width = '0%';
+            progressText.textContent = '0%';
+        });
+        
+        // Function to update progress
+        window.updateUploadProgress = (progress) => {
+            uploadProgress = progress;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
+        };
+        
+    }, 100);
 }
 
-async function saveNewTeamMember() {
+// Helper function to format file size
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+async function saveNewTeamMemberWithPhoto() {
     const sectionType = document.getElementById('memberSectionType').value;
     const name = document.getElementById('memberName').value;
     const position = document.getElementById('memberPosition').value;
     const description = document.getElementById('memberDescription').value;
-    const imageUrl = document.getElementById('memberImageUrl').value;
     const color = document.getElementById('memberColor').value;
     const tagsInput = document.getElementById('memberTags').value;
     const twitter = document.getElementById('memberTwitter').value;
@@ -1160,8 +1276,13 @@ async function saveNewTeamMember() {
     const facebook = document.getElementById('memberFacebook').value;
     const email = document.getElementById('memberEmail').value;
     
-    const tags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+    // Validate required fields
+    if (!name || !position) {
+        alert('Name and Position are required fields');
+        return;
+    }
     
+    const tags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
     const socialHandles = {
         twitter: twitter || '',
         linkedin: linkedin || '',
@@ -1171,14 +1292,54 @@ async function saveNewTeamMember() {
     };
     
     try {
-        const { error } = await cmsSupabase
+        let imageUrl = null;
+        
+        // Upload photo if selected
+        const fileInput = document.getElementById('memberPhoto');
+        const selectedFile = fileInput.files[0];
+        
+        if (selectedFile) {
+            // Generate unique filename
+            const fileName = `profile_${Date.now()}_${selectedFile.name.replace(/\s+/g, '_')}`;
+            const filePath = `${sectionType}/${fileName}`;
+            
+            // Show uploading state
+            const saveButton = document.querySelector('button[onclick="saveNewTeamMemberWithPhoto()"]');
+            const originalText = saveButton.innerHTML;
+            saveButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Uploading...';
+            saveButton.disabled = true;
+            
+            // Upload to Supabase Storage
+            const { data: uploadData, error: uploadError } = await cmsSupabase.storage
+                .from('profile-images')
+                .upload(filePath, selectedFile, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+            
+            if (uploadError) throw uploadError;
+            
+            // Get public URL
+            const { data: { publicUrl } } = cmsSupabase.storage
+                .from('profile-images')
+                .getPublicUrl(filePath);
+            
+            imageUrl = publicUrl;
+            
+            // Reset button
+            saveButton.innerHTML = originalText;
+            saveButton.disabled = false;
+        }
+        
+        // Save member data to database
+        const { error: dbError } = await cmsSupabase
             .from('management_sections')
             .insert({
                 section_type: sectionType,
                 person_name: name,
                 position: position,
                 description: description,
-                profile_image_url: imageUrl || null,
+                profile_image_url: imageUrl,
                 social_handles: socialHandles,
                 color_scheme: color,
                 tags: tags.length > 0 ? tags : null,
@@ -1187,7 +1348,7 @@ async function saveNewTeamMember() {
                 is_active: true
             });
         
-        if (error) throw error;
+        if (dbError) throw dbError;
         
         alert('Team member added successfully!');
         document.querySelector('.fixed').remove();
@@ -1195,6 +1356,12 @@ async function saveNewTeamMember() {
         
     } catch (error) {
         alert('Error adding member: ' + error.message);
+        console.error('Save error:', error);
+        
+        // Reset button
+        const saveButton = document.querySelector('button[onclick="saveNewTeamMemberWithPhoto()"]');
+        saveButton.innerHTML = '<i class="fas fa-save mr-2"></i> Save Member';
+        saveButton.disabled = false;
     }
 }
 
@@ -1210,15 +1377,16 @@ async function editTeamMember(id) {
         if (error) throw error;
         
         const socialHandles = member.social_handles || {};
+        let selectedFile = null;
         
         const modal = document.createElement('div');
         modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
         modal.innerHTML = `
-            <div class="bg-white rounded-xl p-6 w-full max-w-2xl">
+            <div class="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                 <h3 class="text-xl font-bold mb-4">Edit Team Member</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Left Column: Basic Info -->
+                    <!-- Left Column: Basic Info & Photo -->
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">Section Type</label>
@@ -1239,10 +1407,53 @@ async function editTeamMember(id) {
                             <input type="text" id="editPosition" class="w-full border rounded-lg p-2" value="${member.position}">
                         </div>
                         
+                        <!-- Photo Upload/Preview Section -->
                         <div>
-                            <label class="block text-sm font-medium mb-1">Profile Image URL</label>
-                            <input type="text" id="editImageUrl" class="w-full border rounded-lg p-2" value="${member.profile_image_url || ''}">
-                            <p class="text-xs text-gray-500 mt-1">Leave empty for colored initials background</p>
+                            <label class="block text-sm font-medium mb-1">Profile Photo</label>
+                            <div class="mt-1">
+                                <!-- Current Photo Preview -->
+                                ${member.profile_image_url ? `
+                                    <div class="mb-4">
+                                        <p class="text-sm text-gray-600 mb-2">Current Photo:</p>
+                                        <div class="flex items-center space-x-4">
+                                            <img src="${member.profile_image_url}" 
+                                                 alt="${member.person_name}" 
+                                                 class="w-20 h-20 rounded-full object-cover border-2 border-blue-200">
+                                            <div>
+                                                <button type="button" onclick="removeProfilePhoto('${member.id}')" 
+                                                        class="text-sm text-red-600 hover:text-red-800">
+                                                    <i class="fas fa-trash mr-1"></i> Remove Photo
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                <!-- Upload New Photo -->
+                                <div class="mt-4">
+                                    <p class="text-sm text-gray-600 mb-2">${member.profile_image_url ? 'Upload New Photo:' : 'Upload Photo:'}</p>
+                                    <div id="editUploadBox" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 transition-colors">
+                                        <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                                        <p class="text-sm text-gray-600 mb-1">Click to upload new photo</p>
+                                        <p class="text-xs text-gray-500">PNG, JPG up to 5MB</p>
+                                        <input type="file" id="editPhoto" class="hidden" accept="image/*">
+                                    </div>
+                                    
+                                    <!-- New Photo Preview -->
+                                    <div id="editPhotoPreview" class="mt-4 hidden">
+                                        <div class="flex items-center space-x-4">
+                                            <img id="editPreviewImage" class="w-20 h-20 rounded-full object-cover border-2 border-blue-200">
+                                            <div class="flex-1">
+                                                <p id="editFileName" class="text-sm font-medium"></p>
+                                                <p id="editFileSize" class="text-xs text-gray-500"></p>
+                                            </div>
+                                            <button type="button" id="editRemovePhoto" class="text-red-600 hover:text-red-800">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         
                         <div>
@@ -1303,24 +1514,103 @@ async function editTeamMember(id) {
                 
                 <div class="flex justify-end space-x-3 mt-6">
                     <button onclick="this.closest('.fixed').remove()" class="px-4 py-2 border rounded-lg">Cancel</button>
-                    <button onclick="updateTeamMember('${member.id}')" class="px-4 py-2 bg-blue-900 text-white rounded-lg">Update Member</button>
+                    <button onclick="updateTeamMemberWithPhoto('${member.id}')" class="px-4 py-2 bg-blue-900 text-white rounded-lg">
+                        <i class="fas fa-save mr-2"></i> Update Member
+                    </button>
                 </div>
             </div>
         `;
         
         document.body.appendChild(modal);
         
+        // Add file upload functionality for edit form
+        setTimeout(() => {
+            const uploadBox = document.getElementById('editUploadBox');
+            const fileInput = document.getElementById('editPhoto');
+            const previewSection = document.getElementById('editPhotoPreview');
+            const previewImage = document.getElementById('editPreviewImage');
+            const fileName = document.getElementById('editFileName');
+            const fileSize = document.getElementById('editFileSize');
+            const removePhoto = document.getElementById('editRemovePhoto');
+            
+            if (uploadBox && fileInput) {
+                uploadBox.addEventListener('click', () => fileInput.click());
+                
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        // Validate file
+                        if (!file.type.startsWith('image/')) {
+                            alert('Please select an image file');
+                            return;
+                        }
+                        
+                        if (file.size > 5 * 1024 * 1024) {
+                            alert('File size must be less than 5MB');
+                            return;
+                        }
+                        
+                        selectedFile = file;
+                        
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            previewImage.src = e.target.result;
+                            previewSection.classList.remove('hidden');
+                            uploadBox.classList.add('hidden');
+                            
+                            fileName.textContent = file.name;
+                            fileSize.textContent = formatFileSize(file.size);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+                
+                removePhoto.addEventListener('click', () => {
+                    selectedFile = null;
+                    fileInput.value = '';
+                    previewSection.classList.add('hidden');
+                    uploadBox.classList.remove('hidden');
+                });
+            }
+            
+            // Store selected file for update function
+            window.selectedEditFile = selectedFile;
+            
+        }, 100);
+        
     } catch (error) {
         alert('Error loading member: ' + error.message);
     }
 }
 
-async function updateTeamMember(id) {
+// Function to remove existing profile photo
+async function removeProfilePhoto(memberId) {
+    if (confirm('Are you sure you want to remove this profile photo?')) {
+        try {
+            const { error } = await cmsSupabase
+                .from('management_sections')
+                .update({ profile_image_url: null })
+                .eq('id', memberId);
+            
+            if (error) throw error;
+            
+            alert('Profile photo removed successfully!');
+            // Close modal and reload
+            document.querySelector('.fixed').remove();
+            loadManagementPage();
+            
+        } catch (error) {
+            alert('Error removing photo: ' + error.message);
+        }
+    }
+}
+
+// Updated update function with photo upload
+async function updateTeamMemberWithPhoto(id) {
     const sectionType = document.getElementById('editSectionType').value;
     const name = document.getElementById('editName').value;
     const position = document.getElementById('editPosition').value;
     const description = document.getElementById('editDescription').value;
-    const imageUrl = document.getElementById('editImageUrl').value;
     const color = document.getElementById('editColor').value;
     const tagsInput = document.getElementById('editTags').value;
     const twitter = document.getElementById('editTwitter').value;
@@ -1330,7 +1620,6 @@ async function updateTeamMember(id) {
     const email = document.getElementById('editEmail').value;
     
     const tags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-    
     const socialHandles = {
         twitter: twitter || '',
         linkedin: linkedin || '',
@@ -1340,23 +1629,58 @@ async function updateTeamMember(id) {
     };
     
     try {
-        const { error } = await cmsSupabase
+        let imageUrl = null;
+        const fileInput = document.getElementById('editPhoto');
+        
+        // Check if new photo was selected
+        if (fileInput && fileInput.files[0]) {
+            const selectedFile = fileInput.files[0];
+            const fileName = `profile_${Date.now()}_${selectedFile.name.replace(/\s+/g, '_')}`;
+            const filePath = `${sectionType}/${fileName}`;
+            
+            // Upload new photo
+            const { error: uploadError } = await cmsSupabase.storage
+                .from('profile-images')
+                .upload(filePath, selectedFile, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+            
+            if (uploadError) throw uploadError;
+            
+            // Get public URL
+            const { data: { publicUrl } } = cmsSupabase.storage
+                .from('profile-images')
+                .getPublicUrl(filePath);
+            
+            imageUrl = publicUrl;
+        }
+        
+        // Prepare update data
+        const updateData = {
+            section_type: sectionType,
+            person_name: name,
+            position: position,
+            description: description,
+            social_handles: socialHandles,
+            color_scheme: color,
+            tags: tags.length > 0 ? tags : null,
+            avatar_initials: name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2),
+            updated_at: new Date().toISOString()
+        };
+        
+        // Only update image URL if we have a new one
+        if (imageUrl) {
+            updateData.profile_image_url = imageUrl;
+        }
+        
+        // Update member in database
+        const { error: dbError } = await cmsSupabase
             .from('management_sections')
-            .update({
-                section_type: sectionType,
-                person_name: name,
-                position: position,
-                description: description,
-                profile_image_url: imageUrl || null,
-                social_handles: socialHandles,
-                color_scheme: color,
-                tags: tags.length > 0 ? tags : null,
-                avatar_initials: name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2),
-                updated_at: new Date().toISOString()
-            })
+            .update(updateData)
             .eq('id', id);
         
-        if (error) throw error;
+        if (dbError) throw dbError;
         
         alert('Team member updated successfully!');
         document.querySelector('.fixed').remove();
@@ -1364,6 +1688,7 @@ async function updateTeamMember(id) {
         
     } catch (error) {
         alert('Error updating member: ' + error.message);
+        console.error('Update error:', error);
     }
 }
 
