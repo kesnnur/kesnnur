@@ -795,13 +795,13 @@
             }
         }
         
-       // ================== MANAGEMENT PAGE FUNCTIONS ==================
+     // ================== MANAGEMENT PAGE FUNCTIONS ==================
 async function loadManagementPage() {
     console.log("Loading management page...");
     
     const nationalContainer = document.getElementById('managementMembers');
-    const regionalContainer = document.getElementById('eventsList'); // Reusing for demo
-    const adhocContainer = document.getElementById('blogPostsList'); // Reusing for demo
+    const regionalContainer = document.getElementById('eventsList');
+    const adhocContainer = document.getElementById('blogPostsList');
     
     try {
         // Load National Council
@@ -827,28 +827,67 @@ async function loadManagementPage() {
                     'green': 'from-green-700 to-green-500'
                 };
                 
+                // Check if member has profile picture
+                const hasImage = member.profile_image_url && member.profile_image_url.trim() !== '';
+                const socialHandles = member.social_handles || {};
+                
+                // Generate social icons HTML
+                const socialIconsHTML = generateSocialIcons(socialHandles);
+                
                 const memberDiv = document.createElement('div');
                 memberDiv.className = 'bg-white rounded-xl shadow-md p-6 mb-4';
                 memberDiv.innerHTML = `
                     <div class="flex justify-between items-start">
-                        <div>
-                            <div class="flex items-center mb-2">
-                                <div class="w-12 h-12 ${colorMap[member.color_scheme] || 'from-blue-900 to-blue-700'} rounded-full flex items-center justify-center text-white font-bold mr-3">
-                                    ${member.avatar_initials || member.person_name.charAt(0)}
+                        <div class="flex-1">
+                            <div class="flex items-start mb-3">
+                                <!-- Profile Picture or Initials -->
+                                <div class="w-16 h-16 ${colorMap[member.color_scheme] || 'from-blue-900 to-blue-700'} rounded-full flex items-center justify-center overflow-hidden mr-4">
+                                    ${hasImage ? 
+                                        `<img src="${member.profile_image_url}" 
+                                              alt="${member.person_name}" 
+                                              class="w-full h-full object-cover">` :
+                                        `<span class="text-white font-bold text-xl">
+                                            ${member.avatar_initials || member.person_name.charAt(0)}
+                                         </span>`
+                                    }
                                 </div>
-                                <div>
+                                <div class="flex-1">
                                     <h4 class="font-bold text-lg">${member.person_name}</h4>
                                     <p class="text-blue-900 font-semibold">${member.position}</p>
+                                    
+                                    <!-- Social Media Icons -->
+                                    ${socialIconsHTML ? `
+                                        <div class="flex space-x-2 mt-2">
+                                            ${socialIconsHTML}
+                                        </div>
+                                    ` : ''}
                                 </div>
                             </div>
+                            
                             <p class="text-gray-600 text-sm mt-2">${member.description}</p>
+                            
                             ${member.tags && member.tags.length > 0 ? `
                                 <div class="flex flex-wrap gap-1 mt-3">
                                     ${member.tags.map(tag => `<span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">${tag}</span>`).join('')}
                                 </div>
                             ` : ''}
+                            
+                            <!-- Social Media Handles (if any) -->
+                            ${Object.keys(socialHandles).some(key => socialHandles[key] && socialHandles[key].trim() !== '') ? `
+                                <div class="mt-3 pt-3 border-t border-gray-100">
+                                    <p class="text-xs text-gray-500 mb-1">Social Media:</p>
+                                    <div class="text-xs space-y-1">
+                                        ${socialHandles.twitter ? `<div>Twitter: ${socialHandles.twitter}</div>` : ''}
+                                        ${socialHandles.linkedin ? `<div>LinkedIn: ${socialHandles.linkedin}</div>` : ''}
+                                        ${socialHandles.instagram ? `<div>Instagram: ${socialHandles.instagram}</div>` : ''}
+                                        ${socialHandles.facebook ? `<div>Facebook: ${socialHandles.facebook}</div>` : ''}
+                                        ${socialHandles.email ? `<div>Email: ${socialHandles.email}</div>` : ''}
+                                    </div>
+                                </div>
+                            ` : ''}
                         </div>
-                        <div class="flex space-x-2">
+                        
+                        <div class="flex space-x-2 ml-4">
                             <button onclick="editTeamMember('${member.id}')" class="text-blue-600 hover:text-blue-800">
                                 <i class="fas fa-edit"></i>
                             </button>
@@ -873,12 +912,30 @@ async function loadManagementPage() {
         if (!regError && regional) {
             regionalContainer.innerHTML = '';
             regional.forEach(region => {
+                const hasImage = region.profile_image_url && region.profile_image_url.trim() !== '';
+                const socialHandles = region.social_handles || {};
+                const socialIconsHTML = generateSocialIcons(socialHandles);
+                
                 const regionDiv = document.createElement('div');
                 regionDiv.className = 'bg-white rounded-lg border p-4 mb-3';
                 regionDiv.innerHTML = `
-                    <h4 class="font-bold mb-1">${region.person_name}</h4>
-                    <p class="text-gray-600 text-sm mb-2">${region.position}</p>
-                    <p class="text-gray-500 text-xs">${region.description}</p>
+                    <div class="flex items-start">
+                        ${hasImage ? `
+                            <img src="${region.profile_image_url}" 
+                                 alt="${region.person_name}" 
+                                 class="w-12 h-12 rounded-full object-cover mr-3">
+                        ` : ''}
+                        <div class="flex-1">
+                            <h4 class="font-bold mb-1">${region.person_name}</h4>
+                            <p class="text-gray-600 text-sm mb-2">${region.position}</p>
+                            <p class="text-gray-500 text-xs mb-2">${region.description}</p>
+                            ${socialIconsHTML ? `
+                                <div class="flex space-x-2 mt-2">
+                                    ${socialIconsHTML}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
                 `;
                 regionalContainer.appendChild(regionDiv);
             });
@@ -895,17 +952,35 @@ async function loadManagementPage() {
         if (!adhocError && adhoc) {
             adhocContainer.innerHTML = '';
             adhoc.forEach(committee => {
+                const hasImage = committee.profile_image_url && committee.profile_image_url.trim() !== '';
+                const socialHandles = committee.social_handles || {};
+                const socialIconsHTML = generateSocialIcons(socialHandles);
+                
                 const committeeDiv = document.createElement('div');
                 committeeDiv.className = 'bg-white rounded-lg border p-4 mb-3';
                 committeeDiv.innerHTML = `
-                    <h4 class="font-bold mb-1">${committee.person_name}</h4>
-                    <p class="text-gray-600 text-sm mb-2">${committee.position}</p>
-                    <p class="text-gray-500 text-xs mb-2">${committee.description}</p>
-                    ${committee.tags && committee.tags.length > 0 ? `
-                        <div class="flex flex-wrap gap-1">
-                            ${committee.tags.map(tag => `<span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">${tag}</span>`).join('')}
+                    <div class="flex items-start">
+                        ${hasImage ? `
+                            <img src="${committee.profile_image_url}" 
+                                 alt="${committee.person_name}" 
+                                 class="w-12 h-12 rounded-full object-cover mr-3">
+                        ` : ''}
+                        <div class="flex-1">
+                            <h4 class="font-bold mb-1">${committee.person_name}</h4>
+                            <p class="text-gray-600 text-sm mb-2">${committee.position}</p>
+                            <p class="text-gray-500 text-xs mb-2">${committee.description}</p>
+                            ${socialIconsHTML ? `
+                                <div class="flex space-x-2 mt-2">
+                                    ${socialIconsHTML}
+                                </div>
+                            ` : ''}
+                            ${committee.tags && committee.tags.length > 0 ? `
+                                <div class="flex flex-wrap gap-1 mt-2">
+                                    ${committee.tags.map(tag => `<span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">${tag}</span>`).join('')}
+                                </div>
+                            ` : ''}
                         </div>
-                    ` : ''}
+                    </div>
                 `;
                 adhocContainer.appendChild(committeeDiv);
             });
@@ -916,56 +991,148 @@ async function loadManagementPage() {
     }
 }
 
+// Helper function to generate social media icons
+function generateSocialIcons(socialHandles) {
+    const icons = [];
+    
+    if (socialHandles.twitter && socialHandles.twitter.trim() !== '') {
+        icons.push(`<a href="https://twitter.com/${socialHandles.twitter.replace('@', '')}" 
+                      target="_blank" 
+                      class="text-blue-500 hover:text-blue-700"
+                      title="Twitter">
+                     <i class="fab fa-twitter"></i>
+                   </a>`);
+    }
+    
+    if (socialHandles.linkedin && socialHandles.linkedin.trim() !== '') {
+        const linkedinUrl = socialHandles.linkedin.startsWith('http') ? 
+                           socialHandles.linkedin : 
+                           'https://' + socialHandles.linkedin;
+        icons.push(`<a href="${linkedinUrl}" 
+                      target="_blank" 
+                      class="text-blue-800 hover:text-blue-900"
+                      title="LinkedIn">
+                     <i class="fab fa-linkedin"></i>
+                   </a>`);
+    }
+    
+    if (socialHandles.instagram && socialHandles.instagram.trim() !== '') {
+        icons.push(`<a href="https://instagram.com/${socialHandles.instagram.replace('@', '')}" 
+                      target="_blank" 
+                      class="text-pink-600 hover:text-pink-800"
+                      title="Instagram">
+                     <i class="fab fa-instagram"></i>
+                   </a>`);
+    }
+    
+    if (socialHandles.facebook && socialHandles.facebook.trim() !== '') {
+        icons.push(`<a href="https://facebook.com/${socialHandles.facebook}" 
+                      target="_blank" 
+                      class="text-blue-600 hover:text-blue-800"
+                      title="Facebook">
+                     <i class="fab fa-facebook"></i>
+                   </a>`);
+    }
+    
+    if (socialHandles.email && socialHandles.email.trim() !== '') {
+        icons.push(`<a href="mailto:${socialHandles.email}" 
+                      class="text-red-600 hover:text-red-800"
+                      title="Email">
+                     <i class="fas fa-envelope"></i>
+                   </a>`);
+    }
+    
+    return icons.join('');
+}
+
 function addTeamMember() {
     const modal = document.createElement('div');
     modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
     modal.innerHTML = `
-        <div class="bg-white rounded-xl p-6 w-full max-w-md">
+        <div class="bg-white rounded-xl p-6 w-full max-w-2xl">
             <h3 class="text-xl font-bold mb-4">Add Team Member</h3>
             
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">Section Type</label>
-                    <select id="memberSectionType" class="w-full border rounded-lg p-2">
-                        <option value="national_council">National Council</option>
-                        <option value="regional">Regional Committee</option>
-                        <option value="ad_hoc">Ad Hoc Committee</option>
-                    </select>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Left Column: Basic Info -->
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Section Type</label>
+                        <select id="memberSectionType" class="w-full border rounded-lg p-2">
+                            <option value="national_council">National Council</option>
+                            <option value="regional">Regional Committee</option>
+                            <option value="ad_hoc">Ad Hoc Committee</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Name</label>
+                        <input type="text" id="memberName" class="w-full border rounded-lg p-2" placeholder="Full Name">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Position</label>
+                        <input type="text" id="memberPosition" class="w-full border rounded-lg p-2" placeholder="Position/Role">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Profile Image URL</label>
+                        <input type="text" id="memberImageUrl" class="w-full border rounded-lg p-2" placeholder="https://example.com/profile.jpg">
+                        <p class="text-xs text-gray-500 mt-1">Leave empty for colored initials background</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Color Scheme</label>
+                        <select id="memberColor" class="w-full border rounded-lg p-2">
+                            <option value="blue">Blue</option>
+                            <option value="teal">Teal</option>
+                            <option value="purple">Purple</option>
+                            <option value="amber">Amber</option>
+                            <option value="cyan">Cyan</option>
+                            <option value="red">Red</option>
+                            <option value="pink">Pink</option>
+                            <option value="indigo">Indigo</option>
+                            <option value="green">Green</option>
+                        </select>
+                    </div>
                 </div>
                 
-                <div>
-                    <label class="block text-sm font-medium mb-1">Name</label>
-                    <input type="text" id="memberName" class="w-full border rounded-lg p-2" placeholder="Full Name">
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-1">Position</label>
-                    <input type="text" id="memberPosition" class="w-full border rounded-lg p-2" placeholder="Position/Role">
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-1">Description</label>
-                    <textarea id="memberDescription" class="w-full border rounded-lg p-2" rows="3" placeholder="Description"></textarea>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-1">Color Scheme</label>
-                    <select id="memberColor" class="w-full border rounded-lg p-2">
-                        <option value="blue">Blue</option>
-                        <option value="teal">Teal</option>
-                        <option value="purple">Purple</option>
-                        <option value="amber">Amber</option>
-                        <option value="cyan">Cyan</option>
-                        <option value="red">Red</option>
-                        <option value="pink">Pink</option>
-                        <option value="indigo">Indigo</option>
-                        <option value="green">Green</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-1">Tags (comma separated)</label>
-                    <input type="text" id="memberTags" class="w-full border rounded-lg p-2" placeholder="Leadership, Strategy, Advocacy">
+                <!-- Right Column: Social & Description -->
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Description</label>
+                        <textarea id="memberDescription" class="w-full border rounded-lg p-2" rows="3" placeholder="Description"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Social Media Handles</label>
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <div class="w-10 text-blue-600"><i class="fab fa-twitter"></i></div>
+                                <input type="text" id="memberTwitter" class="flex-1 border rounded-lg p-2" placeholder="@username">
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-10 text-blue-800"><i class="fab fa-linkedin"></i></div>
+                                <input type="text" id="memberLinkedin" class="flex-1 border rounded-lg p-2" placeholder="linkedin.com/in/username">
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-10 text-pink-600"><i class="fab fa-instagram"></i></div>
+                                <input type="text" id="memberInstagram" class="flex-1 border rounded-lg p-2" placeholder="@username">
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-10 text-blue-600"><i class="fab fa-facebook"></i></div>
+                                <input type="text" id="memberFacebook" class="flex-1 border rounded-lg p-2" placeholder="facebook.com/username">
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-10 text-red-600"><i class="fas fa-envelope"></i></div>
+                                <input type="text" id="memberEmail" class="flex-1 border rounded-lg p-2" placeholder="email@example.com">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Tags (comma separated)</label>
+                        <input type="text" id="memberTags" class="w-full border rounded-lg p-2" placeholder="Leadership, Strategy, Advocacy">
+                    </div>
                 </div>
             </div>
             
@@ -984,10 +1151,24 @@ async function saveNewTeamMember() {
     const name = document.getElementById('memberName').value;
     const position = document.getElementById('memberPosition').value;
     const description = document.getElementById('memberDescription').value;
+    const imageUrl = document.getElementById('memberImageUrl').value;
     const color = document.getElementById('memberColor').value;
     const tagsInput = document.getElementById('memberTags').value;
+    const twitter = document.getElementById('memberTwitter').value;
+    const linkedin = document.getElementById('memberLinkedin').value;
+    const instagram = document.getElementById('memberInstagram').value;
+    const facebook = document.getElementById('memberFacebook').value;
+    const email = document.getElementById('memberEmail').value;
     
     const tags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+    
+    const socialHandles = {
+        twitter: twitter || '',
+        linkedin: linkedin || '',
+        instagram: instagram || '',
+        facebook: facebook || '',
+        email: email || ''
+    };
     
     try {
         const { error } = await cmsSupabase
@@ -997,6 +1178,8 @@ async function saveNewTeamMember() {
                 person_name: name,
                 position: position,
                 description: description,
+                profile_image_url: imageUrl || null,
+                social_handles: socialHandles,
                 color_scheme: color,
                 tags: tags.length > 0 ? tags : null,
                 avatar_initials: name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2),
@@ -1012,6 +1195,194 @@ async function saveNewTeamMember() {
         
     } catch (error) {
         alert('Error adding member: ' + error.message);
+    }
+}
+
+// Update editTeamMember function to include social media
+async function editTeamMember(id) {
+    try {
+        const { data: member, error } = await cmsSupabase
+            .from('management_sections')
+            .select('*')
+            .eq('id', id)
+            .single();
+        
+        if (error) throw error;
+        
+        const socialHandles = member.social_handles || {};
+        
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+            <div class="bg-white rounded-xl p-6 w-full max-w-2xl">
+                <h3 class="text-xl font-bold mb-4">Edit Team Member</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Left Column: Basic Info -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Section Type</label>
+                            <select id="editSectionType" class="w-full border rounded-lg p-2">
+                                <option value="national_council" ${member.section_type === 'national_council' ? 'selected' : ''}>National Council</option>
+                                <option value="regional" ${member.section_type === 'regional' ? 'selected' : ''}>Regional Committee</option>
+                                <option value="ad_hoc" ${member.section_type === 'ad_hoc' ? 'selected' : ''}>Ad Hoc Committee</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Name</label>
+                            <input type="text" id="editName" class="w-full border rounded-lg p-2" value="${member.person_name}">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Position</label>
+                            <input type="text" id="editPosition" class="w-full border rounded-lg p-2" value="${member.position}">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Profile Image URL</label>
+                            <input type="text" id="editImageUrl" class="w-full border rounded-lg p-2" value="${member.profile_image_url || ''}">
+                            <p class="text-xs text-gray-500 mt-1">Leave empty for colored initials background</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Color Scheme</label>
+                            <select id="editColor" class="w-full border rounded-lg p-2">
+                                <option value="blue" ${member.color_scheme === 'blue' ? 'selected' : ''}>Blue</option>
+                                <option value="teal" ${member.color_scheme === 'teal' ? 'selected' : ''}>Teal</option>
+                                <option value="purple" ${member.color_scheme === 'purple' ? 'selected' : ''}>Purple</option>
+                                <option value="amber" ${member.color_scheme === 'amber' ? 'selected' : ''}>Amber</option>
+                                <option value="cyan" ${member.color_scheme === 'cyan' ? 'selected' : ''}>Cyan</option>
+                                <option value="red" ${member.color_scheme === 'red' ? 'selected' : ''}>Red</option>
+                                <option value="pink" ${member.color_scheme === 'pink' ? 'selected' : ''}>Pink</option>
+                                <option value="indigo" ${member.color_scheme === 'indigo' ? 'selected' : ''}>Indigo</option>
+                                <option value="green" ${member.color_scheme === 'green' ? 'selected' : ''}>Green</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column: Social & Description -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Description</label>
+                            <textarea id="editDescription" class="w-full border rounded-lg p-2" rows="3">${member.description || ''}</textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Social Media Handles</label>
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <div class="w-10 text-blue-600"><i class="fab fa-twitter"></i></div>
+                                    <input type="text" id="editTwitter" class="flex-1 border rounded-lg p-2" value="${socialHandles.twitter || ''}" placeholder="@username">
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-10 text-blue-800"><i class="fab fa-linkedin"></i></div>
+                                    <input type="text" id="editLinkedin" class="flex-1 border rounded-lg p-2" value="${socialHandles.linkedin || ''}" placeholder="linkedin.com/in/username">
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-10 text-pink-600"><i class="fab fa-instagram"></i></div>
+                                    <input type="text" id="editInstagram" class="flex-1 border rounded-lg p-2" value="${socialHandles.instagram || ''}" placeholder="@username">
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-10 text-blue-600"><i class="fab fa-facebook"></i></div>
+                                    <input type="text" id="editFacebook" class="flex-1 border rounded-lg p-2" value="${socialHandles.facebook || ''}" placeholder="facebook.com/username">
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-10 text-red-600"><i class="fas fa-envelope"></i></div>
+                                    <input type="text" id="editEmail" class="flex-1 border rounded-lg p-2" value="${socialHandles.email || ''}" placeholder="email@example.com">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Tags (comma separated)</label>
+                            <input type="text" id="editTags" class="w-full border rounded-lg p-2" value="${member.tags ? member.tags.join(', ') : ''}" placeholder="Leadership, Strategy, Advocacy">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="this.closest('.fixed').remove()" class="px-4 py-2 border rounded-lg">Cancel</button>
+                    <button onclick="updateTeamMember('${member.id}')" class="px-4 py-2 bg-blue-900 text-white rounded-lg">Update Member</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+    } catch (error) {
+        alert('Error loading member: ' + error.message);
+    }
+}
+
+async function updateTeamMember(id) {
+    const sectionType = document.getElementById('editSectionType').value;
+    const name = document.getElementById('editName').value;
+    const position = document.getElementById('editPosition').value;
+    const description = document.getElementById('editDescription').value;
+    const imageUrl = document.getElementById('editImageUrl').value;
+    const color = document.getElementById('editColor').value;
+    const tagsInput = document.getElementById('editTags').value;
+    const twitter = document.getElementById('editTwitter').value;
+    const linkedin = document.getElementById('editLinkedin').value;
+    const instagram = document.getElementById('editInstagram').value;
+    const facebook = document.getElementById('editFacebook').value;
+    const email = document.getElementById('editEmail').value;
+    
+    const tags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+    
+    const socialHandles = {
+        twitter: twitter || '',
+        linkedin: linkedin || '',
+        instagram: instagram || '',
+        facebook: facebook || '',
+        email: email || ''
+    };
+    
+    try {
+        const { error } = await cmsSupabase
+            .from('management_sections')
+            .update({
+                section_type: sectionType,
+                person_name: name,
+                position: position,
+                description: description,
+                profile_image_url: imageUrl || null,
+                social_handles: socialHandles,
+                color_scheme: color,
+                tags: tags.length > 0 ? tags : null,
+                avatar_initials: name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2),
+                updated_at: new Date().toISOString()
+            })
+            .eq('id', id);
+        
+        if (error) throw error;
+        
+        alert('Team member updated successfully!');
+        document.querySelector('.fixed').remove();
+        loadManagementPage();
+        
+    } catch (error) {
+        alert('Error updating member: ' + error.message);
+    }
+}
+
+async function deleteTeamMember(id) {
+    if (confirm('Are you sure you want to delete this team member?')) {
+        try {
+            const { error } = await cmsSupabase
+                .from('management_sections')
+                .delete()
+                .eq('id', id);
+            
+            if (error) throw error;
+            
+            alert('Team member deleted successfully!');
+            loadManagementPage();
+            
+        } catch (error) {
+            alert('Error deleting member: ' + error.message);
+        }
     }
 }
         
