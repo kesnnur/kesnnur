@@ -655,10 +655,10 @@
     // ============================================
 
    async function loadStats() {
-    console.log('Loading stats from CMS...');
+    console.log('📊 Loading ALL homepage settings...');
     
     try {
-        // FIRST: Try to load from system_settings (where your CMS saves)
+        // Load ALL home_page settings
         const cmsResponse = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/system_settings?category=eq.home_page`, {
             headers: {
                 'apikey': CONFIG.SUPABASE_KEY,
@@ -667,327 +667,474 @@
             }
         });
         
-        // If CMS data exists, use it
         if (cmsResponse.ok) {
             const cmsData = await cmsResponse.json();
             
             if (cmsData && cmsData.length > 0) {
-                console.log('✅ Found CMS settings, using them');
+                console.log('✅ Found CMS settings:', cmsData.length, 'items');
                 
-                // Find CMS settings
-                let membersCount = '1,500+';
-                let eventsCount = '50+';
-                let regionsCount = '24';
-                
+                // Create a map for easy access
+                const settingsMap = {};
                 cmsData.forEach(item => {
-                    if (item.setting_key === 'stat_members') {
-                        membersCount = item.setting_value || '1,500+';
-                    } else if (item.setting_key === 'stat_events') {
-                        eventsCount = item.setting_value || '50+';
-                    } else if (item.setting_key === 'stat_partners') {
-                        regionsCount = item.setting_value || '24';
-                    }
+                    settingsMap[item.setting_key] = item.setting_value;
                 });
                 
-                // Update the page with CMS data
-                document.getElementById('membersCount').textContent = membersCount;
-                document.getElementById('eventsCount').textContent = eventsCount;
-                document.getElementById('regionsCount').textContent = regionsCount;
+                // Update STATS
+                document.getElementById('membersCount').textContent = settingsMap.stat_members || '1,500+';
+                document.getElementById('eventsCount').textContent = settingsMap.stat_events || '50+';
+                document.getElementById('regionsCount').textContent = settingsMap.stat_regions || '24';
                 
-                return; // Stop here - we used CMS data
+                // Update HERO SECTION
+                const heroTitle = document.querySelector('section.relative h1');
+                if (heroTitle && settingsMap.home_title) {
+                    heroTitle.innerHTML = settingsMap.home_title.replace('SSSS', '');
+                }
+                
+                const heroSubtitle = document.querySelector('section.relative p.text-xl');
+                if (heroSubtitle && settingsMap.home_subtitle) {
+                    heroSubtitle.textContent = settingsMap.home_subtitle;
+                }
+                
+                // Update SECTION TITLES
+                const reviewsTitle = document.querySelector('section.bg-white h2');
+                if (reviewsTitle && settingsMap.reviews_title) {
+                    reviewsTitle.textContent = settingsMap.reviews_title;
+                }
+                
+                const featuresTitle = document.querySelector('section.bg-gradient-to-br h2');
+                if (featuresTitle && settingsMap.features_title) {
+                    featuresTitle.textContent = settingsMap.features_title;
+                }
+                
+                const eventsTitle = document.querySelector('section.py-16 h2');
+                if (eventsTitle && settingsMap.events_section_title) {
+                    eventsTitle.textContent = settingsMap.events_section_title;
+                }
+                
+                const eventsSubtitle = document.querySelector('section.py-16 p.text-gray-600');
+                if (eventsSubtitle && settingsMap.events_section_subtitle) {
+                    eventsSubtitle.textContent = settingsMap.events_section_subtitle;
+                }
+                
+                console.log('✅ Updated page with CMS settings');
             }
         }
         
-        // FALLBACK: If no CMS data, use your original code
-        console.log('No CMS data found, using original database tables');
-        const [regions, events, members] = await Promise.all([
-            fetchFromSupabase(TABLES.REGIONS, '?select=count'),
-            fetchFromSupabase(TABLES.EVENTS, '?status=eq.upcoming&select=count'),
-            fetchFromSupabase(TABLES.MEMBERS, '?membership_status=eq.active&select=count')
-        ]);
-        
-        document.getElementById('membersCount').textContent = 
-            (members && members[0] ? members[0].count : 1500) + '+';
-        document.getElementById('eventsCount').textContent = 
-            (events && events[0] ? events[0].count : 50) + '+';
-        document.getElementById('regionsCount').textContent = 
-            regions && regions[0] ? regions[0].count : 24;
-            
     } catch (error) {
-        console.log('Error loading stats, using defaults');
-        // Use defaults if everything fails
-        document.getElementById('membersCount').textContent = '1,500+';
-        document.getElementById('eventsCount').textContent = '50+';
-        document.getElementById('regionsCount').textContent = '24';
+        console.error('❌ Error loading settings:', error);
     }
 }
 
-    async function loadReviews() {
-        const container = document.getElementById('reviewsContainer');
-        if (!container) return;
-        
-        // Show loading
-        container.innerHTML = `
-            <div class="loading-skeleton rounded-xl h-64"></div>
-            <div class="loading-skeleton rounded-xl h-64"></div>
-            <div class="loading-skeleton rounded-xl h-64"></div>
-        `;
-        
-        // Sample reviews (since reviews table doesn't exist)
-        const reviews = [
-            {
-                name: 'Sarah M.',
-                role: '3rd Year Nursing Student',
-                institution: 'University of Nairobi',
-                text: 'KESNNUR mentorship program transformed my nursing journey. My mentor guided me through clinical rotations.',
-                rating: 5
-            },
-            {
-                name: 'John K.',
-                role: 'Novice Nurse',
-                institution: 'Kenyatta National Hospital',
-                text: 'The networking events helped me secure my first nursing job. Community support is invaluable.',
-                rating: 5
-            },
-            {
-                name: 'Grace W.',
-                role: '2nd Year Student',
-                institution: 'Moi University',
-                text: 'Resources and workshops have been crucial for my academic success. Highly recommended!',
-                rating: 4
+   async function loadReviews() {
+    const container = document.getElementById('reviewsContainer');
+    if (!container) return;
+    
+    console.log('⭐ Loading reviews from CMS...');
+    
+    // Try to load reviews from settings first
+    try {
+        const response = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/system_settings?category=eq.home_page&setting_key=like.review%`, {
+            headers: {
+                'apikey': CONFIG.SUPABASE_KEY,
+                'Authorization': `Bearer ${CONFIG.SUPABASE_KEY}`,
+                'Accept': 'application/json'
             }
-        ];
-        
-        container.innerHTML = '';
-        reviews.forEach(review => {
-            const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
-            const card = document.createElement('div');
-            card.className = 'review-card bg-white rounded-xl p-6 shadow-lg';
-            card.innerHTML = `
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
-                        ${review.name.charAt(0)}
-                    </div>
-                    <div>
-                        <h4 class="font-bold">${review.name}</h4>
-                        <p class="text-sm text-gray-600">${review.role}</p>
-                        <p class="text-xs text-gray-500">${review.institution}</p>
-                    </div>
-                </div>
-                <div class="text-yellow-500 mb-3">${stars}</div>
-                <p class="text-gray-700 italic">"${review.text}"</p>
-            `;
-            container.appendChild(card);
         });
-    }
-
-    async function loadEvents() {
-        const container = document.getElementById('eventsContainer');
-        if (!container) return;
         
-        container.innerHTML = `
-            <div class="loading-skeleton rounded-xl h-64"></div>
-            <div class="loading-skeleton rounded-xl h-64"></div>
-            <div class="loading-skeleton rounded-xl h-64"></div>
-        `;
-        
-        try {
-            const events = await fetchFromSupabase(TABLES.EVENTS, '?status=eq.upcoming&order=start_date.asc&limit=3');
+        if (response.ok) {
+            const reviewSettings = await response.json();
             
-            if (events && events.length > 0) {
-                container.innerHTML = '';
-                events.forEach(event => {
-                    const date = new Date(event.start_date);
-                    const day = date.getDate();
-                    const month = date.toLocaleDateString('en-US', { month: 'short' });
-                    
-                    const card = document.createElement('div');
-                    card.className = 'event-card bg-white rounded-xl overflow-hidden shadow-lg';
-                    card.innerHTML = `
-                        <div class="h-48 bg-gradient-to-r from-blue-600 to-blue-400 relative">
-                            <div class="absolute top-4 right-4 bg-white text-blue-900 text-center p-2 rounded-lg w-16">
-                                <div class="text-2xl font-bold">${day}</div>
-                                <div class="text-sm font-semibold">${month}</div>
-                            </div>
-                            <div class="absolute bottom-4 left-4">
-                                <span class="bg-blue-900 text-white text-sm px-3 py-1 rounded-full">${event.event_type || 'Workshop'}</span>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="font-bold text-xl mb-2">${event.event_name}</h3>
-                            <p class="text-gray-600 mb-4">${event.description ? event.description.substring(0, 100) + '...' : 'Join us for this exciting event!'}</p>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-gray-500">
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    <span>${event.location || 'Online'}</span>
+            if (reviewSettings && reviewSettings.length > 0) {
+                console.log('✅ Found review settings:', reviewSettings.length);
+                
+                // Group reviews by number (review1, review2, etc.)
+                const reviews = {};
+                reviewSettings.forEach(setting => {
+                    const match = setting.setting_key.match(/review(\d+)_(\w+)/);
+                    if (match) {
+                        const [_, num, field] = match;
+                        if (!reviews[num]) reviews[num] = {};
+                        reviews[num][field] = setting.setting_value;
+                    }
+                });
+                
+                // Convert to array and render
+                const reviewArray = Object.values(reviews);
+                if (reviewArray.length > 0) {
+                    container.innerHTML = '';
+                    reviewArray.forEach(review => {
+                        const stars = '★'.repeat(review.rating || 5) + '☆'.repeat(5 - (review.rating || 5));
+                        const card = document.createElement('div');
+                        card.className = 'review-card bg-white rounded-xl p-6 shadow-lg';
+                        card.innerHTML = `
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                                    ${review.name ? review.name.charAt(0) : 'U'}
                                 </div>
+                                <div>
+                                    <h4 class="font-bold">${review.name || 'User'}</h4>
+                                    <p class="text-sm text-gray-600">${review.role || 'Member'}</p>
+                                    <p class="text-xs text-gray-500">${review.institution || ''}</p>
+                                </div>
+                            </div>
+                            <div class="text-yellow-500 mb-3">${stars}</div>
+                            <p class="text-gray-700 italic">"${review.text || 'Great experience!'}"</p>
+                            <div class="mt-2 text-xs text-green-600">
+                                <i class="fas fa-database mr-1"></i> From CMS
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                    return; // Stop here - we used CMS data
+                }
+            }
+        }
+    } catch (error) {
+        console.log('⚠️ Could not load reviews from CMS:', error);
+    }
+    
+    // Fallback to hardcoded reviews
+    console.log('Using fallback reviews');
+    const reviews = [
+        {
+            name: 'Sarah M.',
+            role: '3rd Year Nursing Student',
+            institution: 'University of Nairobi',
+            text: 'KESNNUR mentorship program transformed my nursing journey. My mentor guided me through clinical rotations.',
+            rating: 5
+        },
+        {
+            name: 'John K.',
+            role: 'Novice Nurse',
+            institution: 'Kenyatta National Hospital',
+            text: 'The networking events helped me secure my first nursing job. Community support is invaluable.',
+            rating: 5
+        },
+        {
+            name: 'Grace W.',
+            role: '2nd Year Student',
+            institution: 'Moi University',
+            text: 'Resources and workshops have been crucial for my academic success. Highly recommended!',
+            rating: 4
+        }
+    ];
+    
+    container.innerHTML = '';
+    reviews.forEach(review => {
+        const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+        const card = document.createElement('div');
+        card.className = 'review-card bg-white rounded-xl p-6 shadow-lg';
+        card.innerHTML = `
+            <div class="flex items-center mb-4">
+                <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                    ${review.name.charAt(0)}
+                </div>
+                <div>
+                    <h4 class="font-bold">${review.name}</h4>
+                    <p class="text-sm text-gray-600">${review.role}</p>
+                    <p class="text-xs text-gray-500">${review.institution}</p>
+                </div>
+            </div>
+            <div class="text-yellow-500 mb-3">${stars}</div>
+            <p class="text-gray-700 italic">"${review.text}"</p>
+        `;
+        container.appendChild(card);
+    });
+}
+
+async function loadEvents() {
+    const container = document.getElementById('eventsContainer');
+    if (!container) return;
+    
+    console.log('📅 Loading REAL events from database...');
+    
+    // Show loading
+    container.innerHTML = `
+        <div class="col-span-3 text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-blue-900 mb-4"></div>
+            <p class="text-gray-600">Loading events from database...</p>
+        </div>
+    `;
+    
+    try {
+        // Get published events starting today or in future
+        const today = new Date().toISOString();
+        const events = await fetchFromSupabase(
+            TABLES.EVENTS, 
+            `?status=eq.published&start_date=gte.${today}&order=start_date.asc&limit=3`
+        );
+        
+        console.log('📊 Real events loaded:', events);
+        
+        if (events && events.length > 0) {
+            container.innerHTML = '';
+            
+            events.forEach(event => {
+                const date = new Date(event.start_date);
+                const day = date.getDate();
+                const month = date.toLocaleDateString('en-US', { month: 'short' });
+                
+                const card = document.createElement('div');
+                card.className = 'event-card bg-white rounded-xl overflow-hidden shadow-lg';
+                card.innerHTML = `
+                    <div class="h-48 bg-gradient-to-r from-blue-600 to-blue-400 relative">
+                        <div class="absolute top-4 right-4 bg-white text-blue-900 text-center p-2 rounded-lg w-16">
+                            <div class="text-2xl font-bold">${day}</div>
+                            <div class="text-sm font-semibold">${month.toUpperCase()}</div>
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <span class="bg-blue-900 text-white text-sm px-3 py-1 rounded-full">
+                                ${event.event_type} • ${event.category}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl mb-2">${event.title}</h3>
+                        <p class="text-gray-600 mb-4">
+                            ${event.description ? event.description.substring(0, 100) + '...' : 'Join us for this exciting event!'}
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center text-gray-500">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>${event.venue || 'Location TBD'}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-xs text-green-600 font-semibold mr-3">
+                                    <i class="fas fa-database mr-1"></i> Live
+                                </span>
                                 <a href="events.html#${event.id}" class="text-blue-900 font-semibold hover:underline">
                                     Details <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
                         </div>
-                    `;
-                    container.appendChild(card);
-                });
-            } else {
-                // Fallback events
-                container.innerHTML = '';
-                const fallbackEvents = [
-                    {
-                        title: 'Nursing Career Fair 2024',
-                        date: 'Mar 15',
-                        month: 'MAR',
-                        type: 'Career',
-                        desc: 'Connect with top healthcare employers and discover job opportunities.',
-                        location: 'Nairobi Convention Center'
-                    },
-                    {
-                        title: 'Mental Health Workshop',
-                        date: 'Apr 10',
-                        month: 'APR',
-                        type: 'Workshop',
-                        desc: 'Learn coping strategies and mental health first aid for nurses.',
-                        location: 'Virtual Event'
-                    },
-                    {
-                        title: 'Clinical Skills Refresher',
-                        date: 'May 22',
-                        month: 'MAY',
-                        type: 'Training',
-                        desc: 'Hands-on training on latest clinical procedures and protocols.',
-                        location: 'KNH Training Center'
-                    }
-                ];
-                
-                fallbackEvents.forEach(event => {
-                    const card = document.createElement('div');
-                    card.className = 'event-card bg-white rounded-xl overflow-hidden shadow-lg';
-                    card.innerHTML = `
-                        <div class="h-48 bg-gradient-to-r from-blue-600 to-blue-400 relative">
-                            <div class="absolute top-4 right-4 bg-white text-blue-900 text-center p-2 rounded-lg w-16">
-                                <div class="text-2xl font-bold">${event.date}</div>
-                                <div class="text-sm font-semibold">${event.month}</div>
-                            </div>
-                            <div class="absolute bottom-4 left-4">
-                                <span class="bg-blue-900 text-white text-sm px-3 py-1 rounded-full">${event.type}</span>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="font-bold text-xl mb-2">${event.title}</h3>
-                            <p class="text-gray-600 mb-4">${event.desc}</p>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-gray-500">
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    <span>${event.location}</span>
-                                </div>
-                                <a href="events.html" class="text-blue-900 font-semibold hover:underline">
-                                    Details <i class="fas fa-arrow-right ml-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            }
-        } catch (error) {
-            console.error('Error loading events:', error);
-        }
-    }
-
-    async function loadBlogPosts() {
-        const container = document.getElementById('blogContainer');
-        if (!container) return;
-        
-        container.innerHTML = `
-            <div class="loading-skeleton rounded-xl h-80"></div>
-            <div class="loading-skeleton rounded-xl h-80"></div>
-            <div class="loading-skeleton rounded-xl h-80"></div>
-        `;
-        
-        try {
-            // Try to fetch announcements first
-            const announcements = await fetchFromSupabase(TABLES.ANNOUNCEMENTS, '?order=created_at.desc&limit=3');
+                    </div>
+                `;
+                container.appendChild(card);
+            });
             
-            if (announcements && announcements.length > 0) {
-                container.innerHTML = '';
-                announcements.forEach(post => {
-                    const date = new Date(post.created_at || post.date || new Date());
-                    const formattedDate = date.toLocaleDateString('en-US', { 
-                        month: 'short', 
-                        day: 'numeric', 
-                        year: 'numeric' 
-                    });
-                    
-                    const card = document.createElement('div');
-                    card.className = 'blog-card bg-white rounded-xl overflow-hidden shadow-lg';
-                    card.innerHTML = `
-                        <div class="h-48 bg-gradient-to-r from-teal-600 to-teal-400"></div>
-                        <div class="p-6">
-                            <div class="flex items-center text-sm text-gray-500 mb-3">
-                                <i class="far fa-calendar mr-2"></i>
-                                <span>${formattedDate}</span>
-                                <span class="mx-2">•</span>
-                                <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">${post.category || 'General'}</span>
+            // Add success note
+            const successNote = document.createElement('div');
+            successNote.className = 'col-span-3 text-center text-sm text-green-600 mt-4';
+            successNote.innerHTML = `<i class="fas fa-check-circle mr-2"></i> Showing ${events.length} real events from database`;
+            container.parentNode.insertBefore(successNote, container.nextSibling);
+            
+        } else {
+            // Show message if no upcoming events
+            container.innerHTML = `
+                <div class="col-span-3 text-center py-12">
+                    <i class="fas fa-calendar-check text-4xl text-blue-500 mb-4"></i>
+                    <h3 class="text-xl font-bold text-gray-600 mb-2">Check Back Soon</h3>
+                    <p class="text-gray-500">New events are being planned. Stay tuned!</p>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('❌ Error loading events:', error);
+        // Show fallback
+    }
+}
+
+   async function loadBlogPosts() {
+    const container = document.getElementById('blogContainer');
+    if (!container) return;
+    
+    console.log('📝 Loading REAL blog posts from database...');
+    
+    // Show loading
+    container.innerHTML = `
+        <div class="col-span-3 text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-blue-900 mb-4"></div>
+            <p class="text-gray-600">Loading blog posts from database...</p>
+        </div>
+    `;
+    
+    try {
+        // Load published blog posts from blog_posts table
+        const posts = await fetchFromSupabase(
+            TABLES.BLOG_POSTS, 
+            '?status=eq.published&order=published_at.desc,created_at.desc&limit=3'
+        );
+        
+        console.log('📊 Real blog posts loaded:', posts);
+        
+        if (posts && posts.length > 0) {
+            container.innerHTML = '';
+            
+            posts.forEach((post, index) => {
+                // Use published_at if available, otherwise created_at
+                const dateValue = post.published_at || post.created_at || new Date();
+                const date = new Date(dateValue);
+                const formattedDate = date.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                });
+                
+                // Get excerpt or generate from content
+                let excerpt = post.excerpt || '';
+                if (!excerpt && post.content) {
+                    // Generate excerpt from content (remove HTML tags if any)
+                    const cleanContent = post.content.replace(/<[^>]*>/g, '');
+                    excerpt = cleanContent.substring(0, 120) + 
+                             (cleanContent.length > 120 ? '...' : '');
+                } else if (!excerpt) {
+                    excerpt = 'Read our latest nursing insights and updates...';
+                } else if (excerpt.length > 120) {
+                    excerpt = excerpt.substring(0, 120) + '...';
+                }
+                
+                // Get category (default to 'Nursing')
+                const category = post.category || 'Nursing';
+                
+                // Get author info
+                const author = post.author || 'KESNNUR Team';
+                const authorRole = post.author_role || '';
+                
+                const card = document.createElement('div');
+                card.className = 'blog-card bg-white rounded-xl overflow-hidden shadow-lg';
+                card.innerHTML = `
+                    <div class="h-48 bg-gradient-to-r from-teal-600 to-teal-400 relative">
+                        ${post.featured_image_url ? 
+                            `<img src="${post.featured_image_url}" alt="${post.title}" class="w-full h-full object-cover">` : 
+                            '<div class="w-full h-full flex items-center justify-center text-white text-4xl">📘</div>'
+                        }
+                        <div class="absolute bottom-4 left-4">
+                            <span class="bg-blue-900 text-white text-sm px-3 py-1 rounded-full">
+                                ${category} • DATABASE
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <i class="far fa-calendar mr-2"></i>
+                            <span>${formattedDate}</span>
+                            <span class="mx-2">•</span>
+                            <span class="text-blue-600">
+                                <i class="fas fa-user mr-1"></i>${author}
+                            </span>
+                        </div>
+                        <h3 class="font-bold text-xl mb-3">${post.title || 'Blog Post'}</h3>
+                        <p class="text-gray-600 mb-4">${excerpt}</p>
+                        <div class="flex justify-between items-center">
+                            <div class="text-xs text-green-600 font-semibold">
+                                <i class="fas fa-database mr-1"></i> Live Data
                             </div>
-                            <h3 class="font-bold text-xl mb-3">${post.title || 'Announcement'}</h3>
-                            <p class="text-gray-600 mb-4">${post.content ? post.content.substring(0, 120) + '...' : 'Read our latest update...'}</p>
                             <a href="blog.html#${post.id}" class="text-blue-900 font-semibold hover:underline">
                                 Read More <i class="fas fa-arrow-right ml-1"></i>
                             </a>
                         </div>
-                    `;
-                    container.appendChild(card);
-                });
-            } else {
-                // Fallback blog posts
-                container.innerHTML = '';
-                const fallbackPosts = [
-                    {
-                        title: 'The Future of Nursing in Kenya',
-                        date: 'Feb 28, 2024',
-                        category: 'Trends',
-                        desc: 'Exploring the evolving landscape of nursing practice and opportunities in Kenya.'
-                    },
-                    {
-                        title: 'Surviving Clinical Rotations',
-                        date: 'Feb 20, 2024',
-                        category: 'Tips',
-                        desc: 'Practical advice for nursing students navigating their clinical rotations successfully.'
-                    },
-                    {
-                        title: 'Mental Wellness for Nurses',
-                        date: 'Feb 15, 2024',
-                        category: 'Health',
-                        desc: 'Essential self-care strategies to maintain mental health in the nursing profession.'
-                    }
-                ];
-                
-                fallbackPosts.forEach(post => {
-                    const card = document.createElement('div');
-                    card.className = 'blog-card bg-white rounded-xl overflow-hidden shadow-lg';
-                    card.innerHTML = `
-                        <div class="h-48 bg-gradient-to-r from-teal-600 to-teal-400"></div>
-                        <div class="p-6">
-                            <div class="flex items-center text-sm text-gray-500 mb-3">
-                                <i class="far fa-calendar mr-2"></i>
-                                <span>${post.date}</span>
-                                <span class="mx-2">•</span>
-                                <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">${post.category}</span>
+                        ${authorRole ? 
+                            `<div class="mt-3 text-xs text-gray-500">
+                                <i class="fas fa-briefcase mr-1"></i>${authorRole}
+                            </div>` : ''
+                        }
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            
+            // Add success message
+            const successMsg = document.createElement('div');
+            successMsg.className = 'col-span-3 text-center text-sm text-green-600 mt-4';
+            successMsg.innerHTML = `
+                <i class="fas fa-check-circle mr-2"></i>
+                Showing ${posts.length} real blog posts from database
+            `;
+            container.parentNode.insertBefore(successMsg, container.nextSibling);
+            
+        } else {
+            // No published blog posts found
+            console.log('⚠️ No published blog posts found');
+            
+            // Check if there are any blog posts at all
+            const allPosts = await fetchFromSupabase(TABLES.BLOG_POSTS, '?limit=1');
+            
+            if (allPosts && allPosts.length > 0) {
+                // There are posts but not published
+                container.innerHTML = `
+                    <div class="col-span-3 text-center py-12">
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded inline-block text-left">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-yellow-700">
+                                        <strong>Note:</strong> Blog posts exist but need to be published.
+                                        <br>Update status to "published" to show them here.
+                                    </p>
+                                </div>
                             </div>
-                            <h3 class="font-bold text-xl mb-3">${post.title}</h3>
-                            <p class="text-gray-600 mb-4">${post.desc}</p>
-                            <a href="blog.html" class="text-blue-900 font-semibold hover:underline">
-                                Read More <i class="fas fa-arrow-right ml-1"></i>
-                            </a>
                         </div>
-                    `;
-                    container.appendChild(card);
-                });
+                    </div>
+                `;
+            } else {
+                // No blog posts at all - show fallback
+                showFallbackBlogPosts(container);
             }
-        } catch (error) {
-            console.error('Error loading blog posts:', error);
         }
+    } catch (error) {
+        console.error('❌ Error loading blog posts:', error);
+        showFallbackBlogPosts(container);
     }
+}
+
+// Fallback function
+function showFallbackBlogPosts(container) {
+    console.log('Using fallback blog posts');
+    
+    const fallbackPosts = [
+        {
+            title: 'The Future of Nursing in Kenya',
+            date: 'Feb 28, 2024',
+            category: 'Trends',
+            desc: 'Exploring the evolving landscape of nursing practice and opportunities in Kenya.',
+            author: 'KESNNUR Team'
+        },
+        {
+            title: 'Surviving Clinical Rotations',
+            date: 'Feb 20, 2024',
+            category: 'Student Tips',
+            desc: 'Practical advice for nursing students navigating their clinical rotations successfully.',
+            author: 'Grace Wanjiku'
+        },
+        {
+            title: 'Mental Wellness for Nurses',
+            date: 'Feb 15, 2024',
+            category: 'Mental Health',
+            desc: 'Essential self-care strategies to maintain mental health in the nursing profession.',
+            author: 'Dr. James Omondi'
+        }
+    ];
+    
+    container.innerHTML = '';
+    fallbackPosts.forEach(post => {
+        const card = document.createElement('div');
+        card.className = 'blog-card bg-white rounded-xl overflow-hidden shadow-lg';
+        card.innerHTML = `
+            <div class="h-48 bg-gradient-to-r from-teal-600 to-teal-400"></div>
+            <div class="p-6">
+                <div class="flex items-center text-sm text-gray-500 mb-3">
+                    <i class="far fa-calendar mr-2"></i>
+                    <span>${post.date}</span>
+                    <span class="mx-2">•</span>
+                    <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">${post.category}</span>
+                </div>
+                <h3 class="font-bold text-xl mb-3">${post.title}</h3>
+                <p class="text-gray-600 mb-4">${post.desc}</p>
+                <div class="flex justify-between items-center">
+                    <div class="text-xs text-yellow-600 font-semibold">
+                        <i class="fas fa-exclamation-circle mr-1"></i> Sample
+                    </div>
+                    <a href="blog.html" class="text-blue-900 font-semibold hover:underline">
+                        Read More <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
 
     function loadPartners() {
         const container = document.getElementById('partnersContainer');
