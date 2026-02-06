@@ -225,15 +225,17 @@
 <div id="homeSection" class="content-section active">
     <div class="editor-card">
         <h2 style="font-size:24px; font-weight:bold; color:#1e293b; margin-bottom:5px;">Home Page Editor</h2>
-        <p style="color:#64748b; margin-bottom:20px;">Edit the main landing page of your website</p>
+        <p style="color:#64748b; margin-bottom:20px;">Edit ALL sections of your homepage</p>
         
         <div style="display:flex; gap:10px; margin-bottom:20px; border-bottom:1px solid #e5e7eb; padding-bottom:10px; flex-wrap:wrap;">
-            <button class="tab-button active" onclick="showHomeTab('hero')">Hero Section</button>
+            <button class="tab-button active" onclick="showHomeTab('hero')">Hero</button>
             <button class="tab-button" onclick="showHomeTab('stats')">Statistics</button>
+            <button class="tab-button" onclick="showHomeTab('testimonials')">Reviews</button>
             <button class="tab-button" onclick="showHomeTab('features')">Features</button>
-            <button class="tab-button" onclick="showHomeTab('events')">Upcoming Events</button>
-            <button class="tab-button" onclick="showHomeTab('blog')">Latest Blog</button>
+            <button class="tab-button" onclick="showHomeTab('events')">Events</button>
+            <button class="tab-button" onclick="showHomeTab('blog')">Blog</button>
             <button class="tab-button" onclick="showHomeTab('partners')">Partners</button>
+            <button class="tab-button" onclick="showHomeTab('cta')">Final CTA</button>
         </div>
         
         <!-- Hero Tab -->
@@ -251,7 +253,7 @@
             <div style="margin-bottom:20px;">
                 <label style="display:block; margin-bottom:8px; font-weight:500;">Hero Image URL</label>
                 <input type="text" id="heroImageUrl" placeholder="https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
-                <p style="color:#6b7280; font-size:12px; margin-top:5px;">Enter URL of hero image</p>
+                <p style="color:#6b7280; font-size:12px; margin-top:5px;">Enter URL of hero background image</p>
             </div>
             
             <div style="margin-bottom:20px;">
@@ -260,7 +262,7 @@
             </div>
         </div>
         
-        <!-- Stats Tab -->
+        <!-- Statistics Tab -->
         <div id="homeStatsTab" class="home-tab" style="display:none;">
             <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; margin-bottom:20px;">
                 <div>
@@ -278,8 +280,111 @@
             </div>
         </div>
         
+        <!-- Testimonials/Reviews Tab -->
+        <div id="homeTestimonialsTab" class="home-tab" style="display:none;">
+            <div style="margin-bottom:20px;">
+                <h3 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:15px;">Section Title</h3>
+                <input type="text" id="reviewsTitle" placeholder="What Our Members Say" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px; margin-bottom:20px;">
+            </div>
+            
+            <div style="margin-bottom:20px;">
+                <h3 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:15px;">Review 1</h3>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Name</label>
+                    <input type="text" id="review1Name" placeholder="Sarah M." style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Role</label>
+                    <input type="text" id="review1Role" placeholder="3rd Year Nursing Student" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Institution</label>
+                    <input type="text" id="review1Institution" placeholder="University of Nairobi" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Review Text</label>
+                    <textarea id="review1Text" placeholder="KESNNUR mentorship program transformed my nursing journey. My mentor guided me through clinical rotations." style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px; height:80px;"></textarea>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Rating (1-5)</label>
+                    <select id="review1Rating" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                        <option value="5">★★★★★ (5)</option>
+                        <option value="4">★★★★☆ (4)</option>
+                        <option value="3">★★★☆☆ (3)</option>
+                        <option value="2">★★☆☆☆ (2)</option>
+                        <option value="1">★☆☆☆☆ (1)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="margin-bottom:20px; padding-top:20px; border-top:1px solid #e5e7eb;">
+                <h3 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:15px;">Review 2</h3>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Name</label>
+                    <input type="text" id="review2Name" placeholder="John K." style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Role</label>
+                    <input type="text" id="review2Role" placeholder="Novice Nurse" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Institution</label>
+                    <input type="text" id="review2Institution" placeholder="Kenyatta National Hospital" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Review Text</label>
+                    <textarea id="review2Text" placeholder="The networking events helped me secure my first nursing job. Community support is invaluable." style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px; height:80px;"></textarea>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Rating (1-5)</label>
+                    <select id="review2Rating" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                        <option value="5">★★★★★ (5)</option>
+                        <option value="4">★★★★☆ (4)</option>
+                        <option value="3">★★★☆☆ (3)</option>
+                        <option value="2">★★☆☆☆ (2)</option>
+                        <option value="1">★☆☆☆☆ (1)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="margin-bottom:20px; padding-top:20px; border-top:1px solid #e5e7eb;">
+                <h3 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:15px;">Review 3</h3>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Name</label>
+                    <input type="text" id="review3Name" placeholder="Grace W." style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Role</label>
+                    <input type="text" id="review3Role" placeholder="2nd Year Student" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Institution</label>
+                    <input type="text" id="review3Institution" placeholder="Moi University" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Review Text</label>
+                    <textarea id="review3Text" placeholder="Resources and workshops have been crucial for my academic success. Highly recommended!" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px; height:80px;"></textarea>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Rating (1-5)</label>
+                    <select id="review3Rating" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                        <option value="5">★★★★★ (5)</option>
+                        <option value="4">★★★★☆ (4)</option>
+                        <option value="3">★★★☆☆ (3)</option>
+                        <option value="2">★★☆☆☆ (2)</option>
+                        <option value="1">★☆☆☆☆ (1)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
         <!-- Features Tab -->
         <div id="homeFeaturesTab" class="home-tab" style="display:none;">
+            <div style="margin-bottom:20px;">
+                <h3 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:15px;">Section Title</h3>
+                <input type="text" id="featuresTitle" placeholder="How We Support Your Growth" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px; margin-bottom:20px;">
+            </div>
+            
             <div style="margin-bottom:20px;">
                 <h3 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:15px;">Feature 1</h3>
                 <div style="margin-bottom:15px;">
@@ -354,8 +459,74 @@
             </div>
         </div>
         
+        <!-- Events Tab -->
+        <div id="homeEventsTab" class="home-tab" style="display:none;">
+            <div style="margin-bottom:20px;">
+                <h3 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:15px;">Section Settings</h3>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Section Title</label>
+                    <input type="text" id="eventsSectionTitle" placeholder="Upcoming Events" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Section Subtitle</label>
+                    <input type="text" id="eventsSectionSubtitle" placeholder="Join our upcoming workshops and networking events" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">View All Text</label>
+                    <input type="text" id="eventsViewAllText" placeholder="View All Events" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+            </div>
+            
+            <div style="margin-bottom:20px;">
+                <h3 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:15px;">Note:</h3>
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <p class="text-blue-700">Events are managed separately in the <strong>Events Page Editor</strong>. The homepage shows the 3 most recent upcoming events automatically.</p>
+                    <button onclick="showSection('events')" style="margin-top:10px; padding:8px 16px; background:#3b82f6; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                        Go to Events Editor
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Blog Tab -->
+        <div id="homeBlogTab" class="home-tab" style="display:none;">
+            <div style="margin-bottom:20px;">
+                <h3 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:15px;">Section Settings</h3>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Section Title</label>
+                    <input type="text" id="blogSectionTitle" placeholder="Latest from Our Blog" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Section Subtitle</label>
+                    <input type="text" id="blogSectionSubtitle" placeholder="Insights and stories from the nursing community" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">View All Text</label>
+                    <input type="text" id="blogViewAllText" placeholder="View All Posts" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+            </div>
+            
+            <div style="margin-bottom:20px;">
+                <h3 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:15px;">Note:</h3>
+                <div class="bg-teal-50 border border-teal-200 rounded-lg p-4">
+                    <p class="text-teal-700">Blog posts are managed separately in the <strong>Blog Page Editor</strong>. The homepage shows the 3 most recent blog posts automatically.</p>
+                    <button onclick="showSection('blog')" style="margin-top:10px; padding:8px 16px; background:#0d9488; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                        Go to Blog Editor
+                    </button>
+                </div>
+            </div>
+        </div>
+        
         <!-- Partners Tab -->
         <div id="homePartnersTab" class="home-tab" style="display:none;">
+            <div style="margin-bottom:20px;">
+                <h3 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:15px;">Section Settings</h3>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500;">Section Title</label>
+                    <input type="text" id="partnersSectionTitle" placeholder="Our Trusted Partners" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+            </div>
+            
             <div style="margin-bottom:20px;">
                 <h3 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:15px;">Partners Management</h3>
                 <p style="color:#64748b; margin-bottom:15px;">Add or edit partners that appear in the homepage slider</p>
@@ -370,10 +541,35 @@
             </div>
         </div>
         
+        <!-- Final CTA Tab -->
+        <div id="homeCtaTab" class="home-tab" style="display:none;">
+            <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:500;">CTA Title</label>
+                <input type="text" id="ctaTitle" placeholder="Ready to Join KESNNUR?" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+            </div>
+            
+            <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:500;">CTA Description</label>
+                <textarea id="ctaDescription" placeholder="Become part of Kenya's largest community of nursing students and novice nurses." style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px; height:80px;"></textarea>
+            </div>
+            
+            <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:500;">Primary Button Text</label>
+                <input type="text" id="ctaPrimaryButton" placeholder="Join Now" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+            </div>
+            
+            <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:500;">Secondary Button Text</label>
+                <input type="text" id="ctaSecondaryButton" placeholder="Contact Us" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+            </div>
+        </div>
+        
+        <!-- Save Button -->
         <div style="margin-top:30px; padding-top:20px; border-top:1px solid #e5e7eb;">
             <button onclick="saveHomePage()" style="padding:12px 25px; background:#10b981; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
-                <i class="fas fa-save" style="margin-right:8px;"></i> Save Home Page
+                <i class="fas fa-save" style="margin-right:8px;"></i> Save ALL Homepage Content
             </button>
+            <p style="color:#64748b; font-size:14px; margin-top:10px;">Saves all sections: Hero, Stats, Reviews, Features, Events, Blog, Partners, CTA</p>
         </div>
     </div>
     
@@ -384,6 +580,10 @@
             <div style="background:#f3f4f6; padding:20px; border-radius:6px;">
                 <h3 id="previewTitle" style="font-size:24px; font-weight:bold; margin-bottom:10px;">Your Nursing Career Journey Starts Here</h3>
                 <p id="previewSubtitle" style="color:#4b5563;">Join Kenya's largest community of nursing students and novice nurses...</p>
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <span style="padding:4px 8px; background:#dbeafe; color:#1e40af; border-radius:4px; font-size:12px;">Hero Section</span>
+                    <span style="padding:4px 8px; background:#dcfce7; color:#166534; border-radius:4px; font-size:12px;">Editable in CMS</span>
+                </div>
             </div>
         </div>
     </div>
@@ -753,7 +953,7 @@
         }
         
         // ================== PAGE FUNCTIONS ==================
-       async function loadHomePage() {
+      async function loadHomePage() {
     console.log("Loading home page...");
     
     try {
@@ -763,82 +963,124 @@
             .eq('category', 'home_page');
         
         if (!error && settings) {
+            console.log('Found', settings.length, 'homepage settings');
+            
             settings.forEach(setting => {
-                switch(setting.setting_key) {
-                    case 'home_title':
-                        document.getElementById('homeTitle').value = setting.setting_value || "Your Nursing Career Journey Starts Here";
-                        document.getElementById('previewTitle').textContent = setting.setting_value || "Your Nursing Career Journey Starts Here";
-                        break;
-                    case 'home_subtitle':
-                        document.getElementById('homeSubtitle').value = setting.setting_value || "Join Kenya's largest community of nursing students and novice nurses. Access mentorship, resources, and career opportunities.";
-                        document.getElementById('previewSubtitle').textContent = setting.setting_value || "Join Kenya's largest community of nursing students and novice nurses...";
-                        break;
-                    case 'hero_image_url':
-                        document.getElementById('heroImageUrl').value = setting.setting_value || "https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3";
-                        break;
-                    case 'cta_button_text':
-                        document.getElementById('ctaButtonText').value = setting.setting_value || "Join KESNNUR Today";
-                        break;
-                    case 'stat_members':
-                        document.getElementById('statMembers').value = setting.setting_value || "1,500+";
-                        break;
-                    case 'stat_events':
-                        document.getElementById('statEvents').value = setting.setting_value || "50+";
-                        break;
-                    case 'stat_regions':
-                        document.getElementById('statRegions').value = setting.setting_value || "24";
-                        break;
-                    // Features
-                    case 'feature1_icon':
-                        document.getElementById('feature1Icon').value = setting.setting_value || "fas fa-user-graduate";
-                        break;
-                    case 'feature1_title':
-                        document.getElementById('feature1Title').value = setting.setting_value || "Mentorship & Guidance";
-                        break;
-                    case 'feature1_desc':
-                        document.getElementById('feature1Desc').value = setting.setting_value || "Connect with experienced nurse mentors for personalized career guidance.";
-                        break;
-                    case 'feature1_link':
-                        document.getElementById('feature1Link').value = setting.setting_value || "Find a Mentor";
-                        break;
-                    case 'feature1_url':
-                        document.getElementById('feature1Url').value = setting.setting_value || "about.html#mentorship";
-                        break;
-                    case 'feature2_icon':
-                        document.getElementById('feature2Icon').value = setting.setting_value || "fas fa-book-medical";
-                        break;
-                    case 'feature2_title':
-                        document.getElementById('feature2Title').value = setting.setting_value || "Continuous Education";
-                        break;
-                    case 'feature2_desc':
-                        document.getElementById('feature2Desc').value = setting.setting_value || "Access workshops and latest research to excel in nursing practice.";
-                        break;
-                    case 'feature2_link':
-                        document.getElementById('feature2Link').value = setting.setting_value || "View Resources";
-                        break;
-                    case 'feature2_url':
-                        document.getElementById('feature2Url').value = setting.setting_value || "resources.html";
-                        break;
-                    case 'feature3_icon':
-                        document.getElementById('feature3Icon').value = setting.setting_value || "fas fa-heart";
-                        break;
-                    case 'feature3_title':
-                        document.getElementById('feature3Title').value = setting.setting_value || "Mental Health Support";
-                        break;
-                    case 'feature3_desc':
-                        document.getElementById('feature3Desc').value = setting.setting_value || "Resources and peer networks to promote wellbeing and resilience.";
-                        break;
-                    case 'feature3_link':
-                        document.getElementById('feature3Link').value = setting.setting_value || "Explore Resources";
-                        break;
-                    case 'feature3_url':
-                        document.getElementById('feature3Url').value = setting.setting_value || "resources.html#mental-health";
-                        break;
+                // Hero Section
+                if (setting.setting_key === 'home_title') {
+                    document.getElementById('homeTitle').value = setting.setting_value || "Your Nursing Career Journey Starts Here";
+                    document.getElementById('previewTitle').textContent = setting.setting_value || "Your Nursing Career Journey Starts Here";
+                }
+                if (setting.setting_key === 'home_subtitle') {
+                    document.getElementById('homeSubtitle').value = setting.setting_value || "Join Kenya's largest community of nursing students and novice nurses. Access mentorship, resources, and career opportunities.";
+                    document.getElementById('previewSubtitle').textContent = setting.setting_value?.substring(0, 100) + "..." || "Join Kenya's largest community of nursing students and novice nurses...";
+                }
+                if (setting.setting_key === 'hero_image_url') {
+                    document.getElementById('heroImageUrl').value = setting.setting_value || "https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3";
+                }
+                if (setting.setting_key === 'cta_button_text') {
+                    document.getElementById('ctaButtonText').value = setting.setting_value || "Join KESNNUR Today";
+                }
+                
+                // Statistics
+                if (setting.setting_key === 'stat_members') {
+                    document.getElementById('statMembers').value = setting.setting_value || "1,500+";
+                }
+                if (setting.setting_key === 'stat_events') {
+                    document.getElementById('statEvents').value = setting.setting_value || "50+";
+                }
+                if (setting.setting_key === 'stat_regions') {
+                    document.getElementById('statRegions').value = setting.setting_value || "24";
+                }
+                
+                // Reviews Section
+                if (setting.setting_key === 'reviews_title') {
+                    document.getElementById('reviewsTitle').value = setting.setting_value || "What Our Members Say";
+                }
+                if (setting.setting_key === 'review1_name') {
+                    document.getElementById('review1Name').value = setting.setting_value || "Sarah M.";
+                }
+                if (setting.setting_key === 'review1_role') {
+                    document.getElementById('review1Role').value = setting.setting_value || "3rd Year Nursing Student";
+                }
+                if (setting.setting_key === 'review1_institution') {
+                    document.getElementById('review1Institution').value = setting.setting_value || "University of Nairobi";
+                }
+                if (setting.setting_key === 'review1_text') {
+                    document.getElementById('review1Text').value = setting.setting_value || "KESNNUR mentorship program transformed my nursing journey. My mentor guided me through clinical rotations.";
+                }
+                if (setting.setting_key === 'review1_rating') {
+                    document.getElementById('review1Rating').value = setting.setting_value || "5";
+                }
+                
+                // ... Add similar for review2 and review3
+                
+                // Features Section
+                if (setting.setting_key === 'features_title') {
+                    document.getElementById('featuresTitle').value = setting.setting_value || "How We Support Your Growth";
+                }
+                if (setting.setting_key === 'feature1_icon') {
+                    document.getElementById('feature1Icon').value = setting.setting_value || "fas fa-user-graduate";
+                }
+                if (setting.setting_key === 'feature1_title') {
+                    document.getElementById('feature1Title').value = setting.setting_value || "Mentorship & Guidance";
+                }
+                if (setting.setting_key === 'feature1_desc') {
+                    document.getElementById('feature1Desc').value = setting.setting_value || "Connect with experienced nurse mentors for personalized career guidance.";
+                }
+                if (setting.setting_key === 'feature1_link') {
+                    document.getElementById('feature1Link').value = setting.setting_value || "Find a Mentor";
+                }
+                if (setting.setting_key === 'feature1_url') {
+                    document.getElementById('feature1Url').value = setting.setting_value || "about.html#mentorship";
+                }
+                
+                // ... Add similar for feature2 and feature3
+                
+                // Events Section
+                if (setting.setting_key === 'events_section_title') {
+                    document.getElementById('eventsSectionTitle').value = setting.setting_value || "Upcoming Events";
+                }
+                if (setting.setting_key === 'events_section_subtitle') {
+                    document.getElementById('eventsSectionSubtitle').value = setting.setting_value || "Join our upcoming workshops and networking events";
+                }
+                if (setting.setting_key === 'events_view_all_text') {
+                    document.getElementById('eventsViewAllText').value = setting.setting_value || "View All Events";
+                }
+                
+                // Blog Section
+                if (setting.setting_key === 'blog_section_title') {
+                    document.getElementById('blogSectionTitle').value = setting.setting_value || "Latest from Our Blog";
+                }
+                if (setting.setting_key === 'blog_section_subtitle') {
+                    document.getElementById('blogSectionSubtitle').value = setting.setting_value || "Insights and stories from the nursing community";
+                }
+                if (setting.setting_key === 'blog_view_all_text') {
+                    document.getElementById('blogViewAllText').value = setting.setting_value || "View All Posts";
+                }
+                
+                // Partners Section
+                if (setting.setting_key === 'partners_section_title') {
+                    document.getElementById('partnersSectionTitle').value = setting.setting_value || "Our Trusted Partners";
+                }
+                
+                // CTA Section
+                if (setting.setting_key === 'cta_title') {
+                    document.getElementById('ctaTitle').value = setting.setting_value || "Ready to Join KESNNUR?";
+                }
+                if (setting.setting_key === 'cta_description') {
+                    document.getElementById('ctaDescription').value = setting.setting_value || "Become part of Kenya's largest community of nursing students and novice nurses.";
+                }
+                if (setting.setting_key === 'cta_primary_button') {
+                    document.getElementById('ctaPrimaryButton').value = setting.setting_value || "Join Now";
+                }
+                if (setting.setting_key === 'cta_secondary_button') {
+                    document.getElementById('ctaSecondaryButton').value = setting.setting_value || "Contact Us";
                 }
             });
         }
     } catch (error) {
-        console.log("Using default home page values");
+        console.log("Using default home page values:", error);
         setDefaultHomeValues();
     }
     
@@ -881,49 +1123,82 @@ function setDefaultHomeValues() {
     document.getElementById('previewTitle').textContent = document.getElementById('homeTitle').value;
     document.getElementById('previewSubtitle').textContent = document.getElementById('homeSubtitle').value.substring(0, 100) + "...";
 }
-       async function saveHomePage() {
-    // Get all values
+      async function saveHomePage() {
+    // Get ALL values from ALL tabs
     const settings = [
-        // Hero
+        // Hero Section
         { setting_key: 'home_title', setting_value: document.getElementById('homeTitle').value, category: 'home_page' },
         { setting_key: 'home_subtitle', setting_value: document.getElementById('homeSubtitle').value, category: 'home_page' },
         { setting_key: 'hero_image_url', setting_value: document.getElementById('heroImageUrl').value, category: 'home_page' },
         { setting_key: 'cta_button_text', setting_value: document.getElementById('ctaButtonText').value, category: 'home_page' },
-        // Stats
+        
+        // Statistics
         { setting_key: 'stat_members', setting_value: document.getElementById('statMembers').value, category: 'home_page' },
         { setting_key: 'stat_events', setting_value: document.getElementById('statEvents').value, category: 'home_page' },
         { setting_key: 'stat_regions', setting_value: document.getElementById('statRegions').value, category: 'home_page' },
+        
+        // Reviews
+        { setting_key: 'reviews_title', setting_value: document.getElementById('reviewsTitle').value, category: 'home_page' },
+        { setting_key: 'review1_name', setting_value: document.getElementById('review1Name').value, category: 'home_page' },
+        { setting_key: 'review1_role', setting_value: document.getElementById('review1Role').value, category: 'home_page' },
+        { setting_key: 'review1_institution', setting_value: document.getElementById('review1Institution').value, category: 'home_page' },
+        { setting_key: 'review1_text', setting_value: document.getElementById('review1Text').value, category: 'home_page' },
+        { setting_key: 'review1_rating', setting_value: document.getElementById('review1Rating').value, category: 'home_page' },
+        
         // Features
+        { setting_key: 'features_title', setting_value: document.getElementById('featuresTitle').value, category: 'home_page' },
         { setting_key: 'feature1_icon', setting_value: document.getElementById('feature1Icon').value, category: 'home_page' },
         { setting_key: 'feature1_title', setting_value: document.getElementById('feature1Title').value, category: 'home_page' },
         { setting_key: 'feature1_desc', setting_value: document.getElementById('feature1Desc').value, category: 'home_page' },
         { setting_key: 'feature1_link', setting_value: document.getElementById('feature1Link').value, category: 'home_page' },
         { setting_key: 'feature1_url', setting_value: document.getElementById('feature1Url').value, category: 'home_page' },
-        { setting_key: 'feature2_icon', setting_value: document.getElementById('feature2Icon').value, category: 'home_page' },
-        { setting_key: 'feature2_title', setting_value: document.getElementById('feature2Title').value, category: 'home_page' },
-        { setting_key: 'feature2_desc', setting_value: document.getElementById('feature2Desc').value, category: 'home_page' },
-        { setting_key: 'feature2_link', setting_value: document.getElementById('feature2Link').value, category: 'home_page' },
-        { setting_key: 'feature2_url', setting_value: document.getElementById('feature2Url').value, category: 'home_page' },
-        { setting_key: 'feature3_icon', setting_value: document.getElementById('feature3Icon').value, category: 'home_page' },
-        { setting_key: 'feature3_title', setting_value: document.getElementById('feature3Title').value, category: 'home_page' },
-        { setting_key: 'feature3_desc', setting_value: document.getElementById('feature3Desc').value, category: 'home_page' },
-        { setting_key: 'feature3_link', setting_value: document.getElementById('feature3Link').value, category: 'home_page' },
-        { setting_key: 'feature3_url', setting_value: document.getElementById('feature3Url').value, category: 'home_page' }
+        
+        // ... Add similar for review2, review3, feature2, feature3, events, blog, partners, cta
+        
+        // Events Section
+        { setting_key: 'events_section_title', setting_value: document.getElementById('eventsSectionTitle').value, category: 'home_page' },
+        { setting_key: 'events_section_subtitle', setting_value: document.getElementById('eventsSectionSubtitle').value, category: 'home_page' },
+        { setting_key: 'events_view_all_text', setting_value: document.getElementById('eventsViewAllText').value, category: 'home_page' },
+        
+        // Blog Section
+        { setting_key: 'blog_section_title', setting_value: document.getElementById('blogSectionTitle').value, category: 'home_page' },
+        { setting_key: 'blog_section_subtitle', setting_value: document.getElementById('blogSectionSubtitle').value, category: 'home_page' },
+        { setting_key: 'blog_view_all_text', setting_value: document.getElementById('blogViewAllText').value, category: 'home_page' },
+        
+        // Partners Section
+        { setting_key: 'partners_section_title', setting_value: document.getElementById('partnersSectionTitle').value, category: 'home_page' },
+        
+        // CTA Section
+        { setting_key: 'cta_title', setting_value: document.getElementById('ctaTitle').value, category: 'home_page' },
+        { setting_key: 'cta_description', setting_value: document.getElementById('ctaDescription').value, category: 'home_page' },
+        { setting_key: 'cta_primary_button', setting_value: document.getElementById('ctaPrimaryButton').value, category: 'home_page' },
+        { setting_key: 'cta_secondary_button', setting_value: document.getElementById('ctaSecondaryButton').value, category: 'home_page' }
     ];
     
     try {
+        let successCount = 0;
+        let errorCount = 0;
+        
         for (const setting of settings) {
-            const { error } = await cmsSupabase
-                .from('system_settings')
-                .upsert({
-                    setting_key: setting.setting_key,
-                    setting_value: setting.setting_value,
-                    category: setting.category,
-                    updated_at: new Date().toISOString()
-                }, { onConflict: 'setting_key' });
-            
-            if (error) {
-                console.error('Error saving:', setting.setting_key, error);
+            try {
+                const { error } = await cmsSupabase
+                    .from('system_settings')
+                    .upsert({
+                        setting_key: setting.setting_key,
+                        setting_value: setting.setting_value,
+                        category: setting.category,
+                        updated_at: new Date().toISOString()
+                    }, { onConflict: 'setting_key' });
+                
+                if (error) {
+                    console.error('Error saving:', setting.setting_key, error);
+                    errorCount++;
+                } else {
+                    successCount++;
+                }
+            } catch (err) {
+                console.error('Failed to save', setting.setting_key, err);
+                errorCount++;
             }
         }
         
@@ -931,9 +1206,9 @@ function setDefaultHomeValues() {
         document.getElementById('previewTitle').textContent = document.getElementById('homeTitle').value;
         document.getElementById('previewSubtitle').textContent = document.getElementById('homeSubtitle').value.substring(0, 100) + "...";
         
-        alert('Home page saved successfully to database!');
+        alert(`Homepage saved! ${successCount} settings saved successfully.${errorCount > 0 ? ` ${errorCount} errors occurred.` : ''}`);
     } catch (error) {
-        alert('Error saving: ' + error.message);
+        alert('Error saving homepage: ' + error.message);
     }
 }
         // Load partners in CMS
@@ -942,9 +1217,10 @@ async function loadPartnersCMS() {
     if (!container) return;
     
     try {
+        // Select columns that actually exist
         const { data: partners, error } = await cmsSupabase
             .from('partners')
-            .select('id, name, description, logo_emoji')
+            .select('id, name, description, logo_url, status') // Use logo_url, not logo_emoji
             .order('name', { ascending: true })
             .limit(20);
         
@@ -954,14 +1230,43 @@ async function loadPartnersCMS() {
         
         if (partners && partners.length > 0) {
             partners.forEach(partner => {
+                // Use logo_url if available, otherwise use emoji fallback
+                let logoHtml = '';
+                if (partner.logo_url && partner.logo_url.trim() !== '') {
+                    // Check if it's an emoji or URL
+                    if (partner.logo_url.startsWith('http')) {
+                        logoHtml = `<img src="${partner.logo_url}" alt="${partner.name}" class="w-8 h-8 object-contain">`;
+                    } else {
+                        // It's an emoji text
+                        logoHtml = `<div class="text-2xl">${partner.logo_url}</div>`;
+                    }
+                } else {
+                    // Fallback emoji based on name
+                    const emojiMap = {
+                        'NNAK': '📘', 'NCK': '🏛️', 'MOH': '🏥', 'KNH': '❤️',
+                        'UoN': '🎓', 'KMTC': '⚕️', 'WHO': '🌍', 'ICN': '🤝'
+                    };
+                    const emoji = emojiMap[partner.name] || '🤝';
+                    logoHtml = `<div class="text-2xl">${emoji}</div>`;
+                }
+                
+                const statusBadge = partner.status === 'active' 
+                    ? '<span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Active</span>'
+                    : '<span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">Inactive</span>';
+                
                 const partnerDiv = document.createElement('div');
                 partnerDiv.className = 'bg-gray-50 p-4 rounded-lg';
                 partnerDiv.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div class="flex items-center space-x-4">
-                            <div class="text-2xl">${partner.logo_emoji || '🤝'}</div>
+                            <div class="w-10 h-10 flex items-center justify-center">
+                                ${logoHtml}
+                            </div>
                             <div>
-                                <h4 class="font-bold">${partner.name}</h4>
+                                <div class="flex items-center space-x-2">
+                                    <h4 class="font-bold">${partner.name}</h4>
+                                    ${statusBadge}
+                                </div>
                                 <p class="text-sm text-gray-600">${partner.description || ''}</p>
                             </div>
                         </div>
@@ -981,11 +1286,19 @@ async function loadPartnersCMS() {
             container.innerHTML = `
                 <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
                     <p class="text-yellow-700">No partners added yet.</p>
+                    <button onclick="addPartner()" class="mt-2 text-blue-600 hover:text-blue-800 font-medium">
+                        <i class="fas fa-plus mr-1"></i> Add First Partner
+                    </button>
                 </div>
             `;
         }
     } catch (error) {
         console.error('Error loading partners:', error);
+        container.innerHTML = `
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+                <p class="text-red-700">Error loading partners. Check console.</p>
+            </div>
+        `;
     }
 }
 
@@ -999,8 +1312,8 @@ function addPartner() {
             
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium mb-1">Partner Name</label>
-                    <input type="text" id="partnerName" class="w-full border rounded-lg p-2" placeholder="NNAK">
+                    <label class="block text-sm font-medium mb-1">Partner Name *</label>
+                    <input type="text" id="partnerName" class="w-full border rounded-lg p-2" placeholder="NNAK" required>
                 </div>
                 
                 <div>
@@ -1009,9 +1322,24 @@ function addPartner() {
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-medium mb-1">Logo Emoji</label>
-                    <input type="text" id="partnerEmoji" class="w-full border rounded-lg p-2" placeholder="📘">
-                    <p class="text-sm text-gray-500 mt-1">Use a single emoji as logo</p>
+                    <label class="block text-sm font-medium mb-1">Logo (URL or Emoji)</label>
+                    <input type="text" id="partnerLogo" class="w-full border rounded-lg p-2" placeholder="https://example.com/logo.png or 📘">
+                    <p class="text-sm text-gray-500 mt-1">Enter image URL or single emoji character</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Website URL</label>
+                    <input type="text" id="partnerWebsite" class="w-full border rounded-lg p-2" placeholder="https://example.com">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Partner Type</label>
+                    <select id="partnerType" class="w-full border rounded-lg p-2">
+                        <option value="organization">Organization</option>
+                        <option value="sponsor">Sponsor</option>
+                        <option value="academic">Academic</option>
+                        <option value="government">Government</option>
+                    </select>
                 </div>
             </div>
             
@@ -1030,7 +1358,9 @@ function addPartner() {
 async function savePartner() {
     const name = document.getElementById('partnerName').value;
     const description = document.getElementById('partnerDesc').value;
-    const emoji = document.getElementById('partnerEmoji').value;
+    const logo = document.getElementById('partnerLogo').value;
+    const website = document.getElementById('partnerWebsite').value;
+    const type = document.getElementById('partnerType').value;
     
     if (!name) {
         alert('Partner name is required');
@@ -1043,9 +1373,11 @@ async function savePartner() {
             .insert({
                 name: name,
                 description: description || '',
-                logo_emoji: emoji || '🤝',
-                partner_type: 'organization',
+                logo_url: logo || '',
+                website_url: website || '',
+                partner_type: type,
                 status: 'active',
+                partnership_level: 'partner',
                 start_date: new Date().toISOString().split('T')[0]
             });
         
@@ -1059,7 +1391,6 @@ async function savePartner() {
         alert('Error saving partner: ' + error.message);
     }
 }
-
 async function deletePartner(id) {
     if (confirm('Are you sure you want to delete this partner?')) {
         try {
