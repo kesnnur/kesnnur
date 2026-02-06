@@ -762,17 +762,332 @@
         </button>
     </div>
 </div>     
-            <!-- EVENTS PAGE EDITOR -->
-            <div id="eventsSection" class="content-section">
-                <div class="editor-card">
-                    <h2 style="font-size:24px; font-weight:bold; color:#1e293b; margin-bottom:5px;">Events Page Editor</h2>
-                    <p style="color:#64748b; margin-bottom:20px;">Manage events displayed on your website</p>
+          <!-- EVENTS PAGE EDITOR -->
+<div id="eventsSection" class="content-section">
+    <div class="editor-card">
+        <h2 style="font-size:24px; font-weight:bold; color:#1e293b; margin-bottom:5px;">Events Page Editor</h2>
+        <p style="color:#64748b; margin-bottom:20px;">Manage events and edit the entire events page HTML</p>
+        
+        <!-- Quick Navigation Tabs -->
+        <div style="display:flex; gap:10px; margin-bottom:25px; border-bottom:2px solid #e5e7eb;">
+            <button onclick="showEventsTab('manage')" id="tabManage" style="padding:12px 24px; background:#1e3a8a; color:white; border:none; border-radius:8px 8px 0 0; font-weight:600; cursor:pointer;">
+                <i class="fas fa-calendar-alt mr-2"></i>Manage Events
+            </button>
+            <button onclick="showEventsTab('html')" id="tabHtml" style="padding:12px 24px; background:#6b7280; color:white; border:none; border-radius:8px 8px 0 0; font-weight:600; cursor:pointer;">
+                <i class="fas fa-code mr-2"></i>Edit Page HTML
+            </button>
+            <button onclick="showEventsTab('preview')" id="tabPreview" style="padding:12px 24px; background:#6b7280; color:white; border:none; border-radius:8px 8px 0 0; font-weight:600; cursor:pointer;">
+                <i class="fas fa-eye mr-2"></i>Live Preview
+            </button>
+        </div>
+        
+        <!-- TAB 1: Manage Events -->
+        <div id="eventsManageTab" class="events-tab">
+            <!-- Event Stats -->
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:30px;">
+                <div style="background:#f0f9ff; border:1px solid #e0f2fe; border-radius:8px; padding:20px; text-align:center;">
+                    <div style="font-size:28px; font-weight:700; color:#0369a1;" id="totalEvents">0</div>
+                    <div style="font-size:14px; color:#64748b;">Total Events</div>
+                </div>
+                <div style="background:#f0fdf4; border:1px solid #dcfce7; border-radius:8px; padding:20px; text-align:center;">
+                    <div style="font-size:28px; font-weight:700; color:#166534;" id="upcomingEvents">0</div>
+                    <div style="font-size:14px; color:#64748b;">Upcoming</div>
+                </div>
+                <div style="background:#fef3c7; border:1px solid #fde68a; border-radius:8px; padding:20px; text-align:center;">
+                    <div style="font-size:28px; font-weight:700; color:#92400e;" id="draftEvents">0</div>
+                    <div style="font-size:14px; color:#64748b;">Drafts</div>
+                </div>
+                <div style="background:#f5f3ff; border:1px solid #ede9fe; border-radius:8px; padding:20px; text-align:center;">
+                    <div style="font-size:28px; font-weight:700; color:#6b21a8;" id="pastEvents">0</div>
+                    <div style="font-size:14px; color:#64748b;">Past Events</div>
+                </div>
+            </div>
+            
+            <!-- Actions Bar -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; padding-bottom:20px; border-bottom:1px solid #e5e7eb;">
+                <div>
+                    <button onclick="showAddEventForm()" style="padding:10px 20px; background:#10b981; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer; margin-right:10px;">
+                        <i class="fas fa-plus mr-2"></i>Add New Event
+                    </button>
+                    <button onclick="refreshEventsList()" style="padding:10px 20px; background:#3b82f6; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                        <i class="fas fa-sync mr-2"></i>Refresh
+                    </button>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <select id="eventFilter" onchange="filterEvents()" style="padding:8px 12px; border:1px solid #d1d5db; border-radius:6px;">
+                        <option value="all">All Events</option>
+                        <option value="upcoming">Upcoming</option>
+                        <option value="published">Published</option>
+                        <option value="draft">Drafts</option>
+                        <option value="past">Past</option>
+                    </select>
+                    <input type="text" id="eventSearch" placeholder="Search events..." style="padding:8px 12px; border:1px solid #d1d5db; border-radius:6px; width:200px;">
+                </div>
+            </div>
+            
+            <!-- Events Table -->
+            <div id="eventsList" style="min-height:300px;">
+                <div style="text-align:center; padding:40px;">
+                    <div class="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-blue-900 mb-4"></div>
+                    <p style="color:#64748b;">Loading events from database...</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TAB 2: Edit HTML -->
+        <div id="eventsHtmlTab" class="events-tab" style="display:none;">
+            <div style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:8px; padding:20px; margin-bottom:20px;">
+                <h3 style="font-size:18px; font-weight:600; color:#1e293b; margin-bottom:10px;">Edit Events Page HTML</h3>
+                <p style="color:#64748b; margin-bottom:15px;">This HTML code powers your entire events.html page. Be careful when editing!</p>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                    <div>
+                        <h4 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:10px;">Page Sections</h4>
+                        <div style="display:flex; flex-direction:column; gap:10px;">
+                            <button onclick="loadHtmlSection('hero')" style="padding:12px; background:#f3f4f6; border:1px solid #d1d5db; border-radius:6px; text-align:left; cursor:pointer;">
+                                <i class="fas fa-flag mr-2"></i>Hero Section
+                            </button>
+                            <button onclick="loadHtmlSection('calendar')" style="padding:12px; background:#f3f4f6; border:1px solid #d1d5db; border-radius:6px; text-align:left; cursor:pointer;">
+                                <i class="fas fa-calendar mr-2"></i>Calendar Section
+                            </button>
+                            <button onclick="loadHtmlSection('upcoming')" style="padding:12px; background:#f3f4f6; border:1px solid #d1d5db; border-radius:6px; text-align:left; cursor:pointer;">
+                                <i class="fas fa-calendar-check mr-2"></i>Upcoming Events
+                            </button>
+                            <button onclick="loadHtmlSection('past')" style="padding:12px; background:#f3f4f6; border:1px solid #d1d5db; border-radius:6px; text-align:left; cursor:pointer;">
+                                <i class="fas fa-history mr-2"></i>Past Events
+                            </button>
+                            <button onclick="loadHtmlSection('cta')" style="padding:12px; background:#f3f4f6; border:1px solid #d1d5db; border-radius:6px; text-align:left; cursor:pointer;">
+                                <i class="fas fa-bullhorn mr-2"></i>CTA Section
+                            </button>
+                            <button onclick="loadHtmlSection('footer')" style="padding:12px; background:#f3f4f6; border:1px solid #d1d5db; border-radius:6px; text-align:left; cursor:pointer;">
+                                <i class="fas fa-shoe-prints mr-2"></i>Footer
+                            </button>
+                        </div>
+                    </div>
                     
-                    <div id="eventsList">
-                        <!-- Events will be loaded here -->
+                    <div>
+                        <h4 style="font-size:16px; font-weight:600; color:#1e293b; margin-bottom:10px;">Quick Edits</h4>
+                        <div style="display:flex; flex-direction:column; gap:15px;">
+                            <div>
+                                <label style="display:block; font-size:14px; color:#4b5563; margin-bottom:5px;">Page Title</label>
+                                <input type="text" id="eventsPageTitle" placeholder="KESNNUR Events" style="width:100%; padding:10px; border:1px solid #d1d5db; border-radius:6px;">
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:14px; color:#4b5563; margin-bottom:5px;">Hero Title</label>
+                                <input type="text" id="eventsHeroTitle" placeholder="KESNNUR Events" style="width:100%; padding:10px; border:1px solid #d1d5db; border-radius:6px;">
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:14px; color:#4b5563; margin-bottom:5px;">Hero Description</label>
+                                <textarea id="eventsHeroDesc" rows="3" style="width:100%; padding:10px; border:1px solid #d1d5db; border-radius:6px;"></textarea>
+                            </div>
+                            <button onclick="saveEventsPageSettings()" style="padding:12px; background:#1e3a8a; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                                <i class="fas fa-save mr-2"></i>Save Page Settings
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+            
+            <!-- HTML Editor -->
+            <div style="margin-bottom:20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <h4 style="font-size:16px; font-weight:600; color:#1e293b;">HTML Editor</h4>
+                    <div style="display:flex; gap:10px;">
+                        <select id="htmlSectionSelect" onchange="loadSelectedHtmlSection()" style="padding:8px 12px; border:1px solid #d1d5db; border-radius:6px;">
+                            <option value="">Select Section...</option>
+                            <option value="full">Full Page HTML</option>
+                            <option value="hero">Hero Section</option>
+                            <option value="calendar">Calendar</option>
+                            <option value="upcoming">Upcoming Events</option>
+                            <option value="past">Past Events</option>
+                            <option value="cta">CTA Section</option>
+                            <option value="footer">Footer</option>
+                        </select>
+                        <button onclick="loadCurrentEventsHtml()" style="padding:8px 16px; background:#3b82f6; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                            <i class="fas fa-sync mr-2"></i>Load
+                        </button>
+                    </div>
+                </div>
+                
+                <textarea id="eventsHtmlEditor" rows="20" style="width:100%; padding:15px; border:1px solid #d1d5db; border-radius:8px; font-family:monospace; font-size:14px;" placeholder="HTML will appear here..."></textarea>
+                
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button onclick="saveEventsHtml()" style="padding:12px 24px; background:#10b981; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                        <i class="fas fa-save mr-2"></i>Save HTML
+                    </button>
+                    <button onclick="previewEventsHtml()" style="padding:12px 24px; background:#f59e0b; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                        <i class="fas fa-eye mr-2"></i>Preview
+                    </button>
+                    <button onclick="resetEventsHtml()" style="padding:12px 24px; background:#ef4444; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                        <i class="fas fa-undo mr-2"></i>Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TAB 3: Live Preview -->
+        <div id="eventsPreviewTab" class="events-tab" style="display:none;">
+            <div style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:8px; padding:20px; margin-bottom:20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h3 style="font-size:18px; font-weight:600; color:#1e293b;">Live Preview</h3>
+                    <button onclick="refreshEventsPreview()" style="padding:8px 16px; background:#3b82f6; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                        <i class="fas fa-sync mr-2"></i>Refresh Preview
+                    </button>
+                </div>
+                
+                <div style="border:1px solid #e5e7eb; border-radius:8px; overflow:hidden; height:600px;">
+                    <iframe id="eventsPreviewFrame" src="events.html" style="width:100%; height:100%; border:none;"></iframe>
+                </div>
+                
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button onclick="openEventsPage()" style="padding:10px 20px; background:#1e3a8a; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                        <i class="fas fa-external-link-alt mr-2"></i>Open Live Page
+                    </button>
+                    <button onclick="openEventsPageNewTab()" style="padding:10px 20px; background:#6b7280; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                        <i class="fas fa-window-restore mr-2"></i>Open in New Tab
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Event Modal -->
+<div id="eventModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:12px; width:90%; max-width:800px; max-height:90vh; overflow-y:auto;">
+        <div style="padding:20px; border-bottom:1px solid #e5e7eb;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 id="eventModalTitle" style="font-size:20px; font-weight:600;">Add New Event</h3>
+                <button onclick="closeEventModal()" style="background:none; border:none; font-size:24px; color:#6b7280; cursor:pointer;">×</button>
+            </div>
+        </div>
+        
+        <div style="padding:20px;">
+            <form id="eventForm">
+                <input type="hidden" id="eventId">
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+                    <div>
+                        <label style="display:block; font-weight:600; color:#4b5563; margin-bottom:8px;">Event Title *</label>
+                        <input type="text" id="eventTitle" required style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                    </div>
+                    
+                    <div>
+                        <label style="display:block; font-weight:600; color:#4b5563; margin-bottom:8px;">Event Type *</label>
+                        <select id="eventType" required style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                            <option value="">Select Type</option>
+                            <option value="conference">Conference</option>
+                            <option value="workshop">Workshop</option>
+                            <option value="webinar">Webinar</option>
+                            <option value="seminar">Seminar</option>
+                            <option value="training">Training</option>
+                            <option value="meeting">Meeting</option>
+                            <option value="social">Social</option>
+                            <option value="networking">Networking</option>
+                            <option value="summit">Summit</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+                    <div>
+                        <label style="display:block; font-weight:600; color:#4b5563; margin-bottom:8px;">Start Date & Time *</label>
+                        <input type="datetime-local" id="eventStartDate" required style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                    </div>
+                    
+                    <div>
+                        <label style="display:block; font-weight:600; color:#4b5563; margin-bottom:8px;">End Date & Time *</label>
+                        <input type="datetime-local" id="eventEndDate" required style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                    </div>
+                </div>
+                
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; font-weight:600; color:#4b5563; margin-bottom:8px;">Venue/Location *</label>
+                    <input type="text" id="eventVenue" required style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+                
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; font-weight:600; color:#4b5563; margin-bottom:8px;">Description *</label>
+                    <textarea id="eventDescription" rows="4" required style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;"></textarea>
+                </div>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+                    <div>
+                        <label style="display:block; font-weight:600; color:#4b5563; margin-bottom:8px;">Fee Amount</label>
+                        <input type="number" id="eventFee" step="0.01" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;" placeholder="0.00">
+                    </div>
+                    
+                    <div>
+                        <label style="display:block; font-weight:600; color:#4b5563; margin-bottom:8px;">Currency</label>
+                        <select id="eventCurrency" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                            <option value="KES">KES (Kenyan Shilling)</option>
+                            <option value="USD">USD (US Dollar)</option>
+                            <option value="EUR">EUR (Euro)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; font-weight:600; color:#4b5563; margin-bottom:8px;">Image URL (Optional)</label>
+                    <input type="url" id="eventImageUrl" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;" placeholder="https://example.com/image.jpg">
+                </div>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:30px;">
+                    <div>
+                        <label style="display:block; font-weight:600; color:#4b5563; margin-bottom:8px;">Status *</label>
+                        <select id="eventStatus" required style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                            <option value="draft">Draft</option>
+                            <option value="published">Published</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label style="display:block; font-weight:600; color:#4b5563; margin-bottom:8px;">Category</label>
+                        <select id="eventCategory" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px;">
+                            <option value="">Select Category</option>
+                            <option value="professional">Professional</option>
+                            <option value="educational">Educational</option>
+                            <option value="networking">Networking</option>
+                            <option value="certification">Certification</option>
+                            <option value="research">Research</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="display:flex; justify-content:flex-end; gap:15px; padding-top:20px; border-top:1px solid #e5e7eb;">
+                    <button type="button" onclick="closeEventModal()" style="padding:12px 24px; background:#6b7280; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" style="padding:12px 24px; background:#10b981; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                        <i class="fas fa-save mr-2"></i>Save Event
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- HTML Preview Modal -->
+<div id="htmlPreviewModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:12px; width:90%; max-width:900px; max-height:90vh; overflow:hidden;">
+        <div style="padding:20px; border-bottom:1px solid #e5e7eb; display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="font-size:20px; font-weight:600;">HTML Preview</h3>
+            <button onclick="closeHtmlPreviewModal()" style="background:none; border:none; font-size:24px; color:#6b7280; cursor:pointer;">×</button>
+        </div>
+        
+        <div style="padding:20px; overflow-y:auto; max-height:70vh;">
+            <div id="htmlPreviewContent" style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:8px; padding:20px; font-family:monospace; font-size:14px; white-space:pre-wrap; word-wrap:break-word; min-height:400px;"></div>
+        </div>
+        
+        <div style="padding:20px; border-top:1px solid #e5e7eb; display:flex; justify-content:flex-end;">
+            <button onclick="closeHtmlPreviewModal()" style="padding:10px 20px; background:#3b82f6; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                Close Preview
+            </button>
+        </div>
+    </div>
+</div>
             
             <!-- BLOG PAGE EDITOR -->
             <div id="blogSection" class="content-section">
@@ -2672,24 +2987,1018 @@ async function deleteTeamMember(id) {
     }
 }
         
-        async function loadEventsPage() {
-            console.log("Loading events page...");
-            const container = document.getElementById('eventsList');
+      // ================== EVENTS PAGE MANAGEMENT ==================
+
+let currentEvents = [];
+let currentEventHtml = '';
+let eventsPageSettings = {};
+
+// Show different tabs
+function showEventsTab(tabName) {
+    // Hide all tabs
+    document.getElementById('eventsManageTab').style.display = 'none';
+    document.getElementById('eventsHtmlTab').style.display = 'none';
+    document.getElementById('eventsPreviewTab').style.display = 'none';
+    
+    // Reset all tab buttons
+    document.getElementById('tabManage').style.background = '#6b7280';
+    document.getElementById('tabHtml').style.background = '#6b7280';
+    document.getElementById('tabPreview').style.background = '#6b7280';
+    
+    // Show selected tab
+    if (tabName === 'manage') {
+        document.getElementById('eventsManageTab').style.display = 'block';
+        document.getElementById('tabManage').style.background = '#1e3a8a';
+        loadEventsList();
+    } else if (tabName === 'html') {
+        document.getElementById('eventsHtmlTab').style.display = 'block';
+        document.getElementById('tabHtml').style.background = '#1e3a8a';
+        loadEventsPageSettings();
+    } else if (tabName === 'preview') {
+        document.getElementById('eventsPreviewTab').style.display = 'block';
+        document.getElementById('tabPreview').style.background = '#1e3a8a';
+        refreshEventsPreview();
+    }
+}
+
+// Load events list from database
+async function loadEventsList() {
+    const container = document.getElementById('eventsList');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div style="text-align:center; padding:40px;">
+            <div class="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-blue-900 mb-4"></div>
+            <p style="color:#64748b;">Loading events from database...</p>
+        </div>
+    `;
+    
+    try {
+        const events = await fetchFromSupabase('events', '?order=start_date.desc');
+        
+        if (events && events.length > 0) {
+            currentEvents = events;
+            updateEventStats(events);
+            renderEventsTable(events);
+        } else {
             container.innerHTML = `
-                <div style="border:1px solid #e5e7eb; border-radius:8px; padding:15px; margin-bottom:10px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <strong>Nursing Leadership Workshop</strong>
-                            <p style="color:#6b7280; margin-top:5px;">March 15, 2024 • Nairobi</p>
-                        </div>
-                        <div>
-                            <span style="padding:3px 8px; background:#dbeafe; color:#1e40af; border-radius:12px; font-size:12px;">Upcoming</span>
-                        </div>
-                    </div>
+                <div style="text-align:center; padding:40px;">
+                    <i class="fas fa-calendar-times text-4xl text-gray-400 mb-4"></i>
+                    <h4 style="font-size:18px; font-weight:600; color:#4b5563; margin-bottom:10px;">No Events Found</h4>
+                    <p style="color:#64748b;">Create your first event to get started.</p>
                 </div>
             `;
         }
+    } catch (error) {
+        console.error('Error loading events:', error);
+        container.innerHTML = `
+            <div style="text-align:center; padding:40px;">
+                <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+                <h4 style="font-size:18px; font-weight:600; color:#4b5563; margin-bottom:10px;">Error Loading Events</h4>
+                <p style="color:#64748b;">Could not connect to database.</p>
+            </div>
+        `;
+    }
+}
+
+// Update event statistics
+function updateEventStats(events) {
+    const now = new Date();
+    
+    const total = events.length;
+    const upcoming = events.filter(e => {
+        const startDate = new Date(e.start_date);
+        return e.status === 'published' && startDate > now;
+    }).length;
+    
+    const drafts = events.filter(e => e.status === 'draft').length;
+    const past = events.filter(e => {
+        const endDate = new Date(e.end_date);
+        return endDate < now;
+    }).length;
+    
+    document.getElementById('totalEvents').textContent = total;
+    document.getElementById('upcomingEvents').textContent = upcoming;
+    document.getElementById('draftEvents').textContent = drafts;
+    document.getElementById('pastEvents').textContent = past;
+}
+
+// Render events table
+function renderEventsTable(events) {
+    const container = document.getElementById('eventsList');
+    if (!container) return;
+    
+    if (events.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center; padding:40px;">
+                <i class="fas fa-calendar-times text-4xl text-gray-400 mb-4"></i>
+                <h4 style="font-size:18px; font-weight:600; color:#4b5563; margin-bottom:10px;">No Events Found</h4>
+                <p style="color:#64748b;">Create your first event to get started.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = `
+        <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse;">
+                <thead>
+                    <tr style="background:#f9fafb; border-bottom:2px solid #e5e7eb;">
+                        <th style="padding:12px; text-align:left; font-weight:600; color:#4b5563;">Event</th>
+                        <th style="padding:12px; text-align:left; font-weight:600; color:#4b5563;">Date</th>
+                        <th style="padding:12px; text-align:left; font-weight:600; color:#4b5563;">Status</th>
+                        <th style="padding:12px; text-align:left; font-weight:600; color:#4b5563;">Type</th>
+                        <th style="padding:12px; text-align:left; font-weight:600; color:#4b5563;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    events.forEach(event => {
+        const startDate = new Date(event.start_date);
+        const endDate = new Date(event.end_date);
+        const now = new Date();
         
+        // Format date
+        const dateStr = startDate.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        
+        // Format time
+        const timeStr = startDate.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        // Determine status color
+        let statusColor = '';
+        let statusText = event.status;
+        
+        if (event.status === 'published') {
+            if (startDate > now) {
+                statusColor = 'background:#dcfce7; color:#166534;';
+                statusText = 'Upcoming';
+            } else if (endDate < now) {
+                statusColor = 'background:#f3f4f6; color:#6b7280;';
+                statusText = 'Past';
+            } else {
+                statusColor = 'background:#dbeafe; color:#1d4ed8;';
+                statusText = 'Ongoing';
+            }
+        } else if (event.status === 'draft') {
+            statusColor = 'background:#fef3c7; color:#92400e;';
+        } else if (event.status === 'cancelled') {
+            statusColor = 'background:#fee2e2; color:#dc2626;';
+        } else if (event.status === 'completed') {
+            statusColor = 'background:#f0fdf4; color:#166534;';
+        }
+        
+        // Truncate description if too long
+        const description = event.description || '';
+        const shortDesc = description.length > 100 
+            ? description.substring(0, 100) + '...' 
+            : description;
+        
+        html += `
+            <tr style="border-bottom:1px solid #e5e7eb; background:${event.status === 'draft' ? '#fefce8' : 'white'};">
+                <td style="padding:12px;">
+                    <div style="display:flex; align-items:start; gap:12px;">
+                        ${event.image_url ? `
+                            <img src="${event.image_url}" alt="${event.title}" 
+                                 style="width:60px; height:60px; object-fit:cover; border-radius:6px;">
+                        ` : `
+                            <div style="width:60px; height:60px; background:#e5e7eb; border-radius:6px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-calendar-alt text-gray-400"></i>
+                            </div>
+                        `}
+                        <div>
+                            <div style="font-weight:600; color:#1e293b; font-size:16px;">${event.title}</div>
+                            <div style="font-size:14px; color:#6b7280; margin-top:4px;">${shortDesc}</div>
+                        </div>
+                    </div>
+                </td>
+                <td style="padding:12px; color:#4b5563;">
+                    <div>${dateStr}</div>
+                    <div style="font-size:14px; color:#6b7280;">${timeStr}</div>
+                </td>
+                <td style="padding:12px;">
+                    <span style="padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600; display:inline-block; ${statusColor}">
+                        ${statusText}
+                    </span>
+                </td>
+                <td style="padding:12px; color:#4b5563; text-transform:capitalize;">
+                    ${event.event_type || 'N/A'}
+                </td>
+                <td style="padding:12px;">
+                    <div style="display:flex; gap:8px;">
+                        <button onclick="editEvent('${event.id}')" 
+                                style="padding:6px 12px; background:#3b82f6; color:white; border:none; border-radius:4px; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:4px;">
+                            <i class="fas fa-edit" style="font-size:10px;"></i> Edit
+                        </button>
+                        <button onclick="viewEventDetails('${event.id}')" 
+                                style="padding:6px 12px; background:#10b981; color:white; border:none; border-radius:4px; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:4px;">
+                            <i class="fas fa-eye" style="font-size:10px;"></i> View
+                        </button>
+                        <button onclick="deleteEvent('${event.id}')" 
+                                style="padding:6px 12px; background:#ef4444; color:white; border:none; border-radius:4px; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:4px;">
+                            <i class="fas fa-trash" style="font-size:10px;"></i> Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += `
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+// Show add event form
+function showAddEventForm() {
+    document.getElementById('eventModalTitle').textContent = 'Add New Event';
+    document.getElementById('eventId').value = '';
+    document.getElementById('eventForm').reset();
+    
+    // Set default values
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    // Format for datetime-local input (YYYY-MM-DDTHH:MM)
+    const formatDateTime = (date) => {
+        return date.toISOString().slice(0, 16);
+    };
+    
+    document.getElementById('eventStartDate').value = formatDateTime(tomorrow);
+    document.getElementById('eventEndDate').value = formatDateTime(new Date(tomorrow.getTime() + 2 * 60 * 60 * 1000)); // 2 hours later
+    document.getElementById('eventStatus').value = 'draft';
+    
+    document.getElementById('eventModal').style.display = 'flex';
+}
+
+// Edit event
+async function editEvent(eventId) {
+    try {
+        const event = await fetchFromSupabase('events', `?id=eq.${eventId}`);
+        
+        if (event && event[0]) {
+            const e = event[0];
+            document.getElementById('eventModalTitle').textContent = 'Edit Event';
+            document.getElementById('eventId').value = e.id;
+            document.getElementById('eventTitle').value = e.title;
+            document.getElementById('eventType').value = e.event_type;
+            document.getElementById('eventStartDate').value = e.start_date.substring(0, 16);
+            document.getElementById('eventEndDate').value = e.end_date.substring(0, 16);
+            document.getElementById('eventVenue').value = e.venue || '';
+            document.getElementById('eventDescription').value = e.description || '';
+            document.getElementById('eventFee').value = e.fee_amount || '';
+            document.getElementById('eventCurrency').value = e.fee_currency || 'KES';
+            document.getElementById('eventImageUrl').value = e.image_url || '';
+            document.getElementById('eventStatus').value = e.status;
+            document.getElementById('eventCategory').value = e.category || '';
+            
+            document.getElementById('eventModal').style.display = 'flex';
+        }
+    } catch (error) {
+        console.error('Error loading event:', error);
+        showNotification('Error loading event details', 'error');
+    }
+}
+
+// View event details
+async function viewEventDetails(eventId) {
+    try {
+        const event = await fetchFromSupabase('events', `?id=eq.${eventId}`);
+        
+        if (event && event[0]) {
+            const e = event[0];
+            const startDate = new Date(e.start_date);
+            const endDate = new Date(e.end_date);
+            
+            const detailsHtml = `
+                <div style="padding:20px;">
+                    <h3 style="font-size:24px; font-weight:bold; color:#1e293b; margin-bottom:20px;">${e.title}</h3>
+                    
+                    ${e.image_url ? `
+                        <img src="${e.image_url}" alt="${e.title}" 
+                             style="width:100%; height:200px; object-fit:cover; border-radius:8px; margin-bottom:20px;">
+                    ` : ''}
+                    
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+                        <div>
+                            <strong style="color:#4b5563;">Type:</strong>
+                            <div style="margin-top:4px;">${e.event_type || 'N/A'}</div>
+                        </div>
+                        <div>
+                            <strong style="color:#4b5563;">Category:</strong>
+                            <div style="margin-top:4px;">${e.category || 'N/A'}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+                        <div>
+                            <strong style="color:#4b5563;">Start Date:</strong>
+                            <div style="margin-top:4px;">${startDate.toLocaleString()}</div>
+                        </div>
+                        <div>
+                            <strong style="color:#4b5563;">End Date:</strong>
+                            <div style="margin-top:4px;">${endDate.toLocaleString()}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom:20px;">
+                        <strong style="color:#4b5563;">Venue:</strong>
+                        <div style="margin-top:4px; padding:10px; background:#f3f4f6; border-radius:6px;">${e.venue || 'N/A'}</div>
+                    </div>
+                    
+                    <div style="margin-bottom:20px;">
+                        <strong style="color:#4b5563;">Fee:</strong>
+                        <div style="margin-top:4px;">
+                            ${e.fee_amount ? `${e.fee_amount} ${e.fee_currency || 'KES'}` : 'Free'}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom:20px;">
+                        <strong style="color:#4b5563;">Description:</strong>
+                        <div style="margin-top:4px; padding:15px; background:#f8fafc; border-radius:6px; white-space:pre-wrap;">
+                            ${e.description || 'No description'}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom:20px;">
+                        <strong style="color:#4b5563;">Status:</strong>
+                        <span style="padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600; display:inline-block; 
+                               ${getStatusColor(e.status)}">
+                            ${e.status.charAt(0).toUpperCase() + e.status.slice(1)}
+                        </span>
+                    </div>
+                    
+                    <div style="margin-top:30px; display:flex; justify-content:center;">
+                        <button onclick="editEvent('${e.id}')" 
+                                style="padding:10px 20px; background:#3b82f6; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
+                            <i class="fas fa-edit mr-2"></i>Edit Event
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Create modal for details
+            const modalHtml = `
+                <div id="eventDetailsModal" style="display:flex; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+                    <div style="background:white; border-radius:12px; width:90%; max-width:600px; max-height:90vh; overflow-y:auto;">
+                        <div style="padding:20px; border-bottom:1px solid #e5e7eb; display:flex; justify-content:space-between; align-items:center;">
+                            <h3 style="font-size:20px; font-weight:600;">Event Details</h3>
+                            <button onclick="document.getElementById('eventDetailsModal').remove()" 
+                                    style="background:none; border:none; font-size:24px; color:#6b7280; cursor:pointer;">×</button>
+                        </div>
+                        ${detailsHtml}
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+    } catch (error) {
+        console.error('Error viewing event:', error);
+        showNotification('Error loading event details', 'error');
+    }
+}
+
+// Get status color for styling
+function getStatusColor(status) {
+    const colors = {
+        'draft': 'background:#fef3c7; color:#92400e;',
+        'published': 'background:#dbeafe; color:#1d4ed8;',
+        'cancelled': 'background:#fee2e2; color:#dc2626;',
+        'completed': 'background:#f0fdf4; color:#166534;'
+    };
+    return colors[status] || 'background:#f3f4f6; color:#6b7280;';
+}
+
+// Close event modal
+function closeEventModal() {
+    document.getElementById('eventModal').style.display = 'none';
+}
+
+// Handle event form submission
+async function handleEventFormSubmit(event) {
+    event.preventDefault();
+    
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+    submitBtn.disabled = true;
+    
+    const formData = new FormData(event.target);
+    const eventData = {
+        title: formData.get('title'),
+        event_type: formData.get('eventType'),
+        start_date: formData.get('startDate'),
+        end_date: formData.get('endDate'),
+        venue: formData.get('venue'),
+        description: formData.get('description'),
+        fee_amount: formData.get('fee') ? parseFloat(formData.get('fee')) : null,
+        fee_currency: formData.get('currency') || 'KES',
+        image_url: formData.get('imageUrl'),
+        status: formData.get('status'),
+        category: formData.get('category'),
+        updated_at: new Date().toISOString()
+    };
+    
+    // Convert empty strings to null for database
+    Object.keys(eventData).forEach(key => {
+        if (eventData[key] === '') {
+            eventData[key] = null;
+        }
+    });
+    
+    const eventId = document.getElementById('eventId').value;
+    
+    try {
+        let result;
+        
+        if (eventId) {
+            // Update existing event
+            result = await updateInSupabase('events', eventId, eventData);
+            showNotification('Event updated successfully!', 'success');
+        } else {
+            // Create new event
+            eventData.created_at = new Date().toISOString();
+            result = await insertIntoSupabase('events', eventData);
+            showNotification('Event created successfully!', 'success');
+        }
+        
+        closeEventModal();
+        loadEventsList();
+    } catch (error) {
+        console.error('Error saving event:', error);
+        showNotification('Error saving event. Please try again.', 'error');
+    } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+}
+
+// Delete event with confirmation
+async function deleteEvent(eventId) {
+    if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+        return;
+    }
+    
+    try {
+        await deleteFromSupabase('events', eventId);
+        showNotification('Event deleted successfully!', 'success');
+        loadEventsList();
+    } catch (error) {
+        console.error('Error deleting event:', error);
+        showNotification('Error deleting event. Please try again.', 'error');
+    }
+}
+
+// Filter events
+function filterEvents() {
+    const filter = document.getElementById('eventFilter').value;
+    const search = document.getElementById('eventSearch').value.toLowerCase();
+    
+    let filteredEvents = [...currentEvents];
+    
+    // Apply filter
+    if (filter !== 'all') {
+        const now = new Date();
+        filteredEvents = filteredEvents.filter(event => {
+            const startDate = new Date(event.start_date);
+            const endDate = new Date(event.end_date);
+            
+            switch (filter) {
+                case 'upcoming':
+                    return event.status === 'published' && startDate > now;
+                case 'published':
+                    return event.status === 'published';
+                case 'draft':
+                    return event.status === 'draft';
+                case 'past':
+                    return endDate < now;
+                default:
+                    return true;
+            }
+        });
+    }
+    
+    // Apply search
+    if (search) {
+        filteredEvents = filteredEvents.filter(event => 
+            event.title.toLowerCase().includes(search) ||
+            (event.description && event.description.toLowerCase().includes(search)) ||
+            (event.venue && event.venue.toLowerCase().includes(search))
+        );
+    }
+    
+    renderEventsTable(filteredEvents);
+}
+
+// Refresh events list
+function refreshEventsList() {
+    loadEventsList();
+}
+
+// Load events page settings
+async function loadEventsPageSettings() {
+    try {
+        // Load saved HTML template
+        const savedHtml = await fetchFromSupabase('settings', '?key=eq.events_page_html');
+        
+        if (savedHtml && savedHtml[0]) {
+            document.getElementById('eventsHtmlEditor').value = savedHtml[0].value || '';
+            currentEventHtml = savedHtml[0].value || '';
+        }
+        
+        // Load page settings
+        const settings = await fetchFromSupabase('settings', '?key=eq.events_page_settings');
+        if (settings && settings[0]) {
+            eventsPageSettings = JSON.parse(settings[0].value || '{}');
+            
+            // Populate form fields
+            document.getElementById('eventsPageTitle').value = eventsPageSettings.pageTitle || 'KESNNUR Events';
+            document.getElementById('eventsHeroTitle').value = eventsPageSettings.heroTitle || 'KESNNUR Events';
+            document.getElementById('eventsHeroDesc').value = eventsPageSettings.heroDescription || 'Join our upcoming events and training sessions';
+        } else {
+            // Set defaults
+            eventsPageSettings = {
+                pageTitle: 'KESNNUR Events',
+                heroTitle: 'KESNNUR Events',
+                heroDescription: 'Join our upcoming events and training sessions'
+            };
+        }
+        
+        // Load events for HTML generation
+        const events = await fetchFromSupabase('events', '?order=start_date.desc&limit=50');
+        currentEvents = events || [];
+        
+        // Generate default HTML if editor is empty
+        if (!document.getElementById('eventsHtmlEditor').value.trim() && events.length > 0) {
+            generateDefaultEventsHtml(events);
+        }
+        
+    } catch (error) {
+        console.error('Error loading events page settings:', error);
+        showNotification('Error loading page settings', 'error');
+    }
+}
+
+// Generate default events HTML
+function generateDefaultEventsHtml(events) {
+    const now = new Date();
+    const upcomingEvents = events.filter(e => {
+        const startDate = new Date(e.start_date);
+        return e.status === 'published' && startDate > now;
+    });
+    
+    const pastEvents = events.filter(e => {
+        const endDate = new Date(e.end_date);
+        return endDate < now;
+    });
+    
+    const defaultHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${eventsPageSettings.pageTitle || 'KESNNUR Events'}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #1e293b; }
+        
+        /* Header Styles */
+        .events-header { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; padding: 60px 20px; text-align: center; }
+        .events-header h1 { font-size: 3rem; font-weight: 700; margin-bottom: 20px; }
+        .events-header p { font-size: 1.2rem; max-width: 600px; margin: 0 auto 30px; opacity: 0.9; }
+        
+        /* Container */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Event Cards */
+        .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; margin: 40px 0; }
+        .event-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .event-card:hover { transform: translateY(-5px); }
+        .event-image { height: 200px; width: 100%; object-fit: cover; }
+        .event-content { padding: 25px; }
+        .event-date { display: flex; align-items: center; color: #3b82f6; font-weight: 600; margin-bottom: 10px; }
+        .event-date i { margin-right: 8px; }
+        .event-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; color: #1e293b; }
+        .event-desc { color: #64748b; margin-bottom: 20px; line-height: 1.6; }
+        .event-details { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .event-type { background: #f0f9ff; color: #0369a1; padding: 6px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; }
+        .event-fee { font-weight: 700; color: #059669; }
+        
+        /* Sections */
+        .section-title { font-size: 2rem; font-weight: 700; margin: 60px 0 30px; text-align: center; }
+        .no-events { text-align: center; padding: 40px; color: #64748b; }
+        
+        /* Calendar */
+        .calendar-section { background: #f8fafc; padding: 60px 20px; border-radius: 20px; margin: 40px 0; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .events-grid { grid-template-columns: 1fr; }
+            .events-header h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="events-header">
+        <div class="container">
+            <h1>${eventsPageSettings.heroTitle || 'KESNNUR Events'}</h1>
+            <p>${eventsPageSettings.heroDescription || 'Join our upcoming events and training sessions'}</p>
+            <div style="margin-top: 30px;">
+                <button style="background: white; color: #1e3a8a; border: none; padding: 12px 30px; border-radius: 30px; font-weight: 600; font-size: 1rem; cursor: pointer; margin-right: 15px;">
+                    View Calendar
+                </button>
+                <button style="background: transparent; color: white; border: 2px solid white; padding: 12px 30px; border-radius: 30px; font-weight: 600; font-size: 1rem; cursor: pointer;">
+                    Suggest Event
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Upcoming Events -->
+        <section>
+            <h2 class="section-title">Upcoming Events</h2>
+            ${upcomingEvents.length > 0 ? `
+                <div class="events-grid">
+                    ${upcomingEvents.map(event => `
+                        <div class="event-card">
+                            ${event.image_url ? `
+                                <img src="${event.image_url}" alt="${event.title}" class="event-image">
+                            ` : `
+                                <div style="background: linear-gradient(135deg, #3b82f6, #1e3a8a); height: 200px; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                            `}
+                            <div class="event-content">
+                                <div class="event-date">
+                                    <i class="fas fa-calendar"></i>
+                                    ${new Date(event.start_date).toLocaleDateString('en-US', { 
+                                        weekday: 'short', 
+                                        month: 'short', 
+                                        day: 'numeric',
+                                        year: 'numeric' 
+                                    })}
+                                </div>
+                                <h3 class="event-title">${event.title}</h3>
+                                <p class="event-desc">${event.description ? event.description.substring(0, 150) + '...' : 'No description available'}</p>
+                                <div class="event-details">
+                                    <span class="event-type">${event.event_type || 'Event'}</span>
+                                    <span class="event-fee">${event.fee_amount ? `${event.fee_amount} ${event.fee_currency || 'KES'}` : 'Free'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            ` : `
+                <div class="no-events">
+                    <i class="fas fa-calendar-times" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 20px;"></i>
+                    <h3>No upcoming events scheduled</h3>
+                    <p>Check back soon for new events!</p>
+                </div>
+            `}
+        </section>
+
+        <!-- Past Events -->
+        ${pastEvents.length > 0 ? `
+            <section>
+                <h2 class="section-title">Past Events</h2>
+                <div class="events-grid">
+                    ${pastEvents.slice(0, 6).map(event => `
+                        <div class="event-card" style="opacity: 0.8;">
+                            ${event.image_url ? `
+                                <img src="${event.image_url}" alt="${event.title}" class="event-image" style="filter: grayscale(30%);">
+                            ` : `
+                                <div style="background: #e5e7eb; height: 200px; display: flex; align-items: center; justify-content: center; color: #6b7280; font-size: 3rem;">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                            `}
+                            <div class="event-content">
+                                <div class="event-date" style="color: #6b7280;">
+                                    <i class="fas fa-calendar"></i>
+                                    ${new Date(event.start_date).toLocaleDateString('en-US', { 
+                                        month: 'short', 
+                                        day: 'numeric',
+                                        year: 'numeric' 
+                                    })}
+                                </div>
+                                <h3 class="event-title">${event.title}</h3>
+                                <p class="event-desc">${event.description ? event.description.substring(0, 100) + '...' : 'No description available'}</p>
+                                <div class="event-details">
+                                    <span class="event-type" style="background: #f3f4f6; color: #6b7280;">${event.event_type || 'Event'}</span>
+                                    <span style="color: #6b7280; font-style: italic;">Completed</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </section>
+        ` : ''}
+
+        <!-- CTA Section -->
+        <section style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 60px; border-radius: 20px; text-align: center; margin: 60px 0;">
+            <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 20px;">Want to Host an Event?</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Partner with KESNNUR to organize training, workshops, or conferences.
+            </p>
+            <button style="background: white; color: #059669; border: none; padding: 15px 40px; border-radius: 30px; font-weight: 700; font-size: 1.1rem; cursor: pointer;">
+                Contact Us About Events
+            </button>
+        </section>
+    </main>
+
+    <footer style="background: #1e293b; color: white; padding: 60px 20px; text-align: center;">
+        <div class="container">
+            <h3 style="font-size: 1.8rem; margin-bottom: 20px;">KESNNUR Events</h3>
+            <p style="color: #cbd5e1; max-width: 600px; margin: 0 auto 30px;">
+                Professional training and events for nursing and research professionals.
+            </p>
+            <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 30px;">
+                <a href="#" style="color: white; text-decoration: none;">
+                    <i class="fab fa-facebook fa-2x"></i>
+                </a>
+                <a href="#" style="color: white; text-decoration: none;">
+                    <i class="fab fa-twitter fa-2x"></i>
+                </a>
+                <a href="#" style="color: white; text-decoration: none;">
+                    <i class="fab fa-linkedin fa-2x"></i>
+                </a>
+                <a href="#" style="color: white; text-decoration: none;">
+                    <i class="fab fa-instagram fa-2x"></i>
+                </a>
+            </div>
+            <p style="color: #94a3b8; font-size: 0.9rem;">
+                &copy; ${new Date().getFullYear()} KESNNUR. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handlers to event cards
+            document.querySelectorAll('.event-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    alert('Event details would open here');
+                });
+            });
+            
+            // Update current year in footer
+            document.querySelector('footer p').innerHTML = 
+                '&copy; ' + new Date().getFullYear() + ' KESNNUR. All rights reserved.';
+        });
+    </script>
+</body>
+</html>`;
+    
+    document.getElementById('eventsHtmlEditor').value = defaultHtml;
+    currentEventHtml = defaultHtml;
+}
+
+// Save events HTML
+async function saveEventsHtml() {
+    const htmlContent = document.getElementById('eventsHtmlEditor').value.trim();
+    
+    if (!htmlContent) {
+        showNotification('Please enter some HTML content', 'error');
+        return;
+    }
+    
+    try {
+        const result = await insertOrUpdateSupabase('settings', {
+            key: 'events_page_html',
+            value: htmlContent,
+            updated_at: new Date().toISOString()
+        }, 'key');
+        
+        currentEventHtml = htmlContent;
+        showNotification('HTML saved successfully!', 'success');
+        
+        // Also update the events.html file
+        await updateEventsPageFile(htmlContent);
+    } catch (error) {
+        console.error('Error saving HTML:', error);
+        showNotification('Error saving HTML. Please try again.', 'error');
+    }
+}
+
+// Save events page settings
+async function saveEventsPageSettings() {
+    const pageSettings = {
+        pageTitle: document.getElementById('eventsPageTitle').value,
+        heroTitle: document.getElementById('eventsHeroTitle').value,
+        heroDescription: document.getElementById('eventsHeroDesc').value,
+        updated_at: new Date().toISOString()
+    };
+    
+    try {
+        await insertOrUpdateSupabase('settings', {
+            key: 'events_page_settings',
+            value: JSON.stringify(pageSettings),
+            updated_at: new Date().toISOString()
+        }, 'key');
+        
+        eventsPageSettings = pageSettings;
+        showNotification('Page settings saved successfully!', 'success');
+    } catch (error) {
+        console.error('Error saving page settings:', error);
+        showNotification('Error saving settings. Please try again.', 'error');
+    }
+}
+
+// Update events.html file
+async function updateEventsPageFile(htmlContent) {
+    try {
+        // This function would typically save the HTML to an actual file
+        // For now, we'll just update the preview
+        console.log('Events page HTML updated:', htmlContent.length, 'characters');
+        
+        // In a real implementation, you might:
+        // 1. Save to a local file using a server-side endpoint
+        // 2. Update a template in your static site generator
+        // 3. Push to a Git repository
+        
+        showNotification('Events page updated (preview only - file not saved)', 'info');
+    } catch (error) {
+        console.error('Error updating events page file:', error);
+        showNotification('Error updating page file', 'error');
+    }
+}
+
+// Load HTML section
+function loadHtmlSection(section) {
+    const editor = document.getElementById('eventsHtmlEditor');
+    const currentHtml = editor.value;
+    
+    // Extract section from current HTML
+    let sectionHtml = '';
+    
+    switch (section) {
+        case 'hero':
+            sectionHtml = extractHtmlSection(currentHtml, 'events-header');
+            break;
+        case 'calendar':
+            sectionHtml = extractHtmlSection(currentHtml, 'calendar-section');
+            break;
+        case 'upcoming':
+            sectionHtml = extractHtmlSection(currentHtml, 'Upcoming Events');
+            break;
+        case 'past':
+            sectionHtml = extractHtmlSection(currentHtml, 'Past Events');
+            break;
+        case 'cta':
+            sectionHtml = extractHtmlSection(currentHtml, 'Want to Host an Event');
+            break;
+        case 'footer':
+            sectionHtml = extractHtmlSection(currentHtml, '<footer');
+            break;
+        default:
+            editor.value = currentEventHtml;
+            return;
+    }
+    
+    if (sectionHtml) {
+        editor.value = sectionHtml;
+    } else {
+        showNotification(`Section "${section}" not found in current HTML`, 'warning');
+    }
+}
+
+// Extract HTML section
+function extractHtmlSection(html, identifier) {
+    if (identifier.startsWith('<')) {
+        // Tag-based extraction
+        const startIndex = html.indexOf(identifier);
+        if (startIndex === -1) return '';
+        
+        let depth = 0;
+        let endIndex = startIndex;
+        const tagName = identifier.match(/<(\w+)/)[1];
+        
+        for (let i = startIndex; i < html.length; i++) {
+            if (html.substring(i, i + tagName.length + 2) === `<${tagName}`) {
+                depth++;
+            } else if (html.substring(i, i + tagName.length + 3) === `</${tagName}`) {
+                depth--;
+                if (depth === 0) {
+                    endIndex = i + tagName.length + 3;
+                    break;
+                }
+            }
+        }
+        
+        return html.substring(startIndex, endIndex);
+    } else {
+        // Text-based extraction
+        const startIndex = html.indexOf(`<!-- ${identifier} -->`) !== -1 
+            ? html.indexOf(`<!-- ${identifier} -->`)
+            : html.indexOf(`<h2[^>]*>${identifier}</h2>`);
+        
+        if (startIndex === -1) return '';
+        
+        // Find the next section
+        const nextSection = html.indexOf('<h2 class="section-title"', startIndex + 1);
+        if (nextSection !== -1) {
+            return html.substring(startIndex, nextSection);
+        }
+        
+        return html.substring(startIndex);
+    }
+}
+
+// Load selected HTML section
+function loadSelectedHtmlSection() {
+    const section = document.getElementById('htmlSectionSelect').value;
+    if (section === 'full') {
+        document.getElementById('eventsHtmlEditor').value = currentEventHtml;
+    } else if (section) {
+        loadHtmlSection(section);
+    }
+}
+
+// Load current events HTML
+function loadCurrentEventsHtml() {
+    const events = currentEvents;
+    generateDefaultEventsHtml(events);
+}
+
+// Preview events HTML
+function previewEventsHtml() {
+    const htmlContent = document.getElementById('eventsHtmlEditor').value;
+    
+    // Create a blob and URL for the HTML content
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    
+    // Open in new tab
+    window.open(url, '_blank');
+    
+    // Also show in preview modal
+    document.getElementById('htmlPreviewContent').textContent = htmlContent;
+    document.getElementById('htmlPreviewModal').style.display = 'flex';
+}
+
+// Close HTML preview modal
+function closeHtmlPreviewModal() {
+    document.getElementById('htmlPreviewModal').style.display = 'none';
+}
+
+// Reset events HTML to default
+function resetEventsHtml() {
+    if (confirm('Are you sure you want to reset the HTML to default? This will overwrite your current changes.')) {
+        generateDefaultEventsHtml(currentEvents);
+        showNotification('HTML reset to default', 'info');
+    }
+}
+
+// Refresh events preview
+function refreshEventsPreview() {
+    const previewFrame = document.getElementById('eventsPreviewFrame');
+    previewFrame.src = previewFrame.src; // Reload the iframe
+}
+
+// Open events page
+function openEventsPage() {
+    window.location.href = 'events.html';
+}
+
+// Open events page in new tab
+function openEventsPageNewTab() {
+    window.open('events.html', '_blank');
+}
+
+// Initialize events page when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Set up event form submission
+    const eventForm = document.getElementById('eventForm');
+    if (eventForm) {
+        eventForm.addEventListener('submit', handleEventFormSubmit);
+    }
+    
+    // Set up search input
+    const eventSearch = document.getElementById('eventSearch');
+    if (eventSearch) {
+        eventSearch.addEventListener('input', filterEvents);
+    }
+    
+    // Show manage tab by default
+    showEventsTab('manage');
+});
       // Load blog section settings
 async function loadBlogSectionSettings() {
     try {
