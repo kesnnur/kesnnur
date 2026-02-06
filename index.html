@@ -654,24 +654,73 @@
     // LOAD DATA FUNCTIONS
     // ============================================
 
-    async function loadStats() {
-        try {
-            const [regions, events, members] = await Promise.all([
-                fetchFromSupabase(TABLES.REGIONS, '?select=count'),
-                fetchFromSupabase(TABLES.EVENTS, '?status=eq.upcoming&select=count'),
-                fetchFromSupabase(TABLES.MEMBERS, '?membership_status=eq.active&select=count')
-            ]);
+   async function loadStats() {
+    console.log('Loading stats from CMS...');
+    
+    try {
+        // FIRST: Try to load from system_settings (where your CMS saves)
+        const cmsResponse = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/system_settings?category=eq.home_page`, {
+            headers: {
+                'apikey': CONFIG.SUPABASE_KEY,
+                'Authorization': `Bearer ${CONFIG.SUPABASE_KEY}`,
+                'Accept': 'application/json'
+            }
+        });
+        
+        // If CMS data exists, use it
+        if (cmsResponse.ok) {
+            const cmsData = await cmsResponse.json();
             
-            document.getElementById('membersCount').textContent = 
-                (members && members[0] ? members[0].count : 1500) + '+';
-            document.getElementById('eventsCount').textContent = 
-                (events && events[0] ? events[0].count : 50) + '+';
-            document.getElementById('regionsCount').textContent = 
-                regions && regions[0] ? regions[0].count : 24;
-        } catch (error) {
-            console.log('Using default stats');
+            if (cmsData && cmsData.length > 0) {
+                console.log('✅ Found CMS settings, using them');
+                
+                // Find CMS settings
+                let membersCount = '1,500+';
+                let eventsCount = '50+';
+                let regionsCount = '24';
+                
+                cmsData.forEach(item => {
+                    if (item.setting_key === 'stat_members') {
+                        membersCount = item.setting_value || '1,500+';
+                    } else if (item.setting_key === 'stat_events') {
+                        eventsCount = item.setting_value || '50+';
+                    } else if (item.setting_key === 'stat_partners') {
+                        regionsCount = item.setting_value || '24';
+                    }
+                });
+                
+                // Update the page with CMS data
+                document.getElementById('membersCount').textContent = membersCount;
+                document.getElementById('eventsCount').textContent = eventsCount;
+                document.getElementById('regionsCount').textContent = regionsCount;
+                
+                return; // Stop here - we used CMS data
+            }
         }
+        
+        // FALLBACK: If no CMS data, use your original code
+        console.log('No CMS data found, using original database tables');
+        const [regions, events, members] = await Promise.all([
+            fetchFromSupabase(TABLES.REGIONS, '?select=count'),
+            fetchFromSupabase(TABLES.EVENTS, '?status=eq.upcoming&select=count'),
+            fetchFromSupabase(TABLES.MEMBERS, '?membership_status=eq.active&select=count')
+        ]);
+        
+        document.getElementById('membersCount').textContent = 
+            (members && members[0] ? members[0].count : 1500) + '+';
+        document.getElementById('eventsCount').textContent = 
+            (events && events[0] ? events[0].count : 50) + '+';
+        document.getElementById('regionsCount').textContent = 
+            regions && regions[0] ? regions[0].count : 24;
+            
+    } catch (error) {
+        console.log('Error loading stats, using defaults');
+        // Use defaults if everything fails
+        document.getElementById('membersCount').textContent = '1,500+';
+        document.getElementById('eventsCount').textContent = '50+';
+        document.getElementById('regionsCount').textContent = '24';
     }
+}
 
     async function loadReviews() {
         const container = document.getElementById('reviewsContainer');
