@@ -1144,22 +1144,254 @@
     </div>
 
     <!-- JavaScript -->
+   !-- JavaScript -->
     <script>
-        // ================== GLOBAL VARIABLES ==================
-        let cmsSupabase = null;
-        let aboutHistoryEditor = null;
-        let currentUser = null;
+            // ================== SUPABASE HELPER FUNCTIONS ==================
+    
+    // Universal fetch function for Supabase
+    async function fetchFromSupabase(table, query = '') {
+        const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
         
-    // ================== INITIALIZATION ==================
+        try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}${query}`, {
+                method: 'GET',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Supabase fetch failed: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error(`Error fetching from ${table}:`, error);
+            throw error;
+        }
+    }
+    
+    // Insert into Supabase
+    async function insertIntoSupabase(table, data) {
+        const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+        
+        try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                },
+                body: JSON.stringify(data)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Supabase insert failed: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error(`Error inserting into ${table}:`, error);
+            throw error;
+        }
+    }
+    
+    // Update in Supabase
+    async function updateInSupabase(table, id, data) {
+        const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+        
+        try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                },
+                body: JSON.stringify(data)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Supabase update failed: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error(`Error updating in ${table}:`, error);
+            throw error;
+        }
+    }
+    
+    // Delete from Supabase
+    async function deleteFromSupabase(table, id) {
+        const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+        
+        try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Prefer': 'return=representation'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Supabase delete failed: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error(`Error deleting from ${table}:`, error);
+            throw error;
+        }
+    }
+    
+    // Notification function
+    function showNotification(message, type = 'info') {
+        alert(message); // Simple alert for now
+    }
+    
+    // ================== AUTHENTICATION FUNCTIONS ==================
+    
+    // cmsLogin function - MUST BE DEFINED BEFORE HTML BUTTON REFERENCES IT
+    function cmsLogin() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        
+        console.log("Login attempt for:", email);
+        
+        try {
+            // Default credentials check
+            const DEFAULT_EMAIL = "admin@kesnnur.org";
+            const DEFAULT_PASSWORD = "kesnnur2024";
+            
+            if (email === DEFAULT_EMAIL && password === DEFAULT_PASSWORD) {
+                currentUser = {
+                    id: 'admin-001',
+                    email: email,
+                    user_metadata: { name: 'KESNNUR Admin' },
+                    role: 'super_admin'
+                };
+                
+                localStorage.setItem('cmsUser', JSON.stringify(currentUser));
+                showCMS();
+                alert("Welcome SUPER ADMIN!");
+                return;
+            }
+            
+            alert('Please use default credentials:\n\nEmail: admin@kesnnur.org\nPassword: kesnnur2024');
+            
+        } catch (error) {
+            console.error('Login error:', error);
+            alert('Login error. Please try again.');
+        }
+    }
+    // ================== GLOBAL VARIABLES ==================
+    let cmsSupabase = null;
+    let aboutHistoryEditor = null;
+    let currentUser = null;
+// ================== AUTHENTICATION FUNCTIONS ==================
+
+// cmsLogin function - MUST BE DEFINED BEFORE HTML BUTTON REFERENCES IT
+function cmsLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    
+    console.log("Login attempt for:", email);
+    
+    try {
+        // Default credentials check
+        const DEFAULT_EMAIL = "admin@kesnnur.org";
+        const DEFAULT_PASSWORD = "kesnnur2024";
+        
+        if (email === DEFAULT_EMAIL && password === DEFAULT_PASSWORD) {
+            currentUser = {
+                id: 'admin-001',
+                email: email,
+                user_metadata: { name: 'KESNNUR Admin' },
+                role: 'super_admin'
+            };
+            
+            localStorage.setItem('cmsUser', JSON.stringify(currentUser));
+            showCMS();
+            alert("Welcome SUPER ADMIN!");
+            return;
+        }
+        
+        // If Supabase is initialized, try proper auth
+        if (cmsSupabase && cmsSupabase.auth) {
+            cmsSupabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            }).then(({ data, error }) => {
+                if (!error && data.user) {
+                    currentUser = data.user;
+                    localStorage.setItem('cmsUser', JSON.stringify(currentUser));
+                    showCMS();
+                    alert("Login successful!");
+                } else {
+                    alert('Login failed. Please check credentials.');
+                }
+            }).catch(error => {
+                console.error('Auth error:', error);
+                alert('Login error. Using default credentials?\n\nDefault:\nEmail: admin@kesnnur.org\nPassword: kesnnur2024');
+            });
+        } else {
+            alert('Please use default credentials:\n\nEmail: admin@kesnnur.org\nPassword: kesnnur2024');
+        }
+        
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('Login error. Please try again.');
+    }
+}
+
+// cmsLogout function
+function cmsLogout() {
+    if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('cmsUser');
+        currentUser = null;
+        
+        // Try Supabase logout
+        if (cmsSupabase && cmsSupabase.auth) {
+            cmsSupabase.auth.signOut();
+        }
+        
+        showLogin();
+    }
+}
+
+function showLogin() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('cmsDashboard').style.display = 'none';
+}
+
+function showCMS() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('cmsDashboard').style.display = 'block';
+    
+    // Load home page
+    loadHomePage();
+}
+
+// ================== INITIALIZATION ==================
 document.addEventListener('DOMContentLoaded', function() {
     console.log("KESNNUR CMS Initializing...");
     
-    // Initialize Supabase (ONLY ONCE!)
-    if (!cmsSupabase) {
-        const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
-        cmsSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    }
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+    cmsSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     
     // Check if already logged in
     const savedUser = localStorage.getItem('cmsUser');
@@ -1196,145 +1428,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add event listeners for blog tab
     addBlogTabListeners();
 });
-
-// ================== BLOG TAB FUNCTIONS ==================
-
-function initializeBlogTab() {
-    console.log("Initializing blog tab...");
-    
-    // Load blog settings when blog tab is shown
-    const blogTab = document.getElementById('blogTab');
-    if (blogTab) {
-        blogTab.addEventListener('click', function() {
-            setTimeout(() => {
-                loadBlogSectionSettings();
-            }, 100);
-        });
-    }
-}
-
-function addBlogTabListeners() {
-    // Add click listeners for blog tab buttons
-    document.addEventListener('click', function(e) {
-        // Check if blog tab is active and handle button clicks
-        const blogTab = document.getElementById('homeBlogTab');
-        if (blogTab && blogTab.style.display !== 'none') {
-            // Handle button clicks within blog tab
-            if (e.target.matches('[onclick*="showAddBlogPostModal"]') || 
-                e.target.closest('[onclick*="showAddBlogPostModal"]')) {
-                showAddBlogPostModal();
-            }
-            else if (e.target.matches('[onclick*="closeAddBlogPostModal"]') || 
-                     e.target.closest('[onclick*="closeAddBlogPostModal"]')) {
-                closeAddBlogPostModal();
-            }
-            else if (e.target.matches('[onclick*="createBlogPost"]') || 
-                     e.target.closest('[onclick*="createBlogPost"]')) {
-                createBlogPost();
-            }
-        }
-    });
-}
-
-        
-        // ================== AUTHENTICATION ==================
-        async function cmsLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            
-            console.log("Login attempt for:", email);
-            
-            try {
-                // Check if user exists in profiles table with super_admin role
-                const { data: profile, error: profileError } = await cmsSupabase
-                    .from('profiles')
-                    .select('id, email, first_name, last_name, role, status')
-                    .eq('email', email)
-                    .eq('role', 'super_admin')
-                    .single();
-                
-                if (profileError || !profile) {
-                    alert('Access denied. SUPER ADMIN account not found.');
-                    return;
-                }
-                
-                // Default password check (for now)
-                const DEFAULT_PASSWORD = "kesnnur2024";
-                
-                if (password === DEFAULT_PASSWORD) {
-                    currentUser = {
-                        id: profile.id,
-                        email: profile.email,
-                        user_metadata: { 
-                            name: profile.first_name + ' ' + profile.last_name
-                        },
-                        role: profile.role,
-                        profile: profile
-                    };
-                    
-                    localStorage.setItem('cmsUser', JSON.stringify(currentUser));
-                    showCMS();
-                    alert("Welcome SUPER ADMIN!");
-                    return;
-                }
-                
-                // Try Supabase Auth as fallback
-                try {
-                    const { data: authData, error: authError } = await cmsSupabase.auth.signInWithPassword({
-                        email: email,
-                        password: password
-                    });
-                    
-                    if (!authError && authData.user) {
-                        currentUser = {
-                            ...authData.user,
-                            profile: profile,
-                            role: profile.role
-                        };
-                        
-                        localStorage.setItem('cmsUser', JSON.stringify(currentUser));
-                        showCMS();
-                        alert("Welcome SUPER ADMIN!");
-                        return;
-                    }
-                } catch (authError) {
-                    console.log("Supabase auth failed");
-                }
-                
-                alert('Incorrect password. Try: ' + DEFAULT_PASSWORD);
-                
-            } catch (error) {
-                console.error('Login error:', error);
-                alert('Login error: ' + error.message);
-            }
-        }
-        
-        function cmsLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem('cmsUser');
-                currentUser = null;
-                
-                // Try Supabase logout
-                if (cmsSupabase && cmsSupabase.auth) {
-                    cmsSupabase.auth.signOut();
-                }
-                
-                showLogin();
-            }
-        }
-        
-        function showLogin() {
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('cmsDashboard').style.display = 'none';
-        }
-        
-        function showCMS() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('cmsDashboard').style.display = 'block';
-            
-            // Load home page
-            loadHomePage();
-        }
         
         // ================== NAVIGATION ==================
         function showSection(sectionId) {
@@ -4238,11 +4331,13 @@ async function createBlogPost() {
     };
     
     try {
-        const response = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/blog_posts`, {
+           const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/blog_posts`, {
             method: 'POST',
             headers: {
-                'apikey': CONFIG.SUPABASE_KEY,
-                'Authorization': `Bearer ${CONFIG.SUPABASE_KEY}`,
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
                 'Content-Type': 'application/json',
                 'Prefer': 'return=representation'
             },
