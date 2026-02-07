@@ -5,38 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Resources - KESNNUR | Kenya Students & Novice Nurses</title>
     
-    <!-- Meta Description for SEO -->
+    <!-- Meta tags -->
     <meta name="description" content="Access nursing resources, research papers, guidelines, and learning materials from KESNNUR - Kenya's largest community for nursing students and novice nurses.">
-    
-    <!-- Keywords for SEO -->
     <meta name="keywords" content="KESNNUR resources, nursing guidelines, research papers, nursing templates, nursing education, Kenya nurses, nursing students">
-    
-    <!-- Author -->
     <meta name="author" content="KESNNUR">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://kesnnur.nnak.or.ke/resources.html">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://kesnnur.nnak.or.ke/resources.html">
     <meta property="og:title" content="Resources - KESNNUR | Nursing Resources & Materials">
-    <meta property="og:description" content="Access nursing resources, research papers, guidelines, and learning materials from KESNNUR.">
-    <meta property="og:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://kesnnur.nnak.or.ke/resources.html">
-    <meta property="twitter:title" content="Resources - KESNNUR | Nursing Resources & Materials">
-    <meta property="twitter:description" content="Access nursing resources, research papers, guidelines, and learning materials from KESNNUR.">
-    <meta property="twitter:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
-    
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#1e3a8a">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
-    <link rel="apple-touch-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -60,6 +33,15 @@
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase with your credentials
+        const supabaseUrl = 'https://noadhwqvaxajuckpibbo.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+        const supabase = window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    </script>
     
     <!-- Custom Styles -->
     <style>
@@ -91,7 +73,6 @@
         body {
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            padding-top: 0; /* Removed top padding since no top logo */
         }
         
         .font-display {
@@ -140,6 +121,21 @@
         .filter-btn.active {
             background-color: #1e3a8a;
             color: white;
+        }
+        
+        /* Loading animation */
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1e3a8a;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -240,31 +236,31 @@
             </div>
         </section>
 
-        <!-- Stats Section -->
+        <!-- Stats Section - Dynamic -->
         <section class="py-12 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
             <div class="container mx-auto px-4">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                     <div>
-                        <div class="text-4xl md:text-5xl font-bold mb-2">200+</div>
+                        <div class="text-4xl md:text-5xl font-bold mb-2" id="totalResourcesCount">0</div>
                         <div class="text-blue-200">Resources</div>
                     </div>
                     <div>
-                        <div class="text-4xl md:text-5xl font-bold mb-2">50+</div>
+                        <div class="text-4xl md:text-5xl font-bold mb-2" id="researchCount">0</div>
                         <div class="text-blue-200">Research Papers</div>
                     </div>
                     <div>
-                        <div class="text-4xl md:text-5xl font-bold mb-2">30+</div>
+                        <div class="text-4xl md:text-5xl font-bold mb-2" id="guidelinesCount">0</div>
                         <div class="text-blue-200">Guidelines</div>
                     </div>
                     <div>
-                        <div class="text-4xl md:text-5xl font-bold mb-2">500+</div>
-                        <div class="text-blue-200">Downloads/Month</div>
+                        <div class="text-4xl md:text-5xl font-bold mb-2" id="downloadsCount">0</div>
+                        <div class="text-blue-200">Downloads</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Resources Section -->
+        <!-- Resources Section - Dynamic -->
         <section class="py-16">
             <div class="container mx-auto px-4">
                 <div class="flex flex-col md:flex-row md:items-center justify-between mb-12">
@@ -282,179 +278,27 @@
                 </div>
 
                 <!-- Filter Buttons -->
-                <div class="flex flex-wrap gap-3 mb-12">
+                <div class="flex flex-wrap gap-3 mb-12" id="categoryFilters">
                     <button class="filter-btn active px-6 py-3 rounded-xl font-medium bg-blue-900 text-white" data-filter="all">
                         All Resources
                     </button>
-                    <button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50" data-filter="research">
-                        Research Papers
-                    </button>
-                    <button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50" data-filter="guidelines">
-                        Guidelines
-                    </button>
-                    <button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50" data-filter="templates">
-                        Templates
-                    </button>
-                    <button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50" data-filter="lectures">
-                        Lecture Notes
-                    </button>
-                    <button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50" data-filter="career">
-                        Career Development
-                    </button>
+                    <!-- Dynamic filters will be loaded here -->
                 </div>
 
                 <!-- Resources Grid -->
-                <div id="resourcesContainer" class="grid md:grid-cols-3 gap-8">
-                    <!-- Resource 1 -->
-                    <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="guidelines">
-                        <div class="flex items-center mb-6">
-                            <div class="bg-blue-100 p-4 rounded-xl mr-4">
-                                <i class="fas fa-file-pdf text-blue-900 text-3xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-xl">KESNNUR Membership Guidelines 2024</h3>
-                                <div class="flex items-center text-gray-600 mt-1">
-                                    <span class="mr-4">PDF • 2.4 MB</span>
-                                    <span class="text-sm bg-blue-50 text-blue-700 px-2 py-1 rounded">Guidelines</span>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 mb-6">Complete guidelines for KESNNUR membership registration, benefits, and code of conduct for nursing students and novice nurses.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Updated: Feb 15, 2024</span>
-                            <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
-                                    data-resource="membership-guidelines">
-                                <i class="fas fa-download mr-2"></i>Download
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Resource 2 -->
-                    <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="templates">
-                        <div class="flex items-center mb-6">
-                            <div class="bg-teal-100 p-4 rounded-xl mr-4">
-                                <i class="fas fa-file-medical text-teal-900 text-3xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-xl">Nursing Research Proposal Template</h3>
-                                <div class="flex items-center text-gray-600 mt-1">
-                                    <span class="mr-4">DOCX • 1.8 MB</span>
-                                    <span class="text-sm bg-teal-50 text-teal-700 px-2 py-1 rounded">Templates</span>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 mb-6">Standard template for nursing research proposals with sections for literature review, methodology, and ethical considerations.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Updated: Jan 28, 2024</span>
-                            <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
-                                    data-resource="research-template">
-                                <i class="fas fa-download mr-2"></i>Download
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Resource 3 -->
-                    <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="career">
-                        <div class="flex items-center mb-6">
-                            <div class="bg-orange-100 p-4 rounded-xl mr-4">
-                                <i class="fas fa-calendar-alt text-orange-900 text-3xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-xl">KESNNUR 2024 Calendar of Events</h3>
-                                <div class="flex items-center text-gray-600 mt-1">
-                                    <span class="mr-4">PDF • 3.1 MB</span>
-                                    <span class="text-sm bg-orange-50 text-orange-700 px-2 py-1 rounded">Career</span>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 mb-6">Official calendar of workshops, conferences, networking events, and training programs for 2024. Updated quarterly.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Updated: Mar 1, 2024</span>
-                            <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
-                                    data-resource="calendar-2024">
-                                <i class="fas fa-download mr-2"></i>Download
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Resource 4 -->
-                    <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="research">
-                        <div class="flex items-center mb-6">
-                            <div class="bg-purple-100 p-4 rounded-xl mr-4">
-                                <i class="fas fa-flask text-purple-900 text-3xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-xl">Clinical Nursing Research in Kenya</h3>
-                                <div class="flex items-center text-gray-600 mt-1">
-                                    <span class="mr-4">PDF • 4.2 MB</span>
-                                    <span class="text-sm bg-purple-50 text-purple-700 px-2 py-1 rounded">Research</span>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 mb-6">Comprehensive research paper on clinical nursing practices and innovations in Kenyan healthcare settings.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Published: Dec 2023</span>
-                            <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
-                                    data-resource="clinical-research">
-                                <i class="fas fa-download mr-2"></i>Download
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Resource 5 -->
-                    <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="guidelines">
-                        <div class="flex items-center mb-6">
-                            <div class="bg-green-100 p-4 rounded-xl mr-4">
-                                <i class="fas fa-hand-holding-medical text-green-900 text-3xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-xl">Infection Control Guidelines</h3>
-                                <div class="flex items-center text-gray-600 mt-1">
-                                    <span class="mr-4">PDF • 2.1 MB</span>
-                                    <span class="text-sm bg-green-50 text-green-700 px-2 py-1 rounded">Guidelines</span>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 mb-6">Updated infection prevention and control guidelines for nursing students and novice nurses in clinical settings.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Updated: Feb 10, 2024</span>
-                            <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
-                                    data-resource="infection-control">
-                                <i class="fas fa-download mr-2"></i>Download
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Resource 6 -->
-                    <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="lectures">
-                        <div class="flex items-center mb-6">
-                            <div class="bg-red-100 p-4 rounded-xl mr-4">
-                                <i class="fas fa-book-medical text-red-900 text-3xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-xl">Pharmacology Lecture Notes</h3>
-                                <div class="flex items-center text-gray-600 mt-1">
-                                    <span class="mr-4">PDF • 5.3 MB</span>
-                                    <span class="text-sm bg-red-50 text-red-700 px-2 py-1 rounded">Lecture Notes</span>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 mb-6">Comprehensive pharmacology notes covering drug classifications, administration, and nursing considerations.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Updated: Jan 15, 2024</span>
-                            <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
-                                    data-resource="pharmacology-notes">
-                                <i class="fas fa-download mr-2"></i>Download
-                            </button>
-                        </div>
+                <div id="resourcesContainer">
+                    <!-- Loading state -->
+                    <div class="text-center py-12">
+                        <div class="loader mx-auto mb-4"></div>
+                        <p class="text-gray-600">Loading resources from database...</p>
                     </div>
                 </div>
 
-                <!-- Load More Button -->
-                <div class="text-center mt-12">
-                    <button id="loadMoreBtn" class="bg-white border-2 border-blue-900 text-blue-900 px-8 py-3 rounded-xl text-lg font-semibold hover:bg-blue-50">
-                        <i class="fas fa-sync-alt mr-2"></i> Load More Resources
-                    </button>
+                <!-- No Results Message -->
+                <div id="noResourcesMessage" class="hidden text-center py-12">
+                    <i class="fas fa-folder-open text-4xl text-gray-400 mb-4"></i>
+                    <h3 class="text-xl font-bold text-gray-700 mb-2">No Resources Found</h3>
+                    <p class="text-gray-600">Try changing your search or filter criteria</p>
                 </div>
             </div>
         </section>
@@ -648,46 +492,171 @@
         </div>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- JavaScript for Dynamic Resources -->
     <script>
-    // ============================================
-    // RESOURCES PAGE FUNCTIONALITY
-    // ============================================
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Set current year
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-        
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('menuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        
-        if (menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', function() {
-                const isHidden = mobileMenu.classList.contains('hidden');
-                
-                if (isHidden) {
-                    mobileMenu.classList.remove('hidden');
-                    this.innerHTML = '<i class="fas fa-times text-2xl"></i>';
-                } else {
-                    mobileMenu.classList.add('hidden');
-                    this.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
-                }
-            });
+document.addEventListener('DOMContentLoaded', function() {
+    // Set current year
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', function() {
+            const isHidden = mobileMenu.classList.contains('hidden');
+            
+            if (isHidden) {
+                mobileMenu.classList.remove('hidden');
+                this.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+            } else {
+                mobileMenu.classList.add('hidden');
+                this.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+            }
+        });
+    }
+    
+    // Helper function for resource type display
+    function getResourceTypeDisplay(type) {
+        const types = {
+            'document': 'Document',
+            'video': 'Video',
+            'link': 'Web Link',
+            'template': 'Template',
+            'software': 'Software',
+            'other': 'Other'
+        };
+        return types[type] || 'Document';
+    }
+    
+    function getCategoryDisplay(category) {
+        const categories = {
+            'research': 'Research Paper',
+            'guidelines': 'Guidelines',
+            'templates': 'Template',
+            'lectures': 'Lecture Notes',
+            'career': 'Career Development',
+            'video': 'Video Library',
+            'other': 'Other'
+        };
+        return categories[category] || category;
+    }
+    
+    function getCategoryColor(category) {
+        const colors = {
+            'research': 'bg-purple-50 text-purple-700',
+            'guidelines': 'bg-green-50 text-green-700',
+            'templates': 'bg-teal-50 text-teal-700',
+            'lectures': 'bg-red-50 text-red-700',
+            'career': 'bg-orange-50 text-orange-700',
+            'video': 'bg-indigo-50 text-indigo-700',
+            'other': 'bg-gray-100 text-gray-700'
+        };
+        return colors[category] || 'bg-gray-100 text-gray-700';
+    }
+    
+    // Initialize resources
+    loadResources();
+    
+    async function loadResources() {
+        try {
+            // Show loading state
+            document.getElementById('resourcesContainer').innerHTML = `
+                <div class="text-center py-12">
+                    <div class="loader mx-auto mb-4"></div>
+                    <p class="text-gray-600">Loading resources from database...</p>
+                </div>
+            `;
+            
+            // Fetch resources from Supabase
+            const { data: resources, error } = await supabase
+                .from('resources')
+                .select('*')
+                .eq('is_active', true)
+                .order('display_order', { ascending: true })
+                .order('created_at', { ascending: false });
+            
+            if (error) throw error;
+            
+            // Update stats
+            updateResourceStats(resources);
+            
+            // Load categories for filters
+            loadCategoryFilters(resources);
+            
+            // Display resources
+            displayResources(resources);
+            
+            // Setup search functionality
+            setupSearchFunctionality(resources);
+            
+        } catch (error) {
+            console.error('Error loading resources:', error);
+            document.getElementById('resourcesContainer').innerHTML = `
+                <div class="text-center py-12 text-red-600">
+                    <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Error Loading Resources</h3>
+                    <p class="mb-4">Failed to load resources from database</p>
+                    <button onclick="loadResources()" class="px-4 py-2 bg-blue-900 text-white rounded-lg">
+                        <i class="fas fa-redo mr-2"></i> Try Again
+                    </button>
+                </div>
+            `;
         }
+    }
+    
+    function updateResourceStats(resources) {
+        const total = resources.length;
+        const research = resources.filter(r => r.category === 'research').length;
+        const guidelines = resources.filter(r => r.category === 'guidelines').length;
+        const downloads = resources.reduce((sum, r) => sum + (r.download_count || 0), 0);
         
-        // Filter functionality
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const resources = document.querySelectorAll('.resource-card');
-        const searchInput = document.getElementById('resourceSearch');
+        document.getElementById('totalResourcesCount').textContent = total;
+        document.getElementById('researchCount').textContent = research;
+        document.getElementById('guidelinesCount').textContent = guidelines;
+        document.getElementById('downloadsCount').textContent = downloads;
+    }
+    
+    function loadCategoryFilters(resources) {
+        const categories = ['research', 'guidelines', 'templates', 'lectures', 'career', 'video', 'other'];
+        const categoryNames = {
+            'research': 'Research Papers',
+            'guidelines': 'Guidelines',
+            'templates': 'Templates',
+            'lectures': 'Lecture Notes',
+            'career': 'Career Development',
+            'video': 'Video Library',
+            'other': 'Other'
+        };
         
-        // Filter by category
-        filterButtons.forEach(button => {
+        const filtersContainer = document.getElementById('categoryFilters');
+        let filtersHTML = `
+            <button class="filter-btn active px-6 py-3 rounded-xl font-medium bg-blue-900 text-white" data-filter="all">
+                All Resources
+            </button>
+        `;
+        
+        categories.forEach(category => {
+            const count = resources.filter(r => r.category === category).length;
+            if (count > 0) {
+                filtersHTML += `
+                    <button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50" 
+                            data-filter="${category}">
+                        ${categoryNames[category]} (${count})
+                    </button>
+                `;
+            }
+        });
+        
+        filtersContainer.innerHTML = filtersHTML;
+        
+        // Add filter click events
+        document.querySelectorAll('.filter-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const filter = this.getAttribute('data-filter');
                 
                 // Update active button
-                filterButtons.forEach(btn => {
+                document.querySelectorAll('.filter-btn').forEach(btn => {
                     btn.classList.remove('active', 'bg-blue-900', 'text-white');
                     btn.classList.add('bg-white', 'border', 'border-blue-900', 'text-blue-900');
                 });
@@ -696,240 +665,226 @@
                 this.classList.add('active', 'bg-blue-900', 'text-white');
                 
                 // Filter resources
-                resources.forEach(resource => {
-                    const category = resource.getAttribute('data-category');
-                    
-                    if (filter === 'all' || category === filter) {
-                        resource.style.display = 'block';
-                        setTimeout(() => {
-                            resource.style.opacity = '1';
-                            resource.style.transform = 'translateY(0)';
-                        }, 10);
-                    } else {
-                        resource.style.opacity = '0';
-                        resource.style.transform = 'translateY(20px)';
-                        setTimeout(() => {
-                            resource.style.display = 'none';
-                        }, 300);
-                    }
-                });
+                filterResources(filter);
             });
         });
+    }
+    
+    function displayResources(resources) {
+        const container = document.getElementById('resourcesContainer');
         
-        // Search functionality
+        if (!resources || resources.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-12">
+                    <i class="fas fa-folder-open text-4xl text-gray-400 mb-4"></i>
+                    <h3 class="text-xl font-bold text-gray-700 mb-2">No Resources Available</h3>
+                    <p class="text-gray-600">Check back soon for new resources</p>
+                </div>
+            `;
+            document.getElementById('noResourcesMessage').classList.add('hidden');
+            return;
+        }
+        
+        let resourcesHTML = '<div class="grid md:grid-cols-3 gap-8">';
+        
+        resources.forEach(resource => {
+            const icon = resource.icon || 'fas fa-file-pdf';
+            const iconColor = resource.icon_color || 'text-blue-900';
+            const iconBg = resource.icon_bg_color || 'bg-blue-100';
+            const fileSize = resource.file_size ? `${resource.file_size} MB` : 'Size not specified';
+            const downloadCount = resource.download_count || 0;
+            const updatedDate = resource.updated_at ? new Date(resource.updated_at).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            }) : 'Date not available';
+            
+            // Use helper functions for better display
+            const resourceType = getResourceTypeDisplay(resource.resource_type);
+            const category = getCategoryDisplay(resource.category);
+            
+            resourcesHTML += `
+                <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="${resource.category || 'other'}">
+                    <div class="flex items-center mb-6">
+                        <div class="${iconBg} p-4 rounded-xl mr-4">
+                            <i class="${icon} ${iconColor} text-3xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl">${resource.title}</h3>
+                            <div class="flex items-center text-gray-600 mt-1">
+                                <span class="mr-4">${resourceType} • ${fileSize}</span>
+                                <span class="text-sm ${getCategoryColor(resource.category)} px-2 py-1 rounded">
+                                    ${category}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 mb-6">${resource.description || 'No description available.'}</p>
+                    
+                    <div class="flex justify-between items-center">
+                        <div class="text-gray-500 text-sm">
+                            <i class="far fa-calendar mr-1"></i> ${updatedDate}
+                            ${downloadCount > 0 ? `
+                                <span class="ml-3">
+                                    <i class="fas fa-download mr-1"></i> ${downloadCount}
+                                </span>
+                            ` : ''}
+                        </div>
+                        <button onclick="downloadResource('${resource.id}', '${resource.file_url}', '${resource.title}')" 
+                                class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors">
+                            <i class="fas fa-download mr-2"></i>Download
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        resourcesHTML += '</div>';
+        container.innerHTML = resourcesHTML;
+        document.getElementById('noResourcesMessage').classList.add('hidden');
+    }
+    
+    function filterResources(category) {
+        const resources = document.querySelectorAll('.resource-card');
+        const noResultsMessage = document.getElementById('noResourcesMessage');
+        let visibleCount = 0;
+        
+        resources.forEach(resource => {
+            const resourceCategory = resource.getAttribute('data-category');
+            
+            if (category === 'all' || resourceCategory === category) {
+                resource.style.display = 'block';
+                setTimeout(() => {
+                    resource.style.opacity = '1';
+                    resource.style.transform = 'translateY(0)';
+                }, 10);
+                visibleCount++;
+            } else {
+                resource.style.opacity = '0';
+                resource.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    resource.style.display = 'none';
+                }, 300);
+            }
+        });
+        
+        // Show/hide no results message
+        if (visibleCount === 0) {
+            noResultsMessage.classList.remove('hidden');
+        } else {
+            noResultsMessage.classList.add('hidden');
+        }
+    }
+    
+    function setupSearchFunctionality(resources) {
+        const searchInput = document.getElementById('resourceSearch');
+        
         if (searchInput) {
             searchInput.addEventListener('input', function() {
                 const searchTerm = this.value.toLowerCase();
+                const resourceCards = document.querySelectorAll('.resource-card');
+                let visibleCount = 0;
                 
-                resources.forEach(resource => {
-                    const title = resource.querySelector('h3').textContent.toLowerCase();
-                    const description = resource.querySelector('p').textContent.toLowerCase();
-                    const category = resource.getAttribute('data-category');
+                resourceCards.forEach(card => {
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    const description = card.querySelector('p').textContent.toLowerCase();
                     
-                    if (title.includes(searchTerm) || description.includes(searchTerm) || category.includes(searchTerm)) {
-                        resource.style.display = 'block';
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        card.style.display = 'block';
                         setTimeout(() => {
-                            resource.style.opacity = '1';
-                            resource.style.transform = 'translateY(0)';
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
                         }, 10);
+                        visibleCount++;
                     } else {
-                        resource.style.opacity = '0';
-                        resource.style.transform = 'translateY(20px)';
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
                         setTimeout(() => {
-                            resource.style.display = 'none';
+                            card.style.display = 'none';
                         }, 300);
                     }
                 });
+                
+                // Show/hide no results message
+                const noResultsMessage = document.getElementById('noResourcesMessage');
+                if (visibleCount === 0) {
+                    noResultsMessage.classList.remove('hidden');
+                } else {
+                    noResultsMessage.classList.add('hidden');
+                }
             });
         }
-        
-        // Download button functionality
-        const downloadButtons = document.querySelectorAll('.download-btn');
-        
-        downloadButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const resourceName = this.getAttribute('data-resource');
-                const buttonText = this.innerHTML;
-                
-                // Show loading state
-                this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Downloading...';
-                this.disabled = true;
-                
-                // Simulate download
-                setTimeout(() => {
-                    // Create a temporary link for download (in real scenario, this would be actual file)
-                    const tempLink = document.createElement('a');
-                    tempLink.href = '#'; // Replace with actual file URL
-                    tempLink.download = `${resourceName}.pdf`;
-                    tempLink.click();
-                    
-                    // Reset button
-                    this.innerHTML = buttonText;
-                    this.disabled = false;
-                    
-                    // Show success message
-                    showToast('Resource downloaded successfully!', 'success');
-                }, 1500);
-            });
-        });
-        
-        // Load more resources
-        const loadMoreBtn = document.getElementById('loadMoreBtn');
-        
-        if (loadMoreBtn) {
-            loadMoreBtn.addEventListener('click', function() {
-                const buttonText = this.innerHTML;
-                
-                // Show loading state
-                this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Loading...';
-                this.disabled = true;
-                
-                // Simulate loading more resources
-                setTimeout(() => {
-                    // In a real scenario, this would fetch more resources from an API
-                    const resourcesContainer = document.getElementById('resourcesContainer');
-                    const newResources = [
-                        {
-                            title: 'Mental Health Nursing Handbook',
-                            icon: 'fas fa-brain',
-                            iconColor: 'text-indigo-900',
-                            iconBg: 'bg-indigo-100',
-                            category: 'guidelines',
-                            size: '3.2 MB',
-                            description: 'Comprehensive guide to mental health nursing practices and interventions.',
-                            date: 'Feb 5, 2024'
-                        },
-                        {
-                            title: 'Clinical Placement Logbook',
-                            icon: 'fas fa-clipboard-check',
-                            iconColor: 'text-cyan-900',
-                            iconBg: 'bg-cyan-100',
-                            category: 'templates',
-                            size: '2.7 MB',
-                            description: 'Digital logbook template for tracking clinical hours and experiences.',
-                            date: 'Jan 30, 2024'
-                        },
-                        {
-                            title: 'Nursing Leadership Guide',
-                            icon: 'fas fa-flag',
-                            iconColor: 'text-amber-900',
-                            iconBg: 'bg-amber-100',
-                            category: 'career',
-                            size: '4.1 MB',
-                            description: 'Developing leadership skills for nursing students and novice nurses.',
-                            date: 'Feb 18, 2024'
-                        }
-                    ];
-                    
-                    newResources.forEach(resource => {
-                        const resourceElement = document.createElement('div');
-                        resourceElement.className = 'resource-card bg-white rounded-2xl shadow-lg p-6';
-                        resourceElement.setAttribute('data-category', resource.category);
-                        resourceElement.style.opacity = '0';
-                        resourceElement.style.transform = 'translateY(20px)';
-                        resourceElement.style.transition = 'all 0.3s ease';
-                        
-                        resourceElement.innerHTML = `
-                            <div class="flex items-center mb-6">
-                                <div class="${resource.iconBg} p-4 rounded-xl mr-4">
-                                    <i class="${resource.icon} ${resource.iconColor} text-3xl"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-xl">${resource.title}</h3>
-                                    <div class="flex items-center text-gray-600 mt-1">
-                                        <span class="mr-4">PDF • ${resource.size}</span>
-                                        <span class="text-sm bg-gray-100 text-gray-700 px-2 py-1 rounded capitalize">${resource.category}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="text-gray-700 mb-6">${resource.description}</p>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-500 text-sm"><i class="far fa-calendar mr-1"></i> Updated: ${resource.date}</span>
-                                <button class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors" 
-                                        data-resource="${resource.title.toLowerCase().replace(/\s+/g, '-')}">
-                                    <i class="fas fa-download mr-2"></i>Download
-                                </button>
-                            </div>
-                        `;
-                        
-                        resourcesContainer.appendChild(resourceElement);
-                        
-                        // Animate in
-                        setTimeout(() => {
-                            resourceElement.style.opacity = '1';
-                            resourceElement.style.transform = 'translateY(0)';
-                        }, 100);
-                        
-                        // Add download event listener to new button
-                        const newDownloadBtn = resourceElement.querySelector('.download-btn');
-                        newDownloadBtn.addEventListener('click', function() {
-                            const resourceName = this.getAttribute('data-resource');
-                            const buttonText = this.innerHTML;
-                            
-                            this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Downloading...';
-                            this.disabled = true;
-                            
-                            setTimeout(() => {
-                                this.innerHTML = buttonText;
-                                this.disabled = false;
-                                showToast('Resource downloaded successfully!', 'success');
-                            }, 1500);
-                        });
-                    });
-                    
-                    // Reset button
-                    this.innerHTML = buttonText;
-                    this.disabled = false;
-                    
-                    // Show message
-                    showToast('More resources loaded successfully!', 'success');
-                    
-                    // Hide button if we've loaded enough (for demo)
-                    if (resourcesContainer.children.length >= 12) {
-                        this.style.display = 'none';
-                    }
-                }, 2000);
-            });
+    }
+    
+    // Make downloadResource function accessible globally
+    window.downloadResource = async function(resourceId, fileUrl, title) {
+        try {
+            // First, get current download count
+            const { data: resource, error: fetchError } = await supabase
+                .from('resources')
+                .select('download_count')
+                .eq('id', resourceId)
+                .single();
+            
+            if (fetchError) throw fetchError;
+            
+            // Update download count - increment by 1
+            const newCount = (resource.download_count || 0) + 1;
+            
+            const { error: updateError } = await supabase
+                .from('resources')
+                .update({ download_count: newCount })
+                .eq('id', resourceId);
+            
+            if (updateError) throw updateError;
+            
+            // Open download link in new tab
+            window.open(fileUrl, '_blank');
+            
+            // Show success message
+            showToast(`${title} downloaded successfully!`, 'success');
+            
+            // Reload resources to update counts after a short delay
+            setTimeout(() => loadResources(), 1000);
+            
+        } catch (error) {
+            console.error('Error downloading resource:', error);
+            // Still try to open the file even if count update fails
+            window.open(fileUrl, '_blank');
+            showToast('File opened. Download count may not update.', 'info');
         }
+    };
+    
+    // Toast notification function
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-xl shadow-lg text-white font-medium transform translate-x-full transition-transform duration-300 ${
+            type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'
+        }`;
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'} mr-3"></i>
+                <span>${message}</span>
+            </div>
+        `;
         
-        // Toast notification function
-        function showToast(message, type = 'info') {
-            // Remove existing toast
-            const existingToast = document.querySelector('.custom-toast');
-            if (existingToast) existingToast.remove();
-            
-            // Create toast
-            const toast = document.createElement('div');
-            toast.className = `custom-toast fixed top-4 right-4 z-50 px-6 py-3 rounded-xl shadow-lg text-white font-medium transform translate-x-full transition-transform duration-300 ${
-                type === 'success' ? 'bg-green-600' : 'bg-blue-600'
-            }`;
-            toast.innerHTML = `
-                <div class="flex items-center">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} mr-3"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            
-            document.body.appendChild(toast);
-            
-            // Animate in
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.transform = 'translateX(0)';
+        }, 10);
+        
+        setTimeout(() => {
+            toast.style.transform = 'translateX(100%)';
             setTimeout(() => {
-                toast.style.transform = 'translateX(0)';
-            }, 10);
-            
-            // Remove after 3 seconds
-            setTimeout(() => {
-                toast.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    if (toast.parentNode) {
-                        toast.parentNode.removeChild(toast);
-                    }
-                }, 300);
-            }, 3000);
-        }
-        
-        console.log('✅ Resources Page Loaded Successfully');
-    });
-    </script>
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 3000);
+    }
+});
+</script>
 </body>
 </html>
