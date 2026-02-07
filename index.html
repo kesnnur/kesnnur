@@ -69,7 +69,8 @@
     </script>
     
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Production Tailwind CSS -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -710,32 +711,42 @@
         }
     }
 
-    async function loadReviews() {
-        const container = document.getElementById('reviewsContainer');
-        if (!container) return;
+   async function loadReviews() {
+    const container = document.getElementById('reviewsContainer');
+    if (!container) return;
+    
+    console.log('⭐ Loading reviews...');
+    
+    try {
+        // Try direct fetch first
+        const reviewSettings = await fetchFromSupabase(
+            TABLES.SETTINGS, 
+            '?category=eq.home_page'
+        );
         
-        console.log('⭐ Loading reviews...');
-        
-        try {
-            const reviewSettings = await fetchFromSupabase(
-                TABLES.SETTINGS, 
-                '?category=eq.home_page&setting_key=like.review%'
+        if (reviewSettings && reviewSettings.length > 0) {
+            console.log('✅ Found settings for reviews filtering:', reviewSettings.length);
+            
+            // Manually filter for reviews in JavaScript
+            const reviews = reviewSettings.filter(setting => 
+                setting.setting_key && setting.setting_key.startsWith('review')
             );
             
-            if (reviewSettings && reviewSettings.length > 0) {
-                console.log('✅ Found reviews:', reviewSettings.length);
+            if (reviews.length > 0) {
+                console.log('✅ Found', reviews.length, 'reviews in settings');
                 
-                const reviews = {};
-                reviewSettings.forEach(setting => {
+                // Group reviews
+                const reviewMap = {};
+                reviews.forEach(setting => {
                     const match = setting.setting_key.match(/review(\d+)_(\w+)/);
                     if (match) {
                         const [_, num, field] = match;
-                        if (!reviews[num]) reviews[num] = {};
-                        reviews[num][field] = setting.setting_value;
+                        if (!reviewMap[num]) reviewMap[num] = {};
+                        reviewMap[num][field] = setting.setting_value;
                     }
                 });
                 
-                const reviewArray = Object.values(reviews);
+                const reviewArray = Object.values(reviewMap);
                 if (reviewArray.length > 0) {
                     container.innerHTML = '';
                     reviewArray.forEach(review => {
@@ -758,140 +769,179 @@
                         `;
                         container.appendChild(card);
                     });
+                    return; // Success - we used database reviews
+                }
+            }
+        }
+    } catch (error) {
+        console.log('⚠️ Could not load reviews from database:', error);
+    }
+    
+    // Fallback to hardcoded reviews
+    console.log('Using fallback reviews');
+    const reviews = [
+        {
+            name: 'Sarah M.',
+            role: '3rd Year Nursing Student',
+            institution: 'University of Nairobi',
+            text: 'KESNNUR mentorship program transformed my nursing journey. My mentor guided me through clinical rotations.',
+            rating: 5
+        },
+        {
+            name: 'John K.',
+            role: 'Novice Nurse',
+            institution: 'Kenyatta National Hospital',
+            text: 'The networking events helped me secure my first nursing job. Community support is invaluable.',
+            rating: 5
+        },
+        {
+            name: 'Grace W.',
+            role: '2nd Year Student',
+            institution: 'Moi University',
+            text: 'Resources and workshops have been crucial for my academic success. Highly recommended!',
+            rating: 4
+        }
+    ];
+    
+    container.innerHTML = '';
+    reviews.forEach(review => {
+        const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+        const card = document.createElement('div');
+        card.className = 'review-card bg-white rounded-xl p-6 shadow-lg';
+        card.innerHTML = `
+            <div class="flex items-center mb-4">
+                <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                    ${review.name.charAt(0)}
+                </div>
+                <div>
+                    <h4 class="font-bold">${review.name}</h4>
+                    <p class="text-sm text-gray-600">${review.role}</p>
+                    <p class="text-xs text-gray-500">${review.institution}</p>
+                </div>
+            </div>
+            <div class="text-yellow-500 mb-3">${stars}</div>
+            <p class="text-gray-700 italic">"${review.text}"</p>
+        `;
+        container.appendChild(card);
+    });
+}
+
+   async function loadEvents() {
+    const container = document.getElementById('eventsContainer');
+    if (!container) return;
+    
+    console.log('📅 Loading events...');
+    
+    try {
+        // Get ALL events to debug
+        const allEvents = await fetchFromSupabase(
+            TABLES.EVENTS, 
+            '?select=id,title,description,start_date,end_date,status,event_type,venue,category,image_url&order=start_date.desc&limit=10'
+        );
+        
+        console.log('📊 ALL events loaded:', allEvents);
+        
+        // Show what we found
+        if (allEvents && allEvents.length > 0) {
+            console.log('Event statuses:', allEvents.map(e => ({
+                title: e.title, 
+                status: e.status,
+                start_date: e.start_date,
+                today: new Date().toISOString().split('T')[0]
+            })));
+            
+            // Filter for published events
+            const publishedEvents = allEvents.filter(event => 
+                event.status === 'published' || event.status === 'active'
+            );
+            
+            console.log('📊 Published events:', publishedEvents.length, publishedEvents);
+            
+            if (publishedEvents.length > 0) {
+                // Filter for upcoming events
+                const today = new Date();
+                const upcomingEvents = publishedEvents.filter(event => {
+                    const eventDate = new Date(event.start_date);
+                    return eventDate >= today;
+                });
+                
+                console.log('📊 Upcoming events:', upcomingEvents.length, upcomingEvents);
+                
+                if (upcomingEvents.length > 0) {
+                    // Display events
+                    container.innerHTML = '';
+                    upcomingEvents.slice(0, 3).forEach(event => {
+                        const date = new Date(event.start_date);
+                        const day = date.getDate();
+                        const month = date.toLocaleDateString('en-US', { month: 'short' });
+                        
+                        const card = document.createElement('div');
+                        card.className = 'event-card bg-white rounded-xl overflow-hidden shadow-lg';
+                        card.innerHTML = `
+                            <div class="h-48 bg-gradient-to-r from-blue-600 to-blue-400 relative">
+                                ${event.image_url ? 
+                                    `<img src="${event.image_url}" alt="${event.title}" class="w-full h-full object-cover">` :
+                                    '<div class="w-full h-full flex items-center justify-center text-white text-4xl">📅</div>'
+                                }
+                                <div class="absolute top-4 right-4 bg-white text-blue-900 text-center p-2 rounded-lg w-16">
+                                    <div class="text-2xl font-bold">${day}</div>
+                                    <div class="text-sm font-semibold">${month.toUpperCase()}</div>
+                                </div>
+                                <div class="absolute bottom-4 left-4">
+                                    <span class="bg-blue-900 text-white text-sm px-3 py-1 rounded-full">
+                                        ${event.event_type || 'Event'} • ${event.category || 'General'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="font-bold text-xl mb-2">${event.title || 'Upcoming Event'}</h3>
+                                <p class="text-gray-600 mb-4">
+                                    ${event.description ? event.description.substring(0, 100) + '...' : 'Join us for this exciting event!'}
+                                </p>
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center text-gray-500">
+                                        <i class="fas fa-map-marker-alt mr-2"></i>
+                                        <span>${event.venue || 'Location TBD'}</span>
+                                    </div>
+                                    <a href="events.html#${event.id || ''}" class="text-blue-900 font-semibold hover:underline">
+                                        Details <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                    
                     return;
                 }
             }
-        } catch (error) {
-            console.log('⚠️ Could not load reviews:', error);
         }
         
-        // Fallback reviews
-        console.log('Using fallback reviews');
-        const reviews = [
-            {
-                name: 'Sarah M.',
-                role: '3rd Year Nursing Student',
-                institution: 'University of Nairobi',
-                text: 'KESNNUR mentorship program transformed my nursing journey. My mentor guided me through clinical rotations.',
-                rating: 5
-            },
-            {
-                name: 'John K.',
-                role: 'Novice Nurse',
-                institution: 'Kenyatta National Hospital',
-                text: 'The networking events helped me secure my first nursing job. Community support is invaluable.',
-                rating: 5
-            },
-            {
-                name: 'Grace W.',
-                role: '2nd Year Student',
-                institution: 'Moi University',
-                text: 'Resources and workshops have been crucial for my academic success. Highly recommended!',
-                rating: 4
-            }
-        ];
-        
-        container.innerHTML = '';
-        reviews.forEach(review => {
-            const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
-            const card = document.createElement('div');
-            card.className = 'review-card bg-white rounded-xl p-6 shadow-lg';
-            card.innerHTML = `
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
-                        ${review.name.charAt(0)}
-                    </div>
-                    <div>
-                        <h4 class="font-bold">${review.name}</h4>
-                        <p class="text-sm text-gray-600">${review.role}</p>
-                        <p class="text-xs text-gray-500">${review.institution}</p>
-                    </div>
+        // Show message if no upcoming events
+        container.innerHTML = `
+            <div class="col-span-3 text-center py-12">
+                <i class="fas fa-calendar-check text-4xl text-blue-500 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-600 mb-2">Check Back Soon</h3>
+                <p class="text-gray-500">New events are being planned. Stay tuned!</p>
+                <div class="mt-4 text-sm text-gray-600">
+                    <p>Database has ${allEvents?.length || 0} total events</p>
+                    <p>Check CMS to update event status</p>
                 </div>
-                <div class="text-yellow-500 mb-3">${stars}</div>
-                <p class="text-gray-700 italic">"${review.text}"</p>
-            `;
-            container.appendChild(card);
-        });
-    }
-
-    async function loadEvents() {
-        const container = document.getElementById('eventsContainer');
-        if (!container) return;
+            </div>
+        `;
         
-        console.log('📅 Loading events...');
-        
-        try {
-            const today = new Date().toISOString().split('T')[0];
-            const events = await fetchFromSupabase(
-                TABLES.EVENTS, 
-                `?status=eq.published&start_date=gte.${today}&order=start_date.asc&limit=3`
-            );
-            
-            console.log('📊 Events loaded:', events);
-            
-            if (events && events.length > 0) {
-                container.innerHTML = '';
-                
-                events.forEach(event => {
-                    const date = new Date(event.start_date);
-                    const day = date.getDate();
-                    const month = date.toLocaleDateString('en-US', { month: 'short' });
-                    
-                    const card = document.createElement('div');
-                    card.className = 'event-card bg-white rounded-xl overflow-hidden shadow-lg';
-                    card.innerHTML = `
-                        <div class="h-48 bg-gradient-to-r from-blue-600 to-blue-400 relative">
-                            <div class="absolute top-4 right-4 bg-white text-blue-900 text-center p-2 rounded-lg w-16">
-                                <div class="text-2xl font-bold">${day}</div>
-                                <div class="text-sm font-semibold">${month.toUpperCase()}</div>
-                            </div>
-                            <div class="absolute bottom-4 left-4">
-                                <span class="bg-blue-900 text-white text-sm px-3 py-1 rounded-full">
-                                    ${event.event_type || 'Event'} • ${event.category || 'General'}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="font-bold text-xl mb-2">${event.title || 'Upcoming Event'}</h3>
-                            <p class="text-gray-600 mb-4">
-                                ${event.description ? event.description.substring(0, 100) + '...' : 'Join us for this exciting event!'}
-                            </p>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-gray-500">
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    <span>${event.venue || 'Location TBD'}</span>
-                                </div>
-                                <a href="events.html#${event.id || ''}" class="text-blue-900 font-semibold hover:underline">
-                                    Details <i class="fas fa-arrow-right ml-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-                
-            } else {
-                // Show message if no upcoming events
-                container.innerHTML = `
-                    <div class="col-span-3 text-center py-12">
-                        <i class="fas fa-calendar-check text-4xl text-blue-500 mb-4"></i>
-                        <h3 class="text-xl font-bold text-gray-600 mb-2">Check Back Soon</h3>
-                        <p class="text-gray-500">New events are being planned. Stay tuned!</p>
-                    </div>
-                `;
-            }
-        } catch (error) {
-            console.error('❌ Error loading events:', error);
-            // Show fallback
-            container.innerHTML = `
-                <div class="col-span-3 text-center py-12">
-                    <i class="fas fa-calendar-alt text-4xl text-blue-300 mb-4"></i>
-                    <h3 class="text-xl font-bold text-gray-600 mb-2">Events Coming Soon</h3>
-                    <p class="text-gray-500">Check our events page for upcoming activities</p>
-                </div>
-            `;
-        }
+    } catch (error) {
+        console.error('❌ Error loading events:', error);
+        // Show fallback
+        container.innerHTML = `
+            <div class="col-span-3 text-center py-12">
+                <i class="fas fa-calendar-alt text-4xl text-blue-300 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-600 mb-2">Events Coming Soon</h3>
+                <p class="text-gray-500">Check our events page for upcoming activities</p>
+            </div>
+        `;
     }
+}
 
     async function loadBlogPosts() {
         const container = document.getElementById('blogContainer');
