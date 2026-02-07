@@ -3025,15 +3025,13 @@ async function updateEventComprehensive(eventId) {
     try {
         const supabase = await getSupabaseClient();
         
-        console.log('Updating event with data:', {
+        console.log('Updating event ID:', eventId);
+        console.log('Update data:', {
             title, startDate, endDate, eventType, category, status,
             venue, location, city, eventMode, isFeatured
         });
         
-        // Get current user to check permissions
-        const { data: { user } } = await supabase.auth.getUser();
-        console.log('Current user:', user?.id);
-        
+        // Option 1: Try without .single() first
         const { data, error } = await supabase
             .from('events')
             .update({
@@ -3055,12 +3053,16 @@ async function updateEventComprehensive(eventId) {
                 updated_at: new Date().toISOString()
             })
             .eq('id', eventId)
-            .select()
-            .single();
+            .select(); // Remove .single() for now
         
         console.log('Update response:', { data, error });
         
         if (error) throw error;
+        
+        if (!data || data.length === 0) {
+            // No rows were updated - probably RLS or event doesn't exist
+            throw new Error('Event not found or you do not have permission to update it');
+        }
         
         showNotification('Event updated successfully!', 'success');
         
@@ -3076,7 +3078,6 @@ async function updateEventComprehensive(eventId) {
         showNotification('Error updating event: ' + error.message, 'error');
     }
 }
-
 async function updateEvent(eventId) {
     const title = document.getElementById('editEventTitle').value;
     const description = document.getElementById('editEventDescription').value;
