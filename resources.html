@@ -2,14 +2,8 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resources - KESNNUR | Kenya Students & Novice Nurses</title>
-    
-    <!-- Meta tags -->
-    <meta name="description" content="Access nursing resources, research papers, guidelines, and learning materials from KESNNUR - Kenya's largest community for nursing students and novice nurses.">
-    <meta name="keywords" content="KESNNUR resources, nursing guidelines, research papers, nursing templates, nursing education, Kenya nurses, nursing students">
-    <meta name="author" content="KESNNUR">
-    <meta property="og:title" content="Resources - KESNNUR | Nursing Resources & Materials">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -34,16 +28,6 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        // Initialize Supabase with your credentials
-        const supabaseUrl = 'https://noadhwqvaxajuckpibbo.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
-        const supabase = window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
-    </script>
-    
-    <!-- Custom Styles -->
     <style>
         :root {
             --kesnnur-blue: #1e3a8a;
@@ -52,48 +36,34 @@
             --kesnnur-gold: #f59e0b;
         }
         
-        /* Skip to content */
-        .skip-to-content {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: #1e3a8a;
-            color: white;
-            padding: 12px;
-            z-index: 10000;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .skip-to-content:focus {
-            top: 0;
-        }
-        
-        /* Base Styles */
         body {
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
         }
         
         .font-display {
             font-family: 'Poppins', sans-serif;
         }
         
-        /* Glass effect */
         .glass {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        /* Gradient text */
-        .gradient-text {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1e3a8a;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
         }
         
-        /* Card hover effects */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         .resource-card {
             transition: all 0.3s ease;
         }
@@ -101,6 +71,11 @@
         .resource-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 40px rgba(30, 58, 138, 0.1);
+        }
+        
+        .filter-btn.active {
+            background-color: #1e3a8a;
+            color: white;
         }
         
         /* Custom scrollbar */
@@ -116,33 +91,9 @@
             background: #1e3a8a;
             border-radius: 4px;
         }
-        
-        /* Filter button active state */
-        .filter-btn.active {
-            background-color: #1e3a8a;
-            color: white;
-        }
-        
-        /* Loading animation */
-        .loader {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #1e3a8a;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-blue-50">
-    <!-- Skip to Content -->
-    <a href="#main-content" class="skip-to-content">Skip to main content</a>
-
     <!-- Navigation -->
     <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
         <div class="container mx-auto px-4 py-4">
@@ -212,203 +163,219 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main id="main-content" role="main">
-        <!-- Hero Section -->
-        <section class="relative py-20 bg-gradient-to-r from-blue-900 to-blue-700">
-            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080')] bg-cover bg-center opacity-20"></div>
-            <div class="container mx-auto px-4 relative z-10 text-center">
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">
-                    Resources Library
-                </h1>
-                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-                    Access nursing resources, research papers, guidelines, templates, and learning materials to support your nursing journey.
+    <!-- Hero Section -->
+    <section class="relative py-20 bg-gradient-to-r from-blue-900 to-blue-700">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080')] bg-cover bg-center opacity-20"></div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">
+                Resources Library
+            </h1>
+            <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                Access nursing resources, research papers, guidelines, templates, and learning materials to support your nursing journey.
+            </p>
+            <div class="bg-white/10 glass rounded-xl p-6 max-w-2xl mx-auto">
+                <p class="text-white mb-4">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Exclusive resources available to KESNNUR members
                 </p>
-                <div class="bg-white/10 glass rounded-xl p-6 max-w-2xl mx-auto">
-                    <p class="text-white mb-4">
-                        <i class="fas fa-info-circle mr-2"></i>
-                        Exclusive resources available to KESNNUR members
-                    </p>
-                    <a href="members.html" class="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold hover:shadow-lg inline-flex items-center">
-                        <i class="fas fa-user-plus mr-2"></i>Become a Member
+                <a href="members.html" class="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold hover:shadow-lg inline-flex items-center">
+                    <i class="fas fa-user-plus mr-2"></i>Become a Member
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-12 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" id="totalResourcesCount">0</div>
+                    <div class="text-blue-200">Resources</div>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" id="researchCount">0</div>
+                    <div class="text-blue-200">Research Papers</div>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" id="guidelinesCount">0</div>
+                    <div class="text-blue-200">Guidelines</div>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" id="downloadsCount">0</div>
+                    <div class="text-blue-200">Downloads</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Browse Resources</h2>
+                    <p class="text-gray-600">Filter by category to find exactly what you need</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="relative">
+                        <input type="text" id="resourceSearch" placeholder="Search resources..." 
+                               class="pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full md:w-80">
+                        <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap gap-3 mb-8" id="categoryFilters">
+                <button class="filter-btn active px-6 py-3 rounded-xl font-medium bg-blue-900 text-white" data-filter="all">
+                    All Resources
+                </button>
+                <!-- Will be populated dynamically -->
+            </div>
+
+            <!-- Access Level Info -->
+            <div class="mb-8 p-4 bg-blue-50 rounded-xl">
+                <div class="flex items-center">
+                    <i class="fas fa-info-circle text-blue-600 mr-3"></i>
+                    <div class="text-sm">
+                        <span class="font-semibold">Access Levels:</span>
+                        <span class="mx-2">
+                            <span class="inline-flex items-center">
+                                <span class="w-3 h-3 bg-green-500 rounded-full mr-1"></span>
+                                <span>Public - Available to everyone</span>
+                            </span>
+                            <span class="inline-flex items-center ml-4">
+                                <span class="w-3 h-3 bg-blue-500 rounded-full mr-1"></span>
+                                <span>Member Only - Requires KESNNUR membership</span>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources Grid -->
+            <div id="resourcesContainer">
+                <div class="text-center py-12">
+                    <div class="loader mx-auto mb-4"></div>
+                    <p class="text-gray-600">Loading resources from database...</p>
+                </div>
+            </div>
+
+            <!-- No Results Message -->
+            <div id="noResourcesMessage" class="hidden text-center py-12">
+                <i class="fas fa-folder-open text-4xl text-gray-400 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-700 mb-2">No Resources Found</h3>
+                <p class="text-gray-600">Try changing your search or filter criteria</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Partnership Section -->
+    <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+        <div class="container mx-auto px-4">
+            <div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white rounded-2xl overflow-hidden shadow-2xl">
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-2/3 p-8 md:p-12">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-white/20 p-3 rounded-lg mr-4">
+                                <i class="fas fa-handshake text-2xl"></i>
+                            </div>
+                            <div>
+                                <span class="text-blue-200 text-sm font-semibold">EXCLUSIVE PARTNERSHIP</span>
+                            </div>
+                        </div>
+                        <h2 class="text-3xl font-bold mb-6">Partnership with Lecturio GmbH</h2>
+                        <p class="text-blue-100 mb-6 text-lg">
+                            We have officially signed a Memorandum of Understanding (MoU) with Lecturio GmbH, marking the beginning of our strategic partnership to provide world-class nursing education resources to our members.
+                        </p>
+                        <div class="grid grid-cols-2 gap-6 mb-8">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-blue-200 mr-3"></i>
+                                <span>Access to 2,000+ nursing video lectures</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-blue-200 mr-3"></i>
+                                <span>Interactive quizzes and assessments</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-blue-200 mr-3"></i>
+                                <span>NCLEX-style question bank</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-blue-200 mr-3"></i>
+                                <span>Continuing education credits</span>
+                            </div>
+                        </div>
+                        <a href="members.html" class="bg-white text-blue-900 px-8 py-3 rounded-xl text-lg font-bold hover:shadow-xl inline-flex items-center">
+                            <i class="fas fa-external-link-alt mr-3"></i>Access Learning Platform
+                        </a>
+                    </div>
+                    <div class="md:w-1/3 bg-gradient-to-br from-blue-800 to-teal-700 flex items-center justify-center p-8">
+                        <div class="text-center">
+                            <i class="fas fa-graduation-cap text-8xl opacity-50 mb-6"></i>
+                            <h3 class="text-2xl font-bold mb-4">Lecturio</h3>
+                            <p class="text-blue-100">Medical Education Platform</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional Resources -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">More Learning Tools</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
+                    <div class="text-blue-900 text-5xl mb-6">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Video Library</h3>
+                    <p class="text-gray-600 mb-6">Access recorded workshops, lectures, and training sessions from past events.</p>
+                    <a href="#" class="text-blue-900 font-semibold hover:underline">
+                        Browse Videos <i class="fas fa-play-circle ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
+                    <div class="text-blue-900 text-5xl mb-6">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Journal Access</h3>
+                    <p class="text-gray-600 mb-6">Get access to nursing journals and academic publications through our partnerships.</p>
+                    <a href="#" class="text-blue-900 font-semibold hover:underline">
+                        View Journals <i class="fas fa-external-link-alt ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
+                    <div class="text-blue-900 text-5xl mb-6">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Discussion Forums</h3>
+                    <p class="text-gray-600 mb-6">Join discussions, ask questions, and share knowledge with fellow nursing students.</p>
+                    <a href="members.html" class="text-blue-900 font-semibold hover:underline">
+                        Join Discussion <i class="fas fa-comment ml-2"></i>
                     </a>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Stats Section - Dynamic -->
-        <section class="py-12 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
-            <div class="container mx-auto px-4">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                    <div>
-                        <div class="text-4xl md:text-5xl font-bold mb-2" id="totalResourcesCount">0</div>
-                        <div class="text-blue-200">Resources</div>
-                    </div>
-                    <div>
-                        <div class="text-4xl md:text-5xl font-bold mb-2" id="researchCount">0</div>
-                        <div class="text-blue-200">Research Papers</div>
-                    </div>
-                    <div>
-                        <div class="text-4xl md:text-5xl font-bold mb-2" id="guidelinesCount">0</div>
-                        <div class="text-blue-200">Guidelines</div>
-                    </div>
-                    <div>
-                        <div class="text-4xl md:text-5xl font-bold mb-2" id="downloadsCount">0</div>
-                        <div class="text-blue-200">Downloads</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Resources Section - Dynamic -->
-        <section class="py-16">
-            <div class="container mx-auto px-4">
-                <div class="flex flex-col md:flex-row md:items-center justify-between mb-12">
-                    <div>
-                        <h2 class="text-3xl font-bold mb-2">Browse Resources</h2>
-                        <p class="text-gray-600">Filter by category to find exactly what you need</p>
-                    </div>
-                    <div class="mt-4 md:mt-0">
-                        <div class="relative">
-                            <input type="text" id="resourceSearch" placeholder="Search resources..." 
-                                   class="pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full md:w-80">
-                            <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filter Buttons -->
-                <div class="flex flex-wrap gap-3 mb-12" id="categoryFilters">
-                    <button class="filter-btn active px-6 py-3 rounded-xl font-medium bg-blue-900 text-white" data-filter="all">
-                        All Resources
-                    </button>
-                    <!-- Dynamic filters will be loaded here -->
-                </div>
-
-                <!-- Resources Grid -->
-                <div id="resourcesContainer">
-                    <!-- Loading state -->
-                    <div class="text-center py-12">
-                        <div class="loader mx-auto mb-4"></div>
-                        <p class="text-gray-600">Loading resources from database...</p>
-                    </div>
-                </div>
-
-                <!-- No Results Message -->
-                <div id="noResourcesMessage" class="hidden text-center py-12">
-                    <i class="fas fa-folder-open text-4xl text-gray-400 mb-4"></i>
-                    <h3 class="text-xl font-bold text-gray-700 mb-2">No Resources Found</h3>
-                    <p class="text-gray-600">Try changing your search or filter criteria</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Learning Partnership Section -->
-        <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
-            <div class="container mx-auto px-4">
-                <div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white rounded-2xl overflow-hidden shadow-2xl">
-                    <div class="flex flex-col md:flex-row">
-                        <div class="md:w-2/3 p-8 md:p-12">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-white/20 p-3 rounded-lg mr-4">
-                                    <i class="fas fa-handshake text-2xl"></i>
-                                </div>
-                                <div>
-                                    <span class="text-blue-200 text-sm font-semibold">EXCLUSIVE PARTNERSHIP</span>
-                                </div>
-                            </div>
-                            <h2 class="text-3xl font-bold mb-6">Partnership with Lecturio GmbH</h2>
-                            <p class="text-blue-100 mb-6 text-lg">
-                                We have officially signed a Memorandum of Understanding (MoU) with Lecturio GmbH, marking the beginning of our strategic partnership to provide world-class nursing education resources to our members.
-                            </p>
-                            <div class="grid grid-cols-2 gap-6 mb-8">
-                                <div class="flex items-center">
-                                    <i class="fas fa-check-circle text-blue-200 mr-3"></i>
-                                    <span>Access to 2,000+ nursing video lectures</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-check-circle text-blue-200 mr-3"></i>
-                                    <span>Interactive quizzes and assessments</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-check-circle text-blue-200 mr-3"></i>
-                                    <span>NCLEX-style question bank</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-check-circle text-blue-200 mr-3"></i>
-                                    <span>Continuing education credits</span>
-                                </div>
-                            </div>
-                            <a href="members.html" class="bg-white text-blue-900 px-8 py-3 rounded-xl text-lg font-bold hover:shadow-xl inline-flex items-center">
-                                <i class="fas fa-external-link-alt mr-3"></i>Access Learning Platform
-                            </a>
-                        </div>
-                        <div class="md:w-1/3 bg-gradient-to-br from-blue-800 to-teal-700 flex items-center justify-center p-8">
-                            <div class="text-center">
-                                <i class="fas fa-graduation-cap text-8xl opacity-50 mb-6"></i>
-                                <h3 class="text-2xl font-bold mb-4">Lecturio</h3>
-                                <p class="text-blue-100">Medical Education Platform</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Additional Resources -->
-        <section class="py-16">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-bold text-center mb-12">More Learning Tools</h2>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
-                        <div class="text-blue-900 text-5xl mb-6">
-                            <i class="fas fa-video"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-4">Video Library</h3>
-                        <p class="text-gray-600 mb-6">Access recorded workshops, lectures, and training sessions from past events.</p>
-                        <a href="#" class="text-blue-900 font-semibold hover:underline">
-                            Browse Videos <i class="fas fa-play-circle ml-2"></i>
-                        </a>
-                    </div>
-                    
-                    <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
-                        <div class="text-blue-900 text-5xl mb-6">
-                            <i class="fas fa-newspaper"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-4">Journal Access</h3>
-                        <p class="text-gray-600 mb-6">Get access to nursing journals and academic publications through our partnerships.</p>
-                        <a href="#" class="text-blue-900 font-semibold hover:underline">
-                            View Journals <i class="fas fa-external-link-alt ml-2"></i>
-                        </a>
-                    </div>
-                    
-                    <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
-                        <div class="text-blue-900 text-5xl mb-6">
-                            <i class="fas fa-comments"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-4">Discussion Forums</h3>
-                        <p class="text-gray-600 mb-6">Join discussions, ask questions, and share knowledge with fellow nursing students.</p>
-                        <a href="members.html" class="text-blue-900 font-semibold hover:underline">
-                            Join Discussion <i class="fas fa-comment ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA Section -->
-        <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-4xl font-bold mb-6">Need Specific Resources?</h2>
-                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                    Can't find what you're looking for? Request resources or suggest topics for our next resource collection.
-                </p>
-                <a href="contact.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl inline-flex items-center">
-                    <i class="fas fa-envelope mr-2"></i> Request Resources
-                </a>
-            </div>
-        </section>
-    </main>
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6">Need Specific Resources?</h2>
+            <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                Can't find what you're looking for? Request resources or suggest topics for our next resource collection.
+            </p>
+            <a href="contact.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl inline-flex items-center">
+                <i class="fas fa-envelope mr-2"></i> Request Resources
+            </a>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
@@ -492,31 +459,62 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Dynamic Resources -->
+    <!-- Load Supabase at the bottom -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Main JavaScript -->
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Set current year
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    // Global variables
+    let allResources = [];
+    let supabaseClient = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', function() {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                
+                if (isHidden) {
+                    mobileMenu.classList.remove('hidden');
+                    this.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    this.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+                }
+            });
+        }
+        
+        // Initialize and load resources
+        initializeApp();
+    });
     
-    // Mobile menu toggle
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    
-    if (menuBtn && mobileMenu) {
-        menuBtn.addEventListener('click', function() {
-            const isHidden = mobileMenu.classList.contains('hidden');
+    async function initializeApp() {
+        try {
+            console.log('Initializing KESNNUR Resources App...');
             
-            if (isHidden) {
-                mobileMenu.classList.remove('hidden');
-                this.innerHTML = '<i class="fas fa-times text-2xl"></i>';
-            } else {
-                mobileMenu.classList.add('hidden');
-                this.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
-            }
-        });
+            // Initialize Supabase
+            const supabaseUrl = 'https://noadhwqvaxajuckpibbo.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+            
+            supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+            console.log('Supabase client initialized');
+            
+            // Load resources
+            await loadResources();
+            
+        } catch (error) {
+            console.error('App initialization error:', error);
+            showError('Failed to initialize application: ' + error.message);
+        }
     }
     
-    // Helper function for resource type display
+    // Helper functions
     function getResourceTypeDisplay(type) {
         const types = {
             'document': 'Document',
@@ -555,57 +553,47 @@ document.addEventListener('DOMContentLoaded', function() {
         return colors[category] || 'bg-gray-100 text-gray-700';
     }
     
-    // Initialize resources
-    loadResources();
-    
     async function loadResources() {
         try {
-            // Show loading state
-            document.getElementById('resourcesContainer').innerHTML = `
-                <div class="text-center py-12">
-                    <div class="loader mx-auto mb-4"></div>
-                    <p class="text-gray-600">Loading resources from database...</p>
-                </div>
-            `;
+            console.log('Loading resources from Supabase...');
             
-            // Fetch resources from Supabase
-            const { data: resources, error } = await supabase
+            const { data: resources, error } = await supabaseClient
                 .from('resources')
                 .select('*')
                 .eq('is_active', true)
                 .order('display_order', { ascending: true })
                 .order('created_at', { ascending: false });
             
-            if (error) throw error;
+            if (error) {
+                console.error('Supabase query error:', error);
+                throw new Error(`Database error: ${error.message}`);
+            }
             
-            // Update stats
+            console.log(`Loaded ${resources?.length || 0} resources`);
+            
+            if (!resources || resources.length === 0) {
+                showNoResources();
+                return;
+            }
+            
+            // Store resources globally
+            allResources = resources;
+            
+            // Update UI
             updateResourceStats(resources);
-            
-            // Load categories for filters
             loadCategoryFilters(resources);
-            
-            // Display resources
             displayResources(resources);
-            
-            // Setup search functionality
-            setupSearchFunctionality(resources);
+            setupSearchFunctionality();
             
         } catch (error) {
             console.error('Error loading resources:', error);
-            document.getElementById('resourcesContainer').innerHTML = `
-                <div class="text-center py-12 text-red-600">
-                    <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">Error Loading Resources</h3>
-                    <p class="mb-4">Failed to load resources from database</p>
-                    <button onclick="loadResources()" class="px-4 py-2 bg-blue-900 text-white rounded-lg">
-                        <i class="fas fa-redo mr-2"></i> Try Again
-                    </button>
-                </div>
-            `;
+            showError(error.message);
         }
     }
     
     function updateResourceStats(resources) {
+        if (!resources) return;
+        
         const total = resources.length;
         const research = resources.filter(r => r.category === 'research').length;
         const guidelines = resources.filter(r => r.category === 'guidelines').length;
@@ -618,6 +606,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function loadCategoryFilters(resources) {
+        if (!resources || resources.length === 0) return;
+        
         const categories = ['research', 'guidelines', 'templates', 'lectures', 'career', 'video', 'other'];
         const categoryNames = {
             'research': 'Research Papers',
@@ -632,7 +622,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const filtersContainer = document.getElementById('categoryFilters');
         let filtersHTML = `
             <button class="filter-btn active px-6 py-3 rounded-xl font-medium bg-blue-900 text-white" data-filter="all">
-                All Resources
+                All Resources (${resources.length})
             </button>
         `;
         
@@ -674,21 +664,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const container = document.getElementById('resourcesContainer');
         
         if (!resources || resources.length === 0) {
-            container.innerHTML = `
-                <div class="text-center py-12">
-                    <i class="fas fa-folder-open text-4xl text-gray-400 mb-4"></i>
-                    <h3 class="text-xl font-bold text-gray-700 mb-2">No Resources Available</h3>
-                    <p class="text-gray-600">Check back soon for new resources</p>
-                </div>
-            `;
-            document.getElementById('noResourcesMessage').classList.add('hidden');
+            showNoResources();
             return;
         }
         
-        let resourcesHTML = '<div class="grid md:grid-cols-3 gap-8">';
+        let resourcesHTML = '<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">';
         
         resources.forEach(resource => {
-            const icon = resource.icon || 'fas fa-file-pdf';
+            const icon = resource.icon || 'fas fa-file-alt';
             const iconColor = resource.icon_color || 'text-blue-900';
             const iconBg = resource.icon_bg_color || 'bg-blue-100';
             const fileSize = resource.file_size ? `${resource.file_size} MB` : 'Size not specified';
@@ -697,11 +680,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric'
-            }) : 'Date not available';
+            }) : 'Recently added';
             
             // Use helper functions for better display
             const resourceType = getResourceTypeDisplay(resource.resource_type);
             const category = getCategoryDisplay(resource.category);
+            
+            // Access level badge
+            const accessBadge = resource.access_level === 'public' ? 
+                '<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded ml-2">Public</span>' :
+                '<span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded ml-2">Member Only</span>';
+            
+            // Escape quotes for JavaScript
+            const safeTitle = (resource.title || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const safeUrl = (resource.file_url || '#').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const safeId = resource.id;
             
             resourcesHTML += `
                 <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="${resource.category || 'other'}">
@@ -710,7 +703,10 @@ document.addEventListener('DOMContentLoaded', function() {
                             <i class="${icon} ${iconColor} text-3xl"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-xl">${resource.title}</h3>
+                            <div class="flex items-center flex-wrap">
+                                <h3 class="font-bold text-xl">${resource.title || 'Untitled Resource'}</h3>
+                                ${accessBadge}
+                            </div>
                             <div class="flex items-center text-gray-600 mt-1">
                                 <span class="mr-4">${resourceType} • ${fileSize}</span>
                                 <span class="text-sm ${getCategoryColor(resource.category)} px-2 py-1 rounded">
@@ -731,9 +727,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </span>
                             ` : ''}
                         </div>
-                        <button onclick="downloadResource('${resource.id}', '${resource.file_url}', '${resource.title}')" 
-                                class="download-btn bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors">
-                            <i class="fas fa-download mr-2"></i>Download
+                        <button onclick="handleResourceAction('${safeId}', '${safeUrl}', '${safeTitle}', '${resource.access_level}')" 
+                                class="${resource.access_level === 'public' ? 'bg-blue-900 hover:bg-blue-800' : 'bg-gray-500 hover:bg-gray-600'} text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                            ${resource.access_level === 'public' ? 
+                                '<i class="fas fa-download mr-2"></i>Download' : 
+                                '<i class="fas fa-lock mr-2"></i>Member Only'}
                         </button>
                     </div>
                 </div>
@@ -777,7 +775,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    function setupSearchFunctionality(resources) {
+    function setupSearchFunctionality() {
         const searchInput = document.getElementById('resourceSearch');
         
         if (searchInput) {
@@ -817,46 +815,80 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Make downloadResource function accessible globally
-    window.downloadResource = async function(resourceId, fileUrl, title) {
+    async function handleResourceAction(resourceId, fileUrl, title, accessLevel) {
         try {
-            // First, get current download count
-            const { data: resource, error: fetchError } = await supabase
-                .from('resources')
-                .select('download_count')
-                .eq('id', resourceId)
-                .single();
+            if (accessLevel !== 'public') {
+                alert('This resource requires KESNNUR membership. Please sign up or log in to access member-only resources.');
+                window.location.href = 'members.html';
+                return;
+            }
             
-            if (fetchError) throw fetchError;
+            // Update download count
+            if (supabaseClient) {
+                const { data: resource } = await supabaseClient
+                    .from('resources')
+                    .select('download_count')
+                    .eq('id', resourceId)
+                    .single();
+                
+                if (resource) {
+                    const newCount = (resource.download_count || 0) + 1;
+                    await supabaseClient
+                        .from('resources')
+                        .update({ download_count: newCount })
+                        .eq('id', resourceId);
+                }
+            }
             
-            // Update download count - increment by 1
-            const newCount = (resource.download_count || 0) + 1;
-            
-            const { error: updateError } = await supabase
-                .from('resources')
-                .update({ download_count: newCount })
-                .eq('id', resourceId);
-            
-            if (updateError) throw updateError;
-            
-            // Open download link in new tab
-            window.open(fileUrl, '_blank');
+            // Open download link
+            if (fileUrl && fileUrl !== '#') {
+                window.open(fileUrl, '_blank');
+            } else {
+                alert('Download link not available for this resource.');
+            }
             
             // Show success message
             showToast(`${title} downloaded successfully!`, 'success');
             
-            // Reload resources to update counts after a short delay
-            setTimeout(() => loadResources(), 1000);
+            // Refresh resources after a delay
+            setTimeout(() => loadResources(), 1500);
             
         } catch (error) {
-            console.error('Error downloading resource:', error);
-            // Still try to open the file even if count update fails
-            window.open(fileUrl, '_blank');
-            showToast('File opened. Download count may not update.', 'info');
+            console.error('Download error:', error);
+            // Still try to open the file
+            if (fileUrl && fileUrl !== '#') {
+                window.open(fileUrl, '_blank');
+            }
+            showToast('File opened successfully!', 'info');
         }
-    };
+    }
     
-    // Toast notification function
+    function showNoResources() {
+        const container = document.getElementById('resourcesContainer');
+        container.innerHTML = `
+            <div class="text-center py-12">
+                <i class="fas fa-folder-open text-4xl text-gray-400 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-700 mb-2">No Resources Available</h3>
+                <p class="text-gray-600">Check back soon for new resources</p>
+            </div>
+        `;
+        document.getElementById('noResourcesMessage').classList.add('hidden');
+    }
+    
+    function showError(message) {
+        const container = document.getElementById('resourcesContainer');
+        container.innerHTML = `
+            <div class="text-center py-12 text-red-600">
+                <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">Error Loading Resources</h3>
+                <p class="mb-4">${message}</p>
+                <button onclick="loadResources()" class="px-4 py-2 bg-blue-900 text-white rounded-lg">
+                    <i class="fas fa-redo mr-2"></i> Try Again
+                </button>
+            </div>
+        `;
+    }
+    
     function showToast(message, type = 'info') {
         const toast = document.createElement('div');
         toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-xl shadow-lg text-white font-medium transform translate-x-full transition-transform duration-300 ${
@@ -884,7 +916,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 300);
         }, 3000);
     }
-});
-</script>
+    
+    // Make functions globally accessible
+    window.handleResourceAction = handleResourceAction;
+    </script>
 </body>
 </html>
