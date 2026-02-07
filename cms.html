@@ -1540,221 +1540,221 @@
         }
     }
 
-    // ================== MANAGEMENT PAGE FUNCTIONS ==================
-    async function loadManagementPage() {
-        console.log("👥 Loading management page...");
+// ================== MANAGEMENT PAGE FUNCTIONS ==================
+async function loadManagementPage() {
+    console.log("👥 Loading management page...");
+    
+    const nationalContainer = document.getElementById('managementMembers');
+    const regionalContainer = document.getElementById('regionalMembers');
+    const adhocContainer = document.getElementById('adhocMembers');
+    
+    try {
+        const supabase = await getSupabaseClient();
+        const { data: allSections, error } = await supabase
+            .from('management_sections')
+            .select('*')
+            .eq('is_active', true)
+            .order('section_type', { ascending: true })
+            .order('display_order', { ascending: true });
         
-        const nationalContainer = document.getElementById('managementMembers');
-        const regionalContainer = document.getElementById('regionalMembers');
-        const adhocContainer = document.getElementById('adhocMembers');
+        if (error) throw error;
         
-        try {
-            const supabase = await getSupabaseClient();
-            const { data: allSections, error } = await supabase
-                .from('management_sections')
-                .select('*')
-                .eq('is_active', true)
-                .order('section_type', { ascending: true })
-                .order('display_order', { ascending: true });
-            
-            if (error) throw error;
-            
-            const nationalCouncil = allSections.filter(s => s.section_type === 'national_council');
-            const regional = allSections.filter(s => s.section_type === 'regional');
-            const adhoc = allSections.filter(s => s.section_type === 'ad_hoc');
-            
-            console.log(`📊 Loaded: ${nationalCouncil.length} NGC, ${regional.length} Regional, ${adhoc.length} Ad Hoc`);
-            
-            renderNationalCouncilCMS(nationalCouncil, nationalContainer);
-            
-            if (regionalContainer) {
-                renderRegionalCommitteesCMS(regional, regionalContainer);
-            }
-            
-            if (adhocContainer) {
-                renderAdHocCommitteesCMS(adhoc, adhocContainer);
-            }
-            
-        } catch (error) {
-            console.error("❌ Error loading management data:", error);
-            showNotification('Error loading management data', 'error');
+        const nationalCouncil = allSections.filter(s => s.section_type === 'national_council');
+        const regional = allSections.filter(s => s.section_type === 'regional');
+        const adhoc = allSections.filter(s => s.section_type === 'ad_hoc');
+        
+        console.log(`📊 Loaded: ${nationalCouncil.length} NGC, ${regional.length} Regional, ${adhoc.length} Ad Hoc`);
+        
+        renderNationalCouncilCMS(nationalCouncil, nationalContainer);
+        
+        if (regionalContainer) {
+            renderRegionalCommitteesCMS(regional, regionalContainer);
         }
+        
+        if (adhocContainer) {
+            renderAdHocCommitteesCMS(adhoc, adhocContainer);
+        }
+        
+    } catch (error) {
+        console.error("❌ Error loading management data:", error);
+        showNotification('Error loading management data', 'error');
     }
+}
 
-    function renderNationalCouncilCMS(members, container) {
-        if (!container) return;
+function renderNationalCouncilCMS(members, container) {
+    if (!container) return;
+    
+    if (!members || members.length === 0) {
+        container.innerHTML = `
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                <p class="text-blue-700">No National Council members added yet.</p>
+                <p class="text-sm text-blue-600 mt-1">Use "Add Team Member" and select "National Council"</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    members.forEach(member => {
+        const colorMap = {
+            'blue': 'from-blue-900 to-blue-700',
+            'teal': 'from-teal-700 to-teal-500',
+            'purple': 'from-purple-700 to-purple-500',
+            'amber': 'from-amber-700 to-amber-500',
+            'cyan': 'from-cyan-700 to-cyan-500',
+            'red': 'from-red-700 to-red-500',
+            'pink': 'from-pink-700 to-pink-500',
+            'indigo': 'from-indigo-700 to-indigo-500',
+            'green': 'from-green-700 to-green-500'
+        };
         
-        if (!members || members.length === 0) {
-            container.innerHTML = `
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                    <p class="text-blue-700">No National Council members added yet.</p>
-                    <p class="text-sm text-blue-600 mt-1">Use "Add Team Member" and select "National Council"</p>
+        const hasImage = member.profile_image_url && member.profile_image_url.trim() !== '';
+        
+        html += `
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                        <div class="flex items-start mb-3">
+                            <div class="w-16 h-16 ${colorMap[member.color_scheme] || 'from-blue-900 to-blue-700'} rounded-full flex items-center justify-center overflow-hidden mr-4">
+                                ${hasImage ? 
+                                    `<img src="${member.profile_image_url}" 
+                                          alt="${member.person_name}" 
+                                          class="w-full h-full object-cover">` :
+                                    `<span class="text-white font-bold text-xl">
+                                        ${member.avatar_initials || member.person_name.charAt(0)}
+                                     </span>`
+                                }
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-lg">${member.person_name}</h4>
+                                <p class="text-blue-900 font-semibold">${member.position}</p>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mt-2">${member.description}</p>
+                    </div>
+                    
+                    <div class="flex space-x-2 ml-4">
+                        <button onclick="editTeamMember('${member.id}')" class="text-blue-600 hover:text-blue-800">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deleteTeamMember('${member.id}')" class="text-red-600 hover:text-red-800">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
-            `;
-            return;
-        }
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+function renderRegionalCommitteesCMS(committees, container) {
+    if (!committees || committees.length === 0) {
+        container.innerHTML = `
+            <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
+                <p class="text-teal-700">No Regional Committees added yet.</p>
+                <p class="text-sm text-teal-600 mt-1">Use "Add Team Member" and select "Regional Committee"</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    committees.forEach(committee => {
+        const hasImage = committee.profile_image_url && committee.profile_image_url.trim() !== '';
         
-        let html = '';
-        members.forEach(member => {
-            const colorMap = {
-                'blue': 'from-blue-900 to-blue-700',
-                'teal': 'from-teal-700 to-teal-500',
-                'purple': 'from-purple-700 to-purple-500',
-                'amber': 'from-amber-700 to-amber-500',
-                'cyan': 'from-cyan-700 to-cyan-500',
-                'red': 'from-red-700 to-red-500',
-                'pink': 'from-pink-700 to-pink-500',
-                'indigo': 'from-indigo-700 to-indigo-500',
-                'green': 'from-green-700 to-green-500'
-            };
-            
-            const hasImage = member.profile_image_url && member.profile_image_url.trim() !== '';
-            
-            html += `
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <div class="flex justify-between items-start">
+        html += `
+            <div class="bg-white rounded-lg border p-4">
+                <div class="flex justify-between items-start">
+                    <div class="flex items-start">
+                        ${hasImage ? `
+                            <img src="${committee.profile_image_url}" 
+                                 alt="${committee.person_name}" 
+                                 class="w-12 h-12 rounded-full object-cover mr-3">
+                        ` : `
+                            <div class="w-12 h-12 bg-gradient-to-r from-teal-500 to-teal-700 rounded-full 
+                                      flex items-center justify-center text-white font-bold mr-3">
+                                ${committee.person_name.charAt(0)}
+                            </div>
+                        `}
                         <div class="flex-1">
-                            <div class="flex items-start mb-3">
-                                <div class="w-16 h-16 ${colorMap[member.color_scheme] || 'from-blue-900 to-blue-700'} rounded-full flex items-center justify-center overflow-hidden mr-4">
-                                    ${hasImage ? 
-                                        `<img src="${member.profile_image_url}" 
-                                              alt="${member.person_name}" 
-                                              class="w-full h-full object-cover">` :
-                                        `<span class="text-white font-bold text-xl">
-                                            ${member.avatar_initials || member.person_name.charAt(0)}
-                                         </span>`
-                                    }
-                                </div>
-                                <div class="flex-1">
-                                    <h4 class="font-bold text-lg">${member.person_name}</h4>
-                                    <p class="text-blue-900 font-semibold">${member.position}</p>
-                                </div>
-                            </div>
-                            
-                            <p class="text-gray-600 text-sm mt-2">${member.description}</p>
-                        </div>
-                        
-                        <div class="flex space-x-2 ml-4">
-                            <button onclick="editTeamMember('${member.id}')" class="text-blue-600 hover:text-blue-800">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button onclick="deleteTeamMember('${member.id}')" class="text-red-600 hover:text-red-800">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <h4 class="font-bold mb-1">${committee.person_name}</h4>
+                            <p class="text-teal-700 font-semibold text-sm">${committee.position}</p>
+                            <p class="text-gray-600 text-sm mb-2">${committee.description}</p>
                         </div>
                     </div>
-                </div>
-            `;
-        });
-        
-        container.innerHTML = html;
-    }
-
-    function renderRegionalCommitteesCMS(committees, container) {
-        if (!committees || committees.length === 0) {
-            container.innerHTML = `
-                <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
-                    <p class="text-teal-700">No Regional Committees added yet.</p>
-                    <p class="text-sm text-teal-600 mt-1">Use "Add Team Member" and select "Regional Committee"</p>
-                </div>
-            `;
-            return;
-        }
-        
-        let html = '';
-        committees.forEach(committee => {
-            const hasImage = committee.profile_image_url && committee.profile_image_url.trim() !== '';
-            
-            html += `
-                <div class="bg-white rounded-lg border p-4">
-                    <div class="flex justify-between items-start">
-                        <div class="flex items-start">
-                            ${hasImage ? `
-                                <img src="${committee.profile_image_url}" 
-                                     alt="${committee.person_name}" 
-                                     class="w-12 h-12 rounded-full object-cover mr-3">
-                            ` : `
-                                <div class="w-12 h-12 bg-gradient-to-r from-teal-500 to-teal-700 rounded-full 
-                                          flex items-center justify-center text-white font-bold mr-3">
-                                    ${committee.person_name.charAt(0)}
-                                </div>
-                            `}
-                            <div class="flex-1">
-                                <h4 class="font-bold mb-1">${committee.person_name}</h4>
-                                <p class="text-teal-700 font-semibold text-sm">${committee.position}</p>
-                                <p class="text-gray-600 text-sm mb-2">${committee.description}</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex space-x-2 ml-4">
-                            <button onclick="editTeamMember('${committee.id}')" class="text-teal-600 hover:text-teal-800">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button onclick="deleteTeamMember('${committee.id}')" class="text-red-600 hover:text-red-800">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
+                    
+                    <div class="flex space-x-2 ml-4">
+                        <button onclick="editTeamMember('${committee.id}')" class="text-teal-600 hover:text-teal-800">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deleteTeamMember('${committee.id}')" class="text-red-600 hover:text-red-800">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
-            `;
-        });
-        
-        container.innerHTML = html;
-    }
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
 
-    function renderAdHocCommitteesCMS(committees, container) {
-        if (!committees || committees.length === 0) {
-            container.innerHTML = `
-                <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
-                    <p class="text-purple-700">No Ad Hoc Committees added yet.</p>
-                    <p class="text-sm text-purple-600 mt-1">Use "Add Team Member" and select "Ad Hoc Committee"</p>
-                </div>
-            `;
-            return;
-        }
+function renderAdHocCommitteesCMS(committees, container) {
+    if (!committees || committees.length === 0) {
+        container.innerHTML = `
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
+                <p class="text-purple-700">No Ad Hoc Committees added yet.</p>
+                <p class="text-sm text-purple-600 mt-1">Use "Add Team Member" and select "Ad Hoc Committee"</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    committees.forEach(committee => {
+        const hasImage = committee.profile_image_url && committee.profile_image_url.trim() !== '';
         
-        let html = '';
-        committees.forEach(committee => {
-            const hasImage = committee.profile_image_url && committee.profile_image_url.trim() !== '';
-            
-            html += `
-                <div class="bg-white rounded-lg border p-4">
-                    <div class="flex justify-between items-start">
-                        <div class="flex items-start">
-                            ${hasImage ? `
-                                <img src="${committee.profile_image_url}" 
-                                     alt="${committee.person_name}" 
-                                     class="w-12 h-12 rounded-full object-cover mr-3">
-                            ` : `
-                                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-700 rounded-full 
-                                          flex items-center justify-center text-white font-bold mr-3">
-                                    ${committee.person_name.charAt(0)}
-                                </div>
-                            `}
-                            <div class="flex-1">
-                                <h4 class="font-bold mb-1">${committee.person_name}</h4>
-                                <p class="text-purple-700 font-semibold text-sm">${committee.position}</p>
-                                <p class="text-gray-600 text-sm mb-2">${committee.description}</p>
+        html += `
+            <div class="bg-white rounded-lg border p-4">
+                <div class="flex justify-between items-start">
+                    <div class="flex items-start">
+                        ${hasImage ? `
+                            <img src="${committee.profile_image_url}" 
+                                 alt="${committee.person_name}" 
+                                 class="w-12 h-12 rounded-full object-cover mr-3">
+                        ` : `
+                            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-700 rounded-full 
+                                      flex items-center justify-center text-white font-bold mr-3">
+                                ${committee.person_name.charAt(0)}
                             </div>
-                        </div>
-                        
-                        <div class="flex space-x-2 ml-4">
-                            <button onclick="editTeamMember('${committee.id}')" class="text-purple-600 hover:text-purple-800">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button onclick="deleteTeamMember('${committee.id}')" class="text-red-600 hover:text-red-800">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                        `}
+                        <div class="flex-1">
+                            <h4 class="font-bold mb-1">${committee.person_name}</h4>
+                            <p class="text-purple-700 font-semibold text-sm">${committee.position}</p>
+                            <p class="text-gray-600 text-sm mb-2">${committee.description}</p>
                         </div>
                     </div>
+                    
+                    <div class="flex space-x-2 ml-4">
+                        <button onclick="editTeamMember('${committee.id}')" class="text-purple-600 hover:text-purple-800">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deleteTeamMember('${committee.id}')" class="text-red-600 hover:text-red-800">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
-            `;
-        });
-        
-        container.innerHTML = html;
-    }
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
 
-   function addTeamMember() {
+function addTeamMember() {
     // Color options for dropdown
     const colorOptions = [
         {value: 'blue', label: 'Blue'},
@@ -1897,11 +1897,34 @@
                         </div>
                         
                         <div>
-                            <label class="block text-sm font-medium mb-1">Twitter/X Profile URL</label>
-                            <input type="url" id="memberTwitter" 
+                            <label class="block text-sm font-medium mb-1">Twitter/X Handle</label>
+                            <input type="text" id="memberTwitter" 
                                    class="w-full border border-purple-200 rounded-lg p-2.5"
-                                   placeholder="https://twitter.com/username">
+                                   placeholder="username (without @)">
                         </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Instagram Handle</label>
+                            <input type="text" id="memberInstagram" 
+                                   class="w-full border border-purple-200 rounded-lg p-2.5"
+                                   placeholder="username (without @)">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Facebook Profile/Page</label>
+                            <input type="text" id="memberFacebook" 
+                                   class="w-full border border-purple-200 rounded-lg p-2.5"
+                                   placeholder="username">
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium mb-1">Email Address</label>
+                        <input type="email" id="memberEmail" 
+                               class="w-full border border-purple-200 rounded-lg p-2.5"
+                               placeholder="email@example.com">
                     </div>
                 </div>
             </div>
@@ -1935,6 +1958,9 @@ async function saveNewTeamMemberComprehensive() {
     const isActive = document.getElementById('memberIsActive').value === 'true';
     const linkedin = document.getElementById('memberLinkedIn').value;
     const twitter = document.getElementById('memberTwitter').value;
+    const instagram = document.getElementById('memberInstagram').value;
+    const facebook = document.getElementById('memberFacebook').value;
+    const email = document.getElementById('memberEmail').value;
     
     if (!name || !position) {
         showNotification('Name and Position are required fields', 'error');
@@ -1955,8 +1981,13 @@ async function saveNewTeamMemberComprehensive() {
                 color_scheme: colorScheme,
                 display_order: parseInt(displayOrder) || 99,
                 is_active: isActive,
-                linkedin_url: linkedin || null,
-                twitter_url: twitter || null,
+                social_handles: {
+                    linkedin: linkedin || null,
+                    twitter: twitter ? (twitter.startsWith('@') ? twitter : '@' + twitter) : null,
+                    instagram: instagram ? (instagram.startsWith('@') ? instagram : '@' + instagram) : null,
+                    facebook: facebook || null,
+                    email: email || null
+                },
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString()
             });
@@ -1973,7 +2004,7 @@ async function saveNewTeamMemberComprehensive() {
     }
 }
 
-   async function editTeamMember(id) {
+async function editTeamMember(id) {
     try {
         const supabase = await getSupabaseClient();
         const { data: member, error } = await supabase
@@ -1983,6 +2014,13 @@ async function saveNewTeamMemberComprehensive() {
             .single();
         
         if (error) throw error;
+        
+        // Get social handles (with fallback for old data)
+        const socialHandles = member.social_handles || {};
+        
+        // Extract handles (remove @ symbol for editing)
+        const twitterHandle = socialHandles.twitter ? socialHandles.twitter.replace('@', '') : '';
+        const instagramHandle = socialHandles.instagram ? socialHandles.instagram.replace('@', '') : '';
         
         // Color options for dropdown
         const colorOptions = [
@@ -2138,17 +2176,43 @@ async function saveNewTeamMemberComprehensive() {
                                 <label class="block text-sm font-medium mb-1">LinkedIn Profile URL</label>
                                 <input type="url" id="editLinkedIn" 
                                        class="w-full border border-purple-200 rounded-lg p-2.5"
-                                       value="${member.linkedin_url || ''}"
+                                       value="${socialHandles.linkedin || ''}"
                                        placeholder="https://linkedin.com/in/username">
                             </div>
                             
                             <div>
-                                <label class="block text-sm font-medium mb-1">Twitter/X Profile URL</label>
-                                <input type="url" id="editTwitter" 
+                                <label class="block text-sm font-medium mb-1">Twitter/X Handle</label>
+                                <input type="text" id="editTwitter" 
                                        class="w-full border border-purple-200 rounded-lg p-2.5"
-                                       value="${member.twitter_url || ''}"
-                                       placeholder="https://twitter.com/username">
+                                       value="${twitterHandle}"
+                                       placeholder="username (without @)">
                             </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Instagram Handle</label>
+                                <input type="text" id="editInstagram" 
+                                       class="w-full border border-purple-200 rounded-lg p-2.5"
+                                       value="${instagramHandle}"
+                                       placeholder="username (without @)">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Facebook Profile/Page</label>
+                                <input type="text" id="editFacebook" 
+                                       class="w-full border border-purple-200 rounded-lg p-2.5"
+                                       value="${socialHandles.facebook || ''}"
+                                       placeholder="username">
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium mb-1">Email Address</label>
+                            <input type="email" id="editEmail" 
+                                   class="w-full border border-purple-200 rounded-lg p-2.5"
+                                   value="${socialHandles.email || ''}"
+                                   placeholder="email@example.com">
                         </div>
                     </div>
                 </div>
@@ -2187,6 +2251,9 @@ async function updateTeamMemberComprehensive(id) {
     const isActive = document.getElementById('editIsActive').value === 'true';
     const linkedin = document.getElementById('editLinkedIn').value;
     const twitter = document.getElementById('editTwitter').value;
+    const instagram = document.getElementById('editInstagram').value;
+    const facebook = document.getElementById('editFacebook').value;
+    const email = document.getElementById('editEmail').value;
     
     if (!name || !position) {
         showNotification('Name and Position are required fields', 'error');
@@ -2207,8 +2274,13 @@ async function updateTeamMemberComprehensive(id) {
                 section_type: sectionType,
                 display_order: parseInt(displayOrder) || 99,
                 is_active: isActive,
-                linkedin_url: linkedin || null,
-                twitter_url: twitter || null,
+                social_handles: {
+                    linkedin: linkedin || null,
+                    twitter: twitter ? (twitter.startsWith('@') ? twitter : '@' + twitter) : null,
+                    instagram: instagram ? (instagram.startsWith('@') ? instagram : '@' + instagram) : null,
+                    facebook: facebook || null,
+                    email: email || null
+                },
                 updated_at: new Date().toISOString()
             })
             .eq('id', id);
@@ -2222,6 +2294,27 @@ async function updateTeamMemberComprehensive(id) {
     } catch (error) {
         console.error('Error updating member:', error);
         showNotification('Error updating member: ' + error.message, 'error');
+    }
+}
+
+// Add this delete function if missing
+async function deleteTeamMember(id) {
+    if (confirm('Are you sure you want to delete this team member?')) {
+        try {
+            const supabase = await getSupabaseClient();
+            const { error } = await supabase
+                .from('management_sections')
+             .delete()
+                .eq('id', id);
+            
+            if (error) throw error;
+            
+            showNotification('Team member deleted successfully!', 'success');
+            loadManagementPage();
+        } catch (error) {
+            console.error('Error deleting member:', error);
+            showNotification('Error deleting member: ' + error.message, 'error');
+        }
     }
 }
 
