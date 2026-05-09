@@ -7,14 +7,8 @@
     
     <!-- Meta Description for SEO -->
     <meta name="description" content="Learn about KESNNUR - Kenya's premier community for nursing students and novice nurses. Our mission, vision, and impact on nursing education.">
-    
-    <!-- Keywords for SEO -->
     <meta name="keywords" content="KESNNUR about, nursing students Kenya, novice nurses, nursing community Kenya, nursing mentorship, NNAK chapter">
-    
-    <!-- Author -->
     <meta name="author" content="KESNNUR">
-    
-    <!-- Canonical URL -->
     <link rel="canonical" href="https://kesnnur.nnak.or.ke/about.html">
     
     <!-- Open Graph / Facebook -->
@@ -25,14 +19,13 @@
     <meta property="og:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
     
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://kesnnur.nnak.or.ke/about.html">
-    <meta property="twitter:title" content="About KESNNUR | Kenya's Nursing Community">
-    <meta property="twitter:description" content="Discover KESNNUR's mission to empower nursing students and novice nurses in Kenya through education, mentorship, and community.">
-    <meta property="twitter:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://kesnnur.nnak.or.ke/about.html">
+    <meta name="twitter:title" content="About KESNNUR | Kenya's Nursing Community">
+    <meta name="twitter:description" content="Discover KESNNUR's mission to empower nursing students and novice nurses in Kenya through education, mentorship, and community.">
+    <meta name="twitter:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
     
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#1e3a8a">
+    <meta name="theme-color" content="#0f2b5e">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
@@ -42,13 +35,34 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        'kesnnur-blue': '#1e3a8a',
-                        'kesnnur-light': '#3b82f6',
-                        'kesnnur-teal': '#0d9488',
-                        'kesnnur-gold': '#f59e0b'
+                        'kesnnur': {
+                            navy: '#0f2b5e',
+                            blue: '#1e3a8a',
+                            light: '#3b82f6',
+                            teal: '#0d9488',
+                            gold: '#fbbf24',
+                            dark: '#1e293b'
+                        }
+                    },
+                    fontFamily: {
+                        'display': ['"Plus Jakarta Sans"', '"Poppins"', 'system-ui'],
+                        'body': ['"Inter"', 'system-ui']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'shimmer': 'shimmer 2s infinite'
+                    },
+                    keyframes: {
+                        float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-8px)' } },
+                        glow: { '0%,100%': { boxShadow: '0 0 5px rgba(59,130,246,0.3)' }, '50%': { boxShadow: '0 0 20px rgba(59,130,246,0.5)' } },
+                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } }
                     }
                 }
             }
@@ -59,16 +73,74 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Custom Styles -->
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
     <style>
         :root {
+            --kesnnur-navy: #0f2b5e;
             --kesnnur-blue: #1e3a8a;
             --kesnnur-light: #3b82f6;
             --kesnnur-teal: #0d9488;
-            --kesnnur-gold: #f59e0b;
+            --kesnnur-gold: #fbbf24;
         }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Custom Cursor - Only on desktop */
+        @media (min-width: 768px) {
+            .custom-cursor {
+                width: 32px;
+                height: 32px;
+                border: 2px solid var(--kesnnur-gold);
+                border-radius: 50%;
+                position: fixed;
+                pointer-events: none;
+                z-index: 99999;
+                transition: transform 0.1s ease, width 0.2s, height 0.2s;
+                transform: translate(-50%, -50%);
+            }
+            .custom-cursor.hover { width: 48px; height: 48px; background: rgba(251, 191, 36, 0.1); }
+            .custom-cursor-dot {
+                width: 6px;
+                height: 6px;
+                background: var(--kesnnur-gold);
+                border-radius: 50%;
+                position: fixed;
+                pointer-events: none;
+                z-index: 99999;
+                transform: translate(-50%, -50%);
+            }
+            body { cursor: none; }
+        }
+        
+        @media (max-width: 768px) {
+            .custom-cursor, .custom-cursor-dot { display: none; }
+            body { cursor: auto; }
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Dark Mode */
+        body.dark { background: #0f172a; color: #f1f5f9; }
+        body.dark .bg-white { background: #1e293b !important; }
+        body.dark .text-gray-600 { color: #94a3b8 !important; }
+        body.dark .text-gray-500 { color: #64748b !important; }
+        body.dark .border-gray-100 { border-color: #334155 !important; }
+        body.dark .bg-gray-50 { background: #0f172a !important; }
+        body.dark .glass-nav { background: rgba(15, 23, 42, 0.96); border-bottom-color: #334155; }
+        body.dark .program-card, body.dark .value-card, body.dark .impact-card { background: #1e293b !important; }
+        body.dark .stats-card { background: rgba(255,255,255,0.05); }
+        body.dark .timeline-item:after { background: #334155; }
+        
+        .font-display { font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif; }
         
         /* Skip to content */
         .skip-to-content {
@@ -82,66 +154,79 @@
             text-decoration: none;
             font-weight: 600;
         }
+        .skip-to-content:focus { top: 0; cursor: pointer; }
         
-        .skip-to-content:focus {
-            top: 0;
+        /* Glass morphism */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: background 0.3s ease;
         }
-        
-        /* Base Styles */
-        body {
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            padding-top: 0;
-        }
-        
-        .font-display {
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        /* Glass effect */
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Gradient text */
-        .gradient-text {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        body.dark .glass-nav { background: rgba(15, 23, 42, 0.96); border-bottom-color: #334155; }
         
         /* Card hover effects */
         .program-card, .value-card, .impact-card {
-            transition: all 0.3s ease;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
-        
         .program-card:hover, .value-card:hover, .impact-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.1);
+            transform: translateY(-6px);
+            box-shadow: 0 25px 35px -12px rgba(15, 43, 94, 0.2);
         }
         
         /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #1e3a8a; border-radius: 10px; }
+        body.dark ::-webkit-scrollbar-track { background: #1e293b; }
+        body.dark ::-webkit-scrollbar-thumb { background: #3b82f6; }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0d9488 50%, #3b82f6 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+        /* Hero overlay */
+        .hero-overlay {
+            background: linear-gradient(135deg, rgba(15, 43, 94, 0.85) 0%, rgba(30, 58, 138, 0.75) 50%, rgba(13, 148, 136, 0.7) 100%);
         }
         
-        ::-webkit-scrollbar-thumb {
-            background: #1e3a8a;
-            border-radius: 4px;
+        /* Reading Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #1e3a8a, #0d9488, #fbbf24);
+            z-index: 10001;
+            transition: width 0.1s ease;
         }
+        
+        /* Theme Toggle & Language Selector */
+        .theme-toggle, .lang-selector {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(8px);
+            border-radius: 50px;
+            padding: 8px 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .theme-toggle:hover, .lang-selector:hover { transform: scale(1.05); }
+        
+        /* Page transition */
+        .page-transition { animation: fadeInPage 0.5s ease-out; }
+        @keyframes fadeInPage { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
         /* Timeline styling */
         .timeline-item {
             position: relative;
             padding-left: 2rem;
         }
-        
         .timeline-item:before {
             content: '';
             position: absolute;
@@ -152,7 +237,7 @@
             background: #1e3a8a;
             border-radius: 50%;
         }
-        
+        body.dark .timeline-item:before { background: #3b82f6; }
         .timeline-item:after {
             content: '';
             position: absolute;
@@ -162,84 +247,163 @@
             height: calc(100% - 1rem);
             background: #e5e7eb;
         }
+        .timeline-item:last-child:after { display: none; }
         
-        .timeline-item:last-child:after {
-            display: none;
+        /* Floating Buttons */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+            cursor: pointer;
+            animation: bounce 2s infinite;
         }
+        .whatsapp-float:hover { transform: scale(1.1); background: #128C7E; }
         
-        /* Accessibility */
-        .focus-visible {
-            outline: 2px solid #1e3a8a;
-            outline-offset: 2px;
+        .float-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 99;
         }
+        .float-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .float-btn:hover { transform: scale(1.1); }
+        .float-call { background: #34B7F1; color: white; }
+        .float-email { background: #EA4335; color: white; }
+        .float-map { background: #4285F4; color: white; }
+        
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
-<body class="bg-gradient-to-br from-gray-50 to-blue-50">
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50/20 page-transition">
+    
+    <!-- Reading Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-dot"></div>
+    
+    <!-- Floating Action Buttons -->
+    <div class="float-buttons">
+        <div class="float-btn float-call" onclick="window.location.href='tel:+254768878303'">
+            <i class="fas fa-phone-alt"></i>
+        </div>
+        <div class="float-btn float-email" onclick="window.location.href='mailto:kesnnur@gmail.com'">
+            <i class="fas fa-envelope"></i>
+        </div>
+        <div class="float-btn float-map" onclick="window.open('https://maps.google.com/?q=Nurses+Complex+KNH+Nairobi', '_blank')">
+            <i class="fas fa-map-marker-alt"></i>
+        </div>
+    </div>
+
+    <!-- WhatsApp Float Button -->
+    <div class="whatsapp-float" onclick="window.open('https://wa.me/254768878303?text=Hello%20KESNNUR%2C%20I%27m%20interested%20in%20joining%20the%20nursing%20community!', '_blank')">
+        <i class="fab fa-whatsapp"></i>
+    </div>
+
     <!-- Skip to Content -->
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+    <nav class="sticky top-0 z-50 glass-nav shadow-sm">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
                 <!-- Logo -->
-                <a href="index.html" class="flex items-center space-x-3">
+                <a href="index.html" class="flex items-center space-x-3 group">
                     <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
                          alt="KESNNUR Logo"
                          width="40"
                          height="40"
-                         class="w-10 h-10 rounded-lg object-contain">
+                         class="w-10 h-10 rounded-xl object-contain shadow-md group-hover:scale-105 transition duration-300">
                     <div>
-                        <h1 class="text-lg md:text-xl font-bold text-blue-900 font-display">KESNNUR</h1>
-                        <p class="text-xs text-gray-600">Students & Novice Nurses</p>
+                        <h1 class="text-lg md:text-xl font-bold gradient-text font-display">KESNNUR</h1>
+                        <p class="text-xs text-gray-500 dark:text-gray-400" data-key="tagline">Students & Novice Nurses</p>
                     </div>
                 </a>
 
                 <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium">Home</a>
-                    <a href="about.html" class="text-blue-900 font-medium border-b-2 border-blue-900">About</a>
-                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium">Management</a>
-                    <a href="events.html" class="text-gray-700 hover:text-blue-900 font-medium">Events</a>
-                    <a href="blog.html" class="text-gray-700 hover:text-blue-900 font-medium">Blog</a>
-                    <a href="resources.html" class="text-gray-700 hover:text-blue-900 font-medium">Resources</a>
-                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium">Contact</a>
-                    <a href="members.html" class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800">
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-400 transition font-medium" data-key="nav_home">Home</a>
+                    <a href="about.html" class="text-blue-900 dark:text-blue-400 font-semibold border-b-2 border-amber-400 pb-0.5" data-key="nav_about">About</a>
+                    <a href="management.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-400 transition font-medium" data-key="nav_management">Management</a>
+                    <a href="events.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-400 transition font-medium" data-key="nav_events">Events</a>
+                    <a href="blog.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-400 transition font-medium" data-key="nav_blog">Blog</a>
+                    <a href="resources.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-400 transition font-medium" data-key="nav_resources">Resources</a>
+                    <a href="contact.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-400 transition font-medium" data-key="nav_contact">Contact</a>
+                    
+                    <!-- Language Selector -->
+                    <div class="lang-selector flex items-center gap-2">
+                        <i class="fas fa-globe text-teal-500"></i>
+                        <span id="currentLang" class="text-sm dark:text-white">EN</span>
+                    </div>
+                    
+                    <!-- Theme Toggle -->
+                    <div class="theme-toggle flex items-center gap-2">
+                        <i class="fas fa-sun text-yellow-500 dark:hidden"></i>
+                        <i class="fas fa-moon text-blue-300 hidden dark:inline"></i>
+                        <span id="themeToggleText" class="text-sm dark:text-white">Light</span>
+                    </div>
+                    
+                    <a href="members.html" class="bg-gradient-to-r from-blue-900 to-teal-600 text-white px-6 py-2 rounded-full font-medium shadow-md hover:shadow-lg transition-all hover:scale-105">
                         Member Portal
                     </a>
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button id="menuBtn" class="md:hidden text-blue-900" aria-label="Toggle navigation menu">
+                <button id="menuBtn" class="md:hidden text-blue-900 dark:text-blue-400" aria-label="Toggle navigation menu">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
             
             <!-- Mobile Menu -->
-            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white rounded-lg shadow-lg p-6">
+            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
                 <div class="space-y-3">
-                    <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-home mr-3"></i>Home
-                    </a>
-                    <a href="about.html" class="block py-3 px-4 bg-blue-50 text-blue-900 rounded-lg">
-                        <i class="fas fa-info-circle mr-3"></i>About
-                    </a>
-                    <a href="management.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-users mr-3"></i>Management
-                    </a>
-                    <a href="events.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-calendar-alt mr-3"></i>Events
-                    </a>
-                    <a href="blog.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-blog mr-3"></i>Blog
-                    </a>
-                    <a href="resources.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-book-medical mr-3"></i>Resources
-                    </a>
-                    <a href="contact.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-envelope mr-3"></i>Contact
-                    </a>
-                    <a href="members.html" class="block py-3 px-4 bg-blue-900 text-white rounded-lg text-center font-medium mt-4">
+                    <a href="index.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition"><i class="fas fa-home mr-3"></i><span data-key="nav_home">Home</span></a>
+                    <a href="about.html" class="block py-3 px-4 bg-gradient-to-r from-blue-50 to-teal-50 dark:from-blue-900/30 dark:to-teal-900/30 text-blue-900 dark:text-blue-400 rounded-xl font-semibold"><i class="fas fa-info-circle mr-3"></i><span data-key="nav_about">About</span></a>
+                    <a href="management.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition"><i class="fas fa-users mr-3"></i><span data-key="nav_management">Management</span></a>
+                    <a href="events.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition"><i class="fas fa-calendar-alt mr-3"></i><span data-key="nav_events">Events</span></a>
+                    <a href="blog.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition"><i class="fas fa-blog mr-3"></i><span data-key="nav_blog">Blog</span></a>
+                    <a href="resources.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition"><i class="fas fa-book-medical mr-3"></i><span data-key="nav_resources">Resources</span></a>
+                    <a href="contact.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition"><i class="fas fa-envelope mr-3"></i><span data-key="nav_contact">Contact</span></a>
+                    
+                    <div class="flex gap-3 pt-3">
+                        <div class="flex-1 lang-selector-mobile bg-gray-100 dark:bg-gray-800 rounded-xl py-2 px-4 text-center flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fas fa-globe text-teal-500"></i>
+                            <span>EN / SW</span>
+                        </div>
+                        <div class="flex-1 theme-toggle-mobile bg-gray-100 dark:bg-gray-800 rounded-xl py-2 px-4 text-center cursor-pointer">
+                            <i class="fas fa-moon dark:hidden"></i>
+                            <i class="fas fa-sun hidden dark:inline"></i>
+                        </div>
+                    </div>
+                    
+                    <a href="members.html" class="block py-3 px-4 bg-gradient-to-r from-blue-900 to-teal-600 text-white rounded-xl text-center font-medium mt-4 shadow-md">
                         <i class="fas fa-user mr-3"></i>Member Portal
                     </a>
                 </div>
@@ -250,64 +414,67 @@
     <!-- Main Content -->
     <main id="main-content" role="main">
         <!-- Hero Section -->
-        <section class="relative py-16 bg-gradient-to-r from-blue-900 to-blue-700">
-            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center opacity-10"></div>
+        <section class="relative py-20 overflow-hidden">
+            <div class="absolute inset-0 hero-overlay"></div>
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center opacity-20"></div>
+            <div class="absolute top-20 left-10 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute bottom-20 right-10 w-80 h-80 bg-amber-400/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+            
             <div class="container mx-auto px-4 relative z-10 text-center">
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">
-                    About KESNNUR
+                <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6 border border-white/30">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <span class="text-sm font-medium text-white tracking-wide">Learn About Us</span>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 font-display leading-tight" data-aos="fade-up">
+                    About <span class="text-amber-300">KESNNUR</span>
                 </h1>
-                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="100">
                     Kenya Students and Novice Nurses (KESNNUR) is a chapter of the National Nurses Association of Kenya (NNAK) dedicated to empowering Kenya's future nursing leaders.
                 </p>
-                <div class="flex flex-wrap justify-center gap-3">
-                    <a href="#who-we-are" class="bg-white text-blue-900 px-6 py-3 rounded-xl font-semibold hover:shadow-xl">
-                        <i class="fas fa-users mr-2"></i>Who We Are
+                <div class="flex flex-wrap justify-center gap-3" data-aos="fade-up" data-aos-delay="200">
+                    <a href="#who-we-are" class="bg-white text-blue-900 px-6 py-3 rounded-full font-semibold hover:shadow-xl transition-all inline-flex items-center gap-2">
+                        <i class="fas fa-users"></i>Who We Are
                     </a>
-                    <a href="#vision-mission" class="border-2 border-white text-white px-6 py-3 rounded-xl font-semibold hover:bg-white/10">
-                        <i class="fas fa-bullseye mr-2"></i>Vision & Mission
+                    <a href="#vision-mission" class="border-2 border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white/10 transition-all inline-flex items-center gap-2">
+                        <i class="fas fa-bullseye"></i>Vision & Mission
                     </a>
                 </div>
+            </div>
+            
+            <!-- Bottom wave -->
+            <div class="absolute bottom-0 left-0 right-0">
+                <svg viewBox="0 0 1440 120" class="w-full h-auto" fill="#ffffff">
+                    <path d="M0,32L120,42.7C240,53,480,75,720,74.7C960,75,1200,53,1320,42.7L1440,32L1440,120L1320,120C1200,120,960,120,720,120C480,120,240,120,120,120L0,120Z"></path>
+                </svg>
             </div>
         </section>
 
         <!-- Who We Are -->
-        <section id="who-we-are" class="py-16">
+        <section id="who-we-are" class="py-20">
             <div class="container mx-auto px-4">
                 <div class="max-w-6xl mx-auto">
-                    <div class="bg-white rounded-2xl shadow-xl p-8 mb-12">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-12" data-aos="fade-up">
                         <div class="flex flex-col md:flex-row md:items-center gap-8">
                             <div class="md:w-1/3">
-                                <div class="bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-xl p-8 text-center">
+                                <div class="bg-gradient-to-br from-blue-900 to-teal-600 text-white rounded-xl p-8 text-center">
                                     <i class="fas fa-graduation-cap text-6xl mb-6 opacity-80"></i>
                                     <h3 class="text-2xl font-bold mb-2">KESNNUR</h3>
                                     <p class="text-blue-100">A Chapter of NNAK</p>
                                 </div>
                             </div>
                             <div class="md:w-2/3">
-                                <h2 class="text-3xl font-bold mb-6 text-blue-900">Who We Are</h2>
-                                <p class="text-gray-700 text-lg mb-6">
+                                <h2 class="text-3xl font-bold mb-6 gradient-text">Who We Are</h2>
+                                <p class="text-gray-700 dark:text-gray-300 text-lg mb-6">
                                     Kenya Students and Novice Nurses (KESNNUR) is a premier chapter of the National Nurses Association of Kenya (NNAK). We serve as a dynamic platform that brings together all nursing college students, university nursing students, and newly qualified nurses up to five years post-qualification.
                                 </p>
-                                <p class="text-gray-700 mb-6">
+                                <p class="text-gray-700 dark:text-gray-300 mb-6">
                                     Our organization is committed to bridging the gap between nursing education and professional practice. We create opportunities for young nurses to develop essential skills, gain practical experience, and build professional networks that last throughout their careers.
                                 </p>
                                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    <div class="text-center">
-                                        <div class="text-3xl font-bold text-blue-900 mb-1">1,500+</div>
-                                        <div class="text-gray-600 text-sm">Active Members</div>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-3xl font-bold text-blue-900 mb-1">24</div>
-                                        <div class="text-gray-600 text-sm">Regions Covered</div>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-3xl font-bold text-blue-900 mb-1">50+</div>
-                                        <div class="text-gray-600 text-sm">Annual Events</div>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-3xl font-bold text-blue-900 mb-1">100+</div>
-                                        <div class="text-gray-600 text-sm">Mentor Partners</div>
-                                    </div>
+                                    <div class="text-center"><div class="text-3xl font-bold text-blue-900 dark:text-blue-400 mb-1">1,500+</div><div class="text-gray-600 dark:text-gray-400 text-sm">Active Members</div></div>
+                                    <div class="text-center"><div class="text-3xl font-bold text-blue-900 dark:text-blue-400 mb-1">24</div><div class="text-gray-600 dark:text-gray-400 text-sm">Regions Covered</div></div>
+                                    <div class="text-center"><div class="text-3xl font-bold text-blue-900 dark:text-blue-400 mb-1">50+</div><div class="text-gray-600 dark:text-gray-400 text-sm">Annual Events</div></div>
+                                    <div class="text-center"><div class="text-3xl font-bold text-blue-900 dark:text-blue-400 mb-1">100+</div><div class="text-gray-600 dark:text-gray-400 text-sm">Mentor Partners</div></div>
                                 </div>
                             </div>
                         </div>
@@ -317,284 +484,137 @@
         </section>
 
         <!-- Vision & Mission -->
-        <section id="vision-mission" class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+        <section id="vision-mission" class="py-20 bg-gradient-to-br from-blue-50 to-teal-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
             <div class="container mx-auto px-4">
                 <div class="max-w-6xl mx-auto">
                     <div class="grid md:grid-cols-2 gap-8 mb-12">
-                        <div class="value-card bg-white rounded-2xl shadow-lg p-8">
+                        <div class="value-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8" data-aos="fade-right">
                             <div class="flex items-center mb-6">
-                                <div class="bg-blue-100 p-4 rounded-xl mr-4">
-                                    <i class="fas fa-eye text-blue-900 text-2xl"></i>
+                                <div class="bg-blue-100 dark:bg-blue-900/30 p-4 rounded-xl mr-4">
+                                    <i class="fas fa-eye text-blue-900 dark:text-blue-400 text-2xl"></i>
                                 </div>
-                                <h2 class="text-2xl font-bold text-blue-900">Our Vision</h2>
+                                <h2 class="text-2xl font-bold text-blue-900 dark:text-blue-400">Our Vision</h2>
                             </div>
-                            <p class="text-gray-700 text-lg mb-6">
+                            <p class="text-gray-700 dark:text-gray-300 text-lg mb-6">
                                 To be the leading platform for nursing students and novice nurses in Kenya, empowering them to become competent, compassionate, and innovative healthcare leaders who transform patient care and advance the nursing profession.
                             </p>
-                            <div class="bg-blue-50 rounded-xl p-4">
-                                <p class="text-blue-900 font-medium">
-                                    <i class="fas fa-quote-left mr-2 opacity-50"></i>
-                                    Building the future of nursing, one student at a time
-                                    <i class="fas fa-quote-right ml-2 opacity-50"></i>
-                                </p>
+                            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4">
+                                <p class="text-blue-900 dark:text-blue-400 font-medium"><i class="fas fa-quote-left mr-2 opacity-50"></i>Building the future of nursing, one student at a time<i class="fas fa-quote-right ml-2 opacity-50"></i></p>
                             </div>
                         </div>
 
-                        <div class="value-card bg-white rounded-2xl shadow-lg p-8">
+                        <div class="value-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8" data-aos="fade-left">
                             <div class="flex items-center mb-6">
-                                <div class="bg-teal-100 p-4 rounded-xl mr-4">
-                                    <i class="fas fa-bullseye text-teal-900 text-2xl"></i>
+                                <div class="bg-teal-100 dark:bg-teal-900/30 p-4 rounded-xl mr-4">
+                                    <i class="fas fa-bullseye text-teal-900 dark:text-teal-400 text-2xl"></i>
                                 </div>
-                                <h2 class="text-2xl font-bold text-teal-900">Our Mission</h2>
+                                <h2 class="text-2xl font-bold text-teal-900 dark:text-teal-400">Our Mission</h2>
                             </div>
-                            <p class="text-gray-700 text-lg mb-6">
+                            <p class="text-gray-700 dark:text-gray-300 text-lg mb-6">
                                 To provide comprehensive mentorship, continuous education, and robust networking opportunities that enhance the professional development, well-being, and career progression of nursing students and novice nurses across Kenya.
                             </p>
-                            <div class="bg-teal-50 rounded-xl p-4">
-                                <p class="text-teal-900 font-medium">
-                                    <i class="fas fa-star mr-2"></i>
-                                    Empowering nurses for excellence in healthcare delivery
-                                </p>
+                            <div class="bg-teal-50 dark:bg-teal-900/20 rounded-xl p-4">
+                                <p class="text-teal-900 dark:text-teal-400 font-medium"><i class="fas fa-star mr-2"></i>Empowering nurses for excellence in healthcare delivery</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Core Values -->
-                    <div class="text-center mb-12">
-                        <h2 class="text-3xl font-bold mb-4 text-blue-900">Our Core Values</h2>
-                        <p class="text-gray-600 max-w-3xl mx-auto">Guiding principles that define our approach to nursing education and professional development</p>
+                    <div class="text-center mb-12" data-aos="fade-up">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Our Core Values</h2>
+                        <p class="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Guiding principles that define our approach to nursing education and professional development</p>
                     </div>
 
                     <div class="grid md:grid-cols-3 gap-6">
-                        <div class="value-card bg-white rounded-xl shadow-md p-6">
-                            <div class="bg-blue-100 p-3 rounded-lg inline-block mb-4">
-                                <i class="fas fa-heart text-blue-900 text-xl"></i>
-                            </div>
-                            <h3 class="font-bold text-lg mb-3">Compassion</h3>
-                            <p class="text-gray-600 text-sm">We believe in providing care with empathy, kindness, and respect for all patients and colleagues.</p>
-                        </div>
-
-                        <div class="value-card bg-white rounded-xl shadow-md p-6">
-                            <div class="bg-teal-100 p-3 rounded-lg inline-block mb-4">
-                                <i class="fas fa-shield-alt text-teal-900 text-xl"></i>
-                            </div>
-                            <h3 class="font-bold text-lg mb-3">Integrity</h3>
-                            <p class="text-gray-600 text-sm">We uphold the highest ethical standards in all our professional and educational activities.</p>
-                        </div>
-
-                        <div class="value-card bg-white rounded-xl shadow-md p-6">
-                            <div class="bg-purple-100 p-3 rounded-lg inline-block mb-4">
-                                <i class="fas fa-lightbulb text-purple-900 text-xl"></i>
-                            </div>
-                            <h3 class="font-bold text-lg mb-3">Innovation</h3>
-                            <p class="text-gray-600 text-sm">We embrace new ideas and approaches to improve nursing education and healthcare delivery.</p>
-                        </div>
-
-                        <div class="value-card bg-white rounded-xl shadow-md p-6">
-                            <div class="bg-green-100 p-3 rounded-lg inline-block mb-4">
-                                <i class="fas fa-handshake text-green-900 text-xl"></i>
-                            </div>
-                            <h3 class="font-bold text-lg mb-3">Collaboration</h3>
-                            <p class="text-gray-600 text-sm">We work together with all stakeholders to achieve our shared goals in nursing education.</p>
-                        </div>
-
-                        <div class="value-card bg-white rounded-xl shadow-md p-6">
-                            <div class="bg-yellow-100 p-3 rounded-lg inline-block mb-4">
-                                <i class="fas fa-graduation-cap text-yellow-900 text-xl"></i>
-                            </div>
-                            <h3 class="font-bold text-lg mb-3">Excellence</h3>
-                            <p class="text-gray-600 text-sm">We strive for the highest standards in nursing education, practice, and professional development.</p>
-                        </div>
-
-                        <div class="value-card bg-white rounded-xl shadow-md p-6">
-                            <div class="bg-red-100 p-3 rounded-lg inline-block mb-4">
-                                <i class="fas fa-users text-red-900 text-xl"></i>
-                            </div>
-                            <h3 class="font-bold text-lg mb-3">Inclusivity</h3>
-                            <p class="text-gray-600 text-sm">We welcome all nursing students and novice nurses regardless of their background or institution.</p>
-                        </div>
+                        <div class="value-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-6" data-aos="fade-up" data-aos-delay="0"><div class="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg inline-block mb-4"><i class="fas fa-heart text-blue-900 dark:text-blue-400 text-xl"></i></div><h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-white">Compassion</h3><p class="text-gray-600 dark:text-gray-400 text-sm">We believe in providing care with empathy, kindness, and respect for all patients and colleagues.</p></div>
+                        <div class="value-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-6" data-aos="fade-up" data-aos-delay="100"><div class="bg-teal-100 dark:bg-teal-900/30 p-3 rounded-lg inline-block mb-4"><i class="fas fa-shield-alt text-teal-900 dark:text-teal-400 text-xl"></i></div><h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-white">Integrity</h3><p class="text-gray-600 dark:text-gray-400 text-sm">We uphold the highest ethical standards in all our professional and educational activities.</p></div>
+                        <div class="value-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-6" data-aos="fade-up" data-aos-delay="200"><div class="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-lg inline-block mb-4"><i class="fas fa-lightbulb text-purple-900 dark:text-purple-400 text-xl"></i></div><h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-white">Innovation</h3><p class="text-gray-600 dark:text-gray-400 text-sm">We embrace new ideas and approaches to improve nursing education and healthcare delivery.</p></div>
+                        <div class="value-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-6" data-aos="fade-up" data-aos-delay="300"><div class="bg-green-100 dark:bg-green-900/30 p-3 rounded-lg inline-block mb-4"><i class="fas fa-handshake text-green-900 dark:text-green-400 text-xl"></i></div><h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-white">Collaboration</h3><p class="text-gray-600 dark:text-gray-400 text-sm">We work together with all stakeholders to achieve our shared goals in nursing education.</p></div>
+                        <div class="value-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-6" data-aos="fade-up" data-aos-delay="400"><div class="bg-yellow-100 dark:bg-yellow-900/30 p-3 rounded-lg inline-block mb-4"><i class="fas fa-graduation-cap text-yellow-900 dark:text-yellow-400 text-xl"></i></div><h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-white">Excellence</h3><p class="text-gray-600 dark:text-gray-400 text-sm">We strive for the highest standards in nursing education, practice, and professional development.</p></div>
+                        <div class="value-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-6" data-aos="fade-up" data-aos-delay="500"><div class="bg-red-100 dark:bg-red-900/30 p-3 rounded-lg inline-block mb-4"><i class="fas fa-users text-red-900 dark:text-red-400 text-xl"></i></div><h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-white">Inclusivity</h3><p class="text-gray-600 dark:text-gray-400 text-sm">We welcome all nursing students and novice nurses regardless of their background or institution.</p></div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Core Programs -->
-        <section class="py-16">
+        <section class="py-20 bg-white dark:bg-gray-900">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Our Core Programs</h2>
-                    <p class="text-gray-600 max-w-3xl mx-auto">Comprehensive programs designed to support every aspect of nursing education and professional development</p>
+                <div class="text-center mb-12" data-aos="fade-up">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Our Core Programs</h2>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Comprehensive programs designed to support every aspect of nursing education and professional development</p>
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="program-card bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-2xl p-8">
-                        <div class="text-center mb-6">
-                            <div class="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-user-graduate text-3xl"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-3">Professional Growth</h3>
-                        </div>
-                        <p class="text-blue-100 mb-6">
-                            Structured mentorship programs connecting students with experienced nurses, career guidance workshops, and leadership development initiatives.
-                        </p>
-                        <ul class="space-y-2 mb-6">
-                            <li class="flex items-center">
-                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
-                                <span>One-on-one mentorship matching</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
-                                <span>Career path counseling</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
-                                <span>Leadership training workshops</span>
-                            </li>
-                        </ul>
-                        <a href="mentorship.html" class="inline-block bg-white text-blue-900 px-6 py-2 rounded-lg font-semibold hover:shadow-lg">
-                            Learn More
-                        </a>
+                    <div class="program-card bg-gradient-to-br from-blue-900 to-blue-700 text-white rounded-2xl p-8" data-aos="flip-left">
+                        <div class="text-center mb-6"><div class="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-user-graduate text-3xl"></i></div><h3 class="text-2xl font-bold mb-3">Professional Growth</h3></div>
+                        <p class="text-blue-100 mb-6">Structured mentorship programs connecting students with experienced nurses, career guidance workshops, and leadership development initiatives.</p>
+                        <ul class="space-y-2 mb-6"><li class="flex items-center"><i class="fas fa-check-circle mr-2 opacity-80"></i><span>One-on-one mentorship matching</span></li><li class="flex items-center"><i class="fas fa-check-circle mr-2 opacity-80"></i><span>Career path counseling</span></li><li class="flex items-center"><i class="fas fa-check-circle mr-2 opacity-80"></i><span>Leadership training workshops</span></li></ul>
+                        <a href="mentorship.html" class="inline-block bg-white text-blue-900 px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all">Learn More</a>
                     </div>
 
-                    <div class="program-card bg-gradient-to-br from-teal-700 to-teal-500 text-white rounded-2xl p-8">
-                        <div class="text-center mb-6">
-                            <div class="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-book-medical text-3xl"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-3">Continuous Education</h3>
-                        </div>
-                        <p class="text-teal-100 mb-6">
-                            Workshops, seminars, research updates, and skills training sessions to keep nursing students at the forefront of healthcare advancements.
-                        </p>
-                        <ul class="space-y-2 mb-6">
-                            <li class="flex items-center">
-                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
-                                <span>Clinical skills workshops</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
-                                <span>Research methodology training</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
-                                <span>Latest medical technology updates</span>
-                            </li>
-                        </ul>
-                        <a href="resources.html" class="inline-block bg-white text-teal-900 px-6 py-2 rounded-lg font-semibold hover:shadow-lg">
-                            Explore Resources
-                        </a>
+                    <div class="program-card bg-gradient-to-br from-teal-700 to-teal-500 text-white rounded-2xl p-8" data-aos="flip-left" data-aos-delay="100">
+                        <div class="text-center mb-6"><div class="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-book-medical text-3xl"></i></div><h3 class="text-2xl font-bold mb-3">Continuous Education</h3></div>
+                        <p class="text-teal-100 mb-6">Workshops, seminars, research updates, and skills training sessions to keep nursing students at the forefront of healthcare advancements.</p>
+                        <ul class="space-y-2 mb-6"><li class="flex items-center"><i class="fas fa-check-circle mr-2 opacity-80"></i><span>Clinical skills workshops</span></li><li class="flex items-center"><i class="fas fa-check-circle mr-2 opacity-80"></i><span>Research methodology training</span></li><li class="flex items-center"><i class="fas fa-check-circle mr-2 opacity-80"></i><span>Latest medical technology updates</span></li></ul>
+                        <a href="resources.html" class="inline-block bg-white text-teal-900 px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all">Explore Resources</a>
                     </div>
 
-                    <div class="program-card bg-gradient-to-br from-orange-600 to-orange-400 text-white rounded-2xl p-8">
-                        <div class="text-center mb-6">
-                            <div class="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-heart text-3xl"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-3">Mental Health Support</h3>
-                        </div>
-                        <p class="text-orange-100 mb-6">
-                            Comprehensive resources, peer support networks, and wellness programs designed specifically for the unique challenges nursing students face.
-                        </p>
-                        <ul class="space-y-2 mb-6">
-                            <li class="flex items-center">
-                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
-                                <span>Peer support groups</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
-                                <span>Stress management workshops</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check-circle mr-2 opacity-80"></i>
-                                <span>Professional counseling services</span>
-                            </li>
-                        </ul>
-                        <a href="wellness.html" class="inline-block bg-white text-orange-900 px-6 py-2 rounded-lg font-semibold hover:shadow-lg">
-                            Access Support
-                        </a>
+                    <div class="program-card bg-gradient-to-br from-amber-600 to-orange-500 text-white rounded-2xl p-8" data-aos="flip-left" data-aos-delay="200">
+                        <div class="text-center mb-6"><div class="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-heart text-3xl"></i></div><h3 class="text-2xl font-bold mb-3">Mental Health Support</h3></div>
+                        <p class="text-amber-100 mb-6">Comprehensive resources, peer support networks, and wellness programs designed specifically for the unique challenges nursing students face.</p>
+                        <ul class="space-y-2 mb-6"><li class="flex items-center"><i class="fas fa-check-circle mr-2 opacity-80"></i><span>Peer support groups</span></li><li class="flex items-center"><i class="fas fa-check-circle mr-2 opacity-80"></i><span>Stress management workshops</span></li><li class="flex items-center"><i class="fas fa-check-circle mr-2 opacity-80"></i><span>Professional counseling services</span></li></ul>
+                        <a href="wellness.html" class="inline-block bg-white text-orange-900 px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all">Access Support</a>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Our Impact -->
-        <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+        <section class="py-20 bg-gradient-to-br from-blue-50 to-teal-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Our Impact</h2>
-                    <p class="text-gray-600 max-w-3xl mx-auto">Making a difference in nursing education and professional development across Kenya</p>
+                <div class="text-center mb-12" data-aos="fade-up">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Our Impact</h2>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Making a difference in nursing education and professional development across Kenya</p>
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="impact-card bg-white rounded-2xl shadow-lg p-8 text-center">
-                        <div class="text-5xl font-bold text-blue-900 mb-4">95%</div>
-                        <h3 class="text-xl font-bold mb-3">Mentorship Satisfaction</h3>
-                        <p class="text-gray-600">Of mentees report significant improvement in clinical confidence and career clarity</p>
-                    </div>
-
-                    <div class="impact-card bg-white rounded-2xl shadow-lg p-8 text-center">
-                        <div class="text-5xl font-bold text-teal-900 mb-4">80%</div>
-                        <h3 class="text-xl font-bold mb-3">Employment Rate</h3>
-                        <p class="text-gray-600">Of our members secure nursing positions within 6 months of graduation</p>
-                    </div>
-
-                    <div class="impact-card bg-white rounded-2xl shadow-lg p-8 text-center">
-                        <div class="text-5xl font-bold text-orange-900 mb-4">75%</div>
-                        <h3 class="text-xl font-bold mb-3">Skill Improvement</h3>
-                        <p class="text-gray-600">Members report enhanced clinical skills through our workshops and training</p>
-                    </div>
+                    <div class="impact-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 text-center" data-aos="zoom-in"><div class="text-5xl font-bold text-blue-900 dark:text-blue-400 mb-4">95%</div><h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-white">Mentorship Satisfaction</h3><p class="text-gray-600 dark:text-gray-400">Of mentees report significant improvement in clinical confidence and career clarity</p></div>
+                    <div class="impact-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 text-center" data-aos="zoom-in" data-aos-delay="100"><div class="text-5xl font-bold text-teal-900 dark:text-teal-400 mb-4">80%</div><h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-white">Employment Rate</h3><p class="text-gray-600 dark:text-gray-400">Of our members secure nursing positions within 6 months of graduation</p></div>
+                    <div class="impact-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 text-center" data-aos="zoom-in" data-aos-delay="200"><div class="text-5xl font-bold text-amber-600 dark:text-amber-400 mb-4">75%</div><h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-white">Skill Improvement</h3><p class="text-gray-600 dark:text-gray-400">Members report enhanced clinical skills through our workshops and training</p></div>
                 </div>
             </div>
         </section>
 
         <!-- Our Journey -->
-        <section class="py-16">
+        <section class="py-20 bg-white dark:bg-gray-900">
             <div class="container mx-auto px-4">
                 <div class="max-w-4xl mx-auto">
-                    <div class="text-center mb-12">
-                        <h2 class="text-3xl font-bold mb-4 text-blue-900">Our Journey</h2>
-                        <p class="text-gray-600">From humble beginnings to becoming Kenya's leading nursing student organization</p>
+                    <div class="text-center mb-12" data-aos="fade-up">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Our Journey</h2>
+                        <p class="text-gray-600 dark:text-gray-400">From humble beginnings to becoming Kenya's leading nursing student organization</p>
                     </div>
 
-                    <div class="bg-white rounded-2xl shadow-lg p-8">
-                        <div class="timeline-item mb-8 pb-8">
-                            <h3 class="font-bold text-xl mb-2 text-blue-900">Foundation (2022)</h3>
-                            <p class="text-gray-600 mb-2">KESNNUR was established as a chapter of NNAK with a vision to support nursing students across Kenya.</p>
-                        </div>
-                        
-                        <div class="timeline-item mb-8 pb-8">
-                            <h3 class="font-bold text-xl mb-2 text-blue-900">Initial Growth (2023)</h3>
-                            <p class="text-gray-600 mb-2">Expanded to 15 regions, launched mentorship programs, and conducted first national conference.</p>
-                        </div>
-                        
-                        <div class="timeline-item mb-8 pb-8">
-                            <h3 class="font-bold text-xl mb-2 text-blue-900">Partnerships (2024)</h3>
-                            <p class="text-gray-600 mb-2">Established partnerships with leading healthcare institutions and launched digital learning platform.</p>
-                        </div>
-                        
-                        <div class="timeline-item">
-                            <h3 class="font-bold text-xl mb-2 text-blue-900">Current Impact (2025)</h3>
-                            <p class="text-gray-600">Serving 1,500+ members across 24 regions with comprehensive nursing education and support programs.</p>
-                        </div>
+                    <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl shadow-lg p-8" data-aos="fade-up">
+                        <div class="timeline-item mb-8 pb-8"><h3 class="font-bold text-xl mb-2 text-blue-900 dark:text-blue-400">Foundation (2022)</h3><p class="text-gray-600 dark:text-gray-400">KESNNUR was established as a chapter of NNAK with a vision to support nursing students across Kenya.</p></div>
+                        <div class="timeline-item mb-8 pb-8"><h3 class="font-bold text-xl mb-2 text-teal-900 dark:text-teal-400">Initial Growth (2023)</h3><p class="text-gray-600 dark:text-gray-400">Expanded to 15 regions, launched mentorship programs, and conducted first national conference.</p></div>
+                        <div class="timeline-item mb-8 pb-8"><h3 class="font-bold text-xl mb-2 text-blue-900 dark:text-blue-400">Partnerships (2024)</h3><p class="text-gray-600 dark:text-gray-400">Established partnerships with leading healthcare institutions and launched digital learning platform.</p></div>
+                        <div class="timeline-item"><h3 class="font-bold text-xl mb-2 text-teal-900 dark:text-teal-400">Current Impact (2025)</h3><p class="text-gray-600 dark:text-gray-400">Serving 1,500+ members across 24 regions with comprehensive nursing education and support programs.</p></div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- CTA Section -->
-        <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-4xl font-bold mb-6">Join the KESNNUR Community</h2>
-                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                    Become part of Kenya's most dynamic nursing community and accelerate your professional growth.
-                </p>
+        <section class="py-20 bg-gradient-to-r from-blue-900 via-blue-800 to-teal-700 text-white relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600')] bg-cover bg-center opacity-10"></div>
+            <div class="absolute top-10 right-10 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+            <div class="container mx-auto px-4 text-center relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 font-display" data-key="cta_title">Join the KESNNUR Community</h2>
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto" data-key="cta_desc">Become part of Kenya's most dynamic nursing community and accelerate your professional growth.</p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="register.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-bold hover:shadow-xl">
-                        <i class="fas fa-user-plus mr-2"></i> Join Now
-                    </a>
-                    <a href="contact.html" class="border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-bold hover:bg-white/10">
-                        <i class="fas fa-envelope mr-2"></i> Contact Us
-                    </a>
+                    <a href="register.html" class="bg-white text-blue-900 px-8 py-4 rounded-full text-lg font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all inline-flex items-center gap-2"><i class="fas fa-user-plus"></i> Join Now</a>
+                    <a href="contact.html" class="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-white/10 transition-all inline-flex items-center gap-2"><i class="fas fa-envelope"></i> Contact Us</a>
                 </div>
             </div>
         </section>
@@ -606,266 +626,154 @@
             <div class="grid md:grid-cols-4 gap-8">
                 <div>
                     <div class="flex items-center space-x-3 mb-4">
-                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
-                             alt="KESNNUR Logo"
-                             width="40"
-                             height="40"
-                             class="w-10 h-10 rounded-lg object-contain bg-white p-1">
-                        <h3 class="text-xl font-bold">KESNNUR</h3>
+                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" alt="KESNNUR Logo" width="40" height="40" class="w-10 h-10 rounded-xl object-contain bg-white p-1">
+                        <h3 class="text-xl font-bold gradient-text">KESNNUR</h3>
                     </div>
-                    <p class="text-gray-400 mb-4">
-                        Empowering Kenya's future nursing leaders through education, mentorship, and community support.
-                    </p>
+                    <p class="text-gray-400 mb-4 leading-relaxed">Empowering Kenya's future nursing leaders through mentorship, resources, and community support.</p>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-twitter text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-facebook text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-instagram text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-linkedin text-xl"></i>
-                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition text-xl hover:scale-110 transform"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition text-xl hover:scale-110 transform"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition text-xl hover:scale-110 transform"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition text-xl hover:scale-110 transform"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
                 
                 <div>
-                    <h4 class="font-bold mb-4">About KESNNUR</h4>
+                    <h4 class="font-bold mb-4 text-white">About KESNNUR</h4>
                     <div class="space-y-3">
-                        <a href="#who-we-are" class="text-gray-400 hover:text-white block">Who We Are</a>
-                        <a href="#vision-mission" class="text-gray-400 hover:text-white block">Vision & Mission</a>
-                        <a href="management.html" class="text-gray-400 hover:text-white block">Leadership</a>
-                        <a href="impact.html" class="text-gray-400 hover:text-white block">Our Impact</a>
-                        <a href="partners.html" class="text-gray-400 hover:text-white block">Partners</a>
+                        <a href="#who-we-are" class="text-gray-400 hover:text-white block transition hover:translate-x-1">Who We Are</a>
+                        <a href="#vision-mission" class="text-gray-400 hover:text-white block transition hover:translate-x-1">Vision & Mission</a>
+                        <a href="management.html" class="text-gray-400 hover:text-white block transition hover:translate-x-1">Leadership</a>
+                        <a href="impact.html" class="text-gray-400 hover:text-white block transition hover:translate-x-1">Our Impact</a>
                     </div>
                 </div>
                 
                 <div>
-                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <h4 class="font-bold mb-4 text-white">Quick Links</h4>
                     <div class="space-y-3">
-                        <a href="index.html" class="text-gray-400 hover:text-white block">Home</a>
-                        <a href="events.html" class="text-gray-400 hover:text-white block">Events</a>
-                        <a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a>
-                        <a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a>
-                        <a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a>
+                        <a href="index.html" class="text-gray-400 hover:text-white block transition hover:translate-x-1">Home</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white block transition hover:translate-x-1">Events</a>
+                        <a href="blog.html" class="text-gray-400 hover:text-white block transition hover:translate-x-1">Blog</a>
+                        <a href="resources.html" class="text-gray-400 hover:text-white block transition hover:translate-x-1">Resources</a>
+                        <a href="members.html" class="text-gray-400 hover:text-white block transition hover:translate-x-1">Member Portal</a>
                     </div>
                 </div>
                 
                 <div>
-                    <h4 class="font-bold mb-4">Contact</h4>
+                    <h4 class="font-bold mb-4 text-white">Contact</h4>
                     <div class="space-y-3 text-gray-400">
-                        <div class="flex items-start">
-                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
-                            <span>Nurses Complex KNH, Nairobi, Kenya</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-phone mr-3"></i>
-                            <a href="tel:+254791296924" class="hover:text-white">+254 791 296 924</a>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-envelope mr-3"></i>
-                            <a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a>
-                        </div>
+                        <div class="flex items-start gap-3"><i class="fas fa-map-marker-alt mt-1 text-teal-400"></i><span>Nurses Complex KNH, Nairobi, Kenya</span></div>
+                        <div class="flex items-center gap-3"><i class="fas fa-phone text-teal-400"></i><a href="tel:+254768878303" class="hover:text-white transition">+254 768 878 303</a></div>
+                        <div class="flex items-center gap-3"><i class="fas fa-envelope text-teal-400"></i><a href="mailto:kesnnur@gmail.com" class="hover:text-white transition">kesnnur@gmail.com</a></div>
                     </div>
                 </div>
             </div>
-            
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>Copyright © <span id="currentYear">2024</span> KESNNUR. All Rights Reserved.</p>
-                <p class="mt-2 text-sm">A Chapter of the National Nurses Association of Kenya (NNAK)</p>
-                <p class="mt-2">
-                    <a href="privacy.html" class="hover:text-white mx-3">Privacy Policy</a> | 
-                    <a href="terms.html" class="hover:text-white mx-3">Terms of Service</a> | 
-                    <a href="sitemap.xml" class="hover:text-white mx-3">Sitemap</a>
-                </p>
-            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400"><p>Copyright © <span id="currentYear"></span> KESNNUR. All Rights Reserved.</p><p class="mt-2 text-sm">A Chapter of the National Nurses Association of Kenya (NNAK)</p></div>
         </div>
     </footer>
 
     <!-- Back to Top Button -->
-    <button id="backToTop" class="fixed bottom-8 right-8 bg-blue-900 text-white p-3 rounded-full shadow-lg hover:shadow-xl opacity-0 transition-opacity duration-300" aria-label="Back to top">
-        <i class="fas fa-chevron-up"></i>
-    </button>
+    <button id="backToTop" class="fixed bottom-8 right-8 bg-gradient-to-r from-blue-900 to-teal-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl opacity-0 transition-all duration-300 hover:scale-110 z-50" aria-label="Back to top"><i class="fas fa-chevron-up"></i></button>
 
-    <!-- JavaScript -->
     <script>
-        // Get current year for copyright
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-
+    (function() {
+        // Initialize AOS
+        AOS.init({ duration: 800, once: true, offset: 50 });
+        
+        // Custom Cursor
+        const cursor = document.querySelector('.custom-cursor');
+        const cursorDot = document.querySelector('.custom-cursor-dot');
+        if (cursor && cursorDot && window.innerWidth > 768) {
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+                cursorDot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            });
+            document.querySelectorAll('a, button, .program-card, .value-card, .impact-card').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+        }
+        
+        // Reading Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) progressBar.style.width = scrolled + '%';
+        });
+        
+        // Dark/Light Mode
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            const themeText = document.getElementById('themeToggleText');
+            if (themeText) themeText.textContent = isDark ? 'Dark' : 'Light';
+        }
+        if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+        document.querySelectorAll('.theme-toggle, .theme-toggle-mobile').forEach(el => el.addEventListener('click', toggleTheme));
+        
+        // Multi-Language Support
+        const translations = {
+            en: { tagline: 'Students & Novice Nurses', nav_home: 'Home', nav_about: 'About', nav_management: 'Management', nav_events: 'Events', nav_blog: 'Blog', nav_resources: 'Resources', nav_contact: 'Contact', cta_title: 'Join the KESNNUR Community', cta_desc: 'Become part of Kenya\'s most dynamic nursing community and accelerate your professional growth.' },
+            sw: { tagline: 'Wanafunzi na Wauguzi Wapya', nav_home: 'Nyumbani', nav_about: 'Kuhusu', nav_management: 'Uongozi', nav_events: 'Matukio', nav_blog: 'Blogu', nav_resources: 'Rasilimali', nav_contact: 'Wasiliana', cta_title: 'Jiunge na Jumuiya ya KESNNUR', cta_desc: 'Kuwa sehemu ya jumuiya ya uuguzi yenye nguvu zaidi nchini Kenya na kuharakisha ukuaji wako wa kitaaluma.' }
+        };
+        
+        let currentLang = localStorage.getItem('language') || 'en';
+        function updateLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            const langSpan = document.getElementById('currentLang');
+            if (langSpan) langSpan.textContent = lang.toUpperCase();
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) el.textContent = translations[lang][key];
+            });
+        }
+        document.querySelectorAll('.lang-selector, .lang-selector-mobile').forEach(el => {
+            el.addEventListener('click', () => updateLanguage(currentLang === 'en' ? 'sw' : 'en'));
+        });
+        updateLanguage(currentLang);
+        
         // Mobile menu toggle
         document.getElementById('menuBtn').addEventListener('click', function() {
             const menu = document.getElementById('mobileMenu');
             menu.classList.toggle('hidden');
         });
-
-        // Back to top button
-        const backToTopButton = document.getElementById('backToTop');
         
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 300) {
-                backToTopButton.classList.remove('opacity-0');
-                backToTopButton.classList.add('opacity-100');
+        // Back to top
+        const backBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backBtn.style.opacity = '1';
+                backBtn.style.pointerEvents = 'auto';
             } else {
-                backToTopButton.classList.remove('opacity-100');
-                backToTopButton.classList.add('opacity-0');
+                backBtn.style.opacity = '0';
+                backBtn.style.pointerEvents = 'none';
             }
         });
-
-        backToTopButton.addEventListener('click', function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
+        backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
-                    // Close mobile menu if open
-                    const mobileMenu = document.getElementById('mobileMenu');
-                    mobileMenu.classList.add('hidden');
-                    
-                    // Scroll to target
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
+                    document.getElementById('mobileMenu').classList.add('hidden');
+                    window.scrollTo({ top: targetElement.offsetTop - 80, behavior: 'smooth' });
                 }
             });
         });
-
-        // Card hover effects enhancement
-        document.querySelectorAll('.program-card, .value-card, .impact-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-10px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Accessibility improvements
-        document.addEventListener('keydown', function(e) {
-            // Close mobile menu on Escape key
-            if (e.key === 'Escape') {
-                const mobileMenu = document.getElementById('mobileMenu');
-                mobileMenu.classList.add('hidden');
-            }
-        });
-
-        // Focus trap for mobile menu
-        function trapFocus(element) {
-            const focusableElements = element.querySelectorAll(
-                'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
-            );
-            const firstFocusable = focusableElements[0];
-            const lastFocusable = focusableElements[focusableElements.length - 1];
-
-            element.addEventListener('keydown', function(e) {
-                if (e.key !== 'Tab') return;
-
-                if (e.shiftKey) {
-                    if (document.activeElement === firstFocusable) {
-                        lastFocusable.focus();
-                        e.preventDefault();
-                    }
-                } else {
-                    if (document.activeElement === lastFocusable) {
-                        firstFocusable.focus();
-                        e.preventDefault();
-                    }
-                }
-            });
-        }
-
-        // Initialize focus trap for mobile menu when it's opened
-        const mobileMenu = document.getElementById('mobileMenu');
-        trapFocus(mobileMenu);
-
-        // Lazy loading images
-        if ('IntersectionObserver' in window) {
-            const imageObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        img.src = img.dataset.src;
-                        img.classList.remove('lazy');
-                        observer.unobserve(img);
-                    }
-                });
-            });
-
-            document.querySelectorAll('img[data-src]').forEach(img => {
-                imageObserver.observe(img);
-            });
-        }
-
-        // Page load animation
-        window.addEventListener('load', function() {
-            document.body.classList.add('loaded');
-            
-            // Add fade-in animation to main content
-            const mainContent = document.getElementById('main-content');
-            mainContent.style.opacity = '0';
-            mainContent.style.transition = 'opacity 0.5s ease';
-            
-            setTimeout(() => {
-                mainContent.style.opacity = '1';
-            }, 100);
-        });
-
-        // Service worker registration for PWA (optional)
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(function(registration) {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, function(err) {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
-        }
-
-        // Form validation (if forms exist on page)
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                // Basic form validation can be added here
-                console.log('Form submitted:', this.id || 'unnamed form');
-            });
-        });
-
-        // Add keyboard navigation for cards
-        document.querySelectorAll('.program-card, .value-card, .impact-card').forEach(card => {
-            card.setAttribute('tabindex', '0');
-            
-            card.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    const link = this.querySelector('a');
-                    if (link) {
-                        link.click();
-                    }
-                }
-            });
-        });
-
-        // Add ARIA labels for better accessibility
-        document.querySelectorAll('i[aria-hidden="true"]').forEach(icon => {
-            const parent = icon.parentElement;
-            if (parent.tagName === 'BUTTON' || parent.tagName === 'A') {
-                if (!parent.getAttribute('aria-label')) {
-                    const text = parent.textContent.trim();
-                    parent.setAttribute('aria-label', text);
-                }
-            }
-        });
+        
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        console.log('✅ KESNNUR About Page - Fully Loaded with Premium Features');
+    })();
     </script>
 </body>
 </html>
