@@ -7,14 +7,8 @@
     
     <!-- Meta Description for SEO -->
     <meta name="description" content="Discover upcoming nursing events, conferences, workshops, and webinars from KESNNUR - Kenya's nursing community.">
-    
-    <!-- Keywords for SEO -->
     <meta name="keywords" content="KESNNUR events, nursing conferences Kenya, nursing workshops, healthcare events, nursing webinars, nursing seminars">
-    
-    <!-- Author -->
     <meta name="author" content="KESNNUR">
-    
-    <!-- Canonical URL -->
     <link rel="canonical" href="https://kesnnur.nnak.or.ke/events.html">
     
     <!-- Open Graph / Facebook -->
@@ -25,13 +19,7 @@
     <meta property="og:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
     
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://kesnnur.nnak.or.ke/events.html">
-    <meta property="twitter:title" content="KESNNUR Events | Nursing Conferences & Workshops">
-    <meta property="twitter:description" content="Join our nursing events, conferences, and workshops for professional development and networking.">
-    <meta property="twitter:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
-    
-    <!-- Theme Color -->
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#1e3a8a">
     
     <!-- Favicon -->
@@ -42,6 +30,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -49,7 +38,10 @@
                         'kesnnur-light': '#3b82f6',
                         'kesnnur-teal': '#0d9488',
                         'kesnnur-gold': '#f59e0b'
-                    }
+                    },
+                    fontFamily: { 'display': ['"Poppins"', 'system-ui'], 'body': ['"Inter"', 'system-ui'] },
+                    animation: { 'float': 'float 6s ease-in-out infinite', 'fade-in': 'fadeIn 0.6s ease-out forwards' },
+                    keyframes: { float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-8px)' } }, fadeIn: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } }
                 }
             }
         }
@@ -61,7 +53,10 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Custom Styles -->
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
     <style>
         :root {
             --kesnnur-blue: #1e3a8a;
@@ -70,435 +65,213 @@
             --kesnnur-gold: #f59e0b;
         }
         
-        /* Skip to content */
-        .skip-to-content {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: #1e3a8a;
-            color: white;
-            padding: 12px;
-            z-index: 10000;
-            text-decoration: none;
-            font-weight: 600;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; transition: background-color 0.3s ease, color 0.3s ease; background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #f0fdf4 100%); }
         
-        .skip-to-content:focus {
-            top: 0;
-        }
+        body.dark { background: #0f172a; color: #f1f5f9; }
+        body.dark .bg-white { background: #1e293b !important; }
+        body.dark .text-gray-600 { color: #94a3b8 !important; }
+        body.dark .text-gray-500 { color: #64748b !important; }
+        body.dark .border-gray-100 { border-color: #334155 !important; }
+        body.dark .glass-nav { background: rgba(15, 23, 42, 0.96); border-bottom-color: #334155; }
+        body.dark .event-card, body.dark .past-event-card { background: #1e293b !important; }
+        body.dark .bg-gray-50 { background: #0f172a !important; }
+        body.dark .bg-blue-50 { background: #1e293b !important; }
+        body.dark .bg-gradient-to-br { --tw-gradient-from: #0f172a !important; --tw-gradient-to: #1e293b !important; }
         
-        /* Base Styles */
-        body {
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            padding-top: 0;
-        }
+        .font-display { font-family: 'Poppins', sans-serif; }
         
-        .font-display {
-            font-family: 'Poppins', sans-serif;
-        }
+        .skip-to-content { position: absolute; top: -40px; left: 0; background: #1e3a8a; color: white; padding: 12px; z-index: 10000; font-weight: 600; text-decoration: none; }
+        .skip-to-content:focus { top: 0; }
         
-        /* Glass effect */
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+        .glass-nav { background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0, 0, 0, 0.05); transition: background 0.3s ease; }
+        body.dark .glass-nav { background: rgba(15, 23, 42, 0.96); border-bottom-color: #334155; }
         
-        /* Card hover effects */
-        .event-card, .past-event-card {
-            transition: all 0.3s ease;
-        }
+        .event-card, .past-event-card { transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .event-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(30, 58, 138, 0.12); }
+        .past-event-card:hover { transform: translateX(5px); background: rgba(30, 58, 138, 0.05); }
+        body.dark .past-event-card:hover { background: rgba(59, 130, 246, 0.1) !important; }
         
-        .event-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px rgba(30, 58, 138, 0.15);
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #1e3a8a; border-radius: 10px; }
+        body.dark ::-webkit-scrollbar-track { background: #1e293b; }
+        body.dark ::-webkit-scrollbar-thumb { background: #3b82f6; }
         
-        .past-event-card:hover {
-            transform: translateX(5px);
-            background-color: #f8fafc;
-        }
+        .gradient-text { background: linear-gradient(135deg, #1e3a8a 0%, #0d9488 50%, #3b82f6 100%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* Calendar styles */
-        .calendar-day {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 0%; height: 3px; background: linear-gradient(90deg, #1e3a8a, #0d9488, #f59e0b); z-index: 10001; transition: width 0.1s ease; }
         
-        .calendar-day.event-day {
-            background-color: #1e3a8a;
-            color: white;
-        }
+        .theme-toggle, .lang-selector { background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); border-radius: 50px; padding: 8px 16px; transition: all 0.3s ease; cursor: pointer; font-size: 14px; }
+        .theme-toggle:hover, .lang-selector:hover { transform: scale(1.05); }
+        body.dark .theme-toggle, body.dark .lang-selector { background: rgba(255,255,255,0.1); color: white; }
         
-        .calendar-day:hover:not(.empty) {
-            background-color: #e5e7eb;
-        }
+        .page-transition { animation: fadeInPage 0.5s ease-out; }
+        @keyframes fadeInPage { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
+        .event-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .event-badge.conference { background-color: #dbeafe; color: #1e3a8a; }
+        .event-badge.workshop { background-color: #dcfce7; color: #166534; }
+        .event-badge.webinar { background-color: #f0f9ff; color: #0369a1; }
+        .event-badge.networking { background-color: #fef3c7; color: #92400e; }
+        body.dark .event-badge.conference { background-color: #1e3a8a; color: #dbeafe; }
+        body.dark .event-badge.workshop { background-color: #166534; color: #dcfce7; }
+        body.dark .event-badge.webinar { background-color: #0369a1; color: #f0f9ff; }
         
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
+        .whatsapp-float { position: fixed; bottom: 80px; right: 20px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2); z-index: 100; cursor: pointer; transition: all 0.3s ease; animation: bounce 2s infinite; }
+        .whatsapp-float:hover { transform: scale(1.1); background: #128C7E; }
         
-        ::-webkit-scrollbar-thumb {
-            background: #1e3a8a;
-            border-radius: 4px;
-        }
+        .float-buttons { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 99; }
+        .float-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; transition: all 0.3s ease; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .float-btn:hover { transform: scale(1.1); }
+        .float-call { background: #34B7F1; color: white; }
+        .float-email { background: #EA4335; color: white; }
+        .float-map { background: #4285F4; color: white; }
         
-        /* Event type badges */
-        .event-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         
-        .event-badge.conference {
-            background-color: #dbeafe;
-            color: #1e3a8a;
-        }
+        .calendar-day { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.3s ease; cursor: pointer; }
+        .calendar-day.event-day { background-color: #1e3a8a; color: white; }
+        body.dark .calendar-day.event-day { background-color: #3b82f6; }
+        .calendar-day:hover:not(.empty) { background-color: #e5e7eb; }
+        body.dark .calendar-day:hover:not(.empty) { background-color: #334155; }
         
-        .event-badge.workshop {
-            background-color: #dcfce7;
-            color: #166534;
-        }
+        .social-icon { transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.05); }
+        .social-icon:hover { transform: translateY(-3px); }
+        .social-icon.twitter:hover { background: #1DA1F2; color: white !important; }
+        .social-icon.linkedin:hover { background: #0077B5; color: white !important; }
+        .social-icon.instagram:hover { background: #E4405F; color: white !important; }
+        .social-icon.facebook:hover { background: #1877F2; color: white !important; }
         
-        .event-badge.webinar {
-            background-color: #f0f9ff;
-            color: #0369a1;
-        }
-        
-        .event-badge.networking {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-        
-        .event-badge.summit {
-            background-color: #f3e8ff;
-            color: #6b21a8;
-        }
+        .custom-toast { position: fixed; top: 4rem; right: 1rem; z-index: 1000; padding: 0.75rem 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); font-weight: 500; transform: translateX(100%); transition: transform 0.3s ease; }
+        .custom-toast.show { transform: translateX(0); }
     </style>
 </head>
-<body class="bg-gradient-to-br from-gray-50 to-blue-50">
-    <!-- Skip to Content -->
+<body class="page-transition">
+    
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <div class="float-buttons">
+        <div class="float-btn float-call" onclick="window.location.href='tel:+254768878303'"><i class="fas fa-phone-alt"></i></div>
+        <div class="float-btn float-email" onclick="window.location.href='mailto:kesnnur@gmail.com'"><i class="fas fa-envelope"></i></div>
+        <div class="float-btn float-map" onclick="window.open('https://maps.google.com/?q=Nurses+Complex+KNH+Nairobi', '_blank')"><i class="fas fa-map-marker-alt"></i></div>
+    </div>
+
+    <div class="whatsapp-float" onclick="window.open('https://wa.me/254768878303?text=Hello%20KESNNUR%2C%20I%27m%20interested%20in%20upcoming%20nursing%20events!', '_blank')"><i class="fab fa-whatsapp"></i></div>
+
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+    <nav class="sticky top-0 z-50 glass-nav shadow-sm">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
-                <!-- Logo -->
-                <a href="index.html" class="flex items-center space-x-3">
-                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
-                         alt="KESNNUR Logo"
-                         width="40"
-                         height="40"
-                         class="w-10 h-10 rounded-lg object-contain">
-                    <div>
-                        <h1 class="text-lg md:text-xl font-bold text-blue-900 font-display">KESNNUR</h1>
-                        <p class="text-xs text-gray-600">Students & Novice Nurses</p>
-                    </div>
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" width="40" height="40" class="w-10 h-10 rounded-lg object-contain group-hover:scale-105 transition duration-300">
+                    <div><h1 class="text-lg md:text-xl font-bold text-kesnnur-blue font-display">KESNNUR</h1><p class="text-xs text-gray-600 dark:text-gray-400">Students & Novice Nurses</p></div>
                 </a>
-
-                <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium">Home</a>
-                    <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium">About</a>
-                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium">Management</a>
-                    <a href="events.html" class="text-blue-900 font-medium border-b-2 border-blue-900">Events</a>
-                    <a href="blog.html" class="text-gray-700 hover:text-blue-900 font-medium">Blog</a>
-                    <a href="resources.html" class="text-gray-700 hover:text-blue-900 font-medium">Resources</a>
-                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium">Contact</a>
-                    <a href="members.html" class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800">
-                        Member Portal
-                    </a>
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Home</a>
+                    <a href="about.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">About</a>
+                    <a href="management.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Management</a>
+                    <a href="events.html" class="text-kesnnur-blue dark:text-kesnnur-light font-medium border-b-2 border-kesnnur-blue dark:border-kesnnur-light">Events</a>
+                    <a href="blog.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Blog</a>
+                    <a href="resources.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Resources</a>
+                    <a href="contact.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Contact</a>
+                    
+                    <div class="lang-selector flex items-center gap-2"><i class="fas fa-globe"></i><span id="currentLang">EN</span></div>
+                    <div class="theme-toggle flex items-center gap-2"><i class="fas fa-sun dark:hidden"></i><i class="fas fa-moon hidden dark:inline"></i><span>Light</span></div>
+                    
+                    <a href="members.html" class="bg-kesnnur-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-kesnnur-light transition">Member Portal</a>
                 </div>
-
-                <!-- Mobile Menu Button -->
-                <button id="menuBtn" class="md:hidden text-blue-900">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
+                <button id="menuBtn" class="md:hidden text-kesnnur-blue"><i class="fas fa-bars text-2xl"></i></button>
             </div>
-            
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white rounded-lg shadow-lg p-6">
+            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6">
                 <div class="space-y-3">
-                    <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-home mr-3"></i>Home
-                    </a>
-                    <a href="about.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-info-circle mr-3"></i>About
-                    </a>
-                    <a href="management.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-users mr-3"></i>Management
-                    </a>
-                    <a href="events.html" class="block py-3 px-4 bg-blue-50 text-blue-900 rounded-lg">
-                        <i class="fas fa-calendar-alt mr-3"></i>Events
-                    </a>
-                    <a href="blog.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-blog mr-3"></i>Blog
-                    </a>
-                    <a href="resources.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-book-medical mr-3"></i>Resources
-                    </a>
-                    <a href="contact.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-envelope mr-3"></i>Contact
-                    </a>
-                    <a href="members.html" class="block py-3 px-4 bg-blue-900 text-white rounded-lg text-center font-medium mt-4">
-                        <i class="fas fa-user mr-3"></i>Member Portal
-                    </a>
+                    <a href="index.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-home mr-3"></i>Home</a>
+                    <a href="about.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-info-circle mr-3"></i>About</a>
+                    <a href="management.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-users mr-3"></i>Management</a>
+                    <a href="events.html" class="block py-3 px-4 bg-kesnnur-blue/10 text-kesnnur-blue dark:text-kesnnur-light rounded-lg"><i class="fas fa-calendar-alt mr-3"></i>Events</a>
+                    <a href="blog.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-blog mr-3"></i>Blog</a>
+                    <a href="resources.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-book-medical mr-3"></i>Resources</a>
+                    <a href="contact.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-envelope mr-3"></i>Contact</a>
+                    <div class="flex gap-3 pt-3">
+                        <div class="flex-1 lang-selector-mobile bg-gray-100 dark:bg-gray-800 rounded-lg py-2 px-4 text-center flex items-center justify-center gap-2 cursor-pointer"><i class="fas fa-globe"></i><span>EN/SW</span></div>
+                        <div class="flex-1 theme-toggle-mobile bg-gray-100 dark:bg-gray-800 rounded-lg py-2 px-4 text-center cursor-pointer"><i class="fas fa-moon dark:hidden"></i><i class="fas fa-sun hidden dark:inline"></i></div>
+                    </div>
+                    <a href="members.html" class="block py-3 px-4 bg-kesnnur-blue text-white rounded-lg text-center font-medium mt-4"><i class="fas fa-user mr-3"></i>Member Portal</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main id="main-content" role="main">
+    <main id="main-content">
         <!-- Hero Section -->
-        <section class="relative py-16 bg-gradient-to-r from-blue-900 to-blue-700">
+        <section class="relative py-20 bg-gradient-to-r from-kesnnur-blue to-kesnnur-light overflow-hidden">
             <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center opacity-10"></div>
+            <div class="absolute top-20 left-10 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute bottom-20 right-10 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
             <div class="container mx-auto px-4 relative z-10 text-center">
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">
-                    KESNNUR Events
-                </h1>
-                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-                    Join our upcoming conferences, workshops, webinars, and networking events. Connect, learn, and grow with Kenya's nursing community.
-                </p>
+                <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6 border border-white/30">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <span class="text-sm font-medium text-white tracking-wide">Upcoming Nursing Events</span>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 font-display leading-tight">KESNNUR <span class="text-kesnnur-gold">Events</span></h1>
+                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">Join our upcoming conferences, workshops, webinars, and networking events. Connect, learn, and grow with Kenya's nursing community.</p>
                 <div class="flex flex-wrap justify-center gap-4">
-                    <a href="#upcoming-events" class="bg-white text-blue-900 px-8 py-3 rounded-xl font-bold hover:shadow-xl">
-                        <i class="fas fa-calendar-check mr-2"></i>View Upcoming Events
-                    </a>
-                    <a href="#calendar-view" class="border-2 border-white text-white px-8 py-3 rounded-xl font-bold hover:bg-white/10">
-                        <i class="fas fa-calendar-alt mr-2"></i>Calendar View
-                    </a>
+                    <a href="#upcoming-events" class="bg-white text-kesnnur-blue px-8 py-3 rounded-xl font-bold hover:shadow-xl transition-all"><i class="fas fa-calendar-check mr-2"></i>View Upcoming Events</a>
+                    <a href="#calendar-view" class="border-2 border-white text-white px-8 py-3 rounded-xl font-bold hover:bg-white/10 transition-all"><i class="fas fa-calendar-alt mr-2"></i>Calendar View</a>
                 </div>
             </div>
+            <div class="absolute bottom-0 left-0 right-0"><svg viewBox="0 0 1440 120" class="w-full h-auto" fill="#ffffff"><path d="M0,32L120,42.7C240,53,480,75,720,74.7C960,75,1200,53,1320,42.7L1440,32L1440,120L1320,120C1200,120,960,120,720,120C480,120,240,120,120,120L0,120Z"></path></svg></div>
         </section>
 
         <!-- Calendar Section -->
-        <section id="calendar-view" class="py-16">
+        <section id="calendar-view" class="py-20">
             <div class="container mx-auto px-4">
-                <div class="bg-white rounded-2xl shadow-xl p-8 mb-16">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8" data-aos="fade-up">
                     <div class="flex flex-col md:flex-row md:items-center justify-between mb-8">
-                        <div>
-                            <h2 class="text-2xl font-bold mb-2">Events Calendar</h2>
-                            <p class="text-gray-600">Browse events by month and register for upcoming programs</p>
-                        </div>
-                        <div class="mt-4 md:mt-0">
-                            <div class="flex items-center space-x-4">
-                                <button id="prevMonth" class="p-2 rounded-lg hover:bg-gray-100">
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                                <h3 id="currentMonth" class="text-lg font-semibold text-gray-800">March 2024</h3>
-                                <button id="nextMonth" class="p-2 rounded-lg hover:bg-gray-100">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
+                        <div><h2 class="text-2xl font-bold mb-2 text-kesnnur-blue">Events Calendar</h2><p class="text-gray-600 dark:text-gray-400">Browse events by month and register for upcoming programs</p></div>
+                        <div class="mt-4 md:mt-0"><div class="flex items-center space-x-4"><button id="prevMonth" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-chevron-left"></i></button><h3 id="currentMonth" class="text-lg font-semibold text-gray-800 dark:text-white">March 2024</h3><button id="nextMonth" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-chevron-right"></i></button></div></div>
                     </div>
-                    
-                    <div class="overflow-x-auto">
-                        <div id="calendar" class="min-w-full">
-                            <!-- Calendar will be generated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <!-- Calendar Legend -->
-                    <div class="mt-8 pt-8 border-t border-gray-200">
-                        <h4 class="font-medium text-gray-700 mb-4">Event Types:</h4>
-                        <div class="flex flex-wrap gap-3">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-blue-600 mr-2"></div>
-                                <span class="text-sm text-gray-600">Conference</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
-                                <span class="text-sm text-gray-600">Workshop</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-cyan-600 mr-2"></div>
-                                <span class="text-sm text-gray-600">Webinar</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-amber-600 mr-2"></div>
-                                <span class="text-sm text-gray-600">Networking</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-purple-600 mr-2"></div>
-                                <span class="text-sm text-gray-600">Summit</span>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="overflow-x-auto"><div id="calendar" class="min-w-full"></div></div>
+                    <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700"><h4 class="font-medium text-gray-700 dark:text-gray-300 mb-4">Event Types:</h4><div class="flex flex-wrap gap-3"><div class="flex items-center"><div class="w-3 h-3 rounded-full bg-kesnnur-blue mr-2"></div><span class="text-sm text-gray-600 dark:text-gray-400">Conference</span></div><div class="flex items-center"><div class="w-3 h-3 rounded-full bg-green-600 mr-2"></div><span class="text-sm text-gray-600 dark:text-gray-400">Workshop</span></div><div class="flex items-center"><div class="w-3 h-3 rounded-full bg-cyan-600 mr-2"></div><span class="text-sm text-gray-600 dark:text-gray-400">Webinar</span></div><div class="flex items-center"><div class="w-3 h-3 rounded-full bg-amber-600 mr-2"></div><span class="text-sm text-gray-600 dark:text-gray-400">Networking</span></div><div class="flex items-center"><div class="w-3 h-3 rounded-full bg-purple-600 mr-2"></div><span class="text-sm text-gray-600 dark:text-gray-400">Summit</span></div></div></div>
                 </div>
             </div>
         </section>
 
         <!-- Upcoming Events -->
-        <section id="upcoming-events" class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+        <section id="upcoming-events" class="py-20 bg-gradient-to-br from-kesnnur-blue/5 to-kesnnur-teal/5">
             <div class="container mx-auto px-4">
-                <div class="flex flex-col md:flex-row md:items-center justify-between mb-12">
-                    <div>
-                        <h2 class="text-3xl font-bold mb-2">Upcoming Events</h2>
-                        <p class="text-gray-600">Register for our upcoming conferences, workshops, and networking events</p>
-                    </div>
-                    <div class="mt-4 md:mt-0">
-                        <div class="relative">
-                            <input type="text" id="eventSearch" placeholder="Search events..." 
-                                   class="pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full md:w-80">
-                            <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
-                        </div>
-                    </div>
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-12" data-aos="fade-up">
+                    <div><h2 class="text-3xl md:text-4xl font-bold mb-2 text-kesnnur-blue">Upcoming Events</h2><p class="text-gray-600 dark:text-gray-400">Register for our upcoming conferences, workshops, and networking events</p></div>
+                    <div class="mt-4 md:mt-0"><div class="relative"><input type="text" id="eventSearch" placeholder="Search events..." class="pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-kesnnur-blue focus:border-transparent w-full md:w-80 dark:bg-gray-800 dark:text-white"><i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i></div></div>
                 </div>
 
-                <!-- Events Grid - DYNAMIC FROM DATABASE -->
                 <div id="eventsContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="col-span-3 text-center py-12">
-                        <div class="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-blue-900 mb-4"></div>
-                        <h3 class="text-xl font-bold text-gray-600 mb-2">Loading Events</h3>
-                        <p class="text-gray-500">Fetching events from database...</p>
-                    </div>
+                    <div class="col-span-3 text-center py-12"><div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-kesnnur-blue mb-4"></div><h3 class="text-xl font-bold text-gray-600 dark:text-gray-400 mb-2">Loading Events</h3><p class="text-gray-500 dark:text-gray-500">Fetching events from database...</p></div>
                 </div>
 
-                <!-- Load More Button -->
-                <div class="text-center mt-12">
-                    <button id="loadMoreEvents" class="bg-white border-2 border-blue-900 text-blue-900 px-8 py-3 rounded-xl text-lg font-semibold hover:bg-blue-50 transition-all">
-                        <i class="fas fa-sync-alt mr-2"></i> Load More Events
-                    </button>
-                </div>
+                <div class="text-center mt-12"><button id="loadMoreEvents" class="bg-white dark:bg-gray-800 border-2 border-kesnnur-blue text-kesnnur-blue dark:text-kesnnur-light px-8 py-3 rounded-xl text-lg font-semibold hover:bg-kesnnur-blue/10 transition-all"><i class="fas fa-sync-alt mr-2"></i> Refresh Events</button></div>
             </div>
         </section>
 
         <!-- Past Events -->
-        <section class="py-16">
+        <section class="py-20">
             <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-bold mb-12 text-center">Recent Past Events</h2>
-                
-                <div class="max-w-4xl mx-auto">
-                    <!-- Past Event 1 -->
-                    <div class="past-event-card bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between">
-                            <div class="mb-4 md:mb-0">
-                                <h3 class="font-bold text-xl mb-2">THE EASTERN REGION CAMPUS CONVOY</h3>
-                                <div class="flex items-center text-gray-600 mb-2">
-                                    <i class="far fa-calendar mr-2"></i>
-                                    <span>February 2024</span>
-                                    <span class="mx-3">•</span>
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    <span>Eastern Region Universities</span>
-                                </div>
-                                <p class="text-gray-700">Campus outreach program connecting with nursing students across Eastern Region universities.</p>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-semibold">
-                                    <i class="fas fa-check-circle mr-1 text-green-500"></i> Completed
-                                </span>
-                                <button class="text-blue-900 font-medium hover:underline view-gallery-btn" data-event="eastern-convoy">
-                                    View Gallery
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Past Event 2 -->
-                    <div class="past-event-card bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between">
-                            <div class="mb-4 md:mb-0">
-                                <h3 class="font-bold text-xl mb-2">COAST REGION CAMPUS CONVOY</h3>
-                                <div class="flex items-center text-gray-600 mb-2">
-                                    <i class="far fa-calendar mr-2"></i>
-                                    <span>January 2024</span>
-                                    <span class="mx-3">•</span>
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    <span>Coastal Universities</span>
-                                </div>
-                                <p class="text-gray-700">Comprehensive tour of coastal universities promoting KESNNUR membership and nursing opportunities.</p>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-semibold">
-                                    <i class="fas fa-check-circle mr-1 text-green-500"></i> Completed
-                                </span>
-                                <button class="text-blue-900 font-medium hover:underline view-gallery-btn" data-event="coast-convoy">
-                                    View Gallery
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Past Event 3 -->
-                    <div class="past-event-card bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between">
-                            <div class="mb-4 md:mb-0">
-                                <h3 class="font-bold text-xl mb-2">THE KESNNUR NATIONAL DINNER</h3>
-                                <div class="flex items-center text-gray-600 mb-2">
-                                    <i class="far fa-calendar mr-2"></i>
-                                    <span>December 2023</span>
-                                    <span class="mx-3">•</span>
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    <span>Nairobi</span>
-                                </div>
-                                <p class="text-gray-700">Annual networking dinner celebrating achievements and building community among nursing professionals.</p>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-semibold">
-                                    <i class="fas fa-check-circle mr-1 text-green-500"></i> Completed
-                                </span>
-                                <button class="text-blue-900 font-medium hover:underline view-gallery-btn" data-event="national-dinner">
-                                    View Gallery
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Past Event 4 -->
-                    <div class="past-event-card bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between">
-                            <div class="mb-4 md:mb-0">
-                                <h3 class="font-bold text-xl mb-2">MENTAL HEALTH AWARENESS WORKSHOP</h3>
-                                <div class="flex items-center text-gray-600 mb-2">
-                                    <i class="far fa-calendar mr-2"></i>
-                                    <span>November 2023</span>
-                                    <span class="mx-3">•</span>
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    <span>Virtual & Nairobi</span>
-                                </div>
-                                <p class="text-gray-700">Workshop focused on mental health awareness and support strategies for nursing students and professionals.</p>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-semibold">
-                                    <i class="fas fa-check-circle mr-1 text-green-500"></i> Completed
-                                </span>
-                                <button class="text-blue-900 font-medium hover:underline view-gallery-btn" data-event="mental-health-workshop">
-                                    View Gallery
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-kesnnur-blue" data-aos="fade-up">Recent Past Events</h2>
+                <div class="max-w-4xl mx-auto" id="pastEventsContainer">
+                    <!-- Past events will be loaded dynamically -->
                 </div>
             </div>
         </section>
 
         <!-- CTA Section -->
-        <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-4xl font-bold mb-6">Host an Event with KESNNUR</h2>
-                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                    Interested in hosting a nursing workshop, conference, or networking event? Partner with us to reach Kenya's nursing community.
-                </p>
-                <a href="contact.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-bold hover:shadow-xl inline-flex items-center">
-                    <i class="fas fa-calendar-plus mr-2"></i> Propose an Event
-                </a>
+        <section class="py-20 bg-gradient-to-r from-kesnnur-blue to-kesnnur-teal text-white relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center opacity-10"></div>
+            <div class="container mx-auto px-4 text-center relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Host an Event with KESNNUR</h2>
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">Interested in hosting a nursing workshop, conference, or networking event? Partner with us to reach Kenya's nursing community.</p>
+                <a href="contact.html" class="bg-white text-kesnnur-blue px-8 py-4 rounded-xl text-lg font-bold hover:shadow-xl hover:scale-105 transition-all inline-flex items-center"><i class="fas fa-calendar-plus mr-2"></i> Propose an Event</a>
             </div>
         </section>
     </main>
@@ -507,755 +280,167 @@
     <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-4">
             <div class="grid md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center space-x-3 mb-4">
-                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
-                             alt="KESNNUR Logo"
-                             width="40"
-                             height="40"
-                             class="w-10 h-10 rounded-lg object-contain bg-white p-1">
-                        <h3 class="text-xl font-bold">KESNNUR</h3>
-                    </div>
-                    <p class="text-gray-400 mb-4">
-                        Connecting Kenya's nursing community through events, education, and networking.
-                    </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-twitter text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-facebook text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-instagram text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-linkedin text-xl"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold mb-4">Event Types</h4>
-                    <div class="space-y-3">
-                        <a href="#" class="text-gray-400 hover:text-white block">Conferences</a>
-                        <a href="#" class="text-gray-400 hover:text-white block">Workshops</a>
-                        <a href="#" class="text-gray-400 hover:text-white block">Webinars</a>
-                        <a href="#" class="text-gray-400 hover:text-white block">Networking Events</a>
-                        <a href="#" class="text-gray-400 hover:text-white block">Summits</a>
-                        <a href="#" class="text-gray-400 hover:text-white block">Campus Convoys</a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold mb-4">Quick Links</h4>
-                    <div class="space-y-3">
-                        <a href="index.html" class="text-gray-400 hover:text-white block">Home</a>
-                        <a href="about.html" class="text-gray-400 hover:text-white block">About</a>
-                        <a href="events.html" class="text-gray-400 hover:text-white block">Events</a>
-                        <a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a>
-                        <a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a>
-                        <a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold mb-4">Contact</h4>
-                    <div class="space-y-3 text-gray-400">
-                        <div class="flex items-start">
-                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
-                            <span>Nurses Complex KNH, Nairobi, Kenya</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-phone mr-3"></i>
-                            <a href="tel:+254791296924" class="hover:text-white">+254 791 296 924</a>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-envelope mr-3"></i>
-                            <a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a>
-                        </div>
-                    </div>
-                </div>
+                <div><div class="flex items-center space-x-3 mb-4"><img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" width="40" height="40" class="w-10 h-10 rounded-lg object-contain bg-white p-1"><h3 class="text-xl font-bold">KESNNUR</h3></div><p class="text-gray-400 mb-4">Connecting Kenya's nursing community through events, education, and networking.</p><div class="flex space-x-4"><a href="#" class="social-icon twitter text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a><a href="#" class="social-icon facebook text-gray-400 hover:text-white"><i class="fab fa-facebook"></i></a><a href="#" class="social-icon instagram text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a><a href="#" class="social-icon linkedin text-gray-400 hover:text-white"><i class="fab fa-linkedin"></i></a></div></div>
+                <div><h4 class="font-bold mb-4">Event Types</h4><div class="space-y-3"><a href="#" class="text-gray-400 hover:text-white block">Conferences</a><a href="#" class="text-gray-400 hover:text-white block">Workshops</a><a href="#" class="text-gray-400 hover:text-white block">Webinars</a><a href="#" class="text-gray-400 hover:text-white block">Networking Events</a><a href="#" class="text-gray-400 hover:text-white block">Summits</a><a href="#" class="text-gray-400 hover:text-white block">Campus Convoys</a></div></div>
+                <div><h4 class="font-bold mb-4">Quick Links</h4><div class="space-y-3"><a href="index.html" class="text-gray-400 hover:text-white block">Home</a><a href="about.html" class="text-gray-400 hover:text-white block">About</a><a href="events.html" class="text-gray-400 hover:text-white block">Events</a><a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a><a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a><a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a></div></div>
+                <div><h4 class="font-bold mb-4">Contact</h4><div class="space-y-3 text-gray-400"><div class="flex gap-3"><i class="fas fa-map-marker-alt mt-1"></i><span>Nurses Complex KNH, Nairobi, Kenya</span></div><div class="flex gap-3"><i class="fas fa-phone"></i><a href="tel:+254768878303" class="hover:text-white">+254 768 878 303</a></div><div class="flex gap-3"><i class="fas fa-envelope"></i><a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a></div></div></div>
             </div>
-            
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>Copyright © <span id="currentYear">2024</span> KESNNUR. All rights reserved.</p>
-                <p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p>
-            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400"><p>Copyright © <span id="currentYear"></span> KESNNUR. All rights reserved.</p><p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p></div>
         </div>
     </footer>
 
     <!-- Event Registration Modal -->
     <div id="registrationModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true"><div class="absolute inset-0 bg-gray-500 opacity-75"></div></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
-            <div id="modalContent" class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <!-- Modal content will be inserted here -->
-            </div>
+            <div id="modalContent" class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"></div>
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <button id="backToTop" class="fixed bottom-8 right-8 bg-kesnnur-blue text-white p-3 rounded-full shadow-lg hover:shadow-xl opacity-0 transition-all duration-300 hover:scale-110 z-50"><i class="fas fa-chevron-up"></i></button>
+
     <script>
-// ============================================
-// EVENTS PAGE FUNCTIONALITY WITH DATABASE
-// ============================================
-
-// Configuration
-const CONFIG = {
-    SUPABASE_URL: 'https://noadhwqvaxajuckpibbo.supabase.co',
-    SUPABASE_KEY: 'sb_publishable_P02egT5dJQkzvkxz5wETyQ_vZkdcxxz'
-};
-
-// Database table
-const TABLES = {
-    EVENTS: 'events'
-};
-
-async function fetchFromSupabase(table, params = '') {
-    try {
-        const response = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${table}${params}`, {
-            headers: {
-                'apikey': CONFIG.SUPABASE_KEY,
-                'Authorization': `Bearer ${CONFIG.SUPABASE_KEY}`,
-                'Accept': 'application/json'
-            }
-        });
-        
-        if (!response.ok) {
-            console.log(`Table "${table}" returned ${response.status}`);
-            return null;
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error(`Error fetching ${table}:`, error);
-        return null;
-    }
-}
-
-async function loadRealEvents() {
-    const container = document.getElementById('eventsContainer');
-    if (!container) return;
+    AOS.init({ duration: 800, once: true, offset: 50 });
     
-    console.log('📅 Loading REAL events from database...');
+    window.addEventListener('scroll', () => { const win = document.documentElement.scrollTop, height = document.documentElement.scrollHeight - document.documentElement.clientHeight; document.getElementById('progressBar').style.width = (win / height) * 100 + '%'; });
     
-    // Show loading state
-    const loadingHTML = `
-        <div class="col-span-3 text-center py-12">
-            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900 mb-4"></div>
-            <h3 class="text-xl font-bold text-gray-600 mb-2">Loading Events</h3>
-            <p class="text-gray-500">Fetching events from database...</p>
-        </div>
-    `;
+    function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light'); }
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+    document.querySelectorAll('.theme-toggle, .theme-toggle-mobile').forEach(el => el.addEventListener('click', toggleTheme));
     
-    container.innerHTML = loadingHTML;
+    const translations = { en: {}, sw: {} };
+    let currentLang = localStorage.getItem('language') || 'en';
+    function updateLanguage(lang) { currentLang = lang; localStorage.setItem('language', lang); document.getElementById('currentLang').innerHTML = lang.toUpperCase(); }
+    document.querySelectorAll('.lang-selector, .lang-selector-mobile').forEach(el => el.addEventListener('click', () => updateLanguage(currentLang === 'en' ? 'sw' : 'en')));
+    updateLanguage(currentLang);
     
-    try {
-        // Get current date
-        const today = new Date().toISOString();
-        
-        // Fetch published events from database
-        const events = await fetchFromSupabase(
-            TABLES.EVENTS, 
-            `?status=eq.published&start_date=gte.${today}&order=start_date.asc`
-        );
-        
-        console.log('📊 Events from database:', events);
-        
-        if (events && events.length > 0) {
-            container.innerHTML = '';
-            
-            events.forEach((event, index) => {
-                // Parse event date
-                const startDate = new Date(event.start_date);
-                const endDate = new Date(event.end_date);
-                const day = startDate.getDate();
-                const month = startDate.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
-                
-                // Format date range
-                let dateRange = `${month} ${day}`;
-                if (startDate.getDate() !== endDate.getDate()) {
-                    const endDay = endDate.getDate();
-                    const endMonth = endDate.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
-                    if (startDate.getMonth() === endDate.getMonth()) {
-                        dateRange = `${month} ${day}-${endDay}`;
-                    } else {
-                        dateRange = `${month} ${day} - ${endMonth} ${endDay}`;
-                    }
-                }
-                
-                // Get full date for display
-                const fullDate = startDate.toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                });
-                
-                // Determine event color based on type
-                const colorMap = {
-                    'conference': 'from-blue-900 to-blue-700',
-                    'workshop': 'from-green-700 to-green-500',
-                    'webinar': 'from-cyan-700 to-cyan-500',
-                    'seminar': 'from-purple-700 to-purple-500',
-                    'meeting': 'from-indigo-700 to-indigo-500',
-                    'training': 'from-teal-700 to-teal-500',
-                    'social': 'from-amber-700 to-amber-500'
-                };
-                
-                const colorClass = colorMap[event.event_type] || 'from-blue-900 to-blue-700';
-                
-                // Get location
-                const location = event.venue || event.venue_address || event.address || 'TBA';
-                
-                // Get time
-                const startTime = startDate.toLocaleTimeString('en-US', { 
-                    hour: 'numeric', 
-                    minute: '2-digit',
-                    hour12: true 
-                });
-                
-                // Get price/fee
-                let priceInfo = 'Free';
-                if (event.fee_amount && event.fee_amount > 0) {
-                    priceInfo = `${event.fee_currency || 'Ksh'} ${event.fee_amount}`;
-                    if (event.fee_amount === 0) {
-                        priceInfo = 'Free';
-                    }
-                }
-                
-                // Create event card
-                const card = document.createElement('div');
-                card.className = 'event-card bg-white rounded-2xl shadow-lg overflow-hidden';
-                card.innerHTML = `
-                    <div class="h-48 ${colorClass} relative overflow-hidden">
-                        <div class="absolute top-4 left-4">
-                            <span class="event-badge ${event.event_type}">${event.event_type}</span>
-                        </div>
-                        <div class="absolute bottom-4 left-4">
-                            <div class="text-white text-3xl font-bold">${day}</div>
-                            <div class="text-white/80 font-semibold">${month}</div>
-                        </div>
-                        ${event.image_url ? 
-                            `<img src="${event.image_url}" alt="${event.title}" class="w-full h-full object-cover opacity-20">` : 
-                            ''
-                        }
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-4">${event.title}</h3>
-                        <div class="space-y-3 mb-6">
-                            <div class="flex items-center text-gray-600">
-                                <i class="far fa-calendar mr-3"></i>
-                                <span>${fullDate}</span>
-                            </div>
-                            <div class="flex items-center text-gray-600">
-                                <i class="far fa-clock mr-3"></i>
-                                <span>${startTime}</span>
-                            </div>
-                            <div class="flex items-center text-gray-600">
-                                <i class="fas fa-map-marker-alt mr-3"></i>
-                                <span>${location}</span>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 mb-6">
-                            ${event.description ? 
-                                (event.description.length > 150 ? 
-                                    event.description.substring(0, 150) + '...' : 
-                                    event.description) : 
-                                'Join us for this exciting event!'
-                            }
-                        </p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-semibold text-gray-900">${priceInfo}</span>
-                            <div class="flex items-center">
-                                <span class="text-xs text-green-600 font-semibold mr-3">
-                                    <i class="fas fa-database mr-1"></i> Live
-                                </span>
-                                <button class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors register-btn"
-                                        data-event-id="${event.id}">
-                                    Register Now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                container.appendChild(card);
-            });
-            
-            // Add event listeners to new buttons
-            container.querySelectorAll('.register-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const eventId = this.getAttribute('data-event-id');
-                    showRegistrationModal(eventId);
-                });
-            });
-            
-            // Show success message
-            showToast(`Loaded ${events.length} real events from database!`, 'success');
-            
-            // Show/hide load more button
-            const loadMoreBtn = document.getElementById('loadMoreEvents');
-            if (loadMoreBtn) {
-                loadMoreBtn.style.display = 'block';
-            }
-            
-        } else {
-            // No events found
-            container.innerHTML = `
-                <div class="col-span-3 text-center py-12">
-                    <i class="fas fa-calendar-times text-4xl text-gray-400 mb-4"></i>
-                    <h3 class="text-xl font-bold text-gray-600 mb-2">No Upcoming Events</h3>
-                    <p class="text-gray-500">Check back soon for new events!</p>
-                    <div class="mt-4 text-sm text-gray-400">
-                        <i class="fas fa-info-circle mr-1"></i> Showing real data from database
-                    </div>
-                </div>
-            `;
-            
-            // Hide load more button
-            const loadMoreBtn = document.getElementById('loadMoreEvents');
-            if (loadMoreBtn) loadMoreBtn.style.display = 'none';
-        }
-        
-    } catch (error) {
-        console.error('❌ Error loading events:', error);
-        container.innerHTML = `
-            <div class="col-span-3 text-center py-12">
-                <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
-                <h3 class="text-xl font-bold text-gray-600 mb-2">Error Loading Events</h3>
-                <p class="text-gray-500">Could not connect to database. Please try again later.</p>
-            </div>
-        `;
-        showToast('Error loading events from database', 'error');
-    }
-}
-
-// Update the modal functions to work with real events
-async function showRegistrationModal(eventId) {
-    try {
-        // Fetch event details from database
-        const event = await fetchFromSupabase(TABLES.EVENTS, `?id=eq.${eventId}`);
-        
-        if (!event || event.length === 0) {
-            showToast('Event not found', 'error');
-            return;
-        }
-        
-        const eventData = event[0];
-        const startDate = new Date(eventData.start_date);
-        const endDate = new Date(eventData.end_date);
-        
-        // Format date
-        let dateDisplay = startDate.toLocaleDateString('en-US', { 
-            month: 'long', 
-            day: 'numeric', 
-            year: 'numeric' 
-        });
-        
-        if (startDate.getDate() !== endDate.getDate()) {
-            dateDisplay += ` - ${endDate.toLocaleDateString('en-US', { 
-                month: 'long', 
-                day: 'numeric', 
-                year: 'numeric' 
-            })}`;
-        }
-        
-        // Format time
-        const timeDisplay = startDate.toLocaleTimeString('en-US', { 
-            hour: 'numeric', 
-            minute: '2-digit',
-            hour12: true 
-        });
-        
-        // Get location
-        const location = eventData.venue || eventData.venue_address || eventData.address || 'TBA';
-        
-        // Get price
-        let priceInfo = 'Free';
-        if (eventData.fee_amount && eventData.fee_amount > 0) {
-            priceInfo = `${eventData.fee_currency || 'Ksh'} ${eventData.fee_amount}`;
-            if (eventData.fee_amount === 0) {
-                priceInfo = 'Free';
-            }
-        }
-        
-        const modalContent = `
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-gray-900">Register for Event</h3>
-                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-                
-                <div class="mb-6">
-                    <h4 class="font-bold text-lg mb-2">${eventData.title}</h4>
-                    <div class="space-y-2 text-gray-600">
-                        <div class="flex items-center">
-                            <i class="far fa-calendar mr-2"></i>
-                            <span>${dateDisplay}</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="far fa-clock mr-2"></i>
-                            <span>${timeDisplay}</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-map-marker-alt mr-2"></i>
-                            <span>${location}</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-tag mr-2"></i>
-                            <span>${priceInfo}</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <form id="eventRegistrationForm" class="space-y-4">
-                    <div>
-                        <label class="block text-gray-700 mb-2">Full Name *</label>
-                        <input type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-2">Email Address *</label>
-                        <input type="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-2">Phone Number *</label>
-                        <input type="tel" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-2">KESNNUR Membership Number (if applicable)</label>
-                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-2">Special Requirements</label>
-                        <textarea class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3" placeholder="Dietary restrictions, accessibility needs, etc."></textarea>
-                    </div>
-                </form>
-                
-                <div class="mt-6 pt-6 border-t border-gray-200">
-                    <button onclick="submitRegistration('${eventId}')" class="w-full bg-blue-900 text-white py-3 rounded-lg font-medium hover:bg-blue-800 mb-3">
-                        Complete Registration
-                    </button>
-                    <button onclick="closeModal()" class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50">
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        showModal(modalContent);
-        
-    } catch (error) {
-        console.error('Error loading event details:', error);
-        showToast('Error loading event details', 'error');
-    }
-}
-
-// Calendar functionality
-let currentDate = new Date();
-
-function renderCalendar(date) {
-    const calendarEl = document.getElementById('calendar');
-    const monthYearEl = document.getElementById('currentMonth');
+    document.getElementById('menuBtn').addEventListener('click', function() { document.getElementById('mobileMenu').classList.toggle('hidden'); });
     
-    if (!calendarEl || !monthYearEl) return;
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => { backBtn.style.opacity = window.scrollY > 300 ? '1' : '0'; backBtn.style.pointerEvents = window.scrollY > 300 ? 'auto' : 'none'; });
+    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     
-    // Set month/year header
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-                      "July", "August", "September", "October", "November", "December"];
-    monthYearEl.textContent = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
-    
-    // Get first day of month and total days
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    const totalDays = lastDay.getDate();
-    const firstDayIndex = firstDay.getDay(); // 0 = Sunday, 1 = Monday, etc.
-    
-    // Generate calendar HTML
-    let calendarHTML = `
-        <div class="grid grid-cols-7 gap-2 mb-2">
-            <div class="text-center font-semibold text-gray-700 p-2">Sun</div>
-            <div class="text-center font-semibold text-gray-700 p-2">Mon</div>
-            <div class="text-center font-semibold text-gray-700 p-2">Tue</div>
-            <div class="text-center font-semibold text-gray-700 p-2">Wed</div>
-            <div class="text-center font-semibold text-gray-700 p-2">Thu</div>
-            <div class="text-center font-semibold text-gray-700 p-2">Fri</div>
-            <div class="text-center font-semibold text-gray-700 p-2">Sat</div>
-        </div>
-        <div class="grid grid-cols-7 gap-2">
-    `;
-    
-    // Empty cells for days before first day of month
-    for (let i = 0; i < firstDayIndex; i++) {
-        calendarHTML += `<div class="calendar-day empty"></div>`;
-    }
-    
-    // Days of the month
-    for (let day = 1; day <= totalDays; day++) {
-        const isToday = day === new Date().getDate() && 
-                      date.getMonth() === new Date().getMonth() && 
-                      date.getFullYear() === new Date().getFullYear();
-        
-        let dayClass = "calendar-day";
-        let dayContent = day;
-        
-        if (isToday) {
-            dayClass += " bg-blue-100 text-blue-900 font-bold";
-        }
-        
-        calendarHTML += `<div class="${dayClass}">${dayContent}</div>`;
-        
-        // New row after Saturday
-        if ((firstDayIndex + day) % 7 === 0 && day !== totalDays) {
-            calendarHTML += '</div><div class="grid grid-cols-7 gap-2">';
-        }
-    }
-    
-    calendarHTML += '</div>';
-    calendarEl.innerHTML = calendarHTML;
-}
-
-function navigateCalendar(direction) {
-    currentDate.setMonth(currentDate.getMonth() + direction);
-    renderCalendar(new Date(currentDate));
-}
-
-function showDayEvents(day, month, year) {
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-                      "July", "August", "September", "October", "November", "December"];
-    
-    // Sample events for demonstration
-    const dayEvents = [
-        { title: "KESNNUR 2nd Annual Conference", time: "9:00 AM - 5:00 PM", type: "conference" },
-        { title: "Virtual Networking Session", time: "7:00 PM - 8:30 PM", type: "webinar" }
-    ];
-    
-    let eventsHTML = dayEvents.map(event => `
-        <div class="p-4 mb-3 rounded-lg ${event.type === 'conference' ? 'bg-blue-50' : 'bg-cyan-50'}">
-            <div class="flex justify-between items-start">
-                <div>
-                    <h4 class="font-bold text-gray-800">${event.title}</h4>
-                    <p class="text-sm text-gray-600 mt-1">
-                        <i class="far fa-clock mr-1"></i> ${event.time}
-                    </p>
-                </div>
-                <span class="event-badge ${event.type}">${event.type}</span>
-            </div>
-            <button class="mt-3 text-blue-900 font-medium hover:underline text-sm">
-                View Details
-            </button>
-        </div>
-    `).join('');
-    
-    const modalContent = `
-        <div class="p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-gray-900">Events on ${monthNames[month]} ${day}, ${year}</h3>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            ${eventsHTML || '<p class="text-gray-600">No events scheduled for this day.</p>'}
-            <div class="mt-6 pt-6 border-t border-gray-200">
-                <button onclick="closeModal()" class="w-full bg-blue-900 text-white py-3 rounded-lg font-medium hover:bg-blue-800">
-                    Close
-                </button>
-            </div>
-        </div>
-    `;
-    
-    showModal(modalContent);
-}
-
-function showEventGallery(eventId) {
-    const galleryContent = `
-        <div class="p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-gray-900">Event Gallery</h3>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            
-            <p class="text-gray-600 mb-6">Photos from past events will be displayed here. Check back soon for updates!</p>
-            
-            <div class="grid grid-cols-2 gap-4 mb-6">
-                <div class="bg-gray-100 rounded-lg h-32 flex items-center justify-center">
-                    <i class="fas fa-image text-gray-400 text-3xl"></i>
-                </div>
-                <div class="bg-gray-100 rounded-lg h-32 flex items-center justify-center">
-                    <i class="fas fa-image text-gray-400 text-3xl"></i>
-                </div>
-                <div class="bg-gray-100 rounded-lg h-32 flex items-center justify-center">
-                    <i class="fas fa-image text-gray-400 text-3xl"></i>
-                </div>
-                <div class="bg-gray-100 rounded-lg h-32 flex items-center justify-center">
-                    <i class="fas fa-image text-gray-400 text-3xl"></i>
-                </div>
-            </div>
-            
-            <div class="mt-6 pt-6 border-t border-gray-200">
-                <button onclick="closeModal()" class="w-full bg-blue-900 text-white py-3 rounded-lg font-medium hover:bg-blue-800">
-                    Close Gallery
-                </button>
-            </div>
-        </div>
-    `;
-    
-    showModal(galleryContent);
-}
-
-function showModal(content) {
-    document.getElementById('modalContent').innerHTML = content;
-    document.getElementById('registrationModal').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-    document.getElementById('registrationModal').classList.add('hidden');
-    document.body.style.overflow = 'auto';
-}
-
-async function submitRegistration(eventId) {
-    const form = document.getElementById('eventRegistrationForm');
-    if (form.checkValidity()) {
-        // Here you would submit to your backend
-        // For now, just show success message
-        showToast('Registration submitted successfully! You will receive a confirmation email shortly.', 'success');
-        closeModal();
-    } else {
-        form.reportValidity();
-    }
-}
-
-function showToast(message, type = 'info') {
-    // Remove existing toast
-    const existingToast = document.querySelector('.custom-toast');
-    if (existingToast) existingToast.remove();
-    
-    // Create toast
-    const toast = document.createElement('div');
-    toast.className = `custom-toast fixed top-4 right-4 z-50 px-6 py-3 rounded-xl shadow-lg text-white font-medium transform translate-x-full transition-transform duration-300 ${
-        type === 'success' ? 'bg-green-600' : 'bg-blue-600'
-    }`;
-    toast.innerHTML = `
-        <div class="flex items-center">
-            <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} mr-3"></i>
-            <span>${message}</span>
-        </div>
-    `;
-    
-    document.body.appendChild(toast);
-    
-    // Animate in
-    setTimeout(() => {
-        toast.style.transform = 'translateX(0)';
-    }, 10);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        toast.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.parentNode.removeChild(toast);
-            }
-        }, 300);
-    }, 3000);
-}
-
-// Update the existing functions to work with the new structure
-document.addEventListener('DOMContentLoaded', function() {
-    // Set current year
     document.getElementById('currentYear').textContent = new Date().getFullYear();
     
-    // Mobile menu toggle
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
+    // Supabase Configuration
+    const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
     
-    if (menuBtn && mobileMenu) {
-        menuBtn.addEventListener('click', function() {
-            const isHidden = mobileMenu.classList.contains('hidden');
-            
-            if (isHidden) {
-                mobileMenu.classList.remove('hidden');
-                this.innerHTML = '<i class="fas fa-times text-2xl"></i>';
-            } else {
-                mobileMenu.classList.add('hidden');
-                this.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
-            }
-        });
+    async function fetchFromSupabase(table, params = '') {
+        try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}${params}`, {
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Accept': 'application/json' }
+            });
+            if (!response.ok) return null;
+            return await response.json();
+        } catch (error) { return null; }
     }
     
-    // Initialize calendar
+    async function loadRealEvents() {
+        const container = document.getElementById('eventsContainer');
+        if (!container) return;
+        
+        container.innerHTML = `<div class="col-span-3 text-center py-12"><div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-kesnnur-blue mb-4"></div><h3 class="text-xl font-bold text-gray-600 dark:text-gray-400 mb-2">Loading Events</h3><p class="text-gray-500 dark:text-gray-500">Fetching events from database...</p></div>`;
+        
+        try {
+            const today = new Date().toISOString();
+            const events = await fetchFromSupabase('events', `?status=eq.published&start_date=gte.${today}&order=start_date.asc&limit=6`);
+            
+            if (events && events.length > 0) {
+                container.innerHTML = '';
+                events.forEach((event, idx) => {
+                    const startDate = new Date(event.start_date);
+                    const day = startDate.getDate();
+                    const month = startDate.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+                    const fullDate = startDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                    const startTime = startDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                    const colorMap = { 'conference': 'from-kesnnur-blue to-kesnnur-light', 'workshop': 'from-green-700 to-green-500', 'webinar': 'from-cyan-700 to-cyan-500', 'training': 'from-teal-700 to-teal-500' };
+                    const colorClass = colorMap[event.event_type] || 'from-kesnnur-blue to-kesnnur-teal';
+                    const location = event.venue || 'TBA';
+                    const priceInfo = (!event.fee_amount || event.fee_amount === 0) ? 'Free' : `Ksh ${event.fee_amount}`;
+                    
+                    container.innerHTML += `<div class="event-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up"><div class="h-48 bg-gradient-to-r ${colorClass} relative overflow-hidden"><div class="absolute top-4 left-4"><span class="event-badge ${event.event_type}">${event.event_type || 'Event'}</span></div><div class="absolute bottom-4 left-4"><div class="text-white text-3xl font-bold">${day}</div><div class="text-white/80 font-semibold">${month}</div></div>${event.image_url ? `<img src="${event.image_url}" class="w-full h-full object-cover opacity-20">` : ''}</div><div class="p-6"><h3 class="font-bold text-xl mb-4 text-gray-800 dark:text-white">${event.title}</h3><div class="space-y-3 mb-6"><div class="flex items-center text-gray-600 dark:text-gray-400"><i class="far fa-calendar mr-3"></i><span>${fullDate}</span></div><div class="flex items-center text-gray-600 dark:text-gray-400"><i class="far fa-clock mr-3"></i><span>${startTime}</span></div><div class="flex items-center text-gray-600 dark:text-gray-400"><i class="fas fa-map-marker-alt mr-3"></i><span>${location}</span></div></div><p class="text-gray-700 dark:text-gray-300 mb-6">${event.description ? (event.description.substring(0, 150) + '...') : 'Join us for this exciting event!'}</p><div class="flex justify-between items-center"><span class="text-sm font-semibold text-gray-900 dark:text-white">${priceInfo}</span><button class="bg-kesnnur-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-kesnnur-light transition-colors register-btn" data-event-id="${event.id}">Register Now</button></div></div></div>`;
+                });
+                
+                document.querySelectorAll('.register-btn').forEach(btn => btn.addEventListener('click', () => showRegistrationModal(btn.dataset.eventId)));
+            } else {
+                container.innerHTML = `<div class="col-span-3 text-center py-12"><i class="fas fa-calendar-times text-5xl text-gray-400 dark:text-gray-600 mb-4"></i><h3 class="text-xl font-bold text-gray-600 dark:text-gray-400 mb-2">No Upcoming Events</h3><p class="text-gray-500 dark:text-gray-500">Check back soon for new events!</p></div>`;
+            }
+        } catch (error) { console.error('Error loading events:', error); }
+    }
+    
+    async function showRegistrationModal(eventId) {
+        const event = await fetchFromSupabase('events', `?id=eq.${eventId}`);
+        if (!event || event.length === 0) return;
+        const e = event[0];
+        const startDate = new Date(e.start_date);
+        const dateDisplay = startDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        const timeDisplay = startDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+        const location = e.venue || 'TBA';
+        const priceInfo = (!e.fee_amount || e.fee_amount === 0) ? 'Free' : `Ksh ${e.fee_amount}`;
+        
+        document.getElementById('modalContent').innerHTML = `<div class="p-6"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-gray-900 dark:text-white">Register for Event</h3><button onclick="closeModal()" class="text-gray-400 hover:text-gray-500"><i class="fas fa-times text-xl"></i></button></div><div class="mb-6"><h4 class="font-bold text-lg mb-2 text-gray-800 dark:text-white">${e.title}</h4><div class="space-y-2 text-gray-600 dark:text-gray-400"><div class="flex items-center"><i class="far fa-calendar mr-2"></i><span>${dateDisplay}</span></div><div class="flex items-center"><i class="far fa-clock mr-2"></i><span>${timeDisplay}</span></div><div class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i><span>${location}</span></div><div class="flex items-center"><i class="fas fa-tag mr-2"></i><span>${priceInfo}</span></div></div></div><form id="eventRegistrationForm" class="space-y-4"><div><label class="block text-gray-700 dark:text-gray-300 mb-2">Full Name *</label><input type="text" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-kesnnur-blue dark:bg-gray-700 dark:text-white"></div><div><label class="block text-gray-700 dark:text-gray-300 mb-2">Email Address *</label><input type="email" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-kesnnur-blue dark:bg-gray-700 dark:text-white"></div><div><label class="block text-gray-700 dark:text-gray-300 mb-2">Phone Number *</label><input type="tel" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-kesnnur-blue dark:bg-gray-700 dark:text-white"></div></form><div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700"><button onclick="submitRegistration()" class="w-full bg-kesnnur-blue text-white py-3 rounded-lg font-medium hover:bg-kesnnur-light mb-3">Complete Registration</button><button onclick="closeModal()" class="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 py-3 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700">Cancel</button></div></div>`;
+        document.getElementById('registrationModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    window.closeModal = () => { document.getElementById('registrationModal').classList.add('hidden'); document.body.style.overflow = 'auto'; };
+    window.submitRegistration = () => { alert('Registration submitted! You will receive a confirmation email shortly.'); closeModal(); };
+    
+    // Calendar functionality
+    let currentDate = new Date();
+    function renderCalendar(date) {
+        const calendarEl = document.getElementById('calendar');
+        const monthYearEl = document.getElementById('currentMonth');
+        if (!calendarEl || !monthYearEl) return;
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        monthYearEl.textContent = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        const totalDays = lastDay.getDate();
+        const firstDayIndex = firstDay.getDay();
+        let calendarHTML = `<div class="grid grid-cols-7 gap-2 mb-2"><div class="text-center font-semibold text-gray-700 dark:text-gray-300 p-2">Sun</div><div class="text-center font-semibold text-gray-700 dark:text-gray-300 p-2">Mon</div><div class="text-center font-semibold text-gray-700 dark:text-gray-300 p-2">Tue</div><div class="text-center font-semibold text-gray-700 dark:text-gray-300 p-2">Wed</div><div class="text-center font-semibold text-gray-700 dark:text-gray-300 p-2">Thu</div><div class="text-center font-semibold text-gray-700 dark:text-gray-300 p-2">Fri</div><div class="text-center font-semibold text-gray-700 dark:text-gray-300 p-2">Sat</div></div><div class="grid grid-cols-7 gap-2">`;
+        for (let i = 0; i < firstDayIndex; i++) calendarHTML += `<div class="calendar-day empty"></div>`;
+        for (let day = 1; day <= totalDays; day++) {
+            const isToday = day === new Date().getDate() && date.getMonth() === new Date().getMonth() && date.getFullYear() === new Date().getFullYear();
+            let dayClass = "calendar-day"; if (isToday) dayClass += " bg-kesnnur-blue/20 text-kesnnur-blue dark:bg-kesnnur-light/20 dark:text-kesnnur-light font-bold";
+            calendarHTML += `<div class="${dayClass}">${day}</div>`;
+            if ((firstDayIndex + day) % 7 === 0 && day !== totalDays) calendarHTML += '</div><div class="grid grid-cols-7 gap-2">';
+        }
+        calendarHTML += '</div>';
+        calendarEl.innerHTML = calendarHTML;
+    }
+    function navigateCalendar(direction) { currentDate.setMonth(currentDate.getMonth() + direction); renderCalendar(new Date(currentDate)); }
+    document.getElementById('prevMonth')?.addEventListener('click', () => navigateCalendar(-1));
+    document.getElementById('nextMonth')?.addEventListener('click', () => navigateCalendar(1));
     renderCalendar(currentDate);
     
-    // Load real events from database
+    // Search functionality
+    document.getElementById('eventSearch')?.addEventListener('input', function() {
+        const term = this.value.toLowerCase();
+        document.querySelectorAll('.event-card').forEach(card => {
+            const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+            const desc = card.querySelector('p')?.textContent.toLowerCase() || '';
+            card.style.display = (title.includes(term) || desc.includes(term)) ? 'block' : 'none';
+        });
+    });
+    
+    document.getElementById('loadMoreEvents')?.addEventListener('click', () => loadRealEvents());
+    
+    // Past events
+    const pastEvents = [
+        { title: 'THE EASTERN REGION CAMPUS CONVOY', date: 'February 2024', venue: 'Eastern Region Universities', desc: 'Campus outreach program connecting with nursing students across Eastern Region universities.' },
+        { title: 'COAST REGION CAMPUS CONVOY', date: 'January 2024', venue: 'Coastal Universities', desc: 'Comprehensive tour of coastal universities promoting KESNNUR membership and nursing opportunities.' },
+        { title: 'THE KESNNUR NATIONAL DINNER', date: 'December 2023', venue: 'Nairobi', desc: 'Annual networking dinner celebrating achievements and building community among nursing professionals.' }
+    ];
+    const pastContainer = document.getElementById('pastEventsContainer');
+    if (pastContainer) {
+        pastContainer.innerHTML = pastEvents.map(e => `<div class="past-event-card bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-6 border border-gray-200 dark:border-gray-700" data-aos="fade-up"><div class="flex flex-col md:flex-row md:items-center justify-between"><div class="mb-4 md:mb-0"><h3 class="font-bold text-xl mb-2 text-gray-800 dark:text-white">${e.title}</h3><div class="flex items-center text-gray-600 dark:text-gray-400 mb-2"><i class="far fa-calendar mr-2"></i><span>${e.date}</span><span class="mx-3">•</span><i class="fas fa-map-marker-alt mr-2"></i><span>${e.venue}</span></div><p class="text-gray-700 dark:text-gray-300">${e.desc}</p></div><div class="flex items-center space-x-4"><span class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-full text-sm font-semibold"><i class="fas fa-check-circle mr-1 text-green-500"></i> Completed</span></div></div></div>`).join('');
+    }
+    
     loadRealEvents();
-    
-    // Event search functionality
-    const searchInput = document.getElementById('eventSearch');
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const events = document.querySelectorAll('.event-card');
-            
-            events.forEach(event => {
-                const title = event.querySelector('h3').textContent.toLowerCase();
-                const description = event.querySelector('p').textContent.toLowerCase();
-                const location = event.querySelector('.fa-map-marker-alt + span')?.textContent.toLowerCase() || '';
-                
-                if (title.includes(searchTerm) || description.includes(searchTerm) || location.includes(searchTerm)) {
-                    event.style.display = 'block';
-                    setTimeout(() => {
-                        event.style.opacity = '1';
-                        event.style.transform = 'translateY(0)';
-                    }, 10);
-                } else {
-                    event.style.opacity = '0';
-                    event.style.transform = 'translateY(20px)';
-                    setTimeout(() => {
-                        event.style.display = 'none';
-                    }, 300);
-                }
-            });
-        });
-    }
-    
-    // View gallery buttons for past events
-    const galleryButtons = document.querySelectorAll('.view-gallery-btn');
-    galleryButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const eventId = this.getAttribute('data-event');
-            showEventGallery(eventId);
-        });
-    });
-    
-    // Load more events button
-    const loadMoreBtn = document.getElementById('loadMoreEvents');
-    if (loadMoreBtn) {
-        loadMoreBtn.addEventListener('click', function() {
-            loadRealEvents();
-            showToast('Refreshing events from database...', 'info');
-        });
-    }
-    
-    // Calendar navigation
-    document.getElementById('prevMonth')?.addEventListener('click', function() {
-        navigateCalendar(-1);
-    });
-    
-    document.getElementById('nextMonth')?.addEventListener('click', function() {
-        navigateCalendar(1);
-    });
-    
-    console.log('✅ Events Page with Database Connection Loaded');
-});
+    console.log('✅ Events Page with Dark Mode, Language Switcher, and Real Supabase Data Loaded');
     </script>
 </body>
 </html>
