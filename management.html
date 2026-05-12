@@ -5,43 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Management & Leadership - KESNNUR | Kenya Students & Novice Nurses</title>
     
-    <!-- Meta Description for SEO -->
     <meta name="description" content="Meet the leadership team of KESNNUR - Kenya Students & Novice Nurses. Learn about our National Council, Regional Committees, and Ad Hoc Committees.">
-    
-    <!-- Keywords for SEO -->
-    <meta name="keywords" content="KESNNUR management, nursing leadership Kenya, student nurses leadership, KESNNUR executives, nursing committee">
-    
-    <!-- Author -->
+    <meta name="keywords" content="KESNNUR management, nursing leadership Kenya, student nurses leadership, KESNNUR executives">
     <meta name="author" content="KESNNUR">
-    
-    <!-- Canonical URL -->
     <link rel="canonical" href="https://kesnnur.nnak.or.ke/management.html">
     
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://kesnnur.nnak.or.ke/management.html">
     <meta property="og:title" content="KESNNUR Leadership | Management & Governance">
-    <meta property="og:description" content="Meet the dedicated leaders steering KESNNUR towards excellence in nursing education and practice.">
+    <meta property="og:description" content="Meet the dedicated leaders steering KESNNUR towards excellence in nursing education.">
     <meta property="og:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
     
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://kesnnur.nnak.or.ke/management.html">
-    <meta property="twitter:title" content="KESNNUR Leadership | Management & Governance">
-    <meta property="twitter:description" content="Meet the dedicated leaders steering KESNNUR towards excellence in nursing education and practice.">
-    <meta property="twitter:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
-    
-    <!-- Theme Color -->
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#1e3a8a">
     
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
     <link rel="apple-touch-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -49,22 +33,21 @@
                         'kesnnur-light': '#3b82f6',
                         'kesnnur-teal': '#0d9488',
                         'kesnnur-gold': '#f59e0b'
-                    }
+                    },
+                    fontFamily: { 'display': ['"Poppins"', 'system-ui'], 'body': ['"Inter"', 'system-ui'] },
+                    animation: { 'float': 'float 6s ease-in-out infinite', 'fade-in': 'fadeIn 0.6s ease-out forwards' },
+                    keyframes: { float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-8px)' } }, fadeIn: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } }
                 }
             }
         }
     </script>
     
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Supabase JS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <!-- Custom Styles -->
     <style>
         :root {
             --kesnnur-blue: #1e3a8a;
@@ -73,468 +56,242 @@
             --kesnnur-gold: #f59e0b;
         }
         
-        /* Skip to content */
-        .skip-to-content {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: #1e3a8a;
-            color: white;
-            padding: 12px;
-            z-index: 10000;
-            text-decoration: none;
-            font-weight: 600;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; transition: background-color 0.3s ease, color 0.3s ease; background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #f0fdf4 100%); }
         
-        .skip-to-content:focus {
-            top: 0;
-        }
+        body.dark { background: #0f172a; color: #f1f5f9; }
+        body.dark .bg-white { background: #1e293b !important; }
+        body.dark .text-gray-600 { color: #94a3b8 !important; }
+        body.dark .text-gray-500 { color: #64748b !important; }
+        body.dark .border-gray-100 { border-color: #334155 !important; }
+        body.dark .glass-nav { background: rgba(15, 23, 42, 0.96); border-bottom-color: #334155; }
+        body.dark .team-card, body.dark .committee-card { background: #1e293b !important; }
+        body.dark .bg-gray-50 { background: #0f172a !important; }
+        body.dark .bg-blue-50 { background: #1e293b !important; }
+        body.dark .bg-gradient-to-br { --tw-gradient-from: #0f172a !important; --tw-gradient-to: #1e293b !important; }
         
-        /* Base Styles */
-        body {
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            padding-top: 0;
-        }
+        .font-display { font-family: 'Poppins', sans-serif; }
         
-        .font-display {
-            font-family: 'Poppins', sans-serif;
-        }
+        .skip-to-content { position: absolute; top: -40px; left: 0; background: #1e3a8a; color: white; padding: 12px; z-index: 10000; font-weight: 600; text-decoration: none; }
+        .skip-to-content:focus { top: 0; }
         
-        /* Glass effect */
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+        .glass-nav { background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0, 0, 0, 0.05); transition: background 0.3s ease; }
+        body.dark .glass-nav { background: rgba(15, 23, 42, 0.96); border-bottom-color: #334155; }
         
-        /* Gradient text */
-        .gradient-text {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .team-card, .committee-card { transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .team-card:hover, .committee-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(30, 58, 138, 0.12); }
         
-        /* Card hover effects */
-        .team-card, .committee-card {
-            transition: all 0.3s ease;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #1e3a8a; border-radius: 10px; }
+        body.dark ::-webkit-scrollbar-track { background: #1e293b; }
+        body.dark ::-webkit-scrollbar-thumb { background: #3b82f6; }
         
-        .team-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px rgba(30, 58, 138, 0.15);
-        }
+        .gradient-text { background: linear-gradient(135deg, #1e3a8a 0%, #0d9488 50%, #3b82f6 100%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .committee-card:hover {
-            transform: translateX(5px);
-        }
+        .hero-overlay { background: linear-gradient(135deg, rgba(15, 43, 94, 0.85) 0%, rgba(30, 58, 138, 0.75) 50%, rgba(13, 148, 136, 0.7) 100%); }
         
-        /* Navigation pills */
-        .nav-pill {
-            transition: all 0.3s ease;
-        }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 0%; height: 3px; background: linear-gradient(90deg, #1e3a8a, #0d9488, #f59e0b); z-index: 10001; transition: width 0.1s ease; }
         
-        .nav-pill.active {
-            background-color: #1e3a8a;
-            color: white;
-        }
+        .theme-toggle, .lang-selector { background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); border-radius: 50px; padding: 8px 16px; transition: all 0.3s ease; cursor: pointer; font-size: 14px; }
+        .theme-toggle:hover, .lang-selector:hover { transform: scale(1.05); }
+        body.dark .theme-toggle, body.dark .lang-selector { background: rgba(255,255,255,0.1); color: white; }
         
-        .nav-pill:not(.active) {
-            background-color: #e5e7eb;
-            color: #4b5563;
-        }
+        .page-transition { animation: fadeInPage 0.5s ease-out; }
+        @keyframes fadeInPage { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        .nav-pill:not(.active):hover {
-            background-color: #d1d5db;
-        }
+        .nav-pill { transition: all 0.3s ease; cursor: pointer; }
+        .nav-pill.active { background-color: #1e3a8a; color: white; }
+        body.dark .nav-pill.active { background-color: #3b82f6; }
+        .nav-pill:not(.active) { background-color: #e5e7eb; color: #4b5563; }
+        body.dark .nav-pill:not(.active) { background-color: #334155; color: #94a3b8; }
+        .nav-pill:not(.active):hover { background-color: #d1d5db; }
+        body.dark .nav-pill:not(.active):hover { background-color: #475569; }
         
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
+        .committee-tag { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-right: 0.5rem; margin-bottom: 0.5rem; }
         
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
+        .loading-shimmer { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        body.dark .loading-shimmer { background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%); }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         
-        ::-webkit-scrollbar-thumb {
-            background: #1e3a8a;
-            border-radius: 4px;
-        }
+        .whatsapp-float { position: fixed; bottom: 80px; right: 20px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2); z-index: 100; cursor: pointer; transition: all 0.3s ease; animation: bounce 2s infinite; }
+        .whatsapp-float:hover { transform: scale(1.1); background: #128C7E; }
         
-        /* Committee tags */
-        .committee-tag {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
+        .float-buttons { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 99; }
+        .float-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; transition: all 0.3s ease; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .float-btn:hover { transform: scale(1.1); }
+        .float-call { background: #34B7F1; color: white; }
+        .float-email { background: #EA4335; color: white; }
+        .float-map { background: #4285F4; color: white; }
         
-        /* Animation */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         
-        .animate-fade-in {
-            animation: fadeIn 0.6s ease-out forwards;
-        }
+        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Loading animation */
-        .loading-shimmer {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
+        .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; background: rgba(255,255,255,0.2); backdrop-filter: blur(4px); }
         
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
+        /* Social icon animations */
+        .social-icon { transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.05); }
+        .social-icon:hover { transform: translateY(-3px); }
+        .social-icon.twitter:hover { background: #1DA1F2; color: white !important; }
+        .social-icon.linkedin:hover { background: #0077B5; color: white !important; }
+        .social-icon.instagram:hover { background: #E4405F; color: white !important; }
+        .social-icon.facebook:hover { background: #1877F2; color: white !important; }
+        .social-icon.email:hover { background: #EA4335; color: white !important; }
+        .social-icon.phone:hover { background: #34B7F1; color: white !important; }
+        
+        /* Team card image overlay */
+        .team-image-overlay { position: relative; overflow: hidden; }
+        .team-image-overlay img { transition: transform 0.5s ease; }
+        .team-card:hover .team-image-overlay img { transform: scale(1.05); }
     </style>
 </head>
-<body class="bg-gradient-to-br from-gray-50 to-blue-50">
-    <!-- Skip to Content -->
+<body class="page-transition">
+    
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <div class="float-buttons">
+        <div class="float-btn float-call" onclick="window.location.href='tel:+254768878303'"><i class="fas fa-phone-alt"></i></div>
+        <div class="float-btn float-email" onclick="window.location.href='mailto:kesnnur@gmail.com'"><i class="fas fa-envelope"></i></div>
+        <div class="float-btn float-map" onclick="window.open('https://maps.google.com/?q=Nurses+Complex+KNH+Nairobi', '_blank')"><i class="fas fa-map-marker-alt"></i></div>
+    </div>
+
+    <div class="whatsapp-float" onclick="window.open('https://wa.me/254768878303?text=Hello%20KESNNUR%2C%20I%27m%20interested%20in%20joining%20the%20nursing%20community!', '_blank')"><i class="fab fa-whatsapp"></i></div>
+
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+    <nav class="sticky top-0 z-50 glass-nav shadow-sm">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
-                <!-- Logo -->
-                <a href="index.html" class="flex items-center space-x-3">
-                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
-                         alt="KESNNUR Logo"
-                         width="40"
-                         height="40"
-                         class="w-10 h-10 rounded-lg object-contain">
-                    <div>
-                        <h1 class="text-lg md:text-xl font-bold text-blue-900 font-display">KESNNUR</h1>
-                        <p class="text-xs text-gray-600">Students & Novice Nurses</p>
-                    </div>
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" width="40" height="40" class="w-10 h-10 rounded-lg object-contain group-hover:scale-105 transition duration-300">
+                    <div><h1 class="text-lg md:text-xl font-bold text-kesnnur-blue font-display">KESNNUR</h1><p class="text-xs text-gray-600 dark:text-gray-400">Students & Novice Nurses</p></div>
                 </a>
-
-                <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium">Home</a>
-                    <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium">About</a>
-                    <a href="management.html" class="text-blue-900 font-medium border-b-2 border-blue-900">Management</a>
-                    <a href="events.html" class="text-gray-700 hover:text-blue-900 font-medium">Events</a>
-                    <a href="blog.html" class="text-gray-700 hover:text-blue-900 font-medium">Blog</a>
-                    <a href="resources.html" class="text-gray-700 hover:text-blue-900 font-medium">Resources</a>
-                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium">Contact</a>
-                    <a href="members.html" class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800">
-                        Member Portal
-                    </a>
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Home</a>
+                    <a href="about.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">About</a>
+                    <a href="management.html" class="text-kesnnur-blue dark:text-kesnnur-light font-medium border-b-2 border-kesnnur-blue dark:border-kesnnur-light">Management</a>
+                    <a href="events.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Events</a>
+                    <a href="blog.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Blog</a>
+                    <a href="resources.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Resources</a>
+                    <a href="contact.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Contact</a>
+                    
+                    <div class="lang-selector flex items-center gap-2"><i class="fas fa-globe"></i><span id="currentLang">EN</span></div>
+                    <div class="theme-toggle flex items-center gap-2"><i class="fas fa-sun dark:hidden"></i><i class="fas fa-moon hidden dark:inline"></i><span>Light</span></div>
+                    
+                    <a href="members.html" class="bg-kesnnur-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-kesnnur-light transition">Member Portal</a>
                 </div>
-
-                <!-- Mobile Menu Button -->
-                <button id="menuBtn" class="md:hidden text-blue-900">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
+                <button id="menuBtn" class="md:hidden text-kesnnur-blue"><i class="fas fa-bars text-2xl"></i></button>
             </div>
-            
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white rounded-lg shadow-lg p-6">
+            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6">
                 <div class="space-y-3">
-                    <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-home mr-3"></i>Home
-                    </a>
-                    <a href="about.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-info-circle mr-3"></i>About
-                    </a>
-                    <a href="management.html" class="block py-3 px-4 bg-blue-50 text-blue-900 rounded-lg">
-                        <i class="fas fa-users mr-3"></i>Management
-                    </a>
-                    <a href="events.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-calendar-alt mr-3"></i>Events
-                    </a>
-                    <a href="blog.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-blog mr-3"></i>Blog
-                    </a>
-                    <a href="resources.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-book-medical mr-3"></i>Resources
-                    </a>
-                    <a href="contact.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-envelope mr-3"></i>Contact
-                    </a>
-                    <a href="members.html" class="block py-3 px-4 bg-blue-900 text-white rounded-lg text-center font-medium mt-4">
-                        <i class="fas fa-user mr-3"></i>Member Portal
-                    </a>
+                    <a href="index.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-home mr-3"></i>Home</a>
+                    <a href="about.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-info-circle mr-3"></i>About</a>
+                    <a href="management.html" class="block py-3 px-4 bg-kesnnur-blue/10 text-kesnnur-blue dark:text-kesnnur-light rounded-lg"><i class="fas fa-users mr-3"></i>Management</a>
+                    <a href="events.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-calendar-alt mr-3"></i>Events</a>
+                    <a href="blog.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-blog mr-3"></i>Blog</a>
+                    <a href="resources.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-book-medical mr-3"></i>Resources</a>
+                    <a href="contact.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-envelope mr-3"></i>Contact</a>
+                    <div class="flex gap-3 pt-3">
+                        <div class="flex-1 lang-selector-mobile bg-gray-100 dark:bg-gray-800 rounded-lg py-2 px-4 text-center flex items-center justify-center gap-2 cursor-pointer"><i class="fas fa-globe"></i><span>EN/SW</span></div>
+                        <div class="flex-1 theme-toggle-mobile bg-gray-100 dark:bg-gray-800 rounded-lg py-2 px-4 text-center cursor-pointer"><i class="fas fa-moon dark:hidden"></i><i class="fas fa-sun hidden dark:inline"></i></div>
+                    </div>
+                    <a href="members.html" class="block py-3 px-4 bg-kesnnur-blue text-white rounded-lg text-center font-medium mt-4"><i class="fas fa-user mr-3"></i>Member Portal</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main id="main-content" role="main">
+    <main id="main-content">
         <!-- Hero Section -->
-        <section class="relative py-16 bg-gradient-to-r from-blue-900 to-blue-700">
+        <section class="relative py-16 bg-gradient-to-r from-kesnnur-blue to-kesnnur-light overflow-hidden">
             <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070')] bg-cover bg-center opacity-10"></div>
+            <div class="absolute top-20 left-10 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute bottom-20 right-10 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
             <div class="container mx-auto px-4 relative z-10 text-center">
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">
-                    KESNNUR Leadership
-                </h1>
-                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-                    Meet the dedicated leaders steering KESNNUR towards excellence in nursing education, practice, and professional development.
-                </p>
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">KESNNUR <span class="text-kesnnur-gold">Leadership</span></h1>
+                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">Meet the dedicated leaders steering KESNNUR towards excellence in nursing education, practice, and professional development.</p>
                 <div class="flex flex-wrap justify-center gap-3">
-                    <a href="#national-council" class="nav-pill active px-6 py-3 rounded-full font-medium">
-                        National Council
-                    </a>
-                    <a href="#regional-committees" class="nav-pill px-6 py-3 rounded-full font-medium">
-                        Regional Committees
-                    </a>
-                    <a href="#ad-hoc-committees" class="nav-pill px-6 py-3 rounded-full font-medium">
-                        Ad Hoc Committees
-                    </a>
+                    <a href="#national-council" class="nav-pill active px-6 py-3 rounded-full font-medium">National Council</a>
+                    <a href="#regional-committees" class="nav-pill px-6 py-3 rounded-full font-medium">Regional Committees</a>
+                    <a href="#ad-hoc-committees" class="nav-pill px-6 py-3 rounded-full font-medium">Ad Hoc Committees</a>
                 </div>
             </div>
+            <div class="absolute bottom-0 left-0 right-0"><svg viewBox="0 0 1440 120" class="w-full h-auto" fill="#ffffff"><path d="M0,32L120,42.7C240,53,480,75,720,74.7C960,75,1200,53,1320,42.7L1440,32L1440,120L1320,120C1200,120,960,120,720,120C480,120,240,120,120,120L0,120Z"></path></svg></div>
         </section>
 
         <!-- National Governing Council -->
         <section id="national-council" class="py-16">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-4 text-blue-900">National Governing Council</h2>
-                    <p class="text-gray-600 max-w-3xl mx-auto">
-                        The supreme decision-making body of KESNNUR, responsible for strategic direction, policy formulation, and overall governance.
-                    </p>
+                <div class="text-center mb-12" data-aos="fade-up">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 text-kesnnur-blue">National Governing Council</h2>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">The supreme decision-making body of KESNNUR, responsible for strategic direction, policy formulation, and overall governance.</p>
                 </div>
-
-                <!-- Loading State -->
                 <div id="national-loading" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="team-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                        <div class="h-48 loading-shimmer"></div>
-                        <div class="p-6">
-                            <div class="h-6 w-3/4 loading-shimmer mb-4"></div>
-                            <div class="h-4 w-1/2 loading-shimmer mb-4"></div>
-                            <div class="h-16 loading-shimmer mb-4"></div>
-                        </div>
-                    </div>
-                    <div class="team-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                        <div class="h-48 loading-shimmer"></div>
-                        <div class="p-6">
-                            <div class="h-6 w-3/4 loading-shimmer mb-4"></div>
-                            <div class="h-4 w-1/2 loading-shimmer mb-4"></div>
-                            <div class="h-16 loading-shimmer mb-4"></div>
-                        </div>
-                    </div>
-                    <div class="team-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                        <div class="h-48 loading-shimmer"></div>
-                        <div class="p-6">
-                            <div class="h-6 w-3/4 loading-shimmer mb-4"></div>
-                            <div class="h-4 w-1/2 loading-shimmer mb-4"></div>
-                            <div class="h-16 loading-shimmer mb-4"></div>
-                        </div>
-                    </div>
+                    <div class="team-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden"><div class="h-48 loading-shimmer"></div><div class="p-6"><div class="h-6 w-3/4 loading-shimmer mb-4"></div><div class="h-4 w-1/2 loading-shimmer mb-4"></div><div class="h-16 loading-shimmer"></div></div></div>
+                    <div class="team-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden"><div class="h-48 loading-shimmer"></div><div class="p-6"><div class="h-6 w-3/4 loading-shimmer mb-4"></div><div class="h-4 w-1/2 loading-shimmer mb-4"></div><div class="h-16 loading-shimmer"></div></div></div>
                 </div>
-
-                <!-- Dynamic Content Container -->
-                <div id="national-council-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" style="display: none;">
-                    <!-- Team members will be dynamically inserted here from Supabase -->
-                </div>
-
-                <!-- Error State -->
-                <div id="national-error" class="text-center py-8" style="display: none;">
-                    <div class="bg-red-50 border border-red-200 rounded-xl p-6 inline-block">
-                        <i class="fas fa-exclamation-triangle text-red-500 text-3xl mb-4"></i>
-                        <h3 class="text-xl font-bold text-red-800 mb-2">Unable to Load Team Data</h3>
-                        <p class="text-red-600 mb-4">There was an error loading the National Council information.</p>
-                        <button onclick="loadManagementData()" class="bg-red-100 text-red-800 px-4 py-2 rounded-lg hover:bg-red-200">
-                            <i class="fas fa-redo mr-2"></i> Try Again
-                        </button>
-                    </div>
-                </div>
+                <div id="national-council-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" style="display: none;"></div>
+                <div id="national-error" class="text-center py-8" style="display: none;"><div class="bg-red-50 dark:bg-red-900/20 border border-red-200 rounded-xl p-6 inline-block"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mb-4"></i><h3 class="text-xl font-bold text-red-800 mb-2">Unable to Load Team Data</h3><button onclick="loadManagementData()" class="bg-red-100 text-red-800 px-4 py-2 rounded-lg">Try Again</button></div></div>
             </div>
         </section>
 
         <!-- Regional Committees -->
-        <section id="regional-committees" class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+        <section id="regional-committees" class="py-16 bg-gradient-to-br from-kesnnur-blue/5 to-kesnnur-teal/5">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Regional Committees</h2>
-                    <p class="text-gray-600 max-w-3xl mx-auto">
-                        Coordinating KESNNUR activities across Kenya's regions, ensuring representation and implementation of national policies at grassroots level.
-                    </p>
+                <div class="text-center mb-12" data-aos="fade-up">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 text-kesnnur-teal">Regional Committees</h2>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Coordinating KESNNUR activities across Kenya's regions, ensuring representation and implementation of national policies at grassroots level.</p>
                 </div>
-
-                <!-- Loading State -->
                 <div id="regional-loading" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="committee-card bg-white rounded-xl shadow-md p-6">
-                        <div class="flex items-start mb-4">
-                            <div class="bg-blue-100 p-3 rounded-lg mr-4 loading-shimmer w-12 h-12"></div>
-                            <div class="flex-1">
-                                <div class="h-6 w-3/4 loading-shimmer mb-2"></div>
-                                <div class="h-4 w-1/2 loading-shimmer"></div>
-                            </div>
-                        </div>
-                        <div class="h-12 loading-shimmer mb-4"></div>
-                        <div class="h-4 w-2/3 loading-shimmer"></div>
-                    </div>
-                    <div class="committee-card bg-white rounded-xl shadow-md p-6">
-                        <div class="flex items-start mb-4">
-                            <div class="bg-blue-100 p-3 rounded-lg mr-4 loading-shimmer w-12 h-12"></div>
-                            <div class="flex-1">
-                                <div class="h-6 w-3/4 loading-shimmer mb-2"></div>
-                                <div class="h-4 w-1/2 loading-shimmer"></div>
-                            </div>
-                        </div>
-                        <div class="h-12 loading-shimmer mb-4"></div>
-                        <div class="h-4 w-2/3 loading-shimmer"></div>
-                    </div>
+                    <div class="committee-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"><div class="flex items-start mb-4"><div class="bg-kesnnur-blue/10 p-3 rounded-lg mr-4 loading-shimmer w-12 h-12"></div><div class="flex-1"><div class="h-6 w-3/4 loading-shimmer mb-2"></div><div class="h-4 w-1/2 loading-shimmer"></div></div></div><div class="h-12 loading-shimmer"></div></div>
                 </div>
-
-                <!-- Dynamic Content Container -->
-                <div id="regional-committees-container" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" style="display: none;">
-                    <!-- Regional committees will be dynamically inserted here from Supabase -->
-                </div>
-
-                <!-- Error State -->
-                <div id="regional-error" class="text-center py-8" style="display: none;">
-                    <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 inline-block">
-                        <i class="fas fa-info-circle text-yellow-500 text-3xl mb-4"></i>
-                        <h3 class="text-xl font-bold text-yellow-800 mb-2">No Regional Committees Found</h3>
-                        <p class="text-yellow-600 mb-4">Regional committee data is not available at the moment.</p>
-                        <p class="text-gray-500 text-sm">Use the CMS to add regional committee information.</p>
-                    </div>
-                </div>
+                <div id="regional-committees-container" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" style="display: none;"></div>
+                <div id="regional-error" class="text-center py-8" style="display: none;"><div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 rounded-xl p-6 inline-block"><i class="fas fa-info-circle text-yellow-500 text-3xl mb-4"></i><h3 class="text-xl font-bold text-yellow-800 mb-2">No Regional Committees Found</h3><p class="text-yellow-600">Use the CMS to add regional committee information.</p></div></div>
             </div>
         </section>
 
         <!-- Ad Hoc Committees -->
         <section id="ad-hoc-committees" class="py-16">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Ad Hoc Committees</h2>
-                    <p class="text-gray-600 max-w-3xl mx-auto">
-                        Temporary committees established for specific projects, events, or initiatives requiring specialized focus.
-                    </p>
+                <div class="text-center mb-12" data-aos="fade-up">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 text-kesnnur-blue">Ad Hoc Committees</h2>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Temporary committees established for specific projects, events, or initiatives requiring specialized focus.</p>
                 </div>
-
-                <!-- Loading State -->
                 <div id="adhoc-loading" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="committee-card bg-white rounded-xl shadow-md p-6">
-                        <div class="flex items-start mb-4">
-                            <div class="bg-blue-100 p-3 rounded-lg mr-4 loading-shimmer w-12 h-12"></div>
-                            <div class="flex-1">
-                                <div class="h-6 w-3/4 loading-shimmer mb-2"></div>
-                                <div class="h-4 w-1/2 loading-shimmer"></div>
-                            </div>
-                        </div>
-                        <div class="h-12 loading-shimmer mb-4"></div>
-                        <div class="h-4 w-2/3 loading-shimmer"></div>
-                    </div>
-                    <div class="committee-card bg-white rounded-xl shadow-md p-6">
-                        <div class="flex items-start mb-4">
-                            <div class="bg-blue-100 p-3 rounded-lg mr-4 loading-shimmer w-12 h-12"></div>
-                            <div class="flex-1">
-                                <div class="h-6 w-3/4 loading-shimmer mb-2"></div>
-                                <div class="h-4 w-1/2 loading-shimmer"></div>
-                            </div>
-                        </div>
-                        <div class="h-12 loading-shimmer mb-4"></div>
-                        <div class="h-4 w-2/3 loading-shimmer"></div>
-                    </div>
+                    <div class="committee-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"><div class="flex items-start mb-4"><div class="bg-kesnnur-gold/20 p-3 rounded-lg mr-4 loading-shimmer w-12 h-12"></div><div class="flex-1"><div class="h-6 w-3/4 loading-shimmer mb-2"></div><div class="h-4 w-1/2 loading-shimmer"></div></div></div><div class="h-12 loading-shimmer"></div></div>
                 </div>
-
-                <!-- Dynamic Content Container -->
-                <div id="adhoc-committees-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" style="display: none;">
-                    <!-- Ad hoc committees will be dynamically inserted here from Supabase -->
-                </div>
-
-                <!-- Error State -->
-                <div id="adhoc-error" class="text-center py-8" style="display: none;">
-                    <div class="bg-red-50 border border-red-200 rounded-xl p-6 inline-block">
-                        <i class="fas fa-exclamation-triangle text-red-500 text-3xl mb-4"></i>
-                        <h3 class="text-xl font-bold text-red-800 mb-2">Unable to Load Committees</h3>
-                        <p class="text-red-600 mb-4">There was an error loading the Ad Hoc Committees.</p>
-                        <button onclick="loadManagementData()" class="bg-red-100 text-red-800 px-4 py-2 rounded-lg hover:bg-red-200">
-                            <i class="fas fa-redo mr-2"></i> Try Again
-                        </button>
-                    </div>
-                </div>
+                <div id="adhoc-committees-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" style="display: none;"></div>
+                <div id="adhoc-error" class="text-center py-8" style="display: none;"><div class="bg-red-50 dark:bg-red-900/20 border border-red-200 rounded-xl p-6 inline-block"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mb-4"></i><h3 class="text-xl font-bold text-red-800 mb-2">Unable to Load Committees</h3><button onclick="loadManagementData()" class="bg-red-100 text-red-800 px-4 py-2 rounded-lg">Try Again</button></div></div>
             </div>
         </section>
 
         <!-- CTA Section -->
-        <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-4xl font-bold mb-6">Interested in Leadership?</h2>
-                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                    KESNNUR offers various leadership opportunities for nursing students and novice nurses. Join our committees and contribute to Kenya's nursing future.
-                </p>
-                <a href="contact.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-bold hover:shadow-xl inline-flex items-center">
-                    <i class="fas fa-hand-rock mr-2"></i> Express Interest
-                </a>
+        <section class="py-16 bg-gradient-to-r from-kesnnur-blue to-kesnnur-teal text-white relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600')] bg-cover bg-center opacity-10"></div>
+            <div class="container mx-auto px-4 text-center relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Interested in Leadership?</h2>
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">KESNNUR offers various leadership opportunities for nursing students and novice nurses. Join our committees and contribute to Kenya's nursing future.</p>
+                <a href="contact.html" class="bg-white text-kesnnur-blue px-8 py-4 rounded-xl text-lg font-bold hover:shadow-xl hover:scale-105 transition-all inline-flex items-center"><i class="fas fa-hand-rock mr-2"></i> Express Interest</a>
             </div>
         </section>
 
         <!-- Governance Structure -->
-        <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+        <section class="py-16 bg-gradient-to-br from-kesnnur-blue/5 to-kesnnur-teal/5">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Governance Structure</h2>
-                    <p class="text-gray-600 max-w-3xl mx-auto">
-                        Understanding how KESNNUR is organized to effectively serve nursing students and novice nurses across Kenya.
-                    </p>
+                <div class="text-center mb-12" data-aos="fade-up">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 text-kesnnur-blue">Governance Structure</h2>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Understanding how KESNNUR is organized to effectively serve nursing students and novice nurses across Kenya.</p>
                 </div>
-
-                <div class="bg-white rounded-2xl shadow-lg p-8">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8" data-aos="fade-up">
                     <div class="grid md:grid-cols-3 gap-8">
-                        <div class="text-center">
-                            <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-users text-blue-900 text-2xl"></i>
-                            </div>
-                            <h3 class="font-bold text-lg mb-2">National Level</h3>
-                            <p class="text-gray-600 text-sm">
-                                The National Governing Council sets overall strategy and policies for KESNNUR operations nationwide.
-                            </p>
-                        </div>
-                        
-                        <div class="text-center">
-                            <div class="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-map-marked-alt text-teal-900 text-2xl"></i>
-                            </div>
-                            <h3 class="font-bold text-lg mb-2">Regional Level</h3>
-                            <p class="text-gray-600 text-sm">
-                                Regional committees implement national policies and coordinate activities within their geographical areas.
-                            </p>
-                        </div>
-                        
-                        <div class="text-center">
-                            <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-university text-purple-900 text-2xl"></i>
-                            </div>
-                            <h3 class="font-bold text-lg mb-2">Institutional Level</h3>
-                            <p class="text-gray-600 text-sm">
-                                Campus representatives in nursing schools ensure grassroots implementation and member engagement.
-                            </p>
-                        </div>
+                        <div class="text-center"><div class="bg-kesnnur-blue/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-users text-kesnnur-blue text-2xl"></i></div><h3 class="font-bold text-lg mb-2">National Level</h3><p class="text-gray-600 dark:text-gray-400 text-sm">The National Governing Council sets overall strategy and policies for KESNNUR operations nationwide.</p></div>
+                        <div class="text-center"><div class="bg-kesnnur-teal/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-map-marked-alt text-kesnnur-teal text-2xl"></i></div><h3 class="font-bold text-lg mb-2">Regional Level</h3><p class="text-gray-600 dark:text-gray-400 text-sm">Regional committees implement national policies and coordinate activities within their geographical areas.</p></div>
+                        <div class="text-center"><div class="bg-kesnnur-gold/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-university text-kesnnur-gold text-2xl"></i></div><h3 class="font-bold text-lg mb-2">Institutional Level</h3><p class="text-gray-600 dark:text-gray-400 text-sm">Campus representatives in nursing schools ensure grassroots implementation and member engagement.</p></div>
                     </div>
-                    
-                    <div class="mt-12 pt-8 border-t border-gray-200">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between">
-                            <div>
-                                <h3 class="font-bold text-lg mb-2">Election Process</h3>
-                                <p class="text-gray-600 text-sm">
-                                    All leadership positions are democratically elected by KESNNUR members during the Annual General Meeting.
-                                </p>
-                            </div>
-                            <a href="documents/constitution.pdf" class="mt-4 md:mt-0 text-blue-900 font-semibold hover:underline inline-flex items-center">
-                                <i class="fas fa-file-pdf mr-2"></i> View Constitution
-                            </a>
-                        </div>
-                    </div>
+                    <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700"><div class="flex flex-col md:flex-row md:items-center justify-between"><div><h3 class="font-bold text-lg mb-2">Election Process</h3><p class="text-gray-600 dark:text-gray-400 text-sm">All leadership positions are democratically elected by KESNNUR members during the Annual General Meeting.</p></div><a href="#" class="mt-4 md:mt-0 text-kesnnur-blue font-semibold hover:underline inline-flex items-center"><i class="fas fa-file-pdf mr-2"></i> View Constitution</a></div></div>
                 </div>
             </div>
         </section>
@@ -544,764 +301,120 @@
     <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-4">
             <div class="grid md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center space-x-3 mb-4">
-                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
-                             alt="KESNNUR Logo"
-                             width="40"
-                             height="40"
-                             class="w-10 h-10 rounded-lg object-contain bg-white p-1">
-                        <h3 class="text-xl font-bold">KESNNUR</h3>
-                    </div>
-                    <p class="text-gray-400 mb-4">
-                        Empowering Kenya's future nursing leaders through governance, mentorship, and community.
-                    </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-twitter text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-facebook text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-instagram text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-linkedin text-xl"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold mb-4">Leadership</h4>
-                    <div class="space-y-3">
-                        <a href="#national-council" class="text-gray-400 hover:text-white block">National Council</a>
-                        <a href="#regional-committees" class="text-gray-400 hover:text-white block">Regional Committees</a>
-                        <a href="#ad-hoc-committees" class="text-gray-400 hover:text-white block">Ad Hoc Committees</a>
-                        <a href="elections.html" class="text-gray-400 hover:text-white block">Elections</a>
-                        <a href="governance.html" class="text-gray-400 hover:text-white block">Governance</a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold mb-4">Quick Links</h4>
-                    <div class="space-y-3">
-                        <a href="index.html" class="text-gray-400 hover:text-white block">Home</a>
-                        <a href="about.html" class="text-gray-400 hover:text-white block">About</a>
-                        <a href="events.html" class="text-gray-400 hover:text-white block">Events</a>
-                        <a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a>
-                        <a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a>
-                        <a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold mb-4">Contact</h4>
-                    <div class="space-y-3 text-gray-400">
-                        <div class="flex items-start">
-                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
-                            <span>Nurses Complex KNH, Nairobi, Kenya</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-phone mr-3"></i>
-                            <a href="tel:+254791296924" class="hover:text-white">+254 791 296 924</a>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-envelope mr-3"></i>
-                            <a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a>
-                        </div>
-                    </div>
-                </div>
+                <div><div class="flex items-center space-x-3 mb-4"><img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" width="40" height="40" class="w-10 h-10 rounded-lg object-contain bg-white p-1"><h3 class="text-xl font-bold">KESNNUR</h3></div><p class="text-gray-400 mb-4">Empowering Kenya's future nursing leaders through governance, mentorship, and community.</p><div class="flex space-x-4"><a href="#" class="social-icon twitter text-gray-400 hover:text-white text-lg"><i class="fab fa-twitter"></i></a><a href="#" class="social-icon facebook text-gray-400 hover:text-white text-lg"><i class="fab fa-facebook"></i></a><a href="#" class="social-icon instagram text-gray-400 hover:text-white text-lg"><i class="fab fa-instagram"></i></a><a href="#" class="social-icon linkedin text-gray-400 hover:text-white text-lg"><i class="fab fa-linkedin"></i></a></div></div>
+                <div><h4 class="font-bold mb-4">Leadership</h4><div class="space-y-3"><a href="#national-council" class="text-gray-400 hover:text-white block">National Council</a><a href="#regional-committees" class="text-gray-400 hover:text-white block">Regional Committees</a><a href="#ad-hoc-committees" class="text-gray-400 hover:text-white block">Ad Hoc Committees</a><a href="elections.html" class="text-gray-400 hover:text-white block">Elections</a></div></div>
+                <div><h4 class="font-bold mb-4">Quick Links</h4><div class="space-y-3"><a href="index.html" class="text-gray-400 hover:text-white block">Home</a><a href="about.html" class="text-gray-400 hover:text-white block">About</a><a href="events.html" class="text-gray-400 hover:text-white block">Events</a><a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a><a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a><a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a></div></div>
+                <div><h4 class="font-bold mb-4">Contact</h4><div class="space-y-3 text-gray-400"><div class="flex gap-3"><i class="fas fa-map-marker-alt mt-1"></i><span>Nurses Complex KNH, Nairobi, Kenya</span></div><div class="flex gap-3"><i class="fas fa-phone"></i><a href="tel:+254768878303" class="hover:text-white">+254 768 878 303</a></div><div class="flex gap-3"><i class="fas fa-envelope"></i><a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a></div></div></div>
             </div>
-            
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>Copyright © <span id="currentYear">2026</span> KESNNUR. All rights reserved.</p>
-                <p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p>
-            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400"><p>Copyright © <span id="currentYear"></span> KESNNUR. All rights reserved.</p><p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p></div>
         </div>
     </footer>
 
-    <!-- JavaScript -->
+    <button id="backToTop" class="fixed bottom-8 right-8 bg-kesnnur-blue text-white p-3 rounded-full shadow-lg hover:shadow-xl opacity-0 transition-all duration-300 hover:scale-110 z-50"><i class="fas fa-chevron-up"></i></button>
+
     <script>
-    // ============================================
-    // GLOBAL SUPABASE CLIENT
-    // ============================================
-    let supabaseClient = null;
-
-    // ============================================
-    // INITIALIZE SUPABASE
-    // ============================================
-    function initSupabase() {
-        if (!window.supabase) {
-            console.error('Supabase library not loaded');
-            return false;
-        }
-        
-        try {
-            const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
-            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
-            
-            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            console.log('✅ Supabase client initialized successfully');
-            return true;
-        } catch (error) {
-            console.error('Error initializing Supabase:', error);
-            return false;
-        }
-    }
-
-    // ============================================
-    // MANAGEMENT PAGE FUNCTIONALITY
-    // ============================================
-    document.addEventListener('DOMContentLoaded', function() {
-        // Set current year
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-        
-        // Initialize Supabase
-        if (!initSupabase()) {
-            console.warn('⚠️ Supabase initialization failed, using static content');
-            showErrorStates();
-        }
-        
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('menuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        
-        if (menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', function() {
-                const isHidden = mobileMenu.classList.contains('hidden');
-                
-                if (isHidden) {
-                    mobileMenu.classList.remove('hidden');
-                    this.innerHTML = '<i class="fas fa-times text-2xl"></i>';
-                } else {
-                    mobileMenu.classList.add('hidden');
-                    this.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
-                }
-            });
-        }
-        
-        // Navigation pills functionality
-        const navPills = document.querySelectorAll('.nav-pill');
-        const sections = {
-            'national-council': document.getElementById('national-council'),
-            'regional-committees': document.getElementById('regional-committees'),
-            'ad-hoc-committees': document.getElementById('ad-hoc-committees')
-        };
-        
-        navPills.forEach(pill => {
-            pill.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Get target section
-                const targetId = this.getAttribute('href').substring(1);
-                const targetSection = sections[targetId];
-                
-                if (targetSection) {
-                    // Remove active class from all pills
-                    navPills.forEach(p => {
-                        p.classList.remove('active', 'bg-blue-900', 'text-white');
-                        p.classList.add('bg-gray-200', 'text-gray-700');
-                    });
-                    
-                    // Add active class to clicked pill
-                    this.classList.remove('bg-gray-200', 'text-gray-700');
-                    this.classList.add('active', 'bg-blue-900', 'text-white');
-                    
-                    // Scroll to section
-                    targetSection.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-        
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in');
-                }
-            });
-        }, observerOptions);
-        
-        // Load management data from Supabase
-        loadManagementData();
-        
-        // Observe team cards and committee cards
-        setTimeout(() => {
-            document.querySelectorAll('.team-card, .committee-card').forEach(card => {
-                observer.observe(card);
-            });
-        }, 1000);
-        
-        // Highlight active section based on scroll
-        window.addEventListener('scroll', () => {
-            let currentSection = '';
-            const scrollPosition = window.scrollY + 200;
-            
-            // Check which section is in view
-            for (const [sectionId, sectionElement] of Object.entries(sections)) {
-                if (sectionElement) {
-                    const sectionTop = sectionElement.offsetTop;
-                    const sectionHeight = sectionElement.offsetHeight;
-                    
-                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                        currentSection = sectionId;
-                        break;
-                    }
-                }
-            }
-            
-            // Update active pill
-            if (currentSection) {
-                navPills.forEach(pill => {
-                    const pillTarget = pill.getAttribute('href').substring(1);
-                    
-                    if (pillTarget === currentSection) {
-                        pill.classList.remove('bg-gray-200', 'text-gray-700');
-                        pill.classList.add('active', 'bg-blue-900', 'text-white');
-                    } else {
-                        pill.classList.remove('active', 'bg-blue-900', 'text-white');
-                        pill.classList.add('bg-gray-200', 'text-gray-700');
-                    }
-                });
-            }
-        });
-        
-        // Add click event for team cards to show detailed view
-        setTimeout(() => {
-            document.querySelectorAll('.team-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const name = this.querySelector('h3')?.textContent;
-                    const position = this.querySelector('.font-semibold')?.textContent;
-                    const description = this.querySelector('.text-gray-600')?.textContent;
-                    
-                    if (name && position && description) {
-                        showLeaderModal(name, position, description);
-                    }
-                });
-            });
-        }, 1500);
-    });
+    AOS.init({ duration: 800, once: true, offset: 50 });
     
-    // ============================================
-    // LOAD MANAGEMENT DATA FROM SUPABASE CMS
-    // ============================================
+    window.addEventListener('scroll', () => { const win = document.documentElement.scrollTop, height = document.documentElement.scrollHeight - document.documentElement.clientHeight; document.getElementById('progressBar').style.width = (win / height) * 100 + '%'; });
+    
+    function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light'); }
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+    document.querySelectorAll('.theme-toggle, .theme-toggle-mobile').forEach(el => el.addEventListener('click', toggleTheme));
+    
+    const translations = { en: {}, sw: {} };
+    let currentLang = localStorage.getItem('language') || 'en';
+    function updateLanguage(lang) { currentLang = lang; localStorage.setItem('language', lang); document.getElementById('currentLang').innerHTML = lang.toUpperCase(); }
+    document.querySelectorAll('.lang-selector, .lang-selector-mobile').forEach(el => el.addEventListener('click', () => updateLanguage(currentLang === 'en' ? 'sw' : 'en')));
+    updateLanguage(currentLang);
+    
+    document.getElementById('menuBtn').addEventListener('click', function() { document.getElementById('mobileMenu').classList.toggle('hidden'); });
+    
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => { backBtn.style.opacity = window.scrollY > 300 ? '1' : '0'; backBtn.style.pointerEvents = window.scrollY > 300 ? 'auto' : 'none'; });
+    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => { anchor.addEventListener('click', function(e) { e.preventDefault(); const target = document.querySelector(this.getAttribute('href')); if (target) { document.getElementById('mobileMenu').classList.add('hidden'); window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' }); } }); });
+    
+    const navPills = document.querySelectorAll('.nav-pill');
+    navPills.forEach(pill => { pill.addEventListener('click', function() { navPills.forEach(p => p.classList.remove('active')); this.classList.add('active'); }); });
+    
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    
+    let supabaseClient = null;
+    function initSupabase() { try { supabaseClient = window.supabase.createClient('https://noadhwqvaxajuckpibbo.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw'); return true; } catch(e) { return false; } }
+    
     async function loadManagementData() {
-        console.log('🔄 Loading management data from Supabase CMS...');
-        
-        // Check if supabase client is ready
-        if (!supabaseClient) {
-            console.error('Supabase client not initialized');
-            showErrorStates();
-            return;
-        }
-        
+        if (!supabaseClient && !initSupabase()) { showErrorStates(); return; }
         try {
-            // Fetch all active management sections
-            const { data: sections, error } = await supabaseClient
-                .from('management_sections')
-                .select('*')
-                .eq('is_active', true)
-                .order('display_order', { ascending: true });
-            
-            if (error) {
-                console.error('Error fetching data:', error);
-                showErrorStates();
-                return;
-            }
-            
-            console.log(`✅ Loaded ${sections.length} management sections from CMS`);
-            
-            // Hide loading states
+            const { data, error } = await supabaseClient.from('management_sections').select('*').eq('is_active', true).order('display_order');
+            if (error) throw error;
             document.getElementById('national-loading').style.display = 'none';
             document.getElementById('regional-loading').style.display = 'none';
             document.getElementById('adhoc-loading').style.display = 'none';
-            
-            // Hide error states
-            document.getElementById('national-error').style.display = 'none';
-            document.getElementById('regional-error').style.display = 'none';
-            document.getElementById('adhoc-error').style.display = 'none';
-            
-            // Group sections by type
-            const nationalCouncil = sections.filter(s => s.section_type === 'national_council');
-            const regional = sections.filter(s => s.section_type === 'regional');
-            const adhoc = sections.filter(s => s.section_type === 'ad_hoc');
-            
-            // Render National Council
-            renderNationalCouncil(nationalCouncil);
-            
-            // Render Regional Committees
-            renderRegionalCommittees(regional);
-            
-            // Render Ad Hoc Committees
-            renderAdHocCommittees(adhoc);
-            
-        } catch (error) {
-            console.error('Error loading management data:', error);
-            showErrorStates();
-        }
+            if (!data || data.length === 0) { showErrorStates(); return; }
+            renderNationalCouncil(data.filter(s => s.section_type === 'national_council'));
+            renderRegionalCommittees(data.filter(s => s.section_type === 'regional'));
+            renderAdHocCommittees(data.filter(s => s.section_type === 'ad_hoc'));
+        } catch(e) { console.error(e); showErrorStates(); }
     }
     
-   // ============================================
-// RENDER NATIONAL COUNCIL WITH PICTURES & ALL SOCIAL MEDIA
-// ============================================
-function renderNationalCouncil(members) {
-    const container = document.getElementById('national-council-container');
-    
-    if (!members || members.length === 0) {
-        document.getElementById('national-error').style.display = 'block';
-        return;
+    function renderNationalCouncil(members) {
+        const container = document.getElementById('national-council-container');
+        if (!members.length) { document.getElementById('national-error').style.display = 'block'; return; }
+        container.innerHTML = '';
+        members.forEach(m => {
+            const hasImage = m.profile_image_url && m.profile_image_url.trim();
+            const social = m.social_handles || {};
+            
+            // Generate social icons HTML with proper links
+            const socialHtml = [];
+            if (social.twitter) socialHtml.push(`<a href="https://twitter.com/${social.twitter.replace('@', '')}" target="_blank" class="social-icon twitter text-gray-500 hover:text-white transition-all"><i class="fab fa-twitter"></i></a>`);
+            if (social.linkedin) socialHtml.push(`<a href="${social.linkedin.includes('http') ? social.linkedin : 'https://linkedin.com/in/' + social.linkedin}" target="_blank" class="social-icon linkedin text-gray-500 hover:text-white transition-all"><i class="fab fa-linkedin-in"></i></a>`);
+            if (social.instagram) socialHtml.push(`<a href="https://instagram.com/${social.instagram.replace('@', '')}" target="_blank" class="social-icon instagram text-gray-500 hover:text-white transition-all"><i class="fab fa-instagram"></i></a>`);
+            if (social.facebook) socialHtml.push(`<a href="https://facebook.com/${social.facebook}" target="_blank" class="social-icon facebook text-gray-500 hover:text-white transition-all"><i class="fab fa-facebook-f"></i></a>`);
+            if (social.email) socialHtml.push(`<a href="mailto:${social.email}" class="social-icon email text-gray-500 hover:text-white transition-all"><i class="fas fa-envelope"></i></a>`);
+            if (social.phone) socialHtml.push(`<a href="tel:${social.phone}" class="social-icon phone text-gray-500 hover:text-white transition-all"><i class="fas fa-phone"></i></a>`);
+            
+            container.innerHTML += `<div class="team-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up"><div class="h-48 bg-gradient-to-r from-kesnnur-blue to-kesnnur-teal team-image-overlay relative"><div class="absolute top-4 left-4"><span class="badge">${m.position}</span></div><div class="absolute bottom-4 left-4"><div class="flex items-center"><div class="w-16 h-16 rounded-full border-2 border-white flex items-center justify-center overflow-hidden mr-3 bg-white/20">${hasImage ? `<img src="${m.profile_image_url}" class="w-full h-full object-cover">` : `<span class="text-white text-2xl font-bold">${m.person_name.charAt(0)}</span>`}</div><div class="text-white"><h3 class="font-bold text-lg">${m.person_name}</h3><p class="text-sm opacity-90">${m.position}</p></div></div></div></div><div class="p-6"><p class="text-gray-600 dark:text-gray-300 mb-4">${m.description || 'Leadership role at KESNNUR'}</p>${socialHtml.length ? `<div class="flex flex-wrap gap-2 pt-2 border-t border-gray-100 dark:border-gray-700 mt-4">${socialHtml.join('')}</div>` : ''}</div></div>`;
+        });
+        container.style.display = 'grid';
     }
-    
-    container.innerHTML = '';
-    
-    // Color mapping for gradients
-    const colorMap = {
-        'blue': { from: 'from-blue-900', to: 'to-blue-700', text: 'text-blue-900', bg: 'bg-blue-100' },
-        'teal': { from: 'from-teal-700', to: 'to-teal-500', text: 'text-teal-900', bg: 'bg-teal-100' },
-        'purple': { from: 'from-purple-700', to: 'to-purple-500', text: 'text-purple-900', bg: 'bg-purple-100' },
-        'amber': { from: 'from-amber-700', to: 'to-amber-500', text: 'text-amber-900', bg: 'bg-amber-100' },
-        'cyan': { from: 'from-cyan-700', to: 'to-cyan-500', text: 'text-cyan-900', bg: 'bg-cyan-100' },
-        'red': { from: 'from-red-700', to: 'to-red-500', text: 'text-red-900', bg: 'bg-red-100' },
-        'pink': { from: 'from-pink-700', to: 'to-pink-500', text: 'text-pink-900', bg: 'bg-pink-100' },
-        'indigo': { from: 'from-indigo-700', to: 'to-indigo-500', text: 'text-indigo-900', bg: 'bg-indigo-100' },
-        'green': { from: 'from-green-700', to: 'to-green-500', text: 'text-green-900', bg: 'bg-green-100' },
-        'orange': { from: 'from-orange-700', to: 'to-orange-500', text: 'text-orange-900', bg: 'bg-orange-100' }
-    };
-    
-    members.forEach(member => {
-        const colors = colorMap[member.color_scheme] || colorMap.blue;
-        const initials = member.person_name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-        const hasImage = member.profile_image_url && member.profile_image_url.trim() !== '';
-        const socialHandles = member.social_handles || {};
-        
-        // Get position badge text
-        const positionBadge = getPositionBadge(member.position);
-        
-        // Function to check if social handle exists
-        const hasSocialHandle = (platform) => {
-            return socialHandles[platform] && socialHandles[platform].trim() !== '';
-        };
-        
-        // Generate social media icons HTML
-        const socialIconsHTML = `
-            <div class="flex space-x-3 mt-4">
-                ${hasSocialHandle('twitter') ? `
-                    <a href="https://twitter.com/${socialHandles.twitter.replace('@', '')}" 
-                       target="_blank" 
-                       class="text-blue-500 hover:text-blue-700 transition-colors"
-                       title="Twitter">
-                        <i class="fab fa-twitter text-lg"></i>
-                    </a>
-                ` : ''}
-                
-                ${hasSocialHandle('linkedin') ? `
-                    <a href="${socialHandles.linkedin.startsWith('http') ? socialHandles.linkedin : 'https://' + socialHandles.linkedin}" 
-                       target="_blank" 
-                       class="text-blue-800 hover:text-blue-900 transition-colors"
-                       title="LinkedIn">
-                        <i class="fab fa-linkedin text-lg"></i>
-                    </a>
-                ` : ''}
-                
-                ${hasSocialHandle('instagram') ? `
-                    <a href="https://instagram.com/${socialHandles.instagram.replace('@', '')}" 
-                       target="_blank" 
-                       class="text-pink-600 hover:text-pink-800 transition-colors"
-                       title="Instagram">
-                        <i class="fab fa-instagram text-lg"></i>
-                    </a>
-                ` : ''}
-                
-                ${hasSocialHandle('facebook') ? `
-                    <a href="https://facebook.com/${socialHandles.facebook}" 
-                       target="_blank" 
-                       class="text-blue-600 hover:text-blue-800 transition-colors"
-                       title="Facebook">
-                        <i class="fab fa-facebook text-lg"></i>
-                    </a>
-                ` : ''}
-                
-                ${hasSocialHandle('email') ? `
-                    <a href="mailto:${socialHandles.email}" 
-                       class="text-red-600 hover:text-red-800 transition-colors"
-                       title="Email">
-                        <i class="fas fa-envelope text-lg"></i>
-                    </a>
-                ` : ''}
-            </div>
-        `;
-        
-        const memberHTML = `
-            <div class="team-card bg-white rounded-2xl shadow-lg overflow-hidden animate-fade-in">
-                <div class="h-48 bg-gradient-to-r ${colors.from} ${colors.to} relative overflow-hidden">
-                    <div class="absolute top-4 left-4">
-                        <span class="bg-white ${colors.text} text-xs font-bold px-3 py-1 rounded-full">
-                            ${positionBadge}
-                        </span>
-                    </div>
-                    
-                    <!-- Profile Picture or Initials -->
-                    <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
-                        <div class="flex items-center">
-                            <div class="w-16 h-16 rounded-full ${hasImage ? '' : 'bg-white/20'} border-2 border-white flex items-center justify-center overflow-hidden mr-3">
-                                ${hasImage ? 
-                                    `<img src="${member.profile_image_url}" 
-                                          alt="${member.person_name}" 
-                                          class="w-full h-full object-cover">` :
-                                    `<span class="text-white text-2xl font-bold">${initials}</span>`
-                                }
-                            </div>
-                            <div class="text-white">
-                                <h3 class="font-bold text-lg">${member.person_name}</h3>
-                                <p class="text-sm opacity-90">${member.position}</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Social Media Icons (in header) -->
-                        ${hasSocialHandle('twitter') || hasSocialHandle('linkedin') || 
-                          hasSocialHandle('instagram') || hasSocialHandle('facebook') || 
-                          hasSocialHandle('email') ? `
-                            <div class="flex space-x-2">
-                                ${hasSocialHandle('twitter') ? `
-                                    <a href="https://twitter.com/${socialHandles.twitter.replace('@', '')}" 
-                                       target="_blank" 
-                                       class="text-white/80 hover:text-white transition-colors"
-                                       title="Twitter">
-                                        <i class="fab fa-twitter"></i>
-                                    </a>
-                                ` : ''}
-                                
-                                ${hasSocialHandle('linkedin') ? `
-                                    <a href="${socialHandles.linkedin.startsWith('http') ? socialHandles.linkedin : 'https://' + socialHandles.linkedin}" 
-                                       target="_blank" 
-                                       class="text-white/80 hover:text-white transition-colors"
-                                       title="LinkedIn">
-                                        <i class="fab fa-linkedin"></i>
-                                    </a>
-                                ` : ''}
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-                
-                <div class="p-6">
-                    <!-- Name and Position (duplicated from header for mobile view) -->
-                    <div class="md:hidden mb-4">
-                        <h3 class="font-bold text-xl mb-1">${member.person_name}</h3>
-                        <p class="${colors.text} font-semibold">${member.position}</p>
-                    </div>
-                    
-                    <p class="text-gray-600 mb-4">${member.description}</p>
-                    
-                    ${member.tags && member.tags.length > 0 ? `
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            ${member.tags.map(tag => `
-                                <span class="committee-tag ${colors.bg} ${colors.text.replace('900', '800')}">${tag}</span>
-                            `).join('')}
-                        </div>
-                    ` : ''}
-                    
-                    <!-- Social Media Handles (detailed view) -->
-                    ${hasSocialHandle('twitter') || hasSocialHandle('linkedin') || 
-                      hasSocialHandle('instagram') || hasSocialHandle('facebook') || 
-                      hasSocialHandle('email') ? `
-                        <div class="pt-4 border-t border-gray-200">
-                            <h4 class="font-medium text-gray-700 mb-2">Connect</h4>
-                            <div class="flex flex-wrap gap-3">
-                                ${hasSocialHandle('twitter') ? `
-                                    <div class="flex items-center">
-                                        <i class="fab fa-twitter text-blue-500 mr-2"></i>
-                                        <span class="text-sm text-gray-600">${socialHandles.twitter}</span>
-                                    </div>
-                                ` : ''}
-                                
-                                ${hasSocialHandle('linkedin') ? `
-                                    <div class="flex items-center">
-                                        <i class="fab fa-linkedin text-blue-800 mr-2"></i>
-                                        <span class="text-sm text-gray-600">${socialHandles.linkedin}</span>
-                                    </div>
-                                ` : ''}
-                                
-                                ${hasSocialHandle('instagram') ? `
-                                    <div class="flex items-center">
-                                        <i class="fab fa-instagram text-pink-600 mr-2"></i>
-                                        <span class="text-sm text-gray-600">${socialHandles.instagram}</span>
-                                    </div>
-                                ` : ''}
-                                
-                                ${hasSocialHandle('facebook') ? `
-                                    <div class="flex items-center">
-                                        <i class="fab fa-facebook text-blue-600 mr-2"></i>
-                                        <span class="text-sm text-gray-600">${socialHandles.facebook}</span>
-                                    </div>
-                                ` : ''}
-                                
-                                ${hasSocialHandle('email') ? `
-                                    <div class="flex items-center">
-                                        <i class="fas fa-envelope text-red-600 mr-2"></i>
-                                        <span class="text-sm text-gray-600">${socialHandles.email}</span>
-                                    </div>
-                                ` : ''}
-                            </div>
-                        </div>
-                    ` : ''}
-                    
-                    <!-- Social Media Icons (footer) -->
-                    ${socialIconsHTML}
-                </div>
-            </div>
-        `;
-        
-        container.innerHTML += memberHTML;
-    });
-    
-    container.style.display = 'grid';
-}
-
-// Helper function to get position badge
-function getPositionBadge(position) {
-    if (position.includes('Chair')) return 'Chairperson';
-    if (position.includes('Secretary')) return 'Secretariat';
-    if (position.includes('Finance')) return 'Finance';
-    if (position.includes('Organizing')) return 'Events';
-    if (position.includes('Representative')) return 'Representative';
-    return position.split(' ')[0];
-}
     
     function renderRegionalCommittees(committees) {
         const container = document.getElementById('regional-committees-container');
-        
-        if (!committees || committees.length === 0) {
-            document.getElementById('regional-error').style.display = 'block';
-            return;
-        }
-        
+        if (!committees.length) { document.getElementById('regional-error').style.display = 'block'; return; }
         container.innerHTML = '';
-        
-        // Icon mapping for regions
-        const iconMap = {
-            'Nairobi': { icon: 'fa-city', color: 'blue' },
-            'Rift Valley': { icon: 'fa-mountain', color: 'green' },
-            'Western': { icon: 'fa-lake', color: 'yellow' },
-            'Coastal': { icon: 'fa-umbrella-beach', color: 'teal' },
-            'Central': { icon: 'fa-mountain-city', color: 'purple' },
-            'Eastern': { icon: 'fa-sun', color: 'red' },
-            'Nyanza': { icon: 'fa-water', color: 'cyan' },
-            'North Eastern': { icon: 'fa-cactus', color: 'orange' }
-        };
-        
-        committees.forEach(committee => {
-            const regionName = committee.person_name.replace('Region', '').trim();
-            const iconInfo = iconMap[regionName] || { icon: 'fa-map-marker-alt', color: 'gray' };
-            const colorClass = `bg-${iconInfo.color}-100 text-${iconInfo.color}-900`;
+        committees.forEach(c => { 
+            const social = c.social_handles || {};
+            const socialHtml = [];
+            if (social.twitter) socialHtml.push(`<a href="https://twitter.com/${social.twitter.replace('@', '')}" target="_blank" class="text-gray-500 hover:text-kesnnur-teal text-sm"><i class="fab fa-twitter"></i></a>`);
+            if (social.linkedin) socialHtml.push(`<a href="${social.linkedin}" target="_blank" class="text-gray-500 hover:text-kesnnur-teal text-sm"><i class="fab fa-linkedin"></i></a>`);
+            if (social.email) socialHtml.push(`<a href="mailto:${social.email}" class="text-gray-500 hover:text-kesnnur-teal text-sm"><i class="fas fa-envelope"></i></a>`);
             
-            const committeeHTML = `
-                <div class="committee-card bg-white rounded-xl shadow-md p-6 animate-fade-in">
-                    <div class="flex items-start mb-4">
-                        <div class="${colorClass} p-3 rounded-lg mr-4">
-                            <i class="fas ${iconInfo.icon} text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-lg mb-1">${committee.person_name}</h3>
-                            <p class="text-${iconInfo.color}-900 text-sm font-semibold">${committee.position}</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-4">${committee.description}</p>
-                    <div class="text-sm text-gray-500 flex items-center">
-                        <i class="fas fa-user mr-2"></i>
-                        <span>${committee.tags?.[0] || 'Regional Chair: To be elected'}</span>
-                    </div>
-                </div>
-            `;
-            
-            container.innerHTML += committeeHTML;
+            container.innerHTML += `<div class="committee-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-6" data-aos="fade-up"><div class="flex items-start mb-4"><div class="bg-kesnnur-teal/10 p-3 rounded-lg mr-4"><i class="fas fa-map-marker-alt text-kesnnur-teal text-xl"></i></div><div><h3 class="font-bold text-lg mb-1 text-gray-800 dark:text-white">${c.person_name}</h3><p class="text-kesnnur-teal text-sm font-semibold">${c.position}</p></div></div><p class="text-gray-600 dark:text-gray-300 text-sm mb-3">${c.description || 'Regional leadership committee'}</p>${socialHtml.length ? `<div class="flex gap-3 pt-2 border-t border-gray-100 dark:border-gray-700 mt-3">${socialHtml.join('')}</div>` : ''}</div>`;
         });
-        
         container.style.display = 'grid';
     }
     
     function renderAdHocCommittees(committees) {
         const container = document.getElementById('adhoc-committees-container');
-        
-        if (!committees || committees.length === 0) {
-            document.getElementById('adhoc-error').style.display = 'block';
-            return;
-        }
-        
+        if (!committees.length) { document.getElementById('adhoc-error').style.display = 'block'; return; }
         container.innerHTML = '';
-        
-        // Icon mapping for committee types
-        const iconMap = {
-            'Conference': { icon: 'fa-calendar-star', color: 'purple' },
-            'Fundraising': { icon: 'fa-hand-holding-usd', color: 'green' },
-            'Constitution': { icon: 'fa-gavel', color: 'red' },
-            'Membership': { icon: 'fa-users', color: 'blue' },
-            'Research': { icon: 'fa-clipboard-check', color: 'teal' },
-            'Emergency': { icon: 'fa-first-aid', color: 'orange' },
-            'default': { icon: 'fa-tasks', color: 'gray' }
-        };
-        
-        committees.forEach(committee => {
-            // Determine icon based on committee name
-            let iconInfo = iconMap.default;
-            for (const [key, value] of Object.entries(iconMap)) {
-                if (committee.person_name.includes(key)) {
-                    iconInfo = value;
-                    break;
-                }
-            }
+        committees.forEach(c => { 
+            const social = c.social_handles || {};
+            const socialHtml = [];
+            if (social.twitter) socialHtml.push(`<a href="https://twitter.com/${social.twitter.replace('@', '')}" target="_blank" class="text-gray-500 hover:text-kesnnur-gold text-sm"><i class="fab fa-twitter"></i></a>`);
+            if (social.linkedin) socialHtml.push(`<a href="${social.linkedin}" target="_blank" class="text-gray-500 hover:text-kesnnur-gold text-sm"><i class="fab fa-linkedin"></i></a>`);
+            if (social.email) socialHtml.push(`<a href="mailto:${social.email}" class="text-gray-500 hover:text-kesnnur-gold text-sm"><i class="fas fa-envelope"></i></a>`);
             
-            const colorClass = `bg-${iconInfo.color}-100 text-${iconInfo.color}-900`;
-            
-            const committeeHTML = `
-                <div class="committee-card bg-white rounded-xl shadow-md p-6 animate-fade-in">
-                    <div class="flex items-start mb-4">
-                        <div class="${colorClass} p-3 rounded-lg mr-4">
-                            <i class="fas ${iconInfo.icon} text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-lg mb-1">${committee.person_name}</h3>
-                            <p class="text-${iconInfo.color}-900 text-sm font-semibold">${committee.position}</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-4">${committee.description}</p>
-                    ${committee.tags && committee.tags.length > 0 ? `
-                        <div class="flex flex-wrap gap-2">
-                            ${committee.tags.map(tag => `
-                                <span class="committee-tag bg-${iconInfo.color}-100 text-${iconInfo.color}-800">${tag}</span>
-                            `).join('')}
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-            
-            container.innerHTML += committeeHTML;
+            container.innerHTML += `<div class="committee-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-6" data-aos="fade-up"><div class="flex items-start mb-4"><div class="bg-kesnnur-gold/20 p-3 rounded-lg mr-4"><i class="fas fa-tasks text-kesnnur-gold text-xl"></i></div><div><h3 class="font-bold text-lg mb-1 text-gray-800 dark:text-white">${c.person_name}</h3><p class="text-kesnnur-gold text-sm font-semibold">${c.position}</p></div></div><p class="text-gray-600 dark:text-gray-300 text-sm mb-3">${c.description || 'Committee leadership'}</p>${socialHtml.length ? `<div class="flex gap-3 pt-2 border-t border-gray-100 dark:border-gray-700 mt-3">${socialHtml.join('')}</div>` : ''}</div>`;
         });
-        
         container.style.display = 'grid';
     }
     
-    function showErrorStates() {
-        // Show loading skeletons as fallback if no data
-        document.getElementById('national-loading').style.display = 'grid';
-        document.getElementById('regional-loading').style.display = 'grid';
-        document.getElementById('adhoc-loading').style.display = 'grid';
-        
-        // Hide dynamic containers
-        document.getElementById('national-council-container').style.display = 'none';
-        document.getElementById('regional-committees-container').style.display = 'none';
-        document.getElementById('adhoc-committees-container').style.display = 'none';
-        
-        // Show error message
-        console.warn('⚠️ Using static fallback content. Check Supabase connection.');
-    }
+    function showErrorStates() { console.log('Using fallback content - check Supabase'); }
     
-    function showLeaderModal(name, position, description) {
-        const modalHTML = `
-            <div class="fixed inset-0 z-50 overflow-y-auto">
-                <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-                    </div>
-                    
-                    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
-                    
-                    <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                        <div class="bg-gradient-to-r from-blue-900 to-blue-700 p-6 text-white">
-                            <div class="flex justify-between items-center">
-                                <h3 class="text-xl font-bold">Leader Profile</h3>
-                                <button onclick="closeModal()" class="text-white hover:text-gray-200">
-                                    <i class="fas fa-times text-xl"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="p-6">
-                            <div class="text-center mb-6">
-                                <div class="w-32 h-32 rounded-full bg-gradient-to-r from-blue-900 to-blue-700 flex items-center justify-center mx-auto mb-4">
-                                    <span class="text-white text-4xl font-bold">${name.charAt(0)}</span>
-                                </div>
-                                <h4 class="text-2xl font-bold mb-2">${name}</h4>
-                                <p class="text-blue-900 font-semibold mb-4">${position}</p>
-                            </div>
-                            
-                            <p class="text-gray-600 mb-6">${description}</p>
-                            
-                            <div class="space-y-4">
-                                <div>
-                                    <h5 class="font-bold text-gray-800 mb-2">Responsibilities:</h5>
-                                    <ul class="list-disc pl-5 text-gray-600">
-                                        <li>Strategic leadership and governance</li>
-                                        <li>Policy formulation and implementation</li>
-                                        <li>Member representation and advocacy</li>
-                                        <li>Committee coordination and oversight</li>
-                                    </ul>
-                                </div>
-                                
-                                <div>
-                                    <h5 class="font-bold text-gray-800 mb-2">Term:</h5>
-                                    <p class="text-gray-600">2 years (2025-2027)</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                            <button onclick="closeModal()" class="w-full bg-blue-900 text-white py-3 rounded-lg font-medium hover:bg-blue-800">
-                                Close Profile
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        // Remove existing modal if any
-        const existingModal = document.querySelector('.modal-container');
-        if (existingModal) {
-            existingModal.remove();
-        }
-        
-        // Create and append modal
-        const modalContainer = document.createElement('div');
-        modalContainer.className = 'modal-container';
-        modalContainer.innerHTML = modalHTML;
-        document.body.appendChild(modalContainer);
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function closeModal() {
-        const modalContainer = document.querySelector('.modal-container');
-        if (modalContainer) {
-            modalContainer.remove();
-            document.body.style.overflow = 'auto';
-        }
-    }
-    
-    // Close modal on escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeModal();
-        }
-    });
-    
-    // Close modal when clicking outside
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('modal-container')) {
-            closeModal();
-        }
-    });
-    
-    console.log('✅ Management Page Loaded Successfully');
-    console.log('🔗 Connected to Supabase CMS');
+    loadManagementData();
     </script>
 </body>
 </html>
