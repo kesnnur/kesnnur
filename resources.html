@@ -2,13 +2,35 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Resources - KESNNUR | Kenya Students & Novice Nurses</title>
+    
+    <!-- Meta Description for SEO -->
+    <meta name="description" content="Access nursing resources, research papers, guidelines, templates, and learning materials to support your nursing journey at KESNNUR.">
+    <meta name="keywords" content="KESNNUR resources, nursing resources Kenya, nursing research, nursing guidelines, nursing templates">
+    <meta name="author" content="KESNNUR">
+    <link rel="canonical" href="https://kesnnur.nnak.or.ke/resources.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kesnnur.nnak.or.ke/resources.html">
+    <meta property="og:title" content="KESNNUR Resources | Nursing Learning Materials">
+    <meta property="og:description" content="Access nursing resources, research papers, guidelines, templates, and learning materials.">
+    <meta property="og:image" content="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
+    <link rel="apple-touch-icon" href="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -16,7 +38,10 @@
                         'kesnnur-light': '#3b82f6',
                         'kesnnur-teal': '#0d9488',
                         'kesnnur-gold': '#f59e0b'
-                    }
+                    },
+                    fontFamily: { 'display': ['"Poppins"', 'system-ui'], 'body': ['"Inter"', 'system-ui'] },
+                    animation: { 'float': 'float 6s ease-in-out infinite', 'fade-in': 'fadeIn 0.6s ease-out forwards' },
+                    keyframes: { float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-8px)' } }, fadeIn: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } }
                 }
             }
         }
@@ -28,6 +53,10 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
     <style>
         :root {
             --kesnnur-blue: #1e3a8a;
@@ -36,889 +65,408 @@
             --kesnnur-gold: #f59e0b;
         }
         
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; transition: background-color 0.3s ease, color 0.3s ease; background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #f0fdf4 100%); }
         
-        .font-display {
-            font-family: 'Poppins', sans-serif;
-        }
+        body.dark { background: #0f172a; color: #f1f5f9; }
+        body.dark .bg-white { background: #1e293b !important; }
+        body.dark .text-gray-600 { color: #94a3b8 !important; }
+        body.dark .text-gray-500 { color: #64748b !important; }
+        body.dark .border-gray-100 { border-color: #334155 !important; }
+        body.dark .glass-nav { background: rgba(15, 23, 42, 0.96); border-bottom-color: #334155; }
+        body.dark .resource-card { background: #1e293b !important; }
+        body.dark .bg-gray-50 { background: #0f172a !important; }
+        body.dark .bg-blue-50 { background: #1e293b !important; }
+        body.dark .bg-gradient-to-br { --tw-gradient-from: #0f172a !important; --tw-gradient-to: #1e293b !important; }
         
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+        .font-display { font-family: 'Poppins', sans-serif; }
         
-        .loader {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #1e3a8a;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
+        .skip-to-content { position: absolute; top: -40px; left: 0; background: #1e3a8a; color: white; padding: 12px; z-index: 10000; font-weight: 600; text-decoration: none; }
+        .skip-to-content:focus { top: 0; }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        .glass-nav { background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0, 0, 0, 0.05); transition: background 0.3s ease; }
+        body.dark .glass-nav { background: rgba(15, 23, 42, 0.96); border-bottom-color: #334155; }
         
-        .resource-card {
-            transition: all 0.3s ease;
-        }
+        .resource-card { transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .resource-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(30, 58, 138, 0.12); }
         
-        .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.1);
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #1e3a8a; border-radius: 10px; }
+        body.dark ::-webkit-scrollbar-track { background: #1e293b; }
+        body.dark ::-webkit-scrollbar-thumb { background: #3b82f6; }
         
-        .filter-btn.active {
-            background-color: #1e3a8a;
-            color: white;
-        }
+        .gradient-text { background: linear-gradient(135deg, #1e3a8a 0%, #0d9488 50%, #3b82f6 100%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 0%; height: 3px; background: linear-gradient(90deg, #1e3a8a, #0d9488, #f59e0b); z-index: 10001; transition: width 0.1s ease; }
         
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
+        .theme-toggle, .lang-selector { background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); border-radius: 50px; padding: 8px 16px; transition: all 0.3s ease; cursor: pointer; font-size: 14px; }
+        .theme-toggle:hover, .lang-selector:hover { transform: scale(1.05); }
+        body.dark .theme-toggle, body.dark .lang-selector { background: rgba(255,255,255,0.1); color: white; }
         
-        ::-webkit-scrollbar-thumb {
-            background: #1e3a8a;
-            border-radius: 4px;
-        }
+        .page-transition { animation: fadeInPage 0.5s ease-out; }
+        @keyframes fadeInPage { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .filter-btn { transition: all 0.3s ease; cursor: pointer; }
+        .filter-btn.active { background-color: #1e3a8a; color: white; border-color: #1e3a8a !important; }
+        body.dark .filter-btn.active { background-color: #3b82f6; }
+        
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #1e3a8a; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .whatsapp-float { position: fixed; bottom: 80px; right: 20px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2); z-index: 100; cursor: pointer; transition: all 0.3s ease; animation: bounce 2s infinite; }
+        .whatsapp-float:hover { transform: scale(1.1); background: #128C7E; }
+        
+        .float-buttons { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 99; }
+        .float-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; transition: all 0.3s ease; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .float-btn:hover { transform: scale(1.1); }
+        .float-call { background: #34B7F1; color: white; }
+        .float-email { background: #EA4335; color: white; }
+        .float-map { background: #4285F4; color: white; }
+        
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        
+        .social-icon { transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.05); }
+        .social-icon:hover { transform: translateY(-3px); }
+        .social-icon.twitter:hover { background: #1DA1F2; color: white !important; }
+        .social-icon.linkedin:hover { background: #0077B5; color: white !important; }
+        .social-icon.instagram:hover { background: #E4405F; color: white !important; }
+        .social-icon.facebook:hover { background: #1877F2; color: white !important; }
+        
+        .custom-toast { position: fixed; top: 4rem; right: 1rem; z-index: 1000; padding: 0.75rem 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); font-weight: 500; transform: translateX(100%); transition: transform 0.3s ease; }
+        .custom-toast.show { transform: translateX(0); }
     </style>
 </head>
-<body class="bg-gradient-to-br from-gray-50 to-blue-50">
+<body class="page-transition">
+    
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <div class="float-buttons">
+        <div class="float-btn float-call" onclick="window.location.href='tel:+254768878303'"><i class="fas fa-phone-alt"></i></div>
+        <div class="float-btn float-email" onclick="window.location.href='mailto:kesnnur@gmail.com'"><i class="fas fa-envelope"></i></div>
+        <div class="float-btn float-map" onclick="window.open('https://maps.google.com/?q=Nurses+Complex+KNH+Nairobi', '_blank')"><i class="fas fa-map-marker-alt"></i></div>
+    </div>
+
+    <div class="whatsapp-float" onclick="window.open('https://wa.me/254768878303?text=Hello%20KESNNUR%2C%20I%27m%20interested%20in%20accessing%20nursing%20resources!', '_blank')"><i class="fab fa-whatsapp"></i></div>
+
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+    <nav class="sticky top-0 z-50 glass-nav shadow-sm">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
-                <!-- Logo -->
-                <a href="index.html" class="flex items-center space-x-3">
-                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
-                         alt="KESNNUR Logo"
-                         width="40"
-                         height="40"
-                         class="w-10 h-10 rounded-lg object-contain">
-                    <div>
-                        <h1 class="text-lg md:text-xl font-bold text-blue-900 font-display">KESNNUR</h1>
-                        <p class="text-xs text-gray-600">Students & Novice Nurses</p>
-                    </div>
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" width="40" height="40" class="w-10 h-10 rounded-lg object-contain group-hover:scale-105 transition duration-300">
+                    <div><h1 class="text-lg md:text-xl font-bold text-kesnnur-blue font-display">KESNNUR</h1><p class="text-xs text-gray-600 dark:text-gray-400">Students & Novice Nurses</p></div>
                 </a>
-
-                <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-blue-900 font-medium">Home</a>
-                    <a href="about.html" class="text-gray-700 hover:text-blue-900 font-medium">About</a>
-                    <a href="management.html" class="text-gray-700 hover:text-blue-900 font-medium">Management</a>
-                    <a href="events.html" class="text-gray-700 hover:text-blue-900 font-medium">Events</a>
-                    <a href="blog.html" class="text-gray-700 hover:text-blue-900 font-medium">Blog</a>
-                    <a href="resources.html" class="text-blue-900 font-medium border-b-2 border-blue-900">Resources</a>
-                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 font-medium">Contact</a>
-                    <a href="members.html" class="bg-blue-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800">
-                        Member Portal
-                    </a>
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Home</a>
+                    <a href="about.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">About</a>
+                    <a href="management.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Management</a>
+                    <a href="events.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Events</a>
+                    <a href="blog.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Blog</a>
+                    <a href="resources.html" class="text-kesnnur-blue dark:text-kesnnur-light font-medium border-b-2 border-kesnnur-blue dark:border-kesnnur-light">Resources</a>
+                    <a href="contact.html" class="text-gray-700 dark:text-gray-300 hover:text-kesnnur-blue font-medium">Contact</a>
+                    
+                    <div class="lang-selector flex items-center gap-2"><i class="fas fa-globe"></i><span id="currentLang">EN</span></div>
+                    <div class="theme-toggle flex items-center gap-2"><i class="fas fa-sun dark:hidden"></i><i class="fas fa-moon hidden dark:inline"></i><span>Light</span></div>
+                    
+                    <a href="members.html" class="bg-kesnnur-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-kesnnur-light transition">Member Portal</a>
                 </div>
-
-                <!-- Mobile Menu Button -->
-                <button id="menuBtn" class="md:hidden text-blue-900">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
+                <button id="menuBtn" class="md:hidden text-kesnnur-blue"><i class="fas fa-bars text-2xl"></i></button>
             </div>
-            
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white rounded-lg shadow-lg p-6">
+            <div id="mobileMenu" class="md:hidden hidden mt-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6">
                 <div class="space-y-3">
-                    <a href="index.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-home mr-3"></i>Home
-                    </a>
-                    <a href="about.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-info-circle mr-3"></i>About
-                    </a>
-                    <a href="management.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-users mr-3"></i>Management
-                    </a>
-                    <a href="events.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-calendar-alt mr-3"></i>Events
-                    </a>
-                    <a href="blog.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-blog mr-3"></i>Blog
-                    </a>
-                    <a href="resources.html" class="block py-3 px-4 bg-blue-50 text-blue-900 rounded-lg">
-                        <i class="fas fa-book-medical mr-3"></i>Resources
-                    </a>
-                    <a href="contact.html" class="block py-3 px-4 text-gray-700 hover:bg-blue-50 rounded-lg">
-                        <i class="fas fa-envelope mr-3"></i>Contact
-                    </a>
-                    <a href="members.html" class="block py-3 px-4 bg-blue-900 text-white rounded-lg text-center font-medium mt-4">
-                        <i class="fas fa-user mr-3"></i>Member Portal
-                    </a>
+                    <a href="index.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-home mr-3"></i>Home</a>
+                    <a href="about.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-info-circle mr-3"></i>About</a>
+                    <a href="management.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-users mr-3"></i>Management</a>
+                    <a href="events.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-calendar-alt mr-3"></i>Events</a>
+                    <a href="blog.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-blog mr-3"></i>Blog</a>
+                    <a href="resources.html" class="block py-3 px-4 bg-kesnnur-blue/10 text-kesnnur-blue dark:text-kesnnur-light rounded-lg"><i class="fas fa-book-medical mr-3"></i>Resources</a>
+                    <a href="contact.html" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-kesnnur-blue/10 rounded-lg"><i class="fas fa-envelope mr-3"></i>Contact</a>
+                    <div class="flex gap-3 pt-3">
+                        <div class="flex-1 lang-selector-mobile bg-gray-100 dark:bg-gray-800 rounded-lg py-2 px-4 text-center flex items-center justify-center gap-2 cursor-pointer"><i class="fas fa-globe"></i><span>EN/SW</span></div>
+                        <div class="flex-1 theme-toggle-mobile bg-gray-100 dark:bg-gray-800 rounded-lg py-2 px-4 text-center cursor-pointer"><i class="fas fa-moon dark:hidden"></i><i class="fas fa-sun hidden dark:inline"></i></div>
+                    </div>
+                    <a href="members.html" class="block py-3 px-4 bg-kesnnur-blue text-white rounded-lg text-center font-medium mt-4"><i class="fas fa-user mr-3"></i>Member Portal</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="relative py-20 bg-gradient-to-r from-blue-900 to-blue-700">
-        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080')] bg-cover bg-center opacity-20"></div>
-        <div class="container mx-auto px-4 relative z-10 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">
-                Resources Library
-            </h1>
-            <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-                Access nursing resources, research papers, guidelines, templates, and learning materials to support your nursing journey.
-            </p>
-            <div class="bg-white/10 glass rounded-xl p-6 max-w-2xl mx-auto">
-                <p class="text-white mb-4">
-                    <i class="fas fa-info-circle mr-2"></i>
-                    Exclusive resources available to KESNNUR members
-                </p>
-                <a href="members.html" class="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold hover:shadow-lg inline-flex items-center">
-                    <i class="fas fa-user-plus mr-2"></i>Become a Member
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="py-12 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                <div>
-                    <div class="text-4xl md:text-5xl font-bold mb-2" id="totalResourcesCount">0</div>
-                    <div class="text-blue-200">Resources</div>
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="relative py-20 bg-gradient-to-r from-kesnnur-blue to-kesnnur-light overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080')] bg-cover bg-center opacity-10"></div>
+            <div class="absolute top-20 left-10 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute bottom-20 right-10 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6 border border-white/30">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <span class="text-sm font-medium text-white tracking-wide">Nursing Learning Materials</span>
                 </div>
-                <div>
-                    <div class="text-4xl md:text-5xl font-bold mb-2" id="researchCount">0</div>
-                    <div class="text-blue-200">Research Papers</div>
-                </div>
-                <div>
-                    <div class="text-4xl md:text-5xl font-bold mb-2" id="guidelinesCount">0</div>
-                    <div class="text-blue-200">Guidelines</div>
-                </div>
-                <div>
-                    <div class="text-4xl md:text-5xl font-bold mb-2" id="downloadsCount">0</div>
-                    <div class="text-blue-200">Downloads</div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 font-display leading-tight">Resources <span class="text-kesnnur-gold">Library</span></h1>
+                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">Access nursing resources, research papers, guidelines, templates, and learning materials to support your nursing journey.</p>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-w-2xl mx-auto border border-white/20">
+                    <p class="text-white mb-4"><i class="fas fa-info-circle mr-2"></i>Exclusive resources available to KESNNUR members</p>
+                    <a href="members.html" class="bg-white text-kesnnur-blue px-6 py-3 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all inline-flex items-center"><i class="fas fa-user-plus mr-2"></i>Become a Member</a>
                 </div>
             </div>
-        </div>
-    </section>
+            <div class="absolute bottom-0 left-0 right-0"><svg viewBox="0 0 1440 120" class="w-full h-auto" fill="#ffffff"><path d="M0,32L120,42.7C240,53,480,75,720,74.7C960,75,1200,53,1320,42.7L1440,32L1440,120L1320,120C1200,120,960,120,720,120C480,120,240,120,120,120L0,120Z"></path></svg></div>
+        </section>
 
-    <!-- Resources Section -->
-    <section class="py-16">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-12">
-                <div>
-                    <h2 class="text-3xl font-bold mb-2">Browse Resources</h2>
-                    <p class="text-gray-600">Filter by category to find exactly what you need</p>
-                </div>
-                <div class="mt-4 md:mt-0">
-                    <div class="relative">
-                        <input type="text" id="resourceSearch" placeholder="Search resources..." 
-                               class="pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full md:w-80">
-                        <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
-                    </div>
+        <!-- Stats Section -->
+        <section class="py-12 bg-gradient-to-r from-kesnnur-blue to-kesnnur-teal text-white">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div data-aos="zoom-in"><div class="text-4xl md:text-5xl font-bold mb-2 stat-number" id="totalResourcesCount">0</div><div class="text-blue-100">Resources</div></div>
+                    <div data-aos="zoom-in" data-aos-delay="100"><div class="text-4xl md:text-5xl font-bold mb-2 stat-number" id="researchCount">0</div><div class="text-blue-100">Research Papers</div></div>
+                    <div data-aos="zoom-in" data-aos-delay="200"><div class="text-4xl md:text-5xl font-bold mb-2 stat-number" id="guidelinesCount">0</div><div class="text-blue-100">Guidelines</div></div>
+                    <div data-aos="zoom-in" data-aos-delay="300"><div class="text-4xl md:text-5xl font-bold mb-2 stat-number" id="downloadsCount">0</div><div class="text-blue-100">Downloads</div></div>
                 </div>
             </div>
+        </section>
 
-            <!-- Filter Buttons -->
-            <div class="flex flex-wrap gap-3 mb-8" id="categoryFilters">
-                <button class="filter-btn active px-6 py-3 rounded-xl font-medium bg-blue-900 text-white" data-filter="all">
-                    All Resources
-                </button>
-                <!-- Will be populated dynamically -->
-            </div>
-
-            <!-- Access Level Info -->
-            <div class="mb-8 p-4 bg-blue-50 rounded-xl">
-                <div class="flex items-center">
-                    <i class="fas fa-info-circle text-blue-600 mr-3"></i>
-                    <div class="text-sm">
-                        <span class="font-semibold">Access Levels:</span>
-                        <span class="mx-2">
-                            <span class="inline-flex items-center">
-                                <span class="w-3 h-3 bg-green-500 rounded-full mr-1"></span>
-                                <span>Public - Available to everyone</span>
-                            </span>
-                            <span class="inline-flex items-center ml-4">
-                                <span class="w-3 h-3 bg-blue-500 rounded-full mr-1"></span>
-                                <span>Member Only - Requires KESNNUR membership</span>
-                            </span>
-                        </span>
-                    </div>
+        <!-- Resources Section -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-12">
+                    <div data-aos="fade-right"><h2 class="text-3xl md:text-4xl font-bold mb-2 text-kesnnur-blue">Browse Resources</h2><p class="text-gray-600 dark:text-gray-400">Filter by category to find exactly what you need</p></div>
+                    <div class="mt-4 md:mt-0" data-aos="fade-left"><div class="relative"><input type="text" id="resourceSearch" placeholder="Search resources..." class="pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-kesnnur-blue focus:border-transparent w-full md:w-80 dark:bg-gray-800 dark:text-white"><i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i></div></div>
                 </div>
-            </div>
 
-            <!-- Resources Grid -->
-            <div id="resourcesContainer">
-                <div class="text-center py-12">
-                    <div class="loader mx-auto mb-4"></div>
-                    <p class="text-gray-600">Loading resources from database...</p>
+                <!-- Filter Buttons -->
+                <div id="categoryFilters" class="flex flex-wrap gap-3 mb-8" data-aos="fade-up"></div>
+
+                <!-- Access Level Info -->
+                <div class="mb-8 p-4 bg-kesnnur-blue/10 rounded-xl" data-aos="fade-up">
+                    <div class="flex items-center flex-wrap gap-4"><i class="fas fa-info-circle text-kesnnur-blue"></i><div class="text-sm"><span class="font-semibold">Access Levels:</span><span class="mx-2"><span class="inline-flex items-center"><span class="w-3 h-3 bg-green-500 rounded-full mr-1"></span><span>Public - Available to everyone</span></span><span class="inline-flex items-center ml-4"><span class="w-3 h-3 bg-blue-500 rounded-full mr-1"></span><span>Member Only - Requires KESNNUR membership</span></span></span></div></div>
                 </div>
-            </div>
 
-            <!-- No Results Message -->
-            <div id="noResourcesMessage" class="hidden text-center py-12">
-                <i class="fas fa-folder-open text-4xl text-gray-400 mb-4"></i>
-                <h3 class="text-xl font-bold text-gray-700 mb-2">No Resources Found</h3>
-                <p class="text-gray-600">Try changing your search or filter criteria</p>
-            </div>
-        </div>
-    </section>
+                <!-- Resources Grid -->
+                <div id="resourcesContainer"><div class="text-center py-12"><div class="loader mx-auto mb-4"></div><p class="text-gray-600 dark:text-gray-400">Loading resources from database...</p></div></div>
 
-    <!-- Learning Partnership Section -->
-    <section class="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
-        <div class="container mx-auto px-4">
-            <div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white rounded-2xl overflow-hidden shadow-2xl">
-                <div class="flex flex-col md:flex-row">
-                    <div class="md:w-2/3 p-8 md:p-12">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-white/20 p-3 rounded-lg mr-4">
-                                <i class="fas fa-handshake text-2xl"></i>
-                            </div>
-                            <div>
-                                <span class="text-blue-200 text-sm font-semibold">EXCLUSIVE PARTNERSHIP</span>
-                            </div>
+                <!-- No Results Message -->
+                <div id="noResourcesMessage" class="hidden text-center py-12"><i class="fas fa-folder-open text-4xl text-gray-400 mb-4"></i><h3 class="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">No Resources Found</h3><p class="text-gray-600 dark:text-gray-400">Try changing your search or filter criteria</p></div>
+            </div>
+        </section>
+
+        <!-- Learning Partnership Section -->
+        <section class="py-16 bg-gradient-to-br from-kesnnur-blue/5 to-kesnnur-teal/5">
+            <div class="container mx-auto px-4">
+                <div class="bg-gradient-to-r from-kesnnur-blue to-kesnnur-teal text-white rounded-2xl overflow-hidden shadow-2xl" data-aos="fade-up">
+                    <div class="flex flex-col md:flex-row">
+                        <div class="md:w-2/3 p-8 md:p-12">
+                            <div class="flex items-center mb-4"><div class="bg-white/20 p-3 rounded-lg mr-4"><i class="fas fa-handshake text-2xl"></i></div><div><span class="text-blue-200 text-sm font-semibold">EXCLUSIVE PARTNERSHIP</span></div></div>
+                            <h2 class="text-3xl font-bold mb-6">Partnership with Lecturio GmbH</h2>
+                            <p class="text-blue-100 mb-6 text-lg">We have officially signed a Memorandum of Understanding (MoU) with Lecturio GmbH, marking the beginning of our strategic partnership to provide world-class nursing education resources to our members.</p>
+                            <div class="grid grid-cols-2 gap-6 mb-8"><div class="flex items-center"><i class="fas fa-check-circle text-blue-200 mr-3"></i><span>Access to 2,000+ nursing video lectures</span></div><div class="flex items-center"><i class="fas fa-check-circle text-blue-200 mr-3"></i><span>Interactive quizzes and assessments</span></div><div class="flex items-center"><i class="fas fa-check-circle text-blue-200 mr-3"></i><span>NCLEX-style question bank</span></div><div class="flex items-center"><i class="fas fa-check-circle text-blue-200 mr-3"></i><span>Continuing education credits</span></div></div>
+                            <a href="members.html" class="bg-white text-kesnnur-blue px-8 py-3 rounded-xl text-lg font-bold hover:shadow-xl hover:scale-105 transition-all inline-flex items-center"><i class="fas fa-external-link-alt mr-3"></i>Access Learning Platform</a>
                         </div>
-                        <h2 class="text-3xl font-bold mb-6">Partnership with Lecturio GmbH</h2>
-                        <p class="text-blue-100 mb-6 text-lg">
-                            We have officially signed a Memorandum of Understanding (MoU) with Lecturio GmbH, marking the beginning of our strategic partnership to provide world-class nursing education resources to our members.
-                        </p>
-                        <div class="grid grid-cols-2 gap-6 mb-8">
-                            <div class="flex items-center">
-                                <i class="fas fa-check-circle text-blue-200 mr-3"></i>
-                                <span>Access to 2,000+ nursing video lectures</span>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-check-circle text-blue-200 mr-3"></i>
-                                <span>Interactive quizzes and assessments</span>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-check-circle text-blue-200 mr-3"></i>
-                                <span>NCLEX-style question bank</span>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-check-circle text-blue-200 mr-3"></i>
-                                <span>Continuing education credits</span>
-                            </div>
-                        </div>
-                        <a href="members.html" class="bg-white text-blue-900 px-8 py-3 rounded-xl text-lg font-bold hover:shadow-xl inline-flex items-center">
-                            <i class="fas fa-external-link-alt mr-3"></i>Access Learning Platform
-                        </a>
-                    </div>
-                    <div class="md:w-1/3 bg-gradient-to-br from-blue-800 to-teal-700 flex items-center justify-center p-8">
-                        <div class="text-center">
-                            <i class="fas fa-graduation-cap text-8xl opacity-50 mb-6"></i>
-                            <h3 class="text-2xl font-bold mb-4">Lecturio</h3>
-                            <p class="text-blue-100">Medical Education Platform</p>
-                        </div>
+                        <div class="md:w-1/3 bg-gradient-to-br from-kesnnur-blue/50 to-kesnnur-teal/50 flex items-center justify-center p-8"><div class="text-center"><i class="fas fa-graduation-cap text-8xl opacity-50 mb-6"></i><h3 class="text-2xl font-bold mb-4">Lecturio</h3><p class="text-blue-100">Medical Education Platform</p></div></div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Additional Resources -->
-    <section class="py-16">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">More Learning Tools</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
-                    <div class="text-blue-900 text-5xl mb-6">
-                        <i class="fas fa-video"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Video Library</h3>
-                    <p class="text-gray-600 mb-6">Access recorded workshops, lectures, and training sessions from past events.</p>
-                    <a href="#" class="text-blue-900 font-semibold hover:underline">
-                        Browse Videos <i class="fas fa-play-circle ml-2"></i>
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
-                    <div class="text-blue-900 text-5xl mb-6">
-                        <i class="fas fa-newspaper"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Journal Access</h3>
-                    <p class="text-gray-600 mb-6">Get access to nursing journals and academic publications through our partnerships.</p>
-                    <a href="#" class="text-blue-900 font-semibold hover:underline">
-                        View Journals <i class="fas fa-external-link-alt ml-2"></i>
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
-                    <div class="text-blue-900 text-5xl mb-6">
-                        <i class="fas fa-comments"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Discussion Forums</h3>
-                    <p class="text-gray-600 mb-6">Join discussions, ask questions, and share knowledge with fellow nursing students.</p>
-                    <a href="members.html" class="text-blue-900 font-semibold hover:underline">
-                        Join Discussion <i class="fas fa-comment ml-2"></i>
-                    </a>
+        <!-- Additional Resources -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-kesnnur-blue" data-aos="fade-up">More Learning Tools</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg text-center" data-aos="fade-up"><div class="text-kesnnur-blue text-5xl mb-6"><i class="fas fa-video"></i></div><h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Video Library</h3><p class="text-gray-600 dark:text-gray-400 mb-6">Access recorded workshops, lectures, and training sessions from past events.</p><a href="#" class="text-kesnnur-blue font-semibold hover:underline inline-flex items-center">Browse Videos <i class="fas fa-play-circle ml-2"></i></a></div>
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg text-center" data-aos="fade-up" data-aos-delay="100"><div class="text-kesnnur-blue text-5xl mb-6"><i class="fas fa-newspaper"></i></div><h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Journal Access</h3><p class="text-gray-600 dark:text-gray-400 mb-6">Get access to nursing journals and academic publications through our partnerships.</p><a href="#" class="text-kesnnur-blue font-semibold hover:underline inline-flex items-center">View Journals <i class="fas fa-external-link-alt ml-2"></i></a></div>
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg text-center" data-aos="fade-up" data-aos-delay="200"><div class="text-kesnnur-blue text-5xl mb-6"><i class="fas fa-comments"></i></div><h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Discussion Forums</h3><p class="text-gray-600 dark:text-gray-400 mb-6">Join discussions, ask questions, and share knowledge with fellow nursing students.</p><a href="members.html" class="text-kesnnur-blue font-semibold hover:underline inline-flex items-center">Join Discussion <i class="fas fa-comment ml-2"></i></a></div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- CTA Section -->
-    <section class="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl font-bold mb-6">Need Specific Resources?</h2>
-            <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                Can't find what you're looking for? Request resources or suggest topics for our next resource collection.
-            </p>
-            <a href="contact.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl inline-flex items-center">
-                <i class="fas fa-envelope mr-2"></i> Request Resources
-            </a>
-        </div>
-    </section>
+        <!-- CTA Section -->
+        <section class="py-20 bg-gradient-to-r from-kesnnur-blue to-kesnnur-teal text-white relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600')] bg-cover bg-center opacity-10"></div>
+            <div class="container mx-auto px-4 text-center relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Need Specific Resources?</h2>
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">Can't find what you're looking for? Request resources or suggest topics for our next resource collection.</p>
+                <a href="contact.html" class="bg-white text-kesnnur-blue px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl hover:scale-105 transition-all inline-flex items-center"><i class="fas fa-envelope mr-2"></i> Request Resources</a>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-4">
             <div class="grid md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center space-x-3 mb-4">
-                        <img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" 
-                             alt="KESNNUR Logo"
-                             width="40"
-                             height="40"
-                             class="w-10 h-10 rounded-lg object-contain bg-white p-1">
-                        <h3 class="text-xl font-bold">KESNNUR</h3>
-                    </div>
-                    <p class="text-gray-400 mb-4">
-                        Empowering Kenya's future nursing leaders through resources and education.
-                    </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-twitter text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-facebook text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-instagram text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-linkedin text-xl"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold mb-4">Resource Categories</h4>
-                    <div class="space-y-3">
-                        <a href="#" class="text-gray-400 hover:text-white block">Research Papers</a>
-                        <a href="#" class="text-gray-400 hover:text-white block">Clinical Guidelines</a>
-                        <a href="#" class="text-gray-400 hover:text-white block">Study Templates</a>
-                        <a href="#" class="text-gray-400 hover:text-white block">Lecture Notes</a>
-                        <a href="#" class="text-gray-400 hover:text-white block">Career Resources</a>
-                        <a href="#" class="text-gray-400 hover:text-white block">Video Library</a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold mb-4">Quick Links</h4>
-                    <div class="space-y-3">
-                        <a href="index.html" class="text-gray-400 hover:text-white block">Home</a>
-                        <a href="about.html" class="text-gray-400 hover:text-white block">About</a>
-                        <a href="events.html" class="text-gray-400 hover:text-white block">Events</a>
-                        <a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a>
-                        <a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a>
-                        <a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold mb-4">Contact</h4>
-                    <div class="space-y-3 text-gray-400">
-                        <div class="flex items-start">
-                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
-                            <span>Nurses Complex KNH, Nairobi, Kenya</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-phone mr-3"></i>
-                            <a href="tel:+254791296924" class="hover:text-white">+254 791 296 924</a>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-envelope mr-3"></i>
-                            <a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a>
-                        </div>
-                    </div>
-                </div>
+                <div><div class="flex items-center space-x-3 mb-4"><img src="https://i0.wp.com/kesnnur.nnak.or.ke/wp-content/uploads/2024/03/cropped-Kesnnur-Logo.jpg" width="40" height="40" class="w-10 h-10 rounded-lg object-contain bg-white p-1"><h3 class="text-xl font-bold">KESNNUR</h3></div><p class="text-gray-400 mb-4">Empowering Kenya's future nursing leaders through resources and education.</p><div class="flex space-x-4"><a href="#" class="social-icon twitter text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a><a href="#" class="social-icon facebook text-gray-400 hover:text-white"><i class="fab fa-facebook"></i></a><a href="#" class="social-icon instagram text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a><a href="#" class="social-icon linkedin text-gray-400 hover:text-white"><i class="fab fa-linkedin"></i></a></div></div>
+                <div><h4 class="font-bold mb-4">Resource Categories</h4><div class="space-y-3"><a href="#" class="text-gray-400 hover:text-white block">Research Papers</a><a href="#" class="text-gray-400 hover:text-white block">Clinical Guidelines</a><a href="#" class="text-gray-400 hover:text-white block">Study Templates</a><a href="#" class="text-gray-400 hover:text-white block">Lecture Notes</a><a href="#" class="text-gray-400 hover:text-white block">Career Resources</a><a href="#" class="text-gray-400 hover:text-white block">Video Library</a></div></div>
+                <div><h4 class="font-bold mb-4">Quick Links</h4><div class="space-y-3"><a href="index.html" class="text-gray-400 hover:text-white block">Home</a><a href="about.html" class="text-gray-400 hover:text-white block">About</a><a href="events.html" class="text-gray-400 hover:text-white block">Events</a><a href="blog.html" class="text-gray-400 hover:text-white block">Blog</a><a href="resources.html" class="text-gray-400 hover:text-white block">Resources</a><a href="members.html" class="text-gray-400 hover:text-white block">Member Portal</a></div></div>
+                <div><h4 class="font-bold mb-4">Contact</h4><div class="space-y-3 text-gray-400"><div class="flex gap-3"><i class="fas fa-map-marker-alt mt-1"></i><span>Nurses Complex KNH, Nairobi, Kenya</span></div><div class="flex gap-3"><i class="fas fa-phone"></i><a href="tel:+254768878303" class="hover:text-white">+254 768 878 303</a></div><div class="flex gap-3"><i class="fas fa-envelope"></i><a href="mailto:kesnnur@gmail.com" class="hover:text-white">kesnnur@gmail.com</a></div></div></div>
             </div>
-            
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>Copyright © <span id="currentYear">2024</span> KESNNUR. All rights reserved.</p>
-                <p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p>
-            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400"><p>Copyright © <span id="currentYear"></span> KESNNUR. All rights reserved.</p><p class="text-sm mt-2">A chapter of the National Nurses Association of Kenya (NNAK)</p></div>
         </div>
     </footer>
 
-    <!-- Load Supabase at the bottom -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Main JavaScript -->
-    <script>
-    // Global variables
-    let allResources = [];
-    let supabaseClient = null;
+    <button id="backToTop" class="fixed bottom-8 right-8 bg-kesnnur-blue text-white p-3 rounded-full shadow-lg hover:shadow-xl opacity-0 transition-all duration-300 hover:scale-110 z-50"><i class="fas fa-chevron-up"></i></button>
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Set current year
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-        
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('menuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        
-        if (menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', function() {
-                const isHidden = mobileMenu.classList.contains('hidden');
-                
-                if (isHidden) {
-                    mobileMenu.classList.remove('hidden');
-                    this.innerHTML = '<i class="fas fa-times text-2xl"></i>';
-                } else {
-                    mobileMenu.classList.add('hidden');
-                    this.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
-                }
-            });
-        }
-        
-        // Initialize and load resources
-        initializeApp();
-    });
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+    AOS.init({ duration: 800, once: true, offset: 50 });
     
-    async function initializeApp() {
+    window.addEventListener('scroll', () => { const win = document.documentElement.scrollTop, height = document.documentElement.scrollHeight - document.documentElement.clientHeight; document.getElementById('progressBar').style.width = (win / height) * 100 + '%'; });
+    
+    function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light'); }
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+    document.querySelectorAll('.theme-toggle, .theme-toggle-mobile').forEach(el => el.addEventListener('click', toggleTheme));
+    
+    const translations = { en: {}, sw: {} };
+    let currentLang = localStorage.getItem('language') || 'en';
+    function updateLanguage(lang) { currentLang = lang; localStorage.setItem('language', lang); document.getElementById('currentLang').innerHTML = lang.toUpperCase(); }
+    document.querySelectorAll('.lang-selector, .lang-selector-mobile').forEach(el => el.addEventListener('click', () => updateLanguage(currentLang === 'en' ? 'sw' : 'en')));
+    updateLanguage(currentLang);
+    
+    document.getElementById('menuBtn').addEventListener('click', function() { document.getElementById('mobileMenu').classList.toggle('hidden'); });
+    
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => { backBtn.style.opacity = window.scrollY > 300 ? '1' : '0'; backBtn.style.pointerEvents = window.scrollY > 300 ? 'auto' : 'none'; });
+    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    
+    // Supabase Configuration
+    const SUPABASE_URL = 'https://noadhwqvaxajuckpibbo.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
+    
+    let supabaseClient = null;
+    let allResources = [];
+    
+    function initSupabase() {
         try {
-            console.log('Initializing KESNNUR Resources App...');
-            
-            // Initialize Supabase
-            const supabaseUrl = 'https://noadhwqvaxajuckpibbo.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWRod3F2YXhhanVja3BpYmJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDk0MDEsImV4cCI6MjA4NTY4NTQwMX0.tFqnonlgPjmcgC5KOiSriISFFE5FbdBrsVzsxURrbAw';
-            
-            supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-            console.log('Supabase client initialized');
-            
-            // Load resources
-            await loadResources();
-            
-        } catch (error) {
-            console.error('App initialization error:', error);
-            showError('Failed to initialize application: ' + error.message);
-        }
-    }
-    
-    // Helper functions
-    function getResourceTypeDisplay(type) {
-        const types = {
-            'document': 'Document',
-            'video': 'Video',
-            'link': 'Web Link',
-            'template': 'Template',
-            'software': 'Software',
-            'other': 'Other'
-        };
-        return types[type] || 'Document';
-    }
-    
-    function getCategoryDisplay(category) {
-        const categories = {
-            'research': 'Research Paper',
-            'guidelines': 'Guidelines',
-            'templates': 'Template',
-            'lectures': 'Lecture Notes',
-            'career': 'Career Development',
-            'video': 'Video Library',
-            'other': 'Other'
-        };
-        return categories[category] || category;
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            console.log('✅ Supabase client initialized');
+            return true;
+        } catch(e) { console.error('Supabase init error:', e); return false; }
     }
     
     function getCategoryColor(category) {
-        const colors = {
-            'research': 'bg-purple-50 text-purple-700',
-            'guidelines': 'bg-green-50 text-green-700',
-            'templates': 'bg-teal-50 text-teal-700',
-            'lectures': 'bg-red-50 text-red-700',
-            'career': 'bg-orange-50 text-orange-700',
-            'video': 'bg-indigo-50 text-indigo-700',
-            'other': 'bg-gray-100 text-gray-700'
-        };
+        const colors = { 'research': 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400', 'guidelines': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400', 'templates': 'bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400', 'lectures': 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400', 'career': 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400', 'video': 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400', 'other': 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300' };
         return colors[category] || 'bg-gray-100 text-gray-700';
     }
     
-    async function loadResources() {
-        try {
-            console.log('Loading resources from Supabase...');
-            
-            const { data: resources, error } = await supabaseClient
-                .from('resources')
-                .select('*')
-                .eq('is_active', true)
-                .order('display_order', { ascending: true })
-                .order('created_at', { ascending: false });
-            
-            if (error) {
-                console.error('Supabase query error:', error);
-                throw new Error(`Database error: ${error.message}`);
-            }
-            
-            console.log(`Loaded ${resources?.length || 0} resources`);
-            
-            if (!resources || resources.length === 0) {
-                showNoResources();
-                return;
-            }
-            
-            // Store resources globally
-            allResources = resources;
-            
-            // Update UI
-            updateResourceStats(resources);
-            loadCategoryFilters(resources);
-            displayResources(resources);
-            setupSearchFunctionality();
-            
-        } catch (error) {
-            console.error('Error loading resources:', error);
-            showError(error.message);
-        }
+    function getCategoryDisplay(category) {
+        const categories = { 'research': 'Research Paper', 'guidelines': 'Guidelines', 'templates': 'Template', 'lectures': 'Lecture Notes', 'career': 'Career Development', 'video': 'Video Library', 'other': 'Other' };
+        return categories[category] || category;
     }
     
-    function updateResourceStats(resources) {
-        if (!resources) return;
-        
-        const total = resources.length;
-        const research = resources.filter(r => r.category === 'research').length;
-        const guidelines = resources.filter(r => r.category === 'guidelines').length;
-        const downloads = resources.reduce((sum, r) => sum + (r.download_count || 0), 0);
-        
-        document.getElementById('totalResourcesCount').textContent = total;
-        document.getElementById('researchCount').textContent = research;
-        document.getElementById('guidelinesCount').textContent = guidelines;
-        document.getElementById('downloadsCount').textContent = downloads;
+    function getResourceTypeDisplay(type) {
+        const types = { 'document': 'Document', 'video': 'Video', 'link': 'Web Link', 'template': 'Template', 'software': 'Software', 'other': 'Other' };
+        return types[type] || 'Document';
+    }
+    
+    async function loadResources() {
+        if (!supabaseClient && !initSupabase()) { showError(); return; }
+        try {
+            const { data, error } = await supabaseClient.from('resources').select('*').eq('is_active', true).order('display_order', { ascending: true }).order('created_at', { ascending: false });
+            if (error) throw error;
+            console.log(`✅ Loaded ${data?.length || 0} resources`);
+            if (!data || data.length === 0) { showNoResources(); return; }
+            allResources = data;
+            updateStats(data);
+            loadCategoryFilters(data);
+            displayResources(data);
+            setupSearch();
+        } catch(e) { console.error('Error:', e); showError(); }
+    }
+    
+    function updateStats(resources) {
+        document.getElementById('totalResourcesCount').textContent = resources.length;
+        document.getElementById('researchCount').textContent = resources.filter(r => r.category === 'research').length;
+        document.getElementById('guidelinesCount').textContent = resources.filter(r => r.category === 'guidelines').length;
+        document.getElementById('downloadsCount').textContent = resources.reduce((sum, r) => sum + (r.download_count || 0), 0);
     }
     
     function loadCategoryFilters(resources) {
-        if (!resources || resources.length === 0) return;
-        
+        const container = document.getElementById('categoryFilters');
         const categories = ['research', 'guidelines', 'templates', 'lectures', 'career', 'video', 'other'];
-        const categoryNames = {
-            'research': 'Research Papers',
-            'guidelines': 'Guidelines',
-            'templates': 'Templates',
-            'lectures': 'Lecture Notes',
-            'career': 'Career Development',
-            'video': 'Video Library',
-            'other': 'Other'
-        };
-        
-        const filtersContainer = document.getElementById('categoryFilters');
-        let filtersHTML = `
-            <button class="filter-btn active px-6 py-3 rounded-xl font-medium bg-blue-900 text-white" data-filter="all">
-                All Resources (${resources.length})
-            </button>
-        `;
-        
-        categories.forEach(category => {
-            const count = resources.filter(r => r.category === category).length;
-            if (count > 0) {
-                filtersHTML += `
-                    <button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-blue-900 text-blue-900 hover:bg-blue-50" 
-                            data-filter="${category}">
-                        ${categoryNames[category]} (${count})
-                    </button>
-                `;
-            }
-        });
-        
-        filtersContainer.innerHTML = filtersHTML;
-        
-        // Add filter click events
-        document.querySelectorAll('.filter-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const filter = this.getAttribute('data-filter');
-                
-                // Update active button
-                document.querySelectorAll('.filter-btn').forEach(btn => {
-                    btn.classList.remove('active', 'bg-blue-900', 'text-white');
-                    btn.classList.add('bg-white', 'border', 'border-blue-900', 'text-blue-900');
-                });
-                
-                this.classList.remove('bg-white', 'border', 'border-blue-900', 'text-blue-900');
-                this.classList.add('active', 'bg-blue-900', 'text-white');
-                
-                // Filter resources
-                filterResources(filter);
-            });
-        });
+        const names = { 'research': 'Research Papers', 'guidelines': 'Guidelines', 'templates': 'Templates', 'lectures': 'Lecture Notes', 'career': 'Career Development', 'video': 'Video Library', 'other': 'Other' };
+        let html = `<button class="filter-btn active px-6 py-3 rounded-xl font-medium bg-kesnnur-blue text-white border-0" data-filter="all">All Resources (${resources.length})</button>`;
+        categories.forEach(cat => { const count = resources.filter(r => r.category === cat).length; if (count > 0) html += `<button class="filter-btn px-6 py-3 rounded-xl font-medium bg-white border border-kesnnur-blue text-kesnnur-blue hover:bg-kesnnur-blue/10" data-filter="${cat}">${names[cat]} (${count})</button>`; });
+        container.innerHTML = html;
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.addEventListener('click', function() { document.querySelectorAll('.filter-btn').forEach(b => { b.classList.remove('active', 'bg-kesnnur-blue', 'text-white'); b.classList.add('bg-white', 'border', 'border-kesnnur-blue', 'text-kesnnur-blue'); }); this.classList.remove('bg-white', 'border', 'border-kesnnur-blue', 'text-kesnnur-blue'); this.classList.add('active', 'bg-kesnnur-blue', 'text-white'); filterResources(this.dataset.filter); }));
     }
     
     function displayResources(resources) {
         const container = document.getElementById('resourcesContainer');
-        
-        if (!resources || resources.length === 0) {
-            showNoResources();
-            return;
-        }
-        
-        let resourcesHTML = '<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">';
-        
-        resources.forEach(resource => {
-            const icon = resource.icon || 'fas fa-file-alt';
-            const iconColor = resource.icon_color || 'text-blue-900';
-            const iconBg = resource.icon_bg_color || 'bg-blue-100';
-            const fileSize = resource.file_size ? `${resource.file_size} MB` : 'Size not specified';
-            const downloadCount = resource.download_count || 0;
-            const updatedDate = resource.updated_at ? new Date(resource.updated_at).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric'
-            }) : 'Recently added';
-            
-            // Use helper functions for better display
-            const resourceType = getResourceTypeDisplay(resource.resource_type);
-            const category = getCategoryDisplay(resource.category);
-            
-            // Access level badge
-            const accessBadge = resource.access_level === 'public' ? 
-                '<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded ml-2">Public</span>' :
-                '<span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded ml-2">Member Only</span>';
-            
-            // Escape quotes for JavaScript
-            const safeTitle = (resource.title || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-            const safeUrl = (resource.file_url || '#').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-            const safeId = resource.id;
-            
-            resourcesHTML += `
-                <div class="resource-card bg-white rounded-2xl shadow-lg p-6" data-category="${resource.category || 'other'}">
-                    <div class="flex items-center mb-6">
-                        <div class="${iconBg} p-4 rounded-xl mr-4">
-                            <i class="${icon} ${iconColor} text-3xl"></i>
-                        </div>
-                        <div>
-                            <div class="flex items-center flex-wrap">
-                                <h3 class="font-bold text-xl">${resource.title || 'Untitled Resource'}</h3>
-                                ${accessBadge}
-                            </div>
-                            <div class="flex items-center text-gray-600 mt-1">
-                                <span class="mr-4">${resourceType} • ${fileSize}</span>
-                                <span class="text-sm ${getCategoryColor(resource.category)} px-2 py-1 rounded">
-                                    ${category}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <p class="text-gray-700 mb-6">${resource.description || 'No description available.'}</p>
-                    
-                    <div class="flex justify-between items-center">
-                        <div class="text-gray-500 text-sm">
-                            <i class="far fa-calendar mr-1"></i> ${updatedDate}
-                            ${downloadCount > 0 ? `
-                                <span class="ml-3">
-                                    <i class="fas fa-download mr-1"></i> ${downloadCount}
-                                </span>
-                            ` : ''}
-                        </div>
-                        <button onclick="handleResourceAction('${safeId}', '${safeUrl}', '${safeTitle}', '${resource.access_level}')" 
-                                class="${resource.access_level === 'public' ? 'bg-blue-900 hover:bg-blue-800' : 'bg-gray-500 hover:bg-gray-600'} text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                            ${resource.access_level === 'public' ? 
-                                '<i class="fas fa-download mr-2"></i>Download' : 
-                                '<i class="fas fa-lock mr-2"></i>Member Only'}
-                        </button>
-                    </div>
-                </div>
-            `;
+        if (!resources.length) { showNoResources(); return; }
+        let html = '<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">';
+        resources.forEach(r => {
+            const icon = r.icon || 'fas fa-file-alt';
+            const iconColor = r.icon_color || 'text-kesnnur-blue';
+            const iconBg = r.icon_bg_color || 'bg-kesnnur-blue/10';
+            const categoryColor = getCategoryColor(r.category);
+            const categoryDisplay = getCategoryDisplay(r.category);
+            const resourceType = getResourceTypeDisplay(r.resource_type);
+            const date = r.updated_at ? new Date(r.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recently added';
+            const accessBadge = r.access_level === 'public' ? '<span class="text-xs bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 px-2 py-1 rounded ml-2">Public</span>' : '<span class="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 px-2 py-1 rounded ml-2">Member Only</span>';
+            const btnClass = r.access_level === 'public' ? 'bg-kesnnur-blue hover:bg-kesnnur-light' : 'bg-gray-500 hover:bg-gray-600';
+            html += `<div class="resource-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6" data-category="${r.category || 'other'}"><div class="flex items-center mb-6"><div class="${iconBg} p-4 rounded-xl mr-4"><i class="${icon} ${iconColor} text-3xl"></i></div><div><div class="flex items-center flex-wrap"><h3 class="font-bold text-xl text-gray-800 dark:text-white">${r.title || 'Untitled'}</h3>${accessBadge}</div><div class="flex items-center text-gray-600 dark:text-gray-400 mt-1"><span class="mr-4">${resourceType}</span><span class="text-sm ${categoryColor} px-2 py-1 rounded">${categoryDisplay}</span></div></div></div><p class="text-gray-700 dark:text-gray-300 mb-6">${r.description || 'No description available.'}</p><div class="flex justify-between items-center"><div class="text-gray-500 dark:text-gray-400 text-sm"><i class="far fa-calendar mr-1"></i> ${date}${r.download_count > 0 ? `<span class="ml-3"><i class="fas fa-download mr-1"></i> ${r.download_count}</span>` : ''}</div><button onclick="handleResourceAction('${r.id}', '${r.file_url || '#'}', '${r.title?.replace(/'/g, "\\'") || 'Resource'}', '${r.access_level}')" class="${btnClass} text-white px-6 py-2 rounded-lg font-medium transition-colors">${r.access_level === 'public' ? '<i class="fas fa-download mr-2"></i>Download' : '<i class="fas fa-lock mr-2"></i>Member Only'}</button></div></div>`;
         });
-        
-        resourcesHTML += '</div>';
-        container.innerHTML = resourcesHTML;
+        html += '</div>';
+        container.innerHTML = html;
         document.getElementById('noResourcesMessage').classList.add('hidden');
     }
     
     function filterResources(category) {
-        const resources = document.querySelectorAll('.resource-card');
-        const noResultsMessage = document.getElementById('noResourcesMessage');
-        let visibleCount = 0;
-        
-        resources.forEach(resource => {
-            const resourceCategory = resource.getAttribute('data-category');
-            
-            if (category === 'all' || resourceCategory === category) {
-                resource.style.display = 'block';
-                setTimeout(() => {
-                    resource.style.opacity = '1';
-                    resource.style.transform = 'translateY(0)';
-                }, 10);
-                visibleCount++;
-            } else {
-                resource.style.opacity = '0';
-                resource.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    resource.style.display = 'none';
-                }, 300);
-            }
+        const cards = document.querySelectorAll('.resource-card');
+        let visible = 0;
+        cards.forEach(card => {
+            if (category === 'all' || card.dataset.category === category) { card.style.display = 'block'; visible++; }
+            else { card.style.display = 'none'; }
         });
-        
-        // Show/hide no results message
-        if (visibleCount === 0) {
-            noResultsMessage.classList.remove('hidden');
-        } else {
-            noResultsMessage.classList.add('hidden');
-        }
+        document.getElementById('noResourcesMessage').classList.toggle('hidden', visible > 0);
     }
     
-    function setupSearchFunctionality() {
-        const searchInput = document.getElementById('resourceSearch');
-        
-        if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                const resourceCards = document.querySelectorAll('.resource-card');
-                let visibleCount = 0;
-                
-                resourceCards.forEach(card => {
-                    const title = card.querySelector('h3').textContent.toLowerCase();
-                    const description = card.querySelector('p').textContent.toLowerCase();
-                    
-                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                        card.style.display = 'block';
-                        setTimeout(() => {
-                            card.style.opacity = '1';
-                            card.style.transform = 'translateY(0)';
-                        }, 10);
-                        visibleCount++;
-                    } else {
-                        card.style.opacity = '0';
-                        card.style.transform = 'translateY(20px)';
-                        setTimeout(() => {
-                            card.style.display = 'none';
-                        }, 300);
-                    }
-                });
-                
-                // Show/hide no results message
-                const noResultsMessage = document.getElementById('noResourcesMessage');
-                if (visibleCount === 0) {
-                    noResultsMessage.classList.remove('hidden');
-                } else {
-                    noResultsMessage.classList.add('hidden');
-                }
+    function setupSearch() {
+        document.getElementById('resourceSearch')?.addEventListener('input', function() {
+            const term = this.value.toLowerCase();
+            const cards = document.querySelectorAll('.resource-card');
+            let visible = 0;
+            cards.forEach(card => {
+                const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                const desc = card.querySelector('p')?.textContent.toLowerCase() || '';
+                if (title.includes(term) || desc.includes(term)) { card.style.display = 'block'; visible++; }
+                else { card.style.display = 'none'; }
             });
+            document.getElementById('noResourcesMessage').classList.toggle('hidden', visible > 0);
+        });
+    }
+    
+    window.handleResourceAction = async function(id, url, title, accessLevel) {
+        if (accessLevel !== 'public') { alert('This resource requires KESNNUR membership. Please sign up or log in to access member-only resources.'); window.location.href = 'members.html'; return; }
+        if (supabaseClient) {
+            try {
+                const { data } = await supabaseClient.from('resources').select('download_count').eq('id', id).single();
+                if (data) await supabaseClient.from('resources').update({ download_count: (data.download_count || 0) + 1 }).eq('id', id);
+            } catch(e) {}
         }
-    }
+        if (url && url !== '#') window.open(url, '_blank');
+        else alert('Download link not available.');
+        showToast(`${title} opened successfully!`, 'success');
+        setTimeout(() => loadResources(), 1500);
+    };
     
-    async function handleResourceAction(resourceId, fileUrl, title, accessLevel) {
-        try {
-            if (accessLevel !== 'public') {
-                alert('This resource requires KESNNUR membership. Please sign up or log in to access member-only resources.');
-                window.location.href = 'members.html';
-                return;
-            }
-            
-            // Update download count
-            if (supabaseClient) {
-                const { data: resource } = await supabaseClient
-                    .from('resources')
-                    .select('download_count')
-                    .eq('id', resourceId)
-                    .single();
-                
-                if (resource) {
-                    const newCount = (resource.download_count || 0) + 1;
-                    await supabaseClient
-                        .from('resources')
-                        .update({ download_count: newCount })
-                        .eq('id', resourceId);
-                }
-            }
-            
-            // Open download link
-            if (fileUrl && fileUrl !== '#') {
-                window.open(fileUrl, '_blank');
-            } else {
-                alert('Download link not available for this resource.');
-            }
-            
-            // Show success message
-            showToast(`${title} downloaded successfully!`, 'success');
-            
-            // Refresh resources after a delay
-            setTimeout(() => loadResources(), 1500);
-            
-        } catch (error) {
-            console.error('Download error:', error);
-            // Still try to open the file
-            if (fileUrl && fileUrl !== '#') {
-                window.open(fileUrl, '_blank');
-            }
-            showToast('File opened successfully!', 'info');
-        }
-    }
-    
-    function showNoResources() {
-        const container = document.getElementById('resourcesContainer');
-        container.innerHTML = `
-            <div class="text-center py-12">
-                <i class="fas fa-folder-open text-4xl text-gray-400 mb-4"></i>
-                <h3 class="text-xl font-bold text-gray-700 mb-2">No Resources Available</h3>
-                <p class="text-gray-600">Check back soon for new resources</p>
-            </div>
-        `;
-        document.getElementById('noResourcesMessage').classList.add('hidden');
-    }
-    
-    function showError(message) {
-        const container = document.getElementById('resourcesContainer');
-        container.innerHTML = `
-            <div class="text-center py-12 text-red-600">
-                <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
-                <h3 class="text-xl font-bold mb-2">Error Loading Resources</h3>
-                <p class="mb-4">${message}</p>
-                <button onclick="loadResources()" class="px-4 py-2 bg-blue-900 text-white rounded-lg">
-                    <i class="fas fa-redo mr-2"></i> Try Again
-                </button>
-            </div>
-        `;
-    }
-    
-    function showToast(message, type = 'info') {
+    function showToast(message, type) {
         const toast = document.createElement('div');
-        toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-xl shadow-lg text-white font-medium transform translate-x-full transition-transform duration-300 ${
-            type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'
-        }`;
-        toast.innerHTML = `
-            <div class="flex items-center">
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'} mr-3"></i>
-                <span>${message}</span>
-            </div>
-        `;
-        
+        toast.className = `custom-toast fixed top-20 right-4 z-50 px-6 py-3 rounded-xl shadow-lg text-white font-medium ${type === 'success' ? 'bg-green-600' : 'bg-kesnnur-blue'} transform translate-x-full transition-transform duration-300`;
+        toast.innerHTML = `<div class="flex items-center"><i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} mr-3"></i><span>${message}</span></div>`;
         document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.style.transform = 'translateX(0)';
-        }, 10);
-        
-        setTimeout(() => {
-            toast.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                if (toast.parentNode) {
-                    toast.parentNode.removeChild(toast);
-                }
-            }, 300);
-        }, 3000);
+        setTimeout(() => toast.style.transform = 'translateX(0)', 10);
+        setTimeout(() => { toast.style.transform = 'translateX(100%)'; setTimeout(() => toast.remove(), 300); }, 3000);
     }
     
-    // Make functions globally accessible
-    window.handleResourceAction = handleResourceAction;
+    function showNoResources() { document.getElementById('resourcesContainer').innerHTML = '<div class="text-center py-12"><i class="fas fa-folder-open text-4xl text-gray-400 mb-4"></i><h3 class="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">No Resources Available</h3><p class="text-gray-600 dark:text-gray-400">Check back soon for new resources</p></div>'; }
+    function showError() { document.getElementById('resourcesContainer').innerHTML = '<div class="text-center py-12"><i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i><h3 class="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">Error Loading Resources</h3><button onclick="loadResources()" class="mt-4 px-4 py-2 bg-kesnnur-blue text-white rounded-lg"><i class="fas fa-redo mr-2"></i> Try Again</button></div>'; }
+    
+    loadResources();
+    console.log('✅ Resources Page with Dark Mode, Language Switcher, and Live Supabase Data Loaded');
     </script>
 </body>
 </html>
